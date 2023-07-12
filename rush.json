@@ -31,7 +31,7 @@
       "packageName": "@reform/girder-client",
       "projectFolder": "projects/girder-client",
       "reviewCategory": "packages",
-      "versionPolicyName": "mobx"
+      "versionPolicyName": "girder"
     },
     {
       "packageName": "@reform/girder-i18n-aspect",

@@ -12,19 +12,19 @@
     {
         "definitionName": "lockStepVersion",
         "policyName": "girder",
-        "version": "0.0.2-rc.1",
+        "version": "0.0.2-rc.4",
         "nextBump": "prerelease"
     },
     {
         "definitionName": "lockStepVersion",
         "policyName": "web-unit",
-        "version": "0.0.2-rc.1",
+        "version": "0.0.2-rc.4",
         "nextBump": "prerelease"
     },
     {
         "definitionName": "lockStepVersion",
         "policyName": "toolbox",
-        "version": "0.0.2-rc.1",
+        "version": "0.0.2-rc.4",
         "nextBump": "prerelease"
     }
   // {

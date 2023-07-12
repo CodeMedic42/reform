@@ -13,7 +13,9 @@
     "ignoredNpmScopes": ["@types"]
   },
   "gitPolicy": {},
-  "repository": {},
+  "repository": {
+    "url": "https://github.com/CodeMedic42/reform"
+  },
   "eventHooks": {
     "preRushInstall": [],
     "postRushInstall": [],

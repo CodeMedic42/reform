@@ -1,6 +1,6 @@
 {
   "name": "@reform/web-unit",
-  "version": "0.0.2-rc.1",
+  "version": "0.0.2-rc.4",
   "description": "",
   "bin": {
     "wunit": "./cli.js"

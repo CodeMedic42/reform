@@ -83,7 +83,8 @@
       "packageName": "@reformjs/toolbox",
       "projectFolder": "projects/toolbox",
       "reviewCategory": "packages",
-      "versionPolicyName": "toolbox"
+      "versionPolicyName": "toolbox",
+      "shouldPublish": true
     }
   ]
 }

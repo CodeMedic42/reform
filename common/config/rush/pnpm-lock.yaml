@@ -6,6 +6,7 @@ specifiers:
   '@babel/eslint-plugin': ~7.13.16
   '@babel/node': ^7.20.5
   '@babel/preset-env': ^7.21.4
+  '@babel/preset-react': ^7.18.6
   '@babel/preset-typescript': ^7.21.4
   '@jest/globals': ^29.3.1
   '@jsdevtools/coverage-istanbul-loader': ^3.0.5
@@ -73,6 +74,7 @@ dependencies:
   '@babel/eslint-plugin': 7.13.16_@babel+eslint-parser@7.14.9
   '@babel/node': 7.22.6_@babel+core@7.22.9
   '@babel/preset-env': 7.22.9_@babel+core@7.22.9
+  '@babel/preset-react': 7.22.5_@babel+core@7.22.9
   '@babel/preset-typescript': 7.22.5_@babel+core@7.22.9
   '@jest/globals': 29.6.1
   '@jsdevtools/coverage-istanbul-loader': 3.0.5
@@ -1426,20 +1428,6 @@ packages:
       '@babel/plugin-transform-dotall-regex': 7.22.5_@babel+core@7.22.9
       '@babel/types': 7.22.5
       esutils: 2.0.3
-    dev: false
-
-  /@babel/preset-react/7.13.13_@babel+core@7.22.9:
-    resolution: {integrity: sha512-gx+tDLIE06sRjKJkVtpZ/t3mzCDOnPG+ggHZG9lffUbX8+wC739x20YQc9V35Do6ZAxaUc/HhVHIiOzz5MvDmA==}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-    dependencies:
-      '@babel/core': 7.22.9
-      '@babel/helper-plugin-utils': 7.22.5
-      '@babel/helper-validator-option': 7.22.5
-      '@babel/plugin-transform-react-display-name': 7.22.5_@babel+core@7.22.9
-      '@babel/plugin-transform-react-jsx': 7.22.5_@babel+core@7.22.9
-      '@babel/plugin-transform-react-jsx-development': 7.22.5_@babel+core@7.22.9
-      '@babel/plugin-transform-react-pure-annotations': 7.22.5_@babel+core@7.22.9
     dev: false
 
   /@babel/preset-react/7.22.5_@babel+core@7.22.9:
@@ -4348,7 +4336,7 @@ packages:
       optionator: 0.9.3
       progress: 2.0.3
       regexpp: 3.2.0
-      semver: 7.3.8
+      semver: 7.5.4
       strip-ansi: 6.0.1
       strip-json-comments: 3.1.1
       table: 6.8.1
@@ -8089,14 +8077,14 @@ packages:
     dev: false
 
   file:projects/eslint-config.tgz_@babel+core@7.22.9:
-    resolution: {integrity: sha512-bz5pS2Y2xcMwqwfhJIydNm5V6nX0SpmxYREic4qTMULhLVhBA+MuyMVWGYRa9GnVVOVEAx0pXiXNapPFx36XVg==, tarball: file:projects/eslint-config.tgz}
+    resolution: {integrity: sha512-QNYaDejKuFXBOxIpOaCVomIvb71hwP+FRk5Pko4OgpUHkpLp1wHrHsWci5EE2NPqOquvBA8Q280rYz7rTbJVSg==, tarball: file:projects/eslint-config.tgz}
     id: file:projects/eslint-config.tgz
     name: '@rush-temp/eslint-config'
     version: 0.0.0
     dependencies:
       '@babel/eslint-parser': 7.14.9_@babel+core@7.22.9+eslint@7.32.0
       '@babel/eslint-plugin': 7.13.16_e24cd50574d9fee357a9427591e77dc2
-      '@babel/preset-react': 7.13.13_@babel+core@7.22.9
+      '@babel/preset-react': 7.22.5_@babel+core@7.22.9
       '@typescript-eslint/eslint-plugin': 4.33.0_96a109dcf9607f5a1aa576228794cffa
       '@typescript-eslint/parser': 4.33.0_eslint@7.32.0+typescript@4.9.5
       babel-eslint: 10.1.0_eslint@7.32.0
@@ -8123,7 +8111,7 @@ packages:
     dev: false
 
   file:projects/girder-client.tgz:
-    resolution: {integrity: sha512-m2mbsrIooci/BsJzio/pp9cvaIx4lSQ22LOKQWcooNm8P21i/n4ce3pdqBTGzSGRtsb2fIayMfEaQO3E3f4D1A==, tarball: file:projects/girder-client.tgz}
+    resolution: {integrity: sha512-WUAHClKpIBHUIeLruRV9DNBZhhdjQYW8F41gIG+xWGUVoJVFa1CnUgClMaxtK6F9Hx3ECIGN5aQVFX54esoM9g==, tarball: file:projects/girder-client.tgz}
     name: '@rush-temp/girder-client'
     version: 0.0.0
     dependencies:
@@ -8135,7 +8123,7 @@ packages:
     dev: false
 
   file:projects/girder-i18n-aspect.tgz:
-    resolution: {integrity: sha512-XCbeCNggeEFuUGs+dQs+9V8OxR7wzCI62drLZQeuL9Z5YFEV4+66cct1cj0PPxeLD7NF51mhWaAVz1ILYw4n/w==, tarball: file:projects/girder-i18n-aspect.tgz}
+    resolution: {integrity: sha512-cYdnsGeq2e0SVSmCs0U3zeDfXnjsXDI2pOvKfBmG2dZyZmUta1k+LGsim9+9VYKtO4PSIPLqLqOU+WS9oG/cpg==, tarball: file:projects/girder-i18n-aspect.tgz}
     name: '@rush-temp/girder-i18n-aspect'
     version: 0.0.0
     dependencies:
@@ -8146,7 +8134,7 @@ packages:
     dev: false
 
   file:projects/girder-react-aspect.tgz:
-    resolution: {integrity: sha512-snttNvVbkTPwLtdr1bAlVJXTh6klmwvQ43rn4prO2WkO+7xcY54x2sK3SsTbe8XU7JEJBV1ybg7+H/eyKpWFBQ==, tarball: file:projects/girder-react-aspect.tgz}
+    resolution: {integrity: sha512-hFkQBjMwMxTwxEfIGSZMld64wgNbWx/nF9piamPz5K1+dnxeJquM5XzNejrpAqiFJbOnhnJ+pKYqIyVn8Q97vw==, tarball: file:projects/girder-react-aspect.tgz}
     name: '@rush-temp/girder-react-aspect'
     version: 0.0.0
     dependencies:
@@ -8161,7 +8149,7 @@ packages:
     dev: false
 
   file:projects/girder-service-aspect.tgz:
-    resolution: {integrity: sha512-au2L+xMnV124qZiJpGAz9i8vPbnMXoeBJ/4uE+3lq8mcW3mLd6kusuUzKl5QxuP86vqp6tCDTObUG9H1ZYAbMA==, tarball: file:projects/girder-service-aspect.tgz}
+    resolution: {integrity: sha512-Gx377ck5U8F4GI1gnUbAEztcuPpRFm9mEAfn8kC1jQBOP6oPB6odnc3aeHufY/lRtJGg48/6swnHgGndLy16OA==, tarball: file:projects/girder-service-aspect.tgz}
     name: '@rush-temp/girder-service-aspect'
     version: 0.0.0
     dependencies:
@@ -8177,7 +8165,7 @@ packages:
     dev: false
 
   file:projects/girder-store-aspect.tgz_react-dom@18.2.0:
-    resolution: {integrity: sha512-GIQDiqD/zX/K8kl50pQ4k1B5QEpBBh4t/83lSep6of8FvKZSW27mqTXXqeAfirQdp1AmlMezdt/RGaC2jxx2rA==, tarball: file:projects/girder-store-aspect.tgz}
+    resolution: {integrity: sha512-1n2bG7yafKi3ziVWVW27R7KiWCUEfBOcTnQHb2ADF8R8aEquLNza+wUpIKda0CG8mMOMWEKWnv+5SiiabL2PpA==, tarball: file:projects/girder-store-aspect.tgz}
     id: file:projects/girder-store-aspect.tgz
     name: '@rush-temp/girder-store-aspect'
     version: 0.0.0
@@ -8198,7 +8186,7 @@ packages:
     dev: false
 
   file:projects/toolbox.tgz:
-    resolution: {integrity: sha512-/0XyI/9lk9RNbg1rVjtEA7NWNANQclnWkgPMlJiYAwul5/PCdaL4vWOhFjqdTp6Al8q5+gv0I1aXHawhunqmRQ==, tarball: file:projects/toolbox.tgz}
+    resolution: {integrity: sha512-DIp9euxB/CTGyft3lfuarRkYxvuGU8w9waHhSv5jvRkgBgKeviWomazjwk/3C7zT5vDiFT8H4SEWolAko9nGRw==, tarball: file:projects/toolbox.tgz}
     name: '@rush-temp/toolbox'
     version: 0.0.0
     dependencies:
@@ -8210,7 +8198,7 @@ packages:
     dev: false
 
   file:projects/web-unit-jest.tgz:
-    resolution: {integrity: sha512-0prPDpLp205PV51Apz+d7sqx7XrIWm2WO5EqvF6w096cvwSKhBU5PkD3TJjxzN20uxMmYzUML99i14VlTQ2a3w==, tarball: file:projects/web-unit-jest.tgz}
+    resolution: {integrity: sha512-yR5A3v5zX3E0O6rt7CP2gVir7BjK5Eo2inLvGCdpQzd9RqOoLo9waqPlio1lm1TILxMaG8b7NtWr2nZe6Evt4w==, tarball: file:projects/web-unit-jest.tgz}
     name: '@rush-temp/web-unit-jest'
     version: 0.0.0
     dependencies:
@@ -8225,7 +8213,7 @@ packages:
     dev: false
 
   file:projects/web-unit.tgz:
-    resolution: {integrity: sha512-mpb5jUIalUpHzq34GHHbToQlze5QG9FeQ0RNS9lNpfVJ2hqiOzEce1agWajdhSLFSpyu4fiSgBM4K9ej4psq+Q==, tarball: file:projects/web-unit.tgz}
+    resolution: {integrity: sha512-C86k4sUV43DTpCz0b7FVl5dBwTrFAPIi9ofTPOoX4ZsQd1lMNvJQij4XeHH3lFmZbxrTvMn242aOEQ0WvVftHQ==, tarball: file:projects/web-unit.tgz}
     name: '@rush-temp/web-unit'
     version: 0.0.0
     dependencies:

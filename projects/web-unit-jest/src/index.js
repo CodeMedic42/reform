@@ -1,4 +1,4 @@
-const initialize = require('@reform/web-unit/initialize');
+const initialize = require('@reformjs/web-unit/initialize');
 
 let libControl = null;
 let harnessControl = null;

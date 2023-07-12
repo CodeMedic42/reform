@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import isNil from 'lodash/isNil';
 import forEach from 'lodash/forEach';
 import reduce from 'lodash/reduce';
-import { Aspect } from '@reform/girder-client';
+import { Aspect } from '@reformjs/girder-client';
 import systemContext from './context';
 
 const { Provider } = systemContext;

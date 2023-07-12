@@ -36,7 +36,7 @@
   // "eslint.nodePath": "common/temp/node_modules",
   "eslint.trace.server": "verbose",
   // "eslint.options": {
-  //   "resolvePluginsRelativeTo": "node_modules/@reform/eslint-config"
+  //   "resolvePluginsRelativeTo": "node_modules/@reformjs/eslint-config"
   // },
   "eslint.format.enable": true,
   "eslint.lintTask.enable": true,

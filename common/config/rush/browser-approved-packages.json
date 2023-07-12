@@ -123,31 +123,31 @@
       "allowedCategories": [ "packages", "tools" ]
     },
     {
-      "name": "@reform/eslint-config",
+      "name": "@reformjs/eslint-config",
       "allowedCategories": [ "packages" ]
     },
     {
-      "name": "@reform/girder-client",
+      "name": "@reformjs/girder-client",
       "allowedCategories": [ "packages" ]
     },
     {
-      "name": "@reform/prettier-config",
+      "name": "@reformjs/prettier-config",
       "allowedCategories": [ "packages" ]
     },
     {
-      "name": "@reform/stylelint-config",
+      "name": "@reformjs/stylelint-config",
       "allowedCategories": [ "packages" ]
     },
     {
-      "name": "@reform/toolbox",
+      "name": "@reformjs/toolbox",
       "allowedCategories": [ "packages" ]
     },
     {
-      "name": "@reform/web-unit",
+      "name": "@reformjs/web-unit",
       "allowedCategories": [ "packages" ]
     },
     {
-      "name": "@reform/web-unit-jest",
+      "name": "@reformjs/web-unit-jest",
       "allowedCategories": [ "packages" ]
     },
     {

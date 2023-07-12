@@ -1,4 +1,4 @@
-import { Aspect } from '@reform/girder-client';
+import { Aspect } from '@reformjs/girder-client';
 
 class I18nAspect extends Aspect {}
 

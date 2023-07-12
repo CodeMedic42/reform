@@ -1,5 +1,5 @@
 {
-    "name": "@reform/eslint-config",
+    "name": "@reformjs/eslint-config",
     "version": "1.0.0",
     "description": "Shared eslint rules",
     "private": true,

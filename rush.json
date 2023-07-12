@@ -25,54 +25,62 @@
   "variants": [],
   "projects": [
     {
-      "packageName": "@reform/eslint-config",
+      "packageName": "@reformjs/eslint-config",
       "projectFolder": "packages/eslint-config",
-      "reviewCategory": "tools"
+      "reviewCategory": "tools",
+      "shouldPublish": false
     },
     {
-      "packageName": "@reform/girder-client",
+      "packageName": "@reformjs/girder-client",
       "projectFolder": "projects/girder-client",
       "reviewCategory": "packages",
-      "versionPolicyName": "girder"
+      "versionPolicyName": "girder",
+      "shouldPublish": true
     },
     {
-      "packageName": "@reform/girder-i18n-aspect",
+      "packageName": "@reformjs/girder-i18n-aspect",
       "projectFolder": "projects/girder-i18n-aspect",
       "reviewCategory": "packages",
-      "versionPolicyName": "girder"
+      "versionPolicyName": "girder",
+      "shouldPublish": true
     },
     {
-      "packageName": "@reform/girder-react-aspect",
+      "packageName": "@reformjs/girder-react-aspect",
       "projectFolder": "projects/girder-react-aspect",
       "reviewCategory": "packages",
-      "versionPolicyName": "girder"
+      "versionPolicyName": "girder",
+      "shouldPublish": true
     },
     {
-      "packageName": "@reform/girder-service-aspect",
+      "packageName": "@reformjs/girder-service-aspect",
       "projectFolder": "projects/girder-service-aspect",
       "reviewCategory": "packages",
-      "versionPolicyName": "girder"
+      "versionPolicyName": "girder",
+      "shouldPublish": true
     },
     {
-      "packageName": "@reform/girder-store-aspect",
+      "packageName": "@reformjs/girder-store-aspect",
       "projectFolder": "projects/girder-store-aspect",
       "reviewCategory": "packages",
-      "versionPolicyName": "girder"
+      "versionPolicyName": "girder",
+      "shouldPublish": true
     },
     {
-      "packageName": "@reform/web-unit",
+      "packageName": "@reformjs/web-unit",
       "projectFolder": "projects/web-unit",
       "reviewCategory": "packages",
-      "versionPolicyName": "web-unit"
+      "versionPolicyName": "web-unit",
+      "shouldPublish": true
     },
     {
-      "packageName": "@reform/web-unit-jest",
+      "packageName": "@reformjs/web-unit-jest",
       "projectFolder": "projects/web-unit-jest",
       "reviewCategory": "packages",
-      "versionPolicyName": "web-unit"
+      "versionPolicyName": "web-unit",
+      "shouldPublish": true
     },
     {
-      "packageName": "@reform/toolbox",
+      "packageName": "@reformjs/toolbox",
       "projectFolder": "projects/toolbox",
       "reviewCategory": "packages",
       "versionPolicyName": "toolbox"

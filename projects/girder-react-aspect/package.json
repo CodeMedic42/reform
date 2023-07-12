@@ -1,0 +1,42 @@
+{
+  "name": "@reform/girder-react-aspect",
+  "version": "0.0.2-rc.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:push": "ncp ./build ./lib ; rimraf build",
+    "build:commit": "rimraf lib ; pnpm build:push",
+    "build:clean": "rimraf build",
+    "compile:js": "tsc",
+    "build:compile": "pnpm compile:js",
+    "build": "pnpm build:clean ; pnpm build:compile ; pnpm build:commit",
+    "lint": "npx eslint ./src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "exports": {
+    ".": {
+      "import": "./lib",
+      "require": "./lib",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "files": [
+    "/lib"
+  ],
+  "dependencies": {
+    "@reform/girder-client": "0.0.2-rc.1",
+    "bluebird": "^3.7.2",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "1.2.0",
+    "@reform/eslint-config": "1.0.0",
+    "ncp": "2.0.0",
+    "rimraf": "^5.0.0",
+		"typescript": "~5.0.4"
+  }
+}

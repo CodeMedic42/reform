@@ -1,0 +1,514 @@
+// DO NOT ADD COMMENTS IN THIS FILE.  They will be lost when the Rush tool resaves it.
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/approved-packages.schema.json",
+  "packages": [
+    {
+      "name": "@babel/core",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@babel/eslint-parser",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@babel/eslint-plugin",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "@babel/node",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@babel/preset-env",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@babel/preset-react",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "@babel/preset-typescript",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@fortawesome/fontawesome-svg-core",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@fortawesome/free-regular-svg-icons",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@fortawesome/free-solid-svg-icons",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@fortawesome/react-fontawesome",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@jest/globals",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@jsdevtools/coverage-istanbul-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@rushstack/eslint-patch",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/addon-essentials",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/addon-interactions",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/addon-links",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/blocks",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/builder-webpack5",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/manager-webpack5",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/preset-scss",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/react",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/react-webpack5",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@storybook/testing-library",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@svgr/webpack",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@testing-library/jest-dom",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@testing-library/react",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@testing-library/user-event",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "@reform/eslint-config",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reform/girder-client",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reform/prettier-config",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reform/stylelint-config",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reform/toolbox",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reform/web-unit",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reform/web-unit-jest",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "axios",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "axios-retry",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "babel-eslint",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "bluebird",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "classnames",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "commander",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "core-js",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "css-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "date-fns",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "eslint",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-config-airbnb",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-config-prettier",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-config-react-app",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "eslint-import-resolver-typescript",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-plugin-es",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "eslint-plugin-flowtype",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "eslint-plugin-formatjs",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "eslint-plugin-import",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-plugin-jest",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-plugin-jsx-a11y",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-plugin-prettier",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "eslint-plugin-react",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "eslint-plugin-react-hooks",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "eslint-plugin-storybook",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "eslint-plugin-testing-library",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "file-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "find-up",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "fs-extra",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "html-inline-script-webpack-plugin",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "html-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "html-webpack-plugin",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "jest",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "jest-cucumber",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "jest-environment-jsdom",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "jest-puppeteer",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "lodash",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "lorem-ipsum",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "make-dir",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "make-dir-cli",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "mini-css-extract-plugin",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "mobx",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "mobx-state-tree",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "ncp",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "node-sass",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "node-sass-package-importer",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "npm-watch",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "pdfjs-dist",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "picomatch",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "process",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "prop-types",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "puppeteer",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "puppeteer-to-istanbul",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "react",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "react-day-picker",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "react-dom",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "react-element-to-jsx-string",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "react-redux",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "react-text-mask",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "read-pkg-up",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "redux",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "resolve-url-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "rimraf",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "sass",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "sass-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "sass-package-importer",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "scroll-into-view-if-needed",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "semver",
+      "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "shortid",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "slash",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "storybook",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "string-replace-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "style-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "stylelint",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "stylelint-config-prettier",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "stylelint-config-standard",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "stylelint-scss",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "ts-dedent",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "ts-jest",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "ts-node",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "typescript",
+      "allowedCategories": [ "packages", "tools" ]
+    },
+    {
+      "name": "url-loader",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "uuid",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "webpack",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "webpack-cli",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "webpack-dev-server",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "webpack-merge",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "webpack-node-externals",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "webpack-virtual-modules",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "worker-loader",
+      "allowedCategories": [ "packages" ]
+    }
+  ]
+}

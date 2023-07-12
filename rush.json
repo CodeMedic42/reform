@@ -1,0 +1,80 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+  "rushVersion": "5.97.0",
+  "pnpmVersion": "6.16.1",
+  "pnpmOptions": {
+    // "useWorkspaces": true,
+  },
+  "nodeSupportedVersionRange": ">=16.0.0",
+  "projectFolderMinDepth": 2,
+  "projectFolderMaxDepth": 3,
+  "approvedPackagesPolicy": {
+    "reviewCategories": ["apps", "packages", "tools"],
+    "ignoredNpmScopes": ["@types"]
+  },
+  "gitPolicy": {},
+  "repository": {},
+  "eventHooks": {
+    "preRushInstall": [],
+    "postRushInstall": [],
+    "preRushBuild": [],
+    "postRushBuild": []
+  },
+  "variants": [],
+  "projects": [
+    {
+      "packageName": "@reform/eslint-config",
+      "projectFolder": "packages/eslint-config",
+      "reviewCategory": "tools"
+    },
+    {
+      "packageName": "@reform/girder-client",
+      "projectFolder": "projects/girder-client",
+      "reviewCategory": "packages",
+      "versionPolicyName": "mobx"
+    },
+    {
+      "packageName": "@reform/girder-i18n-aspect",
+      "projectFolder": "projects/girder-i18n-aspect",
+      "reviewCategory": "packages",
+      "versionPolicyName": "girder"
+    },
+    {
+      "packageName": "@reform/girder-react-aspect",
+      "projectFolder": "projects/girder-react-aspect",
+      "reviewCategory": "packages",
+      "versionPolicyName": "girder"
+    },
+    {
+      "packageName": "@reform/girder-service-aspect",
+      "projectFolder": "projects/girder-service-aspect",
+      "reviewCategory": "packages",
+      "versionPolicyName": "girder"
+    },
+    {
+      "packageName": "@reform/girder-store-aspect",
+      "projectFolder": "projects/girder-store-aspect",
+      "reviewCategory": "packages",
+      "versionPolicyName": "girder"
+    },
+    {
+      "packageName": "@reform/web-unit",
+      "projectFolder": "projects/web-unit",
+      "reviewCategory": "packages",
+      "versionPolicyName": "web-unit"
+    },
+    {
+      "packageName": "@reform/web-unit-jest",
+      "projectFolder": "projects/web-unit-jest",
+      "reviewCategory": "packages",
+      "versionPolicyName": "web-unit"
+    },
+    {
+      "packageName": "@reform/toolbox",
+      "projectFolder": "projects/toolbox",
+      "reviewCategory": "packages",
+      "versionPolicyName": "toolbox"
+    }
+  ]
+}
+

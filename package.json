@@ -1,0 +1,8 @@
+{
+    "name": "reform",
+    "private": true,
+    "scripts": {
+      "build": "rush build",
+      "storybook": "rush storybook --verbose"
+    }
+}

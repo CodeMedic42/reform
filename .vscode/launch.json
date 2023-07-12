@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+		{
+			"name": "test-json",
+			"request": "launch",
+			// "runtimeArgs": ["run-script", "start", "--preserve-symlinks"],
+            "runtimeArgs": ["./test.js"],
+			"runtimeExecutable": "node",
+			"skipFiles": ["<node_internals>/**"],
+			"console": "integratedTerminal",
+			"cwd": "${workspaceFolder}",
+			"type": "node"
+		},
+    ]
+}

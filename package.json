@@ -3,6 +3,7 @@
     "private": true,
     "scripts": {
       "build": "rush build",
-      "storybook": "rush storybook --verbose"
+      "storybook": "rush storybook --verbose",
+      "deploy": "rush publish --publish  --apply --target-branch main --set-access-level public --registry https://registry.npmjs.org/"
     }
 }

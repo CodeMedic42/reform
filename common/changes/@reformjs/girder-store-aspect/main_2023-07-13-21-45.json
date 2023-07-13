@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@reformjs/girder-store-aspect",
+      "comment": "Removing base store aspect as it was clunky and base methods were confusing in different contexts where they were being used.",
+      "type": "none"
+    }
+  ],
+  "packageName": "@reformjs/girder-store-aspect"
+}

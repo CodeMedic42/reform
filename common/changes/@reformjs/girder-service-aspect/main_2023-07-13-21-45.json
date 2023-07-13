@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@reformjs/girder-service-aspect",
+      "comment": "Bug fixes and improvment of overall design",
+      "type": "none"
+    }
+  ],
+  "packageName": "@reformjs/girder-service-aspect"
+}

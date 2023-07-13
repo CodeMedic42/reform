@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@reformjs/girder-pendo-aspect",
+      "comment": "New aspect to add support for Pendo",
+      "type": "none"
+    }
+  ],
+  "packageName": "@reformjs/girder-pendo-aspect"
+}

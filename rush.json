@@ -45,6 +45,13 @@
       "shouldPublish": true
     },
     {
+      "packageName": "@reformjs/girder-pendo-aspect",
+      "projectFolder": "projects/girder-pendo-aspect",
+      "reviewCategory": "packages",
+      "versionPolicyName": "girder",
+      "shouldPublish": true
+    },
+    {
       "packageName": "@reformjs/girder-react-aspect",
       "projectFolder": "projects/girder-react-aspect",
       "reviewCategory": "packages",

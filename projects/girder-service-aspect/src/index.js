@@ -1,12 +1,10 @@
 import ServiceAspect from './service-aspect';
-import ServiceConfiguration from './service-configuration';
-import GroupConfiguration from './group-configuration';
-import CommandConfiguration from './command-configuration';
+import Group from './group';
+import Command from './command';
 
 export default ServiceAspect;
 
 export {
-    ServiceConfiguration,
-    GroupConfiguration,
-    CommandConfiguration,
+    Group,
+    Command,
 };

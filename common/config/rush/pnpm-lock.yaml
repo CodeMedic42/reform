@@ -13,6 +13,7 @@ specifiers:
   '@rush-temp/eslint-config': file:./projects/eslint-config.tgz
   '@rush-temp/girder': file:./projects/girder.tgz
   '@rush-temp/girder-i18n-aspect': file:./projects/girder-i18n-aspect.tgz
+  '@rush-temp/girder-pendo-aspect': file:./projects/girder-pendo-aspect.tgz
   '@rush-temp/girder-react-aspect': file:./projects/girder-react-aspect.tgz
   '@rush-temp/girder-service-aspect': file:./projects/girder-service-aspect.tgz
   '@rush-temp/girder-store-aspect': file:./projects/girder-store-aspect.tgz
@@ -81,6 +82,7 @@ dependencies:
   '@rush-temp/eslint-config': file:projects/eslint-config.tgz_@babel+core@7.22.9
   '@rush-temp/girder': file:projects/girder.tgz
   '@rush-temp/girder-i18n-aspect': file:projects/girder-i18n-aspect.tgz
+  '@rush-temp/girder-pendo-aspect': file:projects/girder-pendo-aspect.tgz
   '@rush-temp/girder-react-aspect': file:projects/girder-react-aspect.tgz
   '@rush-temp/girder-service-aspect': file:projects/girder-service-aspect.tgz
   '@rush-temp/girder-store-aspect': file:projects/girder-store-aspect.tgz_react-dom@18.2.0
@@ -1598,7 +1600,7 @@ packages:
     dependencies:
       '@jest/fake-timers': 29.6.1
       '@jest/types': 29.6.1
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       jest-mock: 29.6.1
     dev: false
 
@@ -1625,7 +1627,7 @@ packages:
     dependencies:
       '@jest/types': 29.6.1
       '@sinonjs/fake-timers': 10.3.0
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       jest-message-util: 29.6.1
       jest-mock: 29.6.1
       jest-util: 29.6.1
@@ -1680,7 +1682,7 @@ packages:
       '@jest/schemas': 29.6.0
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       '@types/yargs': 17.0.24
       chalk: 4.1.2
     dev: false
@@ -1862,26 +1864,26 @@ packages:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/bonjour/3.5.10:
     resolution: {integrity: sha512-p7ienRMiS41Nu2/igbJxxLDWrSZ0WxM8UQgCeO9KhoVF7cOVFkrKsiDr1EsJIla8vV3oEEjGcz11jc5yimhzZw==}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/connect-history-api-fallback/1.5.0:
     resolution: {integrity: sha512-4x5FkPpLipqwthjPsF7ZRbOv3uoLUFkTA9G9v583qi4pACvq0uTELrB8OLUzPWUI4IJIyvM85vzkV1nyiI2Lig==}
     dependencies:
       '@types/express-serve-static-core': 4.17.35
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/eslint-scope/3.7.4:
@@ -1905,7 +1907,7 @@ packages:
   /@types/express-serve-static-core/4.17.35:
     resolution: {integrity: sha512-wALWQwrgiB2AWTT91CB62b6Yt0sNHpznUXeZEcnPU3DRdlDIz74x8Qg1UUYKSVFi+va5vKOLYRBI1bRKiLLKIg==}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
       '@types/send': 0.17.1
@@ -1923,7 +1925,7 @@ packages:
   /@types/graceful-fs/4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/hoist-non-react-statics/3.3.1:
@@ -1944,7 +1946,7 @@ packages:
   /@types/http-proxy/1.17.11:
     resolution: {integrity: sha512-HC8G7c1WmaF2ekqpnFq626xd3Zz0uvaqFmBJNRZCGEZCXkvSdJoNFn/8Ygbd9fKNQj8UzLdCETaI0UWPAjK7IA==}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/istanbul-lib-coverage/2.0.4:
@@ -1979,8 +1981,8 @@ packages:
     resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==}
     dev: false
 
-  /@types/node/20.4.1:
-    resolution: {integrity: sha512-JIzsAvJeA/5iY6Y/OxZbv1lUcc8dNSE77lb2gnBH+/PJ3lFR1Ccvgwl5JWnHAkNHcRsT0TbpVOsiMKZ1F/yyJg==}
+  /@types/node/20.4.2:
+    resolution: {integrity: sha512-Dd0BYtWgnWJKwO1jkmTrzofjK2QXXcai0dmtzvIBhcA+RsG5h8R3xlyta0kGOZRNfL9GuRtb1knmPEhQrePCEw==}
     dev: false
 
   /@types/normalize-package-data/2.4.1:
@@ -2023,7 +2025,7 @@ packages:
     resolution: {integrity: sha512-Cwo8LE/0rnvX7kIIa3QHCkcuF21c05Ayb0ZfxPiv0W8VRiZiNW/WuRupHKpqqGVGf7SUA44QSOUKaEd9lIrd/Q==}
     dependencies:
       '@types/mime': 1.3.2
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/serve-index/1.9.1:
@@ -2037,13 +2039,13 @@ packages:
     dependencies:
       '@types/http-errors': 2.0.1
       '@types/mime': 3.0.1
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/sockjs/0.3.33:
     resolution: {integrity: sha512-f0KEEe05NvUnat+boPTZ0dgaLZ4SfSouXUgv5noUiefG2ajgKjmETo9ZJyuqsl7dfl2aHlLJUiki6B4ZYldiiw==}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/stack-utils/2.0.1:
@@ -2057,7 +2059,7 @@ packages:
   /@types/ws/8.5.5:
     resolution: {integrity: sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
 
   /@types/yargs-parser/21.0.0:
@@ -2074,7 +2076,7 @@ packages:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
     dev: false
     optional: true
 
@@ -2269,7 +2271,7 @@ packages:
       glob: 7.2.3
       is-glob: 4.0.3
       lodash: 4.17.21
-      semver: 7.5.4
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@4.9.5
       typescript: 4.9.5
     transitivePeerDependencies:
@@ -2291,7 +2293,7 @@ packages:
       glob: 7.2.3
       is-glob: 4.0.3
       lodash: 4.17.21
-      semver: 7.5.4
+      semver: 7.3.8
       tsutils: 3.21.0_typescript@5.0.4
       typescript: 5.0.4
     transitivePeerDependencies:
@@ -2695,7 +2697,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       get-intrinsic: 1.2.1
       is-string: 1.0.7
     dev: false
@@ -2711,7 +2713,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       es-shim-unscopables: 1.0.0
     dev: false
 
@@ -2721,7 +2723,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       es-shim-unscopables: 1.0.0
     dev: false
 
@@ -2731,7 +2733,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       es-array-method-boxes-properly: 1.0.0
       is-string: 1.0.7
     dev: false
@@ -2741,7 +2743,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       es-shim-unscopables: 1.0.0
       get-intrinsic: 1.2.1
     dev: false
@@ -3016,7 +3018,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001515
-      electron-to-chromium: 1.4.457
+      electron-to-chromium: 1.4.459
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11_browserslist@4.21.9
     dev: false
@@ -3597,8 +3599,8 @@ packages:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
     dev: false
 
-  /electron-to-chromium/1.4.457:
-    resolution: {integrity: sha512-/g3UyNDmDd6ebeWapmAoiyy+Sy2HyJ+/X8KyvNeHfKRFfHaA2W8oF5fxD5F3tjBDcjpwo0iek6YNgxNXDBoEtA==}
+  /electron-to-chromium/1.4.459:
+    resolution: {integrity: sha512-XXRS5NFv8nCrBL74Rm3qhJjA2VCsRFx0OjHKBMPI0otij56aun8UWiKTDABmd5/7GTR021pA4wivs+Ri6XCElg==}
     dev: false
 
   /emoji-regex/8.0.0:
@@ -3656,8 +3658,8 @@ packages:
       is-arrayish: 0.2.1
     dev: false
 
-  /es-abstract/1.21.2:
-    resolution: {integrity: sha512-y/B5POM2iBnIxCiernH1G7rC9qQoM77lLIMQLuob0zhp8C56Po81+2Nj0WFKnd0pNReDTnkYryc+zhOzpEIROg==}
+  /es-abstract/1.21.3:
+    resolution: {integrity: sha512-ZU4miiY1j3sGPFLJ34VJXEqhpmL+HGByCinGHv4HC+Fxl2fI2Z4yR6tl0mORnDr6PA8eihWo4LmSWDbvhALckg==}
     engines: {node: '>= 0.4'}
     dependencies:
       array-buffer-byte-length: 1.0.0
@@ -3691,6 +3693,7 @@ packages:
       string.prototype.trim: 1.2.7
       string.prototype.trimend: 1.0.6
       string.prototype.trimstart: 1.0.6
+      typed-array-byte-offset: 1.0.0
       typed-array-length: 1.0.4
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.10
@@ -4439,7 +4442,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/expect-utils': 29.6.1
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       jest-get-type: 29.4.3
       jest-matcher-utils: 29.6.1
       jest-message-util: 29.6.1
@@ -4724,7 +4727,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       functions-have-names: 1.2.3
     dev: false
 
@@ -5434,7 +5437,7 @@ packages:
     dependencies:
       '@jest/types': 29.6.1
       '@types/graceful-fs': 4.1.6
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -5477,7 +5480,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': 29.6.1
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       jest-util: 29.6.1
     dev: false
 
@@ -5520,7 +5523,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': 29.6.1
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       chalk: 4.1.2
       ci-info: 3.8.0
       graceful-fs: 4.2.11
@@ -5531,7 +5534,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: false
@@ -5540,7 +5543,7 @@ packages:
     resolution: {integrity: sha512-U+Wrbca7S8ZAxAe9L6nb6g8kPdia5hj32Puu5iOqBCMTMWFHXuK6dOV2IFrpedbTV8fjMFLdWNttQTBL6u2MRA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@types/node': 20.4.1
+      '@types/node': 20.4.2
       jest-util: 29.6.1
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -6024,7 +6027,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
     dev: false
 
   /object.fromentries/2.0.6:
@@ -6033,7 +6036,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
     dev: false
 
   /object.getownpropertydescriptors/2.1.6:
@@ -6043,7 +6046,7 @@ packages:
       array.prototype.reduce: 1.0.5
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       safe-array-concat: 1.0.0
     dev: false
 
@@ -6051,7 +6054,7 @@ packages:
     resolution: {integrity: sha512-B5UIT3J1W+WuWIU55h0mjlwaqxiE5vYENJXIXZ4VFe05pNYrkKuK0U/6aFcb0pKywYJh7IhfoqUfKVmrJJHZHw==}
     dependencies:
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
     dev: false
 
   /object.values/1.1.6:
@@ -6060,7 +6063,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
     dev: false
 
   /obuf/1.1.2:
@@ -7201,7 +7204,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
       get-intrinsic: 1.2.1
       has-symbols: 1.0.3
       internal-slot: 1.0.5
@@ -7215,7 +7218,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
     dev: false
 
   /string.prototype.trimend/1.0.6:
@@ -7223,7 +7226,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
     dev: false
 
   /string.prototype.trimstart/1.0.6:
@@ -7231,7 +7234,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.2.0
-      es-abstract: 1.21.2
+      es-abstract: 1.21.3
     dev: false
 
   /string_decoder/1.1.1:
@@ -7550,6 +7553,17 @@ packages:
     dependencies:
       media-typer: 0.3.0
       mime-types: 2.1.35
+    dev: false
+
+  /typed-array-byte-offset/1.0.0:
+    resolution: {integrity: sha512-RD97prjEt9EL8YgAgpOkf3O4IF9lhJFr9g0htQkm0rchFp/Vx7LW5Q8fSXXub7BXAODyUQohRMyOc3faCPd0hg==}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      available-typed-arrays: 1.0.5
+      call-bind: 1.0.2
+      for-each: 0.3.3
+      has-proto: 1.0.1
+      is-typed-array: 1.1.10
     dev: false
 
   /typed-array-length/1.0.4:
@@ -8110,20 +8124,8 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/girder.tgz:
-    resolution: {integrity: sha512-WUAHClKpIBHUIeLruRV9DNBZhhdjQYW8F41gIG+xWGUVoJVFa1CnUgClMaxtK6F9Hx3ECIGN5aQVFX54esoM9g==, tarball: file:projects/girder.tgz}
-    name: '@rush-temp/girder'
-    version: 0.0.0
-    dependencies:
-      '@rushstack/eslint-patch': 1.2.0
-      lodash: 4.17.21
-      ncp: 2.0.0
-      rimraf: 5.0.1
-      typescript: 5.0.4
-    dev: false
-
   file:projects/girder-i18n-aspect.tgz:
-    resolution: {integrity: sha512-cYdnsGeq2e0SVSmCs0U3zeDfXnjsXDI2pOvKfBmG2dZyZmUta1k+LGsim9+9VYKtO4PSIPLqLqOU+WS9oG/cpg==, tarball: file:projects/girder-i18n-aspect.tgz}
+    resolution: {integrity: sha512-I/Tiju+kFDlSxCq9jOyY0I+sdm1n7D2mXSqTAG6d3FZWi4AgFJqYsaXIX7fO9sLChRCqNwxnLQ9SXSDkriI3Uw==, tarball: file:projects/girder-i18n-aspect.tgz}
     name: '@rush-temp/girder-i18n-aspect'
     version: 0.0.0
     dependencies:
@@ -8133,8 +8135,20 @@ packages:
       typescript: 5.0.4
     dev: false
 
+  file:projects/girder-pendo-aspect.tgz:
+    resolution: {integrity: sha512-S/erV3Pe3lecpVD3TRn3n6hMMi2bFoUl6oO79su55ZtVroB8wFyTW6gCsneM8X1DRV0zp28hppEmdYz+nOWiUA==, tarball: file:projects/girder-pendo-aspect.tgz}
+    name: '@rush-temp/girder-pendo-aspect'
+    version: 0.0.0
+    dependencies:
+      '@rushstack/eslint-patch': 1.2.0
+      lodash: 4.17.21
+      ncp: 2.0.0
+      rimraf: 5.0.1
+      typescript: 5.0.4
+    dev: false
+
   file:projects/girder-react-aspect.tgz:
-    resolution: {integrity: sha512-hFkQBjMwMxTwxEfIGSZMld64wgNbWx/nF9piamPz5K1+dnxeJquM5XzNejrpAqiFJbOnhnJ+pKYqIyVn8Q97vw==, tarball: file:projects/girder-react-aspect.tgz}
+    resolution: {integrity: sha512-1LRJvEl32tWG+PbGbLiHUcDHOTK6kKSZulbAcPHk4HqlMsnpKAe3NkKSM6kSa8nwfJtSOGKPoaUUp/NV7YVdjw==, tarball: file:projects/girder-react-aspect.tgz}
     name: '@rush-temp/girder-react-aspect'
     version: 0.0.0
     dependencies:
@@ -8149,7 +8163,7 @@ packages:
     dev: false
 
   file:projects/girder-service-aspect.tgz:
-    resolution: {integrity: sha512-Gx377ck5U8F4GI1gnUbAEztcuPpRFm9mEAfn8kC1jQBOP6oPB6odnc3aeHufY/lRtJGg48/6swnHgGndLy16OA==, tarball: file:projects/girder-service-aspect.tgz}
+    resolution: {integrity: sha512-HZfcJzWEsjR5ghEQfPyCgRBAlPY85jGBSSWVX4FhiTuqmaw599B0+NEzpmekGn0AFv4sihlgQSb2yYNlCzg1lA==, tarball: file:projects/girder-service-aspect.tgz}
     name: '@rush-temp/girder-service-aspect'
     version: 0.0.0
     dependencies:
@@ -8165,7 +8179,7 @@ packages:
     dev: false
 
   file:projects/girder-store-aspect.tgz_react-dom@18.2.0:
-    resolution: {integrity: sha512-1n2bG7yafKi3ziVWVW27R7KiWCUEfBOcTnQHb2ADF8R8aEquLNza+wUpIKda0CG8mMOMWEKWnv+5SiiabL2PpA==, tarball: file:projects/girder-store-aspect.tgz}
+    resolution: {integrity: sha512-YIMACemDkrTO9tAVMn19/L9OWZLyK3Y/vbGCRUkk75NfGO10NFuFowIupeIiO7aWKj8/N3gmAGJabei72DVZIQ==, tarball: file:projects/girder-store-aspect.tgz}
     id: file:projects/girder-store-aspect.tgz
     name: '@rush-temp/girder-store-aspect'
     version: 0.0.0
@@ -8183,6 +8197,18 @@ packages:
       - '@types/react-dom'
       - react-dom
       - react-native
+    dev: false
+
+  file:projects/girder.tgz:
+    resolution: {integrity: sha512-sM9FgHiM0Bmj37WClaFV28FLfheYn/2NHUSYr49lmOWU+QA9X3qM+EXfeXFcyVCbkGhHvFhnfU5HBiO1Ipqikw==, tarball: file:projects/girder.tgz}
+    name: '@rush-temp/girder'
+    version: 0.0.0
+    dependencies:
+      '@rushstack/eslint-patch': 1.2.0
+      lodash: 4.17.21
+      ncp: 2.0.0
+      rimraf: 5.0.1
+      typescript: 5.0.4
     dev: false
 
   file:projects/toolbox.tgz:

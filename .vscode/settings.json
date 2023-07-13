@@ -46,5 +46,8 @@
   },
   "[handlebars]": {
     "editor.formatOnSave": false
-  }
+  },
+  "cSpell.words": [
+    "Pendo"
+  ]
 }

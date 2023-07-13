@@ -14,8 +14,8 @@ function mergeSettings(settings = {}, additionalSettings = {}) {
 
     const {
         data: additionalData,
-        query: additionalQueryParams = {},
-        params: additionalRouteParams = {},
+        queryParams: additionalQueryParams = {},
+        routeParams: additionalRouteParams = {},
         headers: additionalHeaders = {},
         ...mergableAdditionalSettings
     } = additionalSettings;

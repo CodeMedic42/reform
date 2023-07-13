@@ -18,42 +18,37 @@ class ServiceAspect extends Aspect {
         super('service');
     }
 
-    applyGlobalConfiguration(globalConfiguration) {
-        if (!isNil(globalConfiguration)) {
-            this.globalConfigurations.push(globalConfiguration);
-        };
-    }
-
     // eslint-disable-next-line class-methods-use-this
     onInitialize({ setControls, getContext, hooks }) {
         const globalConfigurations = [DEFAULT_CONFIG];
-        const groupConfigurations = {};
+        const finalConfigurations = {};
 
         forEach(hooks.service, (hook) => {
-            const { configuration } = hook;
+            const {
+                globalConfiguration,
+                groupConfigurations,
+            } = hook;
 
-            if (isNil(configuration)) {
-                return;
+            if (!isNil(globalConfiguration)) {
+                globalConfigurations.push(globalConfiguration);
             }
 
-            globalConfigurations.push(configuration.globalConfiguration);
-
-            forEach(configuration.groupConfigurations, (
+            forEach(groupConfigurations, (
                 groupConfiguration,
                 groupConfigurationId,
             ) => {
-                if (!isNil(groupConfigurations[groupConfigurationId])) {
+                if (!isNil(finalConfigurations[groupConfigurationId])) {
                     throw new Error(`A service group configuration already exists with id "${groupConfigurationId}"`);
                 }
 
-                groupConfigurations[groupConfigurationId] = groupConfiguration;
+                finalConfigurations[groupConfigurationId] = groupConfiguration;
             });
         });
 
         const globalConfiguration = mergeConfigs(...globalConfigurations);
 
         const controls = mapValues(
-            groupConfigurations,
+            finalConfigurations,
             (groupConfiguration) => groupConfiguration.build(globalConfiguration, getContext),
         );
 

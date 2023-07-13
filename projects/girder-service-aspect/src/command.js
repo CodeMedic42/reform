@@ -59,7 +59,7 @@ function runHooksWithHandled(hookList, contextAccess, value) {
     return handled;
 }
 
-class CommandConfiguration {
+class Command {
     constructor(config = {}) {
         this.config = config;
     }
@@ -72,6 +72,7 @@ class CommandConfiguration {
 
         return async (instanceConfiguration) => {
             let result = null;
+            let error = null;
 
             const {
                 hooks,
@@ -98,17 +99,19 @@ class CommandConfiguration {
                 result = await instance.request(settings);
 
                 runHooks(hooks.onSuccess, context, result);
-            } catch (error) {
-                result = error;
+            } catch (caughtError) {
+                error = caughtError;
 
                 runHooksWithHandled(hooks.onFailure, context, error);
             }
 
-            runHooks(hooks.onAfterRequest, context, result);
+            const returnValue = [error, result];
 
-            return result;
+            runHooks(hooks.onAfterRequest, context, returnValue);
+
+            return returnValue;
         };
     }
 }
 
-export default CommandConfiguration;
+export default Command;

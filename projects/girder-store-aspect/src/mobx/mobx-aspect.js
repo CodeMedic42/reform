@@ -1,20 +1,10 @@
 import isNil from 'lodash/isNil';
 import forEach from 'lodash/forEach';
-import StoreAspect from '../store-aspect';
+import { Aspect } from '@reformjs/girder';
 
-class MobxAspect extends StoreAspect {
+class MobxAspect extends Aspect {
     constructor() {
         super('mobx');
-
-        this.stores = null;
-    }
-
-    state(storeId) {
-        return this.stores[storeId];
-    }
-
-    dispatch(storeId, action, ...args) {
-        this.stores[storeId][action](...args);
     }
 
     onInitialize(initContext) {
@@ -22,27 +12,28 @@ class MobxAspect extends StoreAspect {
 
         const {
             hooks,
+            setControls,
         } = initContext;
 
-        this.stores = [];
+        const stores = [];
 
         forEach(hooks.mobx, (hook) => {
             forEach(hook.stores, (store) => {
                 const storeId = store.id;
 
-                if (!isNil(this.stores[storeId])) {
+                if (!isNil(stores[storeId])) {
                     throw new Error(`A store by the id of ${storeId} already exists.`);
                 }
 
-                this.stores[storeId] = store.create();
+                stores[storeId] = store.create();
             });
         });
-    }
 
-    onStop() {
-        super.onStop();
+        const controls = {
+            getStore: (storeId) => stores[storeId],
+        };
 
-        this.stores = null;
+        setControls(controls);
     }
 }
 

@@ -8,14 +8,13 @@ import isNil from 'lodash/isNil';
 import isEmpty from 'lodash/isEmpty';
 import keys from 'lodash/keys';
 import forEach from 'lodash/forEach';
-import StoreAspect from '../store-aspect';
+import { Aspect } from '@reformjs/girder';
 
-class ReduxAspect extends StoreAspect {
+class ReduxAspect extends Aspect {
     constructor(combineCallback = combineReducers) {
         super('redux');
 
         this.combineCallback = combineCallback;
-        this.store = null;
     }
 
     hooks() {
@@ -31,18 +30,13 @@ class ReduxAspect extends StoreAspect {
         };
     }
 
-    state() {
-        return this.store.getState();
-    }
-
-    dispatch(...args) {
-        this.store.dispatch(...args);
-    }
-
     onInitialize(initContext) {
         super.onInitialize(initContext);
 
-        const { hooks } = initContext;
+        const {
+            hooks,
+            setControls,
+        } = initContext;
 
         const reducers = {};
 
@@ -66,7 +60,14 @@ class ReduxAspect extends StoreAspect {
             throw new Error('At least one reducer is needed to use Redux');
         }
 
-        this.store = createStore(this.combineCallback(reducers));
+        const store = createStore(this.combineCallback(reducers));
+
+        const controls = {
+            getState: (...args) => store(...args),
+            dispatch: (...args) => store.dispatch(...args),
+        };
+
+        setControls(controls);
     }
 }
 

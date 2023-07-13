@@ -11,7 +11,7 @@ specifiers:
   '@jest/globals': ^29.3.1
   '@jsdevtools/coverage-istanbul-loader': ^3.0.5
   '@rush-temp/eslint-config': file:./projects/eslint-config.tgz
-  '@rush-temp/girder-client': file:./projects/girder-client.tgz
+  '@rush-temp/girder': file:./projects/girder.tgz
   '@rush-temp/girder-i18n-aspect': file:./projects/girder-i18n-aspect.tgz
   '@rush-temp/girder-react-aspect': file:./projects/girder-react-aspect.tgz
   '@rush-temp/girder-service-aspect': file:./projects/girder-service-aspect.tgz
@@ -79,7 +79,7 @@ dependencies:
   '@jest/globals': 29.6.1
   '@jsdevtools/coverage-istanbul-loader': 3.0.5
   '@rush-temp/eslint-config': file:projects/eslint-config.tgz_@babel+core@7.22.9
-  '@rush-temp/girder-client': file:projects/girder-client.tgz
+  '@rush-temp/girder': file:projects/girder.tgz
   '@rush-temp/girder-i18n-aspect': file:projects/girder-i18n-aspect.tgz
   '@rush-temp/girder-react-aspect': file:projects/girder-react-aspect.tgz
   '@rush-temp/girder-service-aspect': file:projects/girder-service-aspect.tgz
@@ -8110,9 +8110,9 @@ packages:
       - supports-color
     dev: false
 
-  file:projects/girder-client.tgz:
-    resolution: {integrity: sha512-WUAHClKpIBHUIeLruRV9DNBZhhdjQYW8F41gIG+xWGUVoJVFa1CnUgClMaxtK6F9Hx3ECIGN5aQVFX54esoM9g==, tarball: file:projects/girder-client.tgz}
-    name: '@rush-temp/girder-client'
+  file:projects/girder.tgz:
+    resolution: {integrity: sha512-WUAHClKpIBHUIeLruRV9DNBZhhdjQYW8F41gIG+xWGUVoJVFa1CnUgClMaxtK6F9Hx3ECIGN5aQVFX54esoM9g==, tarball: file:projects/girder.tgz}
+    name: '@rush-temp/girder'
     version: 0.0.0
     dependencies:
       '@rushstack/eslint-patch': 1.2.0

@@ -127,7 +127,7 @@
       "allowedCategories": [ "packages" ]
     },
     {
-      "name": "@reformjs/girder-client",
+      "name": "@reformjs/girder",
       "allowedCategories": [ "packages" ]
     },
     {

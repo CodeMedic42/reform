@@ -31,8 +31,8 @@
       "shouldPublish": false
     },
     {
-      "packageName": "@reformjs/girder-client",
-      "projectFolder": "projects/girder-client",
+      "packageName": "@reformjs/girder",
+      "projectFolder": "projects/girder",
       "reviewCategory": "packages",
       "versionPolicyName": "girder",
       "shouldPublish": true

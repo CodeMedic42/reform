@@ -1,7 +1,7 @@
 import mapValues from 'lodash/mapValues';
 import isNil from 'lodash/isNil';
 import forEach from 'lodash/forEach';
-import { Aspect } from '@reformjs/girder-client';
+import { Aspect } from '@reformjs/girder';
 import mergeConfigs from './merge-configs';
 
 const DEFAULT_CONFIG = {

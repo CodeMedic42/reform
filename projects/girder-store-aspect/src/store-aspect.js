@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { Aspect } from '@reformjs/girder-client';
+import { Aspect } from '@reformjs/girder';
 
 class StoreAspect extends Aspect {
     hooks() {

@@ -41,7 +41,7 @@
     "redux": "^4.2.1"
   },
   "dependencies": {
-    "@reformjs/girder-client": "0.0.2-rc.4",
+    "@reformjs/girder": "0.0.2-rc.4",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

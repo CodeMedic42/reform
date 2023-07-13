@@ -6,6 +6,7 @@
       "storybook": "rush storybook --verbose",
       "deploy:build": "rush build",
       "deploy:publish": "rush publish --publish  --apply --target-branch main --set-access-level public --registry https://registry.npmjs.org/",
-      "deploy": "npm run deploy:build || npm run deploy:publish"
+      "deploy": "npm run deploy:build || npm run deploy:publish",
+      "version": "rush version --target-branch main --bump"
     }
 }

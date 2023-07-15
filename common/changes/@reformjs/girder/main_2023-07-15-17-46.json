@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@reformjs/girder",
+      "comment": "Fixing readme copyright",
+      "type": "none"
+    }
+  ],
+  "packageName": "@reformjs/girder"
+}

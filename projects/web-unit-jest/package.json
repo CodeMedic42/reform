@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/web-unit-jest",
-  "version": "0.0.2-rc.4",
+  "version": "0.0.2-rc.7",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   ],
   "dependencies": {
     "@jest/globals": "^29.3.1",
-    "@reformjs/web-unit": "0.0.2-rc.4",
+    "@reformjs/web-unit": "0.0.2-rc.7",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

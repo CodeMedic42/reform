@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/girder-react-aspect",
-  "version": "0.0.2-rc.6",
+  "version": "0.0.2-rc.9",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "/lib"
   ],
   "dependencies": {
-    "@reformjs/girder": "0.0.2-rc.6",
+    "@reformjs/girder": "0.0.2-rc.9",
     "bluebird": "^3.7.2",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

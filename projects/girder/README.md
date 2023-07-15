@@ -367,4 +367,4 @@ See also the list of [contributors](https://github.com/CodeMedic42/reform/graphs
 
 ## __License__
 
-[MIT License](https://andreasonny.mit-license.org/2019) © Andrea SonnY
+[MIT License](https://andreasonny.mit-license.org/2019) © Christian Micle

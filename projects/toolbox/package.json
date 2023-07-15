@@ -25,13 +25,19 @@
       "import": "./lib/for-map.js",
       "require": "./lib/for-map.js",
       "types": "./lib/for-map.d.ts"
+    },
+    "./promise-for-each": {
+      "import": "./lib/promise-for-each.js",
+      "require": "./lib/promise-for-each.js",
+      "types": "./lib/promise-for-each.d.ts"
     }
   },
   "files": [
     "/lib"
   ],
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "bluebird": "~3.7.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "1.2.0",

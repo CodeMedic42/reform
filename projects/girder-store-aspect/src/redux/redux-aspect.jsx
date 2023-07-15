@@ -30,17 +30,14 @@ class ReduxAspect extends Aspect {
         };
     }
 
-    onInitialize(initContext) {
-        super.onInitialize(initContext);
-
+    onInitialize(config) {
         const {
             hooks,
-            setControls,
-        } = initContext;
+        } = config;
 
         const reducers = {};
 
-        forEach(hooks.redux, (hook) => {
+        forEach(hooks, (hook) => {
             const aspectReducers = hook.reducers;
 
             if (isNil(aspectReducers)) {
@@ -62,12 +59,10 @@ class ReduxAspect extends Aspect {
 
         const store = createStore(this.combineCallback(reducers));
 
-        const controls = {
+        return {
             getState: (...args) => store(...args),
             dispatch: (...args) => store.dispatch(...args),
         };
-
-        setControls(controls);
     }
 }
 

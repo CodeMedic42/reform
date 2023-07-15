@@ -26,6 +26,7 @@
     "/lib"
   ],
   "dependencies": {
+    "@reformjs/toolbox": "0.0.2-rc.4",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

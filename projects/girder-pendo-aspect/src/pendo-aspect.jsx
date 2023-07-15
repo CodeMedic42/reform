@@ -22,8 +22,8 @@ class PendoAspect extends Aspect {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    onInitialize({ setControls, getContext, hooks }) {
-        setControls({
+    onInitialize() {
+        return {
             initialize: (...args) => {
                 if (isNil(window.pendo)) {
                     throw new Error('Pendo has not been setup properly.');
@@ -31,7 +31,7 @@ class PendoAspect extends Aspect {
 
                 window.pendo.initialize(...args);
             }
-        });
+        };
     }
 
     onStart(...args) {

@@ -1,271 +1,370 @@
-[![npm version](https://badge.fury.io/js/@reformjs%2Fgirder-client.svg)](https://badge.fury.io/js/@reformjs%2Fgirder-client)
+[![npm version](https://badge.fury.io/js/@reformjs%2Fgirder.svg)](https://badge.fury.io/js/@reformjs%2Fgirder)
 <!-- [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) -->
 
 # Girder
 
 Girder is a framework built to compartmentalize common setup steps for any front end Javascript application. It is structured around the idea that any application is just a series of plugins, even the application itself. Each plugin in this context is called an Aspect, as that plugin is just an aspect of the application.
 
-## Prerequisites
 
-This project requires NodeJS (version 8 or later) and NPM.
-[Node](http://nodejs.org/) and [NPM](https://npmjs.org/) are really easy to install.
-To make sure you have them available on your machine,
-try running the following command.
+## __Table of contents__
 
-```sh
-$ npm -v && node -v
-6.4.1
-v8.16.0
-```
-
-## Table of contents
-
-- [Project Name](#project-name)
-  - [Prerequisites](#prerequisites)
+- [Girder](#girder)
   - [Table of contents](#table-of-contents)
-  - [Getting Started](#getting-started)
-  - [Installation](#installation)
+  - [Contribution](#contribution)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Project Commands](#project-commands)
   - [Usage](#usage)
-    - [Serving the app](#serving-the-app)
-    - [Running the tests](#running-the-tests)
-    - [Building a distribution version](#building-a-distribution-version)
-    - [Serving the distribution version](#serving-the-distribution-version)
-  - [API](#api)
-    - [useBasicFetch](#usebasicfetch)
-      - [Options](#options)
-    - [fetchData](#fetchdata)
-  - [Contributing](#contributing)
-  - [Credits](#credits)
-  - [Built With](#built-with)
+    - [Installation](#installation)
+    - [Overview](#overview)
+      - [Client](#client)
+      - [Aspect](#aspect)
+  - [Examples](#examples)
   - [Versioning](#versioning)
   - [Authors](#authors)
+  - [Contributors](#contributors)
   - [License](#license)
 
-## Getting Started
+## __Contribution__
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. For instructions on how to use this system within another project please see the [Installation](#installation) section.
 
-## Installation
+### __Prerequisites__
 
-**BEFORE YOU INSTALL:** please read the [prerequisites](#prerequisites)
+This project requires [NodeJS](http://nodejs.org/) (version 16 or later), [PNPM](https://https://pnpm.io/), and [RushJS](https://rushjs.io/).
+Please follow their respective installation instructions. To verify if they are installed and available each has a "-v" command option for getting the installed version.
+
+### __Setup__
 
 Start with cloning this repo on your local machine:
 
 ```sh
-$ git clone https://github.com/ORG/PROJECT.git
-$ cd PROJECT
+$ git clone https://github.com/CodeMedic42/reform.git
+$ cd girder
 ```
+
+To install dependencies run this Rush command
+
+```sh
+$ rush install
+```
+
+### __Project Commands__
+
+This project has these high level commands
+
+- build
+
+  To build all project the command "rush build" will run the build command for each project which has changes from the last time this command was ran.
+
+- deploy
+
+  To build and publish a new version the command "rush deploy" will perform a build and will deploy the latest version of the changes for those projects who have changes.
+
+- test
+
+  To run the unit tests the command "rush test" will run the test system. (Note: There are no tests at this time)
+
+- lint
+
+To run the linting rules the command "rush list" will run the linting system. (Note: There are is no command at this time)
+
+## __Usage__
+
+These instructions will help you install this library to your project and provide assistance on how to use it. For information on how to contribute to this project please see the [Contribution](#contribution) section
+
+### __Installation__
 
 To install and set up the library, run:
 
-```sh
-$ npm install -S myLib
-```
+- npm
 
-Or if you prefer using Yarn:
+  ```sh
+  $ npm install girder
+  ```
 
-```sh
-$ yarn add --dev myLib
-```
+- yarn
 
-## Usage
+  ```sh
+  $ yarn add girder
+  ```
 
-### Serving the app
+- pnpm
 
-```sh
-$ npm start
-```
+  ```sh
+  $ pnpm install girder
+  ```
 
-### Running the tests
+### __Overview__
 
-```sh
-$ npm test
-```
+There are only two primary parts to this system, the Client and the Aspect. Both are the building blocks to an application which is compartmentalized and flexible. The next two sections will provide information on both and how to take advantage of their functionality.
 
-### Building a distribution version
+  1. ### Client
 
-```sh
-$ npm run build
-```
+      The client is the root of your application it runs the show but needs very little. To get started with it all you need to do is import it and create an instance of it.
 
-This task will create a distribution version of the project
-inside your local `dist/` folder
+      ```js
+      import Client from '@reformjs/girder';
 
-### Serving the distribution version
+      const client = new Client();
+      ```
 
-```sh
-$ npm run serve:dist
-```
+      However the client it really nothing more than a startup workflow implementation. Its the [Aspects](#aspect) which really do the work. We'll get to them in a minute. First we need to know how to add them to the client. Let's take a look at that.
 
-This will use `lite-server` for servign your already
-generated distribution version of the project.
+      ```js
+      client.registerAspect(YOUR_ASPECT_HERE);
+      ```
 
-*Note* this requires
-[Building a distribution version](#building-a-distribution-version) first.
+      You can register as many different aspects as you want. However as we will see, each Aspect has a unique id, and all registered Aspects must be unique.
 
-## API
+      Once you have registered all your Aspects all that's needed is to start the client. This will start the process of setting up and executing the logic inside each Aspect.
 
-### useBasicFetch
+      ```js
+      client.start();
+      ```
 
-```js
-useBasicFetch(url: string = '', delay: number = 0)
-```
+      The start method will return a promise which when resolved will indicate that all Aspects have completely started.
 
-Supported options and result fields for the `useBasicFetch` hook are listed below.
+      If however you want to stop the client all that you need to do is the following.
 
-#### Options
+      ```js
+      client.stop();
+      ```
 
-`url`
+      The stop method will return a promise which when resolved will indicate that all Aspects have completely stopped.
 
-| Type | Default value |
-| --- | --- |
-| string | '' |
+      That is all it takes, but we can shorten all this down like this.
 
-If present, the request will be performed as soon as the component is mounted
+      ```js
+      import Client from '@reformjs/girder';
 
-Example:
+      const client = new Client()
+        .registerAspect(YOUR_ASPECT_HERE)
+        .registerAspect(YOUR_ASPECT_HERE)
+        .registerAspect(YOUR_ASPECT_HERE)
+        .start();
+      ```
 
-```tsx
-const MyComponent: React.FC = () => {
-  const { data, error, loading } = useBasicFetch('https://api.icndb.com/jokes/random');
+  1. ### Aspect
 
-  if (error) {
-    return <p>Error</p>;
-  }
+      The Aspect is the brains behind the Client.
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+      An Aspect can be created via following
 
-  return (
-    <div className="App">
-      <h2>Chuck Norris Joke of the day</h2>
-      {data && data.value && <p>{data.value.joke}</p>}
-    </div>
-  );
-};
-```
+      ```js
+      import { Aspect } = "@reformjs/girder";
 
-`delay`
+      const aspect = new Aspect('YOUR_ASPECT_ID');
+      ```
 
-| Type | Default value | Description |
-| --- | --- | --- |
-| number | 0 | Time in milliseconds |
+      All an aspect requires is an ID as the first parameter to the constructor.
 
-If present, the request will be delayed by the given amount of time
+      However this Aspect is not going to do anything. We need to extend from it to take advantage of it functionality.
 
-Example:
+      ```js
+      import { Aspect } = "@reformjs/girder";
 
-```tsx
-type Joke = {
-  value: {
-    id: number;
-    joke: string;
-  };
-};
+      class MyAspect extends Aspect {
+        // ... overrides
+      }
+      ```
 
-const MyComponent: React.FC = () => {
-  const { data, error, loading } = useBasicFetch<Joke>('https://api.icndb.com/jokes/random', 2000);
+      However if you have logic you would like to run as part of the constructor be sure to either default the Aspect Id or allow whoever uses your Aspect to provide it.
 
-  if (error) {
-    return <p>Error</p>;
-  }
+      ```js
+      import { Aspect } = "@reformjs/girder";
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+      class MyAspect extends Aspect {
+        constructor(aspectId) {
+          super(aspectId);
+        }
 
-  return (
-    <div className="App">
-      <h2>Chuck Norris Joke of the day</h2>
-      {data && data.value && <p>{data.value.joke}</p>}
-    </div>
-  );
-};
-```
+        // ... overrides
+      }
+      ```
 
-### fetchData
+      ```js
+      import { Aspect } = "@reformjs/girder";
 
-```js
-fetchData(url: string)
-```
+      class MyAspect extends Aspect {
+        constructor() {
+          super('MY_STATIC_ID');
+        }
 
-Perform an asynchronous http request against a given url
+        // ... overrides
+      }
+      ```
 
-```tsx
-type Joke = {
-  value: {
-    id: number;
-    joke: string;
-  };
-};
+      __Note:__ There are a series of methods which can be overridden which are called as part of the client startup and stopping workflows. We will go over these methods shortly. If extending directly from the Aspect you do not need to call the super instance of these methods. However if extending from a predefined Aspect from another library or a custom one then the super instance should be called. Further examples will illustrate this even though they are extending from the base Aspect. Failure to do so might prevent the system from fully starting up.
 
-const ChuckNorrisJokes: React.FC = () => {
-  const { data, fetchData, error, loading } = useBasicFetch<Joke>();
-  const [jokeId, setJokeId] = useState(1);
+      ### - __`hooks`__
 
-  useEffect(() => {
-    fetchData(`https://api.icndb.com/jokes/${jokeId}`);
-  }, [jokeId, fetchData]);
+      The method, hooks, is synchronous, can be overridden, and is called as the client is starting up. The purpose of this method is to provide setup configuration to other Aspects as they are starting up. It takes no parameters and expects an object to er returned. We will get to how the Aspect accesses this information in a moment.
 
-  const handleNext = () => setJokeId(jokeId + 1);
+      For an example let's assume we have an Aspect like so...
 
-  if (error) {
-    return <p>Error</p>;
-  }
+      ```js
+      import { Aspect } = "@reformjs/girder";
 
-  const jokeData = data && data.value;
+      class MyAspect extends Aspect {
+        constructor() {
+          super('MY_STATIC_ID');
+        }
 
-  return (
-    <div className="Comments">
-      {loading && <p>Loading...</p>}
-      {!loading && jokeData && (
-        <div>
-          <p>Joke ID: {jokeData.id}</p>
-          <p>{jokeData.joke}</p>
-        </div>
-      )}
-      {!loading && jokeData && !jokeData.joke && <p>{jokeData}</p>}
-      <button disabled={loading} onClick={handleNext}>
-        Next Joke
-      </button>
-    </div>
-  );
-};
-```
+        // ... overrides
+      }
+      ```
 
-## Contributing
+      Let's assume the above Aspect has configuration information it uses.
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+      To pass this information in from another Aspect we would do this.
 
-1.  Fork it!
-2.  Create your feature branch: `git checkout -b my-new-feature`
-3.  Add your changes: `git add .`
-4.  Commit your changes: `git commit -am 'Add some feature'`
-5.  Push to the branch: `git push origin my-new-feature`
-6.  Submit a pull request :sunglasses:
+      ```js
+      import { Aspect } = "@reformjs/girder";
 
-## Credits
+      class MyOtherAspect extends Aspect {
+        constructor() {
+          super('MY_OTHER_STATIC_ID');
+        }
 
-TODO: Write credits
+        hooks() {
+          return {
+            ...super.hooks(),
+            MY_OTHER_STATIC_ID: {} // Here is the configuration information.
+          };
+        }
 
-## Built With
+        // ... overrides
+      }
+      ```
 
-* Dropwizard - Bla bla bla
-* Maven - Maybe
-* Atom - ergaerga
-* Love
+      The hooks method expects an object to be returned where each property key is the id of the Aspect you want to pass information to. You are not obligated to override or use this method or even pass information to all aspects. Only provide information to those Aspects you want to. The information passed can be any data type.
 
-## Versioning
+      #### - __`onInitialize`__
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+      The method, onInitialize, is asynchronous, can be overridden, and is called as the client is starting up. The purpose of this method is to setup and run any prelaunch logic.
 
-## Authors
+      - Return Value
 
-* **John Doe** - *Initial work* - [JohnDoe](https://github.com/JohnDoe)
+        Before we get to the parameters provided to this method we first need to talk about what can be returned from it and how that information is used.
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+        The return value can be generally be anything. If it is a promise then the Client will wait for this and any other Aspects to complete their initialization before starting the system fully. What's important is what happens to what you return directly or through a promise. Inside the client when it is started as each onInitialize method is called, their return values, if not nil, are place in an object called the clientContext under a key matching the id of the Aspect. As an example given the MyAspect example above, if it were to return something like this...
 
-## License
+        ```js
+        import { Aspect } = "@reformjs/girder";
+
+        class MyAspect extends Aspect {
+          constructor() {
+            super('MY_STATIC_ID');
+          }
+
+          onInitialize(config) {
+            return super.onInitialize(config)
+              .then((superControls) => {
+                return {
+                  ...superControls,
+                  startInterval: (cb, delay, ...args) => {
+                    this.interval = setInterval(cb, delay, ...args);
+                  },
+                  clearInterval: () => {
+                    clearInterval(this.interval);
+                  }
+                };
+              });
+          }
+
+          // ... overrides
+        }
+        ```
+
+        Then the clientContext would result in something like this.
+
+        ```js
+        {
+          MY_STATIC_ID: {
+            startInterval,
+            clearInterval,
+          }
+        }
+        ```
+
+        For the rest of this document the return value from this method will be referred to as the Aspect control.
+
+      - Parameters
+
+        The onInitialize method is passed one object called the configuration. The configuration provides two properties.
+
+        - hooks
+
+          This will be an array of all hooks gathered from all the registered Aspects who specified a hook for that AspectId. It will be up to the running Aspect to combine that data together. An Aspect should not require any order to the hooks as no guarantee can be given on the order of how Aspects are registered.
+
+          ```js
+          import { Aspect } = "@reformjs/girder";
+
+          class MyOtherAspect extends Aspect {
+            constructor() {
+              super('MY_OTHER_STATIC_ID');
+            }
+
+            onInitialize(config) {
+              const { hooks } = config;
+
+              // Do what you will with the provided hooks.
+            }
+
+            // ... overrides
+          }
+          ```
+
+        - getContext
+
+          This is a function which will, when called, return the clientContext providing access to all the Aspect controls. Be aware that the clientContext is not considered complete until the client has fully started up and will throw an error if called too soon. This method is meant to be used inside any functions returned as part of the Aspect control.
+
+        - stopClient
+
+          This is a function which will, when called, start the process of stopping the client. It is the same as calling the stop method off the client object itself.
+
+      #### - __`onStart`__
+
+      The method, onStart, is synchronous, can be overridden, and is called as the client is starting up. It is called after the onInitialize method is called for all Aspects and all promises returned from them have successfully resolved. This method is called to signal that everything is loaded and ready to be used. Any logic which requires the use of another aspect can safely be done here. This is where the main part of your application will probably start from.
+
+      - Return Value
+
+        There is no return value for this method
+
+      - Parameters
+
+        Only one parameter is provided to this method and that is the clientContext. This can be used as part of an Aspect final startup routine and all Aspect controls can safely be used at this point. Also any calls from getContext from within the Aspect controls will also work.
+
+      #### - __`onStop`__
+
+      The method, onStop, is asynchronous, can be overridden, and is called as the client is stopping. This method can be used for any teardown needed within an Aspect. A promise can be return
+
+      - Return Value
+
+        A promise can be returned from here and will delay the stopping of the client until it resolves. The client will not be able to be restarted until it has completely stopped.
+
+      - Parameters
+
+        There are no parameters provided to this method.
+
+## __Examples__
+
+A working [example](https://github.com/CodeMedic42/reform/tree/main/examples/girder) on how to setup girder and create some basic Aspects has been provided.
+
+## __Versioning__
+
+We use [SemVer](http://semver.org/) for versioning.
+
+## __Authors__
+
+* **[Christian Micle](https://github.com/CodeMedic42)**
+   - Initial work
+
+## __Contributors__
+
+See also the list of [contributors](https://github.com/CodeMedic42/reform/graphs/contributors) who participated in this project.
+
+## __License__
 
 [MIT License](https://andreasonny.mit-license.org/2019) © Andrea SonnY

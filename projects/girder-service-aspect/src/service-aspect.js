@@ -19,11 +19,13 @@ class ServiceAspect extends Aspect {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    onInitialize({ setControls, getContext, hooks }) {
+    onInitialize(config) {
+        const{ getContext, hooks } = config;
+
         const globalConfigurations = [DEFAULT_CONFIG];
         const finalConfigurations = {};
 
-        forEach(hooks.service, (hook) => {
+        forEach(hooks, (hook) => {
             const {
                 globalConfiguration,
                 groupConfigurations,
@@ -52,7 +54,9 @@ class ServiceAspect extends Aspect {
             (groupConfiguration) => groupConfiguration.build(globalConfiguration, getContext),
         );
 
-        setControls(controls);
+        return {
+            controls
+        };
     }
 }
 

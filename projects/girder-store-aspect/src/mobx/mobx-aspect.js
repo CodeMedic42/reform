@@ -7,17 +7,15 @@ class MobxAspect extends Aspect {
         super('mobx');
     }
 
-    onInitialize(initContext) {
-        super.onInitialize(initContext);
-
+    // eslint-disable-next-line class-methods-use-this
+    onInitialize(config) {
         const {
             hooks,
-            setControls,
-        } = initContext;
+        } = config;
 
         const stores = [];
 
-        forEach(hooks.mobx, (hook) => {
+        forEach(hooks, (hook) => {
             forEach(hook.stores, (store) => {
                 const storeId = store.id;
 
@@ -29,11 +27,9 @@ class MobxAspect extends Aspect {
             });
         });
 
-        const controls = {
+        return {
             getStore: (storeId) => stores[storeId],
         };
-
-        setControls(controls);
     }
 }
 

@@ -3,15 +3,36 @@ import isNil from 'lodash/isNil';
 import forEach from 'lodash/forEach';
 import get from 'lodash/get';
 import set from 'lodash/set';
+import promiseForEach from '@reformjs/toolbox/promise-for-each';
 
 class Client {
     constructor() {
         this.aspects = {};
         this.hooks = {};
+
+        this.status = 'stopped';
+        this.startingPromise = null;
+        this.stoppingPromise = null;
+    }
+
+    isRunning() {
+        return this.status === 'starting' || this.status === 'started';
+    }
+
+    isStarted() {
+        return this.status === 'started';
+    }
+
+    isStopping() {
+        return this.status === 'stopping';
+    }
+
+    isStopped() {
+        return this.status === 'stopped';
     }
 
     registerAspect(aspect) {
-        if (this.started) {
+        if (this.isRunning()) {
             throw new Error('Cannot register an aspect when the system has already been started');
         }
 
@@ -33,63 +54,84 @@ class Client {
     }
 
     async start() {
-        try {
-            if (this.started) {
-                return this;
-            }
+        if (this.isRunning()) {
+            return this.startingPromise;
+        }
 
-            const context = {};
+        if (this.isStopping()) {
+            throw new Error('Client in a stopping state, please wait for that to complete before starting again.');
+        }
 
-            forEach(this.aspects, (aspect, aspectId) => {
-                aspect.onInitialize({
-                    setControls: (controls) => {
-                        context[aspectId] = controls;
-                    },
-                    getContext: () => {
-                        if (!this.started) {
-                            throw new Error('The client has not started yet.');
+        this.status = 'starting';
+
+        this.startingPromise = Promise.resolve()
+            .then(() => {
+                const clientContext = {};
+
+                return promiseForEach(this.aspects, (aspect, aspectId) =>
+                    Promise.resolve(aspect.onInitialize({
+                        getContext: () => {
+                            if (!this.isStarted()) {
+                                throw new Error('The client has not started yet.');
+                            }
+
+                            return clientContext;
+                        },
+                        hooks: this.hooks[aspectId] || [],
+                        stopClient: () => this.stop(),
+                    }))
+                    .then((controls) => {
+                        if (!isNil(controls)) {
+                            clientContext[aspectId] = controls;
                         }
+                    }))
+                .then(() => {
+                    this.status = 'started';
 
-                        return context;
-                    },
-                    hooks: this.hooks,
+                    forEach(this.aspects, (aspect) => {
+                        aspect.onStart(clientContext);
+                    });
+                }).catch((error) => {
+                    this.status = 'stopped';
+
+                    console.error('Failed to start client');
+                    console.log(error, error.stack);
+
+                    throw error;
                 });
             });
 
-            this.started = true;
-
-            forEach(this.aspects, (aspect) => {
-                aspect.onStart(context);
-            });
-        } catch(error) {
-            this.started = false;
-
-            console.error('Failed to start client');
-
-            throw error;
-        }
-
-        return this;
+        return this.startingPromise;
     }
 
     stop() {
-        try {
-            if (!this.stared) {
-                return this;
-            }
-
-            forEach(this.aspects, (aspect) => {
-                aspect.onStop();
-            });
-
-            this.started = false;
-        } catch (error) {
-            console.error('Failed to stop client');
-
-            throw error;
+        if (this.isStopped()) {
+            return null;
         }
 
-        return this;
+        if (this.isStopping()) {
+            return this.stoppingPromise;
+        }
+
+        this.startingPromise = null;
+
+        this.status = 'stopping';
+
+        this.stoppingPromise = promiseForEach(this.aspects, (aspect) => aspect.onStop())
+            .then(() => {
+
+                this.stoppingPromise = null;
+
+                this.status = 'stopped';
+            })
+            .catch((error) => {
+                console.error('Failed to stop client');
+                console.error(error, error.stack);
+
+                throw error;
+            });
+
+        return this.stoppingPromise;
     }
 };
 

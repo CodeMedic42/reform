@@ -30,12 +30,10 @@ class ReactAspect extends Aspect {
         this.aspectComponents = [];
     }
 
-    onInitialize(context) {
-        super.onInitialize(context);
-
+    onInitialize(config) {
         this.aspectComponents = [];
 
-        forEach(context.hooks.react, (hook) => {
+        forEach(config.hooks, (hook) => {
             const { Component } = hook;
 
             if (isNil(Component)) {

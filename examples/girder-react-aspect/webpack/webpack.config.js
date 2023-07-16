@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const reduce = require('lodash/reduce');
 const portFinder = require('portfinder');
 
 const workspaceRoot = path.resolve(__dirname, '..');
@@ -14,6 +15,16 @@ const paths = {
 	templatePath: path.resolve(srcRoot, 'html/index.html'),
     jsFolder: 'js',
 }
+
+const mapAliases = (dependencies, folder) =>
+	reduce(
+		dependencies,
+		(acc, dependency) => ({
+			[dependency]: path.resolve(`${folder}/${dependency}`),
+			...acc,
+		}),
+		{},
+	);
 
 module.exports = () =>
 	portFinder
@@ -87,6 +98,9 @@ module.exports = () =>
                     ],
                 },
                 plugins: [
+                    // new webpack.ProvidePlugin({
+                    //     process: 'process/browser',
+                    // }),
                     new webpack.ProgressPlugin(),
                     new HtmlWebpackPlugin({
                         template: paths.templatePath,
@@ -96,6 +110,13 @@ module.exports = () =>
                 resolve: {
                     modules: ['node_modules', 'src'],
                     extensions: ['*', '.js', '.jsx', '.css', '.scss', '.ts'],
+                    alias: mapAliases(
+                        [
+                            'react',
+                            'react-dom',
+                        ],
+                        './node_modules',
+                    ),
                 },
                 mode: 'development',
                 devtool: 'eval-source-map',

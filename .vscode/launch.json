@@ -5,15 +5,18 @@
     "version": "0.2.0",
     "configurations": [
 		{
-			"name": "test-json",
+			"name": "Girder Unit Tests",
 			"request": "launch",
-			// "runtimeArgs": ["run-script", "start", "--preserve-symlinks"],
-            "runtimeArgs": ["./test.js"],
-			"runtimeExecutable": "node",
+			// "runtimeArgs": ["run-script", "test", "--preserve-symlinks"],
+            // "runtimeArgs": ["./test.js"],
+			// "runtimeExecutable": "node",
+			"runtimeArgs": ["test"],
+			"runtimeExecutable": "npm",
 			"skipFiles": ["<node_internals>/**"],
 			"console": "integratedTerminal",
-			"cwd": "${workspaceFolder}",
-			"type": "node"
+			"cwd": "${workspaceFolder}/projects/girder",
+			"type": "pwa-node",
+			"sourceMaps": true,
 		},
     ]
 }

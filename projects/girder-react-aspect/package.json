@@ -25,12 +25,14 @@
   "files": [
     "/lib"
   ],
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "dependencies": {
     "@reformjs/girder": "0.0.2-rc.10",
     "bluebird": "^3.7.2",
-    "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "1.2.0",

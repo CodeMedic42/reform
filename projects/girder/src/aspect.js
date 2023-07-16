@@ -1,7 +1,13 @@
+import isNil from 'lodash/isNil';
+
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable class-methods-use-this */
 class Aspect {
     constructor(aspectId) {
+        if (isNil(aspectId)) {
+            throw new Error('An Aspect must have an id.');
+        }
+
         this.aspectId = aspectId;
     }
 

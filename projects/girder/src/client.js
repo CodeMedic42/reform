@@ -16,7 +16,11 @@ class Client {
     }
 
     isRunning() {
-        return this.status === 'starting' || this.status === 'started';
+        return this.isStarting() || this.isStarted();
+    }
+
+    isStarting() {
+        return this.status === 'starting';
     }
 
     isStarted() {
@@ -33,16 +37,16 @@ class Client {
 
     registerAspect(aspect) {
         if (this.isRunning()) {
-            throw new Error('Cannot register an aspect when the system has already been started');
+            throw new Error('Cannot register an aspect when the system has already been started.');
         }
 
         if (!isNil(this.aspects[aspect.id])) {
-            throw new Error(`An aspect with the iud ${aspect.id} already exists`);
+            throw new Error(`An aspect with the id "${aspect.id}" already exists.`);
         }
 
         this.aspects[aspect.id] = aspect;
 
-        forEach(aspect.hooks?.(), (hook, hookId) => {
+        forEach(aspect.hooks(), (hook, hookId) => {
             const aspectHooks = get(this.hooks, hookId, []);
 
             aspectHooks.push(hook);
@@ -59,6 +63,7 @@ class Client {
         }
 
         if (this.isStopping()) {
+            /* istanbul ignore next */
             throw new Error('Client in a stopping state, please wait for that to complete before starting again.');
         }
 
@@ -106,30 +111,36 @@ class Client {
 
     stop() {
         if (this.isStopped()) {
-            return null;
+            return Promise.resolve();
         }
 
         if (this.isStopping()) {
             return this.stoppingPromise;
         }
 
-        this.startingPromise = null;
+        const finish = () => {
+            this.status = 'stopping';
+            this.startingPromise = null;
 
-        this.status = 'stopping';
+            return promiseForEach(this.aspects, (aspect) => aspect.onStop())
+                .then(() => {
 
-        this.stoppingPromise = promiseForEach(this.aspects, (aspect) => aspect.onStop())
-            .then(() => {
+                    this.stoppingPromise = null;
 
-                this.stoppingPromise = null;
+                    this.status = 'stopped';
+                })
+                .catch((error) => {
+                    console.error('Failed to stop client');
+                    console.error(error, error.stack);
 
-                this.status = 'stopped';
-            })
-            .catch((error) => {
-                console.error('Failed to stop client');
-                console.error(error, error.stack);
-
-                throw error;
-            });
+                    throw error;
+                });
+            };
+        if (this.isStarting()) {
+            this.stoppingPromise = this.startingPromise.then(finish);
+        } else {
+            this.stoppingPromise = finish();
+        }
 
         return this.stoppingPromise;
     }

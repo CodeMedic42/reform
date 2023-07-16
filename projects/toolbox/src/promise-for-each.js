@@ -38,6 +38,10 @@ function promiseForEach(list, cb, maxConcurrentCalls) {
         ? maxConcurrentCalls
         : iter.length;
 
+    if (limit <= 0) {
+        return Promise.resolve();
+    }
+
     let nextIdx = 0;
     const current = [];
     let isDone = false;

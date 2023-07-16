@@ -55,6 +55,34 @@
       "allowedCategories": [ "packages" ]
     },
     {
+      "name": "@reformjs/eslint-config",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reformjs/girder",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reformjs/prettier-config",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reformjs/stylelint-config",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reformjs/toolbox",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reformjs/web-unit",
+      "allowedCategories": [ "packages" ]
+    },
+    {
+      "name": "@reformjs/web-unit-jest",
+      "allowedCategories": [ "packages" ]
+    },
+    {
       "name": "@rushstack/eslint-patch",
       "allowedCategories": [ "packages" ]
     },
@@ -123,34 +151,6 @@
       "allowedCategories": [ "packages", "tools" ]
     },
     {
-      "name": "@reformjs/eslint-config",
-      "allowedCategories": [ "packages" ]
-    },
-    {
-      "name": "@reformjs/girder",
-      "allowedCategories": [ "packages" ]
-    },
-    {
-      "name": "@reformjs/prettier-config",
-      "allowedCategories": [ "packages" ]
-    },
-    {
-      "name": "@reformjs/stylelint-config",
-      "allowedCategories": [ "packages" ]
-    },
-    {
-      "name": "@reformjs/toolbox",
-      "allowedCategories": [ "packages" ]
-    },
-    {
-      "name": "@reformjs/web-unit",
-      "allowedCategories": [ "packages" ]
-    },
-    {
-      "name": "@reformjs/web-unit-jest",
-      "allowedCategories": [ "packages" ]
-    },
-    {
       "name": "axios",
       "allowedCategories": [ "packages" ]
     },
@@ -161,6 +161,10 @@
     {
       "name": "babel-eslint",
       "allowedCategories": [ "tools" ]
+    },
+    {
+      "name": "babel-jest",
+      "allowedCategories": [ "packages" ]
     },
     {
       "name": "babel-loader",

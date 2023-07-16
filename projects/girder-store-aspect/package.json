@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/girder-store-aspect",
-  "version": "0.0.2-rc.10",
+  "version": "0.0.2-rc.11",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -41,7 +41,7 @@
     "redux": "^4.2.1"
   },
   "dependencies": {
-    "@reformjs/girder": "0.0.2-rc.10",
+    "@reformjs/girder": "0.0.2-rc.11",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

@@ -21,7 +21,6 @@ function processItem(promiseContext, item, index) {
 // then it will only call the callback up to that limit then wait for one to
 // complete before starting on another.
 function promiseForEach(list, cb, maxConcurrentCalls) {
-    console.log('test');
     let iter = list;
     let useKeys = false;
 
@@ -79,9 +78,6 @@ function promiseForEach(list, cb, maxConcurrentCalls) {
                 );
 
                 nextIdx += 1;
-
-                // eslint-disable-next-line consistent-return
-                return current[nextIdx];
             },
         };
 

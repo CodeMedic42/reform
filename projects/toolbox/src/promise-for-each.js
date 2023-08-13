@@ -1,4 +1,3 @@
-import Promise from 'bluebird';
 import isFinite from 'lodash/isFinite';
 import isArray from 'lodash/isArray';
 import keys from 'lodash/keys';
@@ -17,7 +16,7 @@ function processItem(promiseContext, item, index) {
     });
 }
 
-// THis function loops over a list of items and calls the callback for each.
+// This function loops over a list of items and calls the callback for each.
 // If maxConcurrentCalls is provided and is less than the number of items in the list,
 // then it will only call the callback up to that limit then wait for one to
 // complete before starting on another.
@@ -79,6 +78,9 @@ function promiseForEach(list, cb, maxConcurrentCalls) {
                 );
 
                 nextIdx += 1;
+
+                // eslint-disable-next-line consistent-return
+                return current[nextIdx];
             },
         };
 

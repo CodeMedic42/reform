@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@reformjs/toolbox",
+      "comment": "Bug fixes for Toolbox library",
+      "type": "none"
+    }
+  ],
+  "packageName": "@reformjs/toolbox"
+}

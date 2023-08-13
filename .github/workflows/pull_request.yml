@@ -4,9 +4,13 @@ name: Pull Request
 # https://github.com/open-sauced/open-sauced/blob/main/.github/workflows/development.yml
 
 on:
-  push:
-    branches:
-      - 'main'
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+  workflow_call:
 
 jobs:
   verify:
@@ -30,3 +34,6 @@ jobs:
 
       - name: "install rush@latest"
         run: pnpm i -g @microsoft/rush@latest
+
+      - name: "Verify change log created"
+        run: rush change --verify --target-branch origin/main

@@ -1,0 +1,37 @@
+name: Development
+
+# https://github.blog/2022-02-02-build-ci-cd-pipeline-github-actions-four-steps/
+# https://github.com/open-sauced/open-sauced/blob/main/.github/workflows/development.yml
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+  workflow_call:
+
+jobs:
+  verify:
+    name: Verify Change Log
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v2
+
+      - name: "🔧 setup node"
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 16
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: "install rush@latest"
+        run: pnpm i -g @microsoft/rush@latest
+
+      - name: "Verify change log created"
+        run: rush change --verify --target-branch main

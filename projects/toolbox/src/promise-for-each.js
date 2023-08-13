@@ -78,9 +78,6 @@ function promiseForEach(list, cb, maxConcurrentCalls) {
                 );
 
                 nextIdx += 1;
-
-                // eslint-disable-next-line consistent-return
-                return current[nextIdx];
             },
         };
 

@@ -1,3 +1,3 @@
 # reform
 
-Change to test GitHub branch rules 1
+Change to test GitHub branch rules 1 2

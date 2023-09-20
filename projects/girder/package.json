@@ -27,12 +27,11 @@
     "/lib"
   ],
   "dependencies": {
-    "@reformjs/toolbox": "0.0.2-rc.9",
+    "@reformjs/toolbox": "workspace:*",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "1.0.0",
-    "@rushstack/eslint-patch": "1.2.0",
+    "@reformjs/eslint-config": "workspace:*",
     "jest": "^29.0.0",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",

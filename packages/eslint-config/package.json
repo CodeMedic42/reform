@@ -4,9 +4,7 @@
     "description": "Shared eslint rules",
     "private": true,
     "main": "index.js",
-    "scripts": {
-      "build": ""
-    },
+    "scripts": {},
     "dependencies": {
       "@babel/eslint-parser": "~7.14.4",
       "@babel/eslint-plugin": "~7.13.16",

@@ -1,11 +1,14 @@
 {
-    "name": "reform",
-    "private": true,
-    "scripts": {
-      "build": "rush build",
-      "deploy:build": "rush build",
-      "deploy:publish": "rush publish --publish  --apply --target-branch main --set-access-level public --registry https://registry.npmjs.org/ --include-all",
-      "deploy": "npm run deploy:build ; npm run deploy:publish",
-      "change": "rush change --target-branch origin/main"
-    }
+  "name": "reform",
+  "private": true,
+  "scripts": {
+    "build": "lerna run build --stream",
+    "deploy:build": "rush build",
+    "deploy:publish": "rush publish --publish  --apply --target-branch main --set-access-level public --registry https://registry.npmjs.org/ --include-all",
+    "deploy": "npm run deploy:build ; npm run deploy:publish",
+    "change": "rush change --target-branch origin/main"
+  },
+  "dependencies": {
+    "lerna": "^8.1.2"
+  }
 }

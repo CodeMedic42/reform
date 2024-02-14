@@ -1,0 +1,51 @@
+$base-primary-clr: rgb(13, 110, 253);
+$base-primary-fill-clr: $--clr-white;
+
+$--ra-config-interactive-color-primary-base: (
+    "clr": rgb(13, 110, 253),
+    "bg": $--clr-transparent,
+    "br": $--clr-transparent,
+    "out": $--clr-transparent,
+
+    "hover-clr": #0a58ca,
+    "hover-bg": $--clr-transparent,
+    "hover-br": $--clr-transparent,
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": #0a58ca,
+    "focus-bg": $--clr-transparent,
+    "focus-br": $--clr-transparent,
+    "focus-out": $--clr-transparent,
+
+    "active-clr": #0a58ca,
+    "active-bg": $--clr-transparent,
+    "active-br": $--clr-transparent,
+    "active-out": $--clr-transparent,
+) !default;
+
+$--ra-config-interactive-color-primary-fill: (
+    "clr": $base-primary-fill-clr,
+    "bg": $base-primary-clr,
+    "br": $base-primary-clr,
+    "out": $--clr-transparent,
+
+    "hover-clr": $base-primary-fill-clr,
+    "hover-bg": rgb(11, 94, 215),
+    "hover-br": rgb(10, 88, 202),
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": $base-primary-fill-clr,
+    "focus-bg": rgb(11, 94, 215),
+    "focus-br": rgb(10, 88, 202),
+    "focus-out": rgba(49, 132, 253, 0.5),
+
+    "active-clr": $base-primary-fill-clr,
+    "active-bg": rgb(10, 88, 202),
+    "active-br": rgb(10, 83, 190),
+    "active-out": $--clr-transparent,
+) !default;
+
+$--ra-config-interactive-color-primary: (
+    "": $--ra-config-interactive-color-primary-base,
+    "fill": $--ra-config-interactive-color-primary-fill,
+) !default;

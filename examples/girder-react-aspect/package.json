@@ -1,5 +1,5 @@
 {
-    "name": "girder-example",
+    "name": "girder-react-aspect-example",
     "version": "0.0.1",
     "private": true,
     "scripts": {
@@ -11,8 +11,8 @@
     ],
     "author": "Christian Micle <cam42.dev@outlook.com>",
     "dependencies": {
-        "@reformjs/girder": "0.0.2-rc.10",
-        "@reformjs/girder-react-aspect": "0.0.2-rc.10",
+        "@reformjs/girder": "workspace:*",
+        "@reformjs/girder-react-aspect": "workspace:*",
         "lodash": "^4.17.21",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"

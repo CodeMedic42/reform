@@ -1,0 +1,83 @@
+// This is a special class.
+// It keeps things "technically" rendered and accessible to take focus and other functions.
+// But it is still visually hidden and the user cannot interact with it with the mouse.
+// Things like display:none and visibility: hidden are used by the browser to disallow items from gaining focus.
+// This would break other functionality, so this class is used instead of regular hidden.
+.active-hidden {
+    opacity: 0;
+    pointer-events: none;
+    z-index: -9999;
+}
+
+.ra-tray {
+    @include boxShadow16dp;
+
+    position: fixed;
+    background-color: $--clr-white;
+    border-radius: 4px;
+    outline: none;
+    overflow: auto;
+    color: initial;
+    border-color: initial;
+    box-sizing: border-box;
+}
+
+.ra-tray-tail {
+    position: fixed;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    z-index: 51;
+
+    &::after {
+        content: '';
+        position: absolute;
+        width: 11.31px;
+        height: 11.31px;
+        background-color: white;
+    }
+
+    &.bottom {
+        clip: rect(0, 30px, 16px, -30px);
+        transform: scaleY(1.5);
+
+        &::after {
+            left: 50%;
+            bottom: 0;
+            transform: translate(-50%, 50%) rotate(45deg);
+        }
+    }
+
+    &.top {
+        clip: rect(0, 30px, 10px, -30px);
+        transform: scaleY(1.5);
+
+        &::after {
+            left: 50%;
+            top: 0;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+    }
+
+    &.right {
+        clip: rect(0, 16px, 30px, -30px);
+        transform: scaleX(1.5);
+
+        &::after {
+            top: 50%;
+            right: 0;
+            transform: translate(50%, -50%) rotate(45deg);
+        }
+    }
+
+    &.left {
+        clip: rect(0, 16px, 30px, 0);
+        transform: scaleX(1.5);
+
+        &::after {
+            top: 50%;
+            left: 0;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+    }
+}

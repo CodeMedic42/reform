@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "jsx": "react",
-    "module": "commonjs",
+    "module": "node16",
     "rootDir": "src",
     "moduleResolution": "node",
     "allowJs": true,

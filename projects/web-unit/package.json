@@ -67,8 +67,7 @@
     "webpack-virtual-modules": "^0.4.6"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "1.2.0",
-    "@reformjs/eslint-config": "1.0.0",
+    "@reformjs/eslint-config": "workspace:*",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",
 		"typescript": "~5.0.4"

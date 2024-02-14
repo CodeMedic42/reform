@@ -5,7 +5,6 @@
     "private": true,
     "main": "index.js",
     "scripts": {
-      "build": ""
     },
     "dependencies": {
       "@babel/eslint-parser": "~7.14.4",

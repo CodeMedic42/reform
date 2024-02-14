@@ -5,12 +5,10 @@
   "editor.formatOnSave": true,
   "search.exclude": {
     "**/node_modules": true,
-    "**/.nyc_output": true,
-    "**/.rush": true
+    "**/.nyc_output": true
   },
   "files.exclude": {
     "**/.nyc_output": true,
-    "**/.rush": true,
     "**/*.build.log": true,
     "**/*.build.error.log": true,
     "**/generated-docs": true,

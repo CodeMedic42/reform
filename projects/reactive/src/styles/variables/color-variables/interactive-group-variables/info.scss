@@ -1,0 +1,51 @@
+$base-info-clr: #0dcaf0;
+$base-info-fill-clr: $--clr-black;
+
+$interactive-color-info-base: (
+    "clr": $base-info-clr,
+    "bg": $--clr-transparent,
+    "br": $--clr-transparent,
+    "out": $--clr-transparent,
+
+    "hover-clr": #31d2f2,
+    "hover-bg": $--clr-transparent,
+    "hover-br": $--clr-transparent,
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": #b02a37,
+    "focus-bg": $--clr-transparent,
+    "focus-br": $--clr-transparent,
+    "focus-out": $--clr-transparent,
+
+    "active-clr": #b02a37,
+    "active-bg": $--clr-transparent,
+    "active-br": $--clr-transparent,
+    "active-out": $--clr-transparent,
+) !default;
+
+$interactive-color-info-fill: (
+    "clr": $--clr-black,
+    "bg": $base-info-clr,
+    "br": $base-info-clr,
+    "out": $--clr-transparent,
+
+    "hover-clr": $base-info-fill-clr,
+    "hover-bg": #31d2f2,
+    "hover-br": #31d2f2,
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": $base-info-fill-clr,
+    "focus-bg": #31d2f2,
+    "focus-br": #31d2f2,
+    "focus-out": rgba(11,172,204, 0.5),
+
+    "active-clr": $base-info-fill-clr,
+    "active-bg": #3dd5f3,
+    "active-br": #3dd5f3,
+    "active-out": $--clr-transparent,
+) !default;
+
+$interactive-color-info: (
+    "": $interactive-color-info-base,
+    "fill": $interactive-color-info-fill,
+) !default;

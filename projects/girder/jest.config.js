@@ -113,7 +113,7 @@ module.exports = {
     preset: 'ts-jest',
     // preset: '/Users/codemedic42/source/github.com/codemedic42/weavr-web-js/projects/reactive/test/preset-merge',
     // preset: 'jest-puppeteer',
-    // preset: '@weavr/web-unit-jest',
+    // preset: '@reformjs/web-unit-jest',
 
     // Run tests from one or more projects
     // projects: undefined,

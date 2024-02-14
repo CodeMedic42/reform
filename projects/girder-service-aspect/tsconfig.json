@@ -3,7 +3,7 @@
     "rootDir": "src",
     "outDir": "build",
     "target": "es6",
-    "module": "commonjs",
+    "module": "node16",
     "moduleResolution": "node16",
     "allowJs": true,
     "declaration": true,

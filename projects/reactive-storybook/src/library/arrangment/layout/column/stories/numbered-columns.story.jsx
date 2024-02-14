@@ -1,0 +1,165 @@
+import React from 'react';
+import { Row, Column } from '@reformjs/reactive/arrangement/layout';
+import ResolutionHeader from '../../common/resolution-header';
+import LayoutScope from '../../common/layout-scope';
+import Content from '../../common/content';
+
+// const component = 'div';
+// const component = 'span';
+
+export default function example() {
+    return (
+        <>
+            <ResolutionHeader sticky />
+            <LayoutScope title="Numbered Columns">
+                <Row gutter="16">
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="3">
+                        <Content>3</Content>
+                    </Column>
+                    <Column width="3">
+                        <Content>3</Content>
+                    </Column>
+                    <Column width="3">
+                        <Content>3</Content>
+                    </Column>
+                    <Column width="3">
+                        <Content>3</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="4">
+                        <Content>4</Content>
+                    </Column>
+                    <Column width="4">
+                        <Content>4</Content>
+                    </Column>
+                    <Column width="4">
+                        <Content>4</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="5">
+                        <Content>5</Content>
+                    </Column>
+                    <Column width="5">
+                        <Content>5</Content>
+                    </Column>
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="6">
+                        <Content>6</Content>
+                    </Column>
+                    <Column width="6">
+                        <Content>6</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="7">
+                        <Content>7</Content>
+                    </Column>
+                    <Column width="5">
+                        <Content>5</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="8">
+                        <Content>8</Content>
+                    </Column>
+                    <Column width="4">
+                        <Content>4</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="9">
+                        <Content>9</Content>
+                    </Column>
+                    <Column width="3">
+                        <Content>3</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="10">
+                        <Content>10</Content>
+                    </Column>
+                    <Column width="2">
+                        <Content>2</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="11">
+                        <Content>11</Content>
+                    </Column>
+                    <Column width="1">
+                        <Content>1</Content>
+                    </Column>
+                </Row>
+                <Row gutter="16">
+                    <Column width="12">
+                        <Content>12</Content>
+                    </Column>
+                </Row>
+            </LayoutScope>
+        </>
+    );
+}

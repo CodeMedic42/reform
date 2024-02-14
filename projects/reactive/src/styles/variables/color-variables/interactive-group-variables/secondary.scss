@@ -1,0 +1,51 @@
+$base-secondary-clr: #6c757d;
+$base-secondary-fill-clr: $--clr-white;
+
+$interactive-color-secondary-base: (
+    "clr": $base-secondary-clr,
+    "bg": $--clr-transparent,
+    "br": $--clr-transparent,
+    "out": $--clr-transparent,
+
+    "hover-clr": #5c636a,
+    "hover-bg": $--clr-transparent,
+    "hover-br": $--clr-transparent,
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": #5c636a,
+    "focus-bg": $--clr-transparent,
+    "focus-br": $--clr-transparent,
+    "focus-out": $--clr-transparent,
+
+    "active-clr": #565e64,
+    "active-bg": $--clr-transparent,
+    "active-br": $--clr-transparent,
+    "active-out": $--clr-transparent,
+) !default;
+
+$interactive-color-secondary-fill: (
+    "clr": $base-secondary-fill-clr,
+    "bg": $base-secondary-clr,
+    "br": $base-secondary-clr,
+    "out": $--clr-transparent,
+
+    "hover-clr": $base-secondary-fill-clr,
+    "hover-bg": #5c636a,
+    "hover-br": #5c636a,
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": $base-secondary-fill-clr,
+    "focus-bg": #5c636a,
+    "focus-br": #5c636a,
+    "focus-out": rgba(130,138,145, 0.5),
+
+    "active-clr": $base-secondary-fill-clr,
+    "active-bg": #565e64,
+    "active-br": #565e64,
+    "active-out": $--clr-transparent,
+) !default;
+
+$interactive-color-secondary: (
+    "": $interactive-color-secondary-base,
+    "fill": $interactive-color-secondary-fill,
+) !default;

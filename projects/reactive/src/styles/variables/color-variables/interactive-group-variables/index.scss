@@ -1,0 +1,16 @@
+@import './default';
+@import './primary';
+@import './secondary';
+@import './info';
+@import './success';
+@import './warn';
+@import './danger';
+
+$interactive-colors: (
+    "primary": $interactive-color-primary,
+    "secondary": $interactive-color-secondary,
+    "info": $interactive-color-info,
+    "success": $interactive-color-success,
+    "warn": $interactive-color-warn,
+    "danger": $interactive-color-danger,
+) !default;

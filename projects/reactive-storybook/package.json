@@ -6,7 +6,8 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "storybook2": "storybook dev",
-    "start": "storybook"
+    "start": "storybook",
+    "lint": "npx eslint ./src"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +39,9 @@
       "runOnChangeOnly": false
     }
   },
+  "eslintConfig": {
+    "extends": "@reformjs/eslint-config"
+  },
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@reformjs/reactive": "workspace:*",
@@ -48,13 +52,13 @@
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typescript": "~5.0.4"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.4",
+    "@reformjs/eslint-config": "workspace:*",
     "@storybook/addon-essentials": "^7.0.6",
     "@storybook/addon-interactions": "^7.0.6",
     "@storybook/addon-links": "^7.0.6",
@@ -79,7 +83,7 @@
     "sass-loader": "^13.2.0",
     "storybook": "^7.0.6",
     "style-loader": "^3.3.1",
-    "typescript": "~5.0.4",
+    "typescript": "~5.3.3",
     "url-loader": "^4.1.1",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0",

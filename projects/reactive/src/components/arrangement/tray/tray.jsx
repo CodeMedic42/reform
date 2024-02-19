@@ -1045,7 +1045,64 @@ function setTailStyles(
     merge(tailElement.style, styles);
 }
 
+const dropPositionTypes = PropTypes.oneOf(['top', 'bottom', 'left', 'right']);
+
 class Tray extends Component {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        open: PropTypes.bool,
+        dropPositions: PropTypes.arrayOf(dropPositionTypes),
+        getAnchor: PropTypes.func.isRequired,
+        onClick: PropTypes.func,
+        parentPadding: PropTypes.number,
+        onContainedFocus: PropTypes.func,
+        onContainedBlur: PropTypes.func,
+        minWidth: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.oneOf(['anchor']),
+        ]),
+        maxWidth: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.oneOf(['anchor']),
+        ]),
+        maxHeight: PropTypes.number,
+        offset: PropTypes.shape({
+            left: PropTypes.number,
+            right: PropTypes.number,
+            top: PropTypes.number,
+            bottom: PropTypes.number,
+        }),
+        horizontallyCenter: PropTypes.bool,
+        dockRight: PropTypes.bool,
+        enableTail: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        open: false,
+        children: null,
+        dropPositions: ['bottom', 'top', 'right', 'left'],
+        onClick: null,
+        parentPadding: null,
+        onContainedFocus: null,
+        onContainedBlur: null,
+        minWidth: null,
+        maxWidth: null,
+        maxHeight: null,
+        offset: null,
+        horizontallyCenter: false,
+        dockRight: false,
+        enableTail: false,
+    };
+
+    static contextType = TrayContext;
+
     constructor(props) {
         super(props);
 
@@ -1348,62 +1405,5 @@ class Tray extends Component {
         return ReactDOM.createPortal(tray, window.document.body);
     }
 }
-
-const dropPositionTypes = PropTypes.oneOf(['top', 'bottom', 'left', 'right']);
-
-Tray.propTypes = {
-	id: PropTypes.string,
-	className: PropTypes.string,
-	children: PropTypes.oneOfType([
-		PropTypes.node,
-		PropTypes.arrayOf(PropTypes.node),
-	]),
-	open: PropTypes.bool,
-	dropPositions: PropTypes.arrayOf(dropPositionTypes),
-	getAnchor: PropTypes.func.isRequired,
-	onClick: PropTypes.func,
-	parentPadding: PropTypes.number,
-	onContainedFocus: PropTypes.func,
-	onContainedBlur: PropTypes.func,
-	minWidth: PropTypes.oneOfType([
-		PropTypes.number,
-		PropTypes.oneOf(['anchor']),
-	]),
-	maxWidth: PropTypes.oneOfType([
-		PropTypes.number,
-		PropTypes.oneOf(['anchor']),
-	]),
-	maxHeight: PropTypes.number,
-	offset: PropTypes.shape({
-		left: PropTypes.number,
-		right: PropTypes.number,
-		top: PropTypes.number,
-		bottom: PropTypes.number,
-	}),
-	horizontallyCenter: PropTypes.bool,
-	dockRight: PropTypes.bool,
-	enableTail: PropTypes.bool,
-};
-
-Tray.defaultProps = {
-	id: null,
-	className: null,
-	open: false,
-	children: null,
-	dropPositions: ['bottom', 'top', 'right', 'left'],
-	onClick: null,
-	parentPadding: null,
-	onContainedFocus: null,
-	onContainedBlur: null,
-	minWidth: null,
-	maxWidth: null,
-	maxHeight: null,
-	offset: null,
-	horizontallyCenter: false,
-	dockRight: false,
-	enableTail: false,
-};
-
-Tray.contextType = TrayContext;
 
 export default Tray;

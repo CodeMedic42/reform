@@ -3,17 +3,22 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "start": "webpack serve --config ./webpack/webpack.config.js --stats verbose"
+        "start": "webpack serve --config ./webpack/webpack.config.js --stats verbose",
+        "lint": "npx eslint ./src"
     },
     "browserslist": [
         "> 0.25%",
         "not dead"
     ],
     "author": "Christian Micle <cam42.dev@outlook.com>",
+    "eslintConfig": {
+      "extends": "@reformjs/eslint-config"
+    },
     "dependencies": {
         "@reformjs/girder": "workspace:*"
     },
     "devDependencies": {
+        "@reformjs/eslint-config": "workspace:*",
         "@babel/preset-env": "^7.21.4",
         "@babel/preset-react": "^7.18.6",
         "babel-loader": "^9.1.2",

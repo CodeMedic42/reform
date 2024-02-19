@@ -30,6 +30,9 @@
   "files": [
     "/lib"
   ],
+  "eslintConfig": {
+    "extends": "@reformjs/eslint-config"
+  },
   "dependencies": {
     "@jest/globals": "^29.3.1",
     "@reformjs/web-unit": "workspace:*",
@@ -39,6 +42,6 @@
     "@reformjs/eslint-config": "workspace:*",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",
-		"typescript": "~5.0.4"
+		"typescript": "~5.3.3"
   }
 }

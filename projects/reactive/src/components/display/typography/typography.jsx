@@ -6,6 +6,28 @@ import { colorPropType, getColorInfo } from '../../../common/color-list';
 import applyForwardRef from '../../../common/apply-forward-ref';
 
 class Typography extends PureComponent {
+
+    static propTypes = {
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        color: colorPropType,
+        Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+        forwardRef: PropTypes.instanceOf(Object),
+        inline: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        className: null,
+        children: null,
+        color: null,
+        Component: 'span',
+        forwardRef: null,
+        inline: false,
+    };
+
     render() {
         const {
             className,
@@ -35,26 +57,5 @@ class Typography extends PureComponent {
         );
     }
 }
-
-Typography.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    color: colorPropType,
-    Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    forwardRef: PropTypes.instanceOf(Object),
-    inline: PropTypes.bool,
-};
-
-Typography.defaultProps = {
-    className: null,
-    children: null,
-    color: null,
-    Component: 'span',
-    forwardRef: null,
-    inline: false,
-};
 
 export default applyForwardRef(Typography);

@@ -17,6 +17,47 @@ import applyAnchorBinding from '../../controls/drop-down/anchor-binding';
 import changeSize from '../../../util/change-size';
 
 class MultiSelectAnchor extends PureComponent {
+	static propTypes = {
+		id: PropTypes.string,
+		size: PropTypes.oneOf(['sm', 'md', 'lg']),
+		value: PropTypes.arrayOf(PropTypes.string),
+		nullable: PropTypes.bool,
+		onClear: PropTypes.func,
+		// eslint-disable-next-line react/forbid-prop-types
+		onClearMeta: PropTypes.object,
+		onClearIndex: PropTypes.func,
+		// eslint-disable-next-line react/forbid-prop-types
+		onClearIndexMeta: PropTypes.object,
+		disabled: PropTypes.bool,
+		open: PropTypes.bool,
+		'aria-labelledby': PropTypes.string,
+		'aria-describedby': PropTypes.string,
+		'aria-label': PropTypes.string,
+		title: PropTypes.string,
+		placeholder: PropTypes.string,
+		expandable: PropTypes.bool,
+		listBoxId: PropTypes.string.isRequired,
+	};
+
+	static defaultProps = {
+		id: null,
+		size: null,
+		nullable: false,
+		onClear: null,
+		onClearMeta: null,
+		onClearIndex: null,
+		onClearIndexMeta: null,
+		disabled: false,
+		open: false,
+		title: null,
+		'aria-labelledby': null,
+		'aria-describedby': null,
+		'aria-label': null,
+		placeholder: null,
+		value: null,
+		expandable: false,
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -198,47 +239,6 @@ class MultiSelectAnchor extends PureComponent {
 		);
 	}
 }
-
-MultiSelectAnchor.propTypes = {
-	id: PropTypes.string,
-	size: PropTypes.oneOf(['sm', 'md', 'lg']),
-	value: PropTypes.arrayOf(PropTypes.string),
-	nullable: PropTypes.bool,
-	onClear: PropTypes.func,
-	// eslint-disable-next-line react/forbid-prop-types
-	onClearMeta: PropTypes.object,
-	onClearIndex: PropTypes.func,
-	// eslint-disable-next-line react/forbid-prop-types
-	onClearIndexMeta: PropTypes.object,
-	disabled: PropTypes.bool,
-	open: PropTypes.bool,
-	'aria-labelledby': PropTypes.string,
-	'aria-describedby': PropTypes.string,
-	'aria-label': PropTypes.string,
-	title: PropTypes.string,
-	placeholder: PropTypes.string,
-	expandable: PropTypes.bool,
-	listBoxId: PropTypes.string.isRequired,
-};
-
-MultiSelectAnchor.defaultProps = {
-	id: null,
-	size: null,
-	nullable: false,
-	onClear: null,
-	onClearMeta: null,
-	onClearIndex: null,
-	onClearIndexMeta: null,
-	disabled: false,
-	open: false,
-	title: null,
-	'aria-labelledby': null,
-	'aria-describedby': null,
-	'aria-label': null,
-	placeholder: null,
-	value: null,
-	expandable: false,
-};
 
 export default applyAnchorBinding(MultiSelectAnchor, {
 	focusSelector: '.button-anchor',

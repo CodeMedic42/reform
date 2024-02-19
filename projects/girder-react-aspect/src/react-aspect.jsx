@@ -78,6 +78,7 @@ class ReactAspect extends Aspect {
                 this.root.render(appRoot);
             })
             .catch(() => {
+                // eslint-disable-next-line react/no-deprecated
                 ReactDOM.render(appRoot, container);
             });
     }
@@ -90,6 +91,7 @@ class ReactAspect extends Aspect {
 
             this.root = null;
         } else {
+            // eslint-disable-next-line react/no-deprecated
             ReactDOM.unmountComponentAtNode(this.container);
         }
 

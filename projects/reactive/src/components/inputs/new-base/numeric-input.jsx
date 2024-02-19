@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, useCallback } from 'react';
 import isNil from 'lodash/isNil';
+import isNaN from 'lodash/isNaN';
+
 import PropTypes from '../../../common/prop-types';
 
 function getNumericValue(value) {

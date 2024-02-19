@@ -53,6 +53,11 @@ export interface ExternalBoundaryPropsInt {
 }
 
 class ExternalBoundary extends Component<ExternalBoundaryPropsInt> {
+    static defaultProps = {
+        onExternalClick: null,
+        cancelExternalScroll: false,
+    };
+
     private clickedInside = false;
 
     private boundaryRef = createRef<HTMLDivElement>();
@@ -127,6 +132,10 @@ class ExternalBoundary extends Component<ExternalBoundaryPropsInt> {
         this.clickedInside = true;
     }
 
+    isClicked() {
+        return this.clickedInside;
+    }
+
     private applyWheel() {
         const boundaryElement = this.boundaryRef.current;
 
@@ -192,7 +201,7 @@ class ExternalBoundary extends Component<ExternalBoundaryPropsInt> {
             }
         };
 
-        this.clickedInside = false;
+        // this.clickedInside = false;
 
         document.addEventListener<'click'>('click', handleClick);
 

@@ -6,6 +6,30 @@ import PropTypes from '../../../common/prop-types';
 import MenuItem from './menu-item';
 
 class MenuText extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        menuIcon: PropTypes.icon,
+        children: PropTypes.string,
+        selected: PropTypes.bool,
+        targeted: PropTypes.bool,
+        borderBottom: PropTypes.bool,
+        borderTop: PropTypes.bool,
+        icon: PropTypes.icon,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        selected: false,
+        targeted: false,
+        menuIcon: null,
+        children: null,
+        borderBottom: false,
+        borderTop: false,
+        icon: null,
+    };
+
     renderListItemContent() {
         const { children, menuIcon } = this.props;
 
@@ -54,29 +78,5 @@ class MenuText extends PureComponent {
         );
     }
 }
-
-MenuText.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    menuIcon: PropTypes.icon,
-    children: PropTypes.string,
-    selected: PropTypes.bool,
-    targeted: PropTypes.bool,
-    borderBottom: PropTypes.bool,
-    borderTop: PropTypes.bool,
-    icon: PropTypes.icon,
-};
-
-MenuText.defaultProps = {
-    id: null,
-    className: null,
-    selected: false,
-    targeted: false,
-    menuIcon: null,
-    children: null,
-    borderBottom: false,
-    borderTop: false,
-    icon: null,
-};
 
 export default MenuText;

@@ -6,6 +6,34 @@ import { colorPropType, getColorInfo } from '../../../common/color-list';
 import applyForwardRef from '../../../common/apply-forward-ref';
 
 class Text extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        // eslint-disable-next-line react/forbid-prop-types
+        style: PropTypes.object,
+        singleLine: PropTypes.bool,
+        size: PropTypes.oneOf(['xl', 'lg', 'md', 'sm', 'xs']),
+        weight: PropTypes.oneOf(['bold', 'semi-bold', 'normal']),
+        color: colorPropType,
+        applyMargin: PropTypes.bool,
+        forwardRef: PropTypes.instanceOf(Object),
+    };
+
+    static defaultProps = {
+        className: null,
+        children: null,
+        color: null,
+        weight: null,
+        size: null,
+        singleLine: false,
+        style: null,
+        applyMargin: false,
+        forwardRef: null,
+    };
+
     render() {
         const {
             color,
@@ -45,33 +73,5 @@ class Text extends PureComponent {
         );
     }
 }
-
-Text.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
-    singleLine: PropTypes.bool,
-    size: PropTypes.oneOf(['xl', 'lg', 'md', 'sm', 'xs']),
-    weight: PropTypes.oneOf(['bold', 'semi-bold', 'normal']),
-    color: colorPropType,
-    applyMargin: PropTypes.bool,
-    forwardRef: PropTypes.instanceOf(Object),
-};
-
-Text.defaultProps = {
-    className: null,
-    children: null,
-    color: null,
-    weight: null,
-    size: null,
-    singleLine: false,
-    style: null,
-    applyMargin: false,
-    forwardRef: null,
-};
 
 export default applyForwardRef(Text);

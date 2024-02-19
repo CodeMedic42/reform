@@ -115,4 +115,12 @@ function Container(props: ContainerProps) {
     );
 }
 
+Container.defaultProps = {
+    className: null,
+    gutter: null,
+    hideOverflow: null,
+    children: null,
+    style: null,
+};
+
 export default Container;

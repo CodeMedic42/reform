@@ -11,6 +11,47 @@ import {
 import PropTypes from '../../../common/prop-types';
 
 class Button extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        type: PropTypes.string,
+        color: schemeColorPropType,
+        variant: PropTypes.oneOf(['none', 'fill', 'outline', 'opaque']),
+        useDark: PropTypes.bool,
+        size: PropTypes.oneOf(['xl', 'lg', 'md', 'sm', 'xs', '2xs']),
+        onClick: PropTypes.func,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        rounded: PropTypes.bool,
+        noPadding: PropTypes.bool,
+        dockSide: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+        asAnchor: PropTypes.bool,
+        href: PropTypes.string,
+        target: PropTypes.string,
+        focusOnMount: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        type: 'button',
+        className: null,
+        variant: 'fill',
+        color: null,
+        onClick: null,
+        children: null,
+        rounded: false,
+        size: 'md',
+        noPadding: false,
+        dockSide: null,
+        asAnchor: false,
+        href: null,
+        target: null,
+        useDark: false,
+        focusOnMount: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -155,46 +196,5 @@ class Button extends PureComponent {
         );
     }
 }
-
-Button.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    type: PropTypes.string,
-    color: schemeColorPropType,
-    variant: PropTypes.oneOf(['none', 'fill', 'outline', 'opaque']),
-    useDark: PropTypes.bool,
-    size: PropTypes.oneOf(['xl', 'lg', 'md', 'sm', 'xs', '2xs']),
-    onClick: PropTypes.func,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    rounded: PropTypes.bool,
-    noPadding: PropTypes.bool,
-    dockSide: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-    asAnchor: PropTypes.bool,
-    href: PropTypes.string,
-    target: PropTypes.string,
-    focusOnMount: PropTypes.bool,
-};
-
-Button.defaultProps = {
-    id: null,
-    type: 'button',
-    className: null,
-    variant: 'fill',
-    color: null,
-    onClick: null,
-    children: null,
-    rounded: false,
-    size: 'md',
-    noPadding: false,
-    dockSide: null,
-    asAnchor: false,
-    href: null,
-    target: null,
-    useDark: false,
-    focusOnMount: false,
-};
 
 export default Button;

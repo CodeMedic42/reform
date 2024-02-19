@@ -5,9 +5,41 @@ import get from 'lodash/get';
 import isNil from 'lodash/isNil';
 import map from 'lodash/map';
 import TabBar from '../tab-bar';
-import { schemeColorPropType } from '../../common/color-list';
+import { schemeColorPropType } from '../../../common/color-list';
 
 class TabGroup extends PureComponent {
+    static propTypes = {
+        defaultTabId: PropTypes.string,
+        size: PropTypes.oneOf(['lg', 'sm']),
+        justify: PropTypes.bool,
+        color: schemeColorPropType,
+        background: PropTypes.bool,
+        border: PropTypes.bool,
+        tabs: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.string,
+                heading: PropTypes.node,
+                body: PropTypes.node,
+                disabled: PropTypes.bool,
+                alwaysRenderBody: PropTypes.bool,
+            }),
+        ).isRequired,
+        onMove: PropTypes.func,
+        // eslint-disable-next-line react/forbid-prop-types
+        onMoveMeta: PropTypes.any,
+    };
+
+    static defaultProps = {
+        defaultTabId: null,
+        size: 'lg',
+        justify: false,
+        background: false,
+        border: false,
+        color: 'primary',
+        onMove: null,
+        onMoveMeta: null,
+    };
+
     constructor(props) {
         super(props);
 
@@ -81,36 +113,5 @@ class TabGroup extends PureComponent {
         );
     }
 }
-TabGroup.propTypes = {
-    defaultTabId: PropTypes.string,
-    size: PropTypes.oneOf(['lg', 'sm']),
-    justify: PropTypes.bool,
-    color: schemeColorPropType,
-    background: PropTypes.bool,
-    border: PropTypes.bool,
-    tabs: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            heading: PropTypes.node,
-            body: PropTypes.node,
-            disabled: PropTypes.bool,
-            alwaysRenderBody: PropTypes.bool,
-        }),
-    ).isRequired,
-    onMove: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    onMoveMeta: PropTypes.any,
-};
-
-TabGroup.defaultProps = {
-    defaultTabId: null,
-    size: 'lg',
-    justify: false,
-    background: false,
-    border: false,
-    color: 'primary',
-    onMove: null,
-    onMoveMeta: null,
-};
 
 export default TabGroup;

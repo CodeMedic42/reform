@@ -18,6 +18,7 @@ afterEach(async () => {
 
 afterAll(async () => {
     harnessControl = null;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+    // eslint-disable-next-line no-unused-vars
     const coverage = await libControl.stop();
 });

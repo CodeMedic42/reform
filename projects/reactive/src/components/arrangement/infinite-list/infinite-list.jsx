@@ -334,7 +334,6 @@ const InfiniteList = forwardRef((props, ref) => {
         () => validateIndexes(minIndex, maxIndex,
             firstIndex,
             lastIndex, startingIndex),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [minIndex, maxIndex,
             firstIndex,
             lastIndex, startingIndex]
@@ -383,7 +382,6 @@ const InfiniteList = forwardRef((props, ref) => {
         listRef.current.scrollTop = scrollTop;
 
         shiftInfoRef.current = null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     useLayoutEffect(() => {
@@ -405,7 +403,6 @@ const InfiniteList = forwardRef((props, ref) => {
         listRef.current.scrollTop -= topOffsetRef.current;
 
         scrollToRef.current = null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     const review = useCallback(() => {

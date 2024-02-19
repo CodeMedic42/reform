@@ -15,6 +15,7 @@ import React, {
 import classnames from 'classnames';
 import isNil from 'lodash/isNil';
 import isFunction from 'lodash/isFunction';
+import PropTypes from '../../../common/prop-types';
 
 // interface BindingInterfaceInt {
 //     onClick?: (event: MouseEvent<HTMLElement>) => void,
@@ -54,7 +55,30 @@ function getTarget(rootElement, selector) {
         : rootElement.firstElementChild;
 }
 
+
+
 export class AnchorWrapper extends Component {
+    static propTypes = {
+        boundingTargetSelector: PropTypes.any.isRequired,
+        focusTargetSelector: PropTypes.any.isRequired,
+        AnchorComponent: PropTypes.any.isRequired,
+        bindingInterface: PropTypes.shape({
+            onClick: PropTypes.func,
+            onFocus: PropTypes.func,
+            onKeyPress: PropTypes.func,
+            onKeyDown: PropTypes.func,
+            onPointerEnter: PropTypes.func,
+            onPointerLeave: PropTypes.func,
+            onPointerCancel: PropTypes.func,
+        }).isRequired,
+        anchorProps: PropTypes.object,
+        open: PropTypes.isRequired,
+    };
+
+    static defaultProps = {
+        anchorProps: null,
+    };
+
     constructor(props) {
         super(props);
 
@@ -139,6 +163,15 @@ export class AnchorWrapper extends Component {
     }
 }
 
+const AnchorBindingPropTypes = {
+    anchorProps: PropTypes.object,
+    bindingRef: PropTypes.string.isRequired,
+};
+
+const AnchorBindingDefaultProps = {
+    anchorProps: null,
+};
+
 /**
  * @callback selectorCallback
  * @param {Object} Properties from the Component when rendered
@@ -184,6 +217,9 @@ function applyAnchorBinding(
             />
         );
     };
+
+    AnchorBinding.propTypes = AnchorBindingPropTypes;
+    AnchorBinding.defaultProps = AnchorBindingDefaultProps;
 
     return AnchorBinding;
 }

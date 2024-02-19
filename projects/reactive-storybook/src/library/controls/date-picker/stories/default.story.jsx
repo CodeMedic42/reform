@@ -15,15 +15,13 @@ export default function DefaultStory() {
     }, []);
 
     return (
-        <>
-            <DatePicker
-                fromDate={from}
-                toDate={to}
-                minDate={new Date('1980/4/6')}
-                maxDate={new Date('2000/8/24')}
-                onSelect={handleSelect}
-                targetDate={target}
-            />
-        </>
+        <DatePicker
+            fromDate={from}
+            toDate={to}
+            minDate={new Date('1980/4/6')}
+            maxDate={new Date('2000/8/24')}
+            onSelect={handleSelect}
+            targetDate={target}
+        />
     );
 }

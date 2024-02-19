@@ -6,6 +6,26 @@ import Typography from './typography';
 import applyForwardRef from '../../../common/apply-forward-ref';
 
 class SubHeading extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        level: PropTypes.oneOf(['1', '2', '3', '4', '5']).isRequired,
+        forwardRef: PropTypes.instanceOf(Object),
+        weightNormal: PropTypes.bool,
+        responsive: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        className: null,
+        children: null,
+        forwardRef: null,
+        weightNormal: false,
+        responsive: false,
+    };
+
     render() {
         const {
             className,
@@ -37,25 +57,5 @@ class SubHeading extends PureComponent {
         );
     }
 }
-
-SubHeading.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    level: PropTypes.oneOf(['1', '2', '3', '4', '5']).isRequired,
-    forwardRef: PropTypes.instanceOf(Object),
-    weightNormal: PropTypes.bool,
-    responsive: PropTypes.bool,
-};
-
-SubHeading.defaultProps = {
-    className: null,
-    children: null,
-    forwardRef: null,
-    weightNormal: false,
-    responsive: false,
-};
 
 export default applyForwardRef(SubHeading);

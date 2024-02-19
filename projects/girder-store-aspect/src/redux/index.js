@@ -1,8 +1,3 @@
-import MobxAspect from './mobx-aspect';
-import Store from './store';
+import ReduxAspect from './redux-aspect';
 
-export default MobxAspect;
-
-export {
-    Store,
-};
+export default ReduxAspect;

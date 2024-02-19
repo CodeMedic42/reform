@@ -1,10 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import React, { useCallback } from 'react';
 import classnames from 'classnames';
+/* eslint-disable import/no-duplicates */
 import isToday from 'date-fns/isToday';
 import isEqual from 'date-fns/isEqual';
 import getDate from 'date-fns/getDate';
+/* eslint-enable import/no-duplicates */
 import isNil from 'lodash/isNil';
 import PropTypes from '../../../common/prop-types';
 import preventDefault from '../../../common/prevent-default';
@@ -46,7 +46,7 @@ function PickerDay(props) {
     const day = getDate(dayDate);
 
     const handleClick = useCallback(
-        (event) => {
+        () => {
             if (!isNil(onSelect)) {
                 onSelect(dayDate);
             }

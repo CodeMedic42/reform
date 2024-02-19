@@ -14,6 +14,7 @@ async function startPuppeteer(runContext, port) {
     const page = await browser.newPage();
 
     if (verbose) {
+        // eslint-disable-next-line no-console
         page.on('console', (msg) => console.log(msg.text()));
     }
 

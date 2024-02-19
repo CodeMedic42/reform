@@ -1,981 +1,981 @@
-// /* stylelint-disable no-descending-specificity */
-// // @import '~react-day-picker/lib/style.css';
-
-// $--input-placeholder: $--clr-g-60;
-
-// $input-sm: 32px;
-// $input-md: 40px;
-// $input-lg: 48px;
-
-// .ra-input-description {
-//     ul {
-//         list-style-type: none;
-//         margin: 0;
-//         padding-left: 0;
-//         font-size: calc(1em - 2px);
-//         font-weight: 500;
-//         color: $--clr-g-60;
-//         margin-top: 8px;
-
-//         li {
-//             text-indent: 4px;
-//             margin: 0;
-//             display: block;
-//             color: $--clr-g-60;
-//             line-height: 22px;
-//         }
-
-//         &.success-messages {
-//             li {
-//                 color: map.get($--ra-config-interactive-color-success-base, "clr");
-//             }
-//         }
-
-//         &.failure-messages {
-//             li {
-//                 color: map.get($--ra-config-interactive-color-danger-base, "clr");
-//             }
-//         }
-//     }
-// }
-
-// .ra-input {
-//     width: 100%;
-//     max-width: 100%;
-//     vertical-align: top;
-//     box-sizing: border-box;
-//     min-width: 0;
-
-//     &.ra-drop-down-input {
-//         .ra-drop-down {
-//             width: 100%;
-//         }
-
-//         &.ra-action-selector {
-//             width: auto;
-//             max-width: none;
-//             display: inline-block;
-//         }
-//     }
-
-//     input::-webkit-outer-spin-button,
-//     input::-webkit-inner-spin-button {
-//         /* display: none; <- Crashes Chrome on hover */
-//         -webkit-appearance: none;
-//         margin: 0; /* <$-- Apparently some margin are still there even though it's hidden */
-//     }
-
-//     input[type='number'] {
-//         -moz-appearance: textfield; /* Firefox */
-//     }
-
-//     input::-ms-clear {
-//         display: none;
-//     }
-
-//     .input-container {
-//         position: relative;
-
-//         .left-annotation,
-//         .right-annotation,
-//         .clear-button {
-//             position: absolute;
-//             display: flex;
-//             justify-content: center;
-//             align-items: center;
-//             top: 4px;
-//         }
-
-//         .left-annotation,
-//         .right-annotation {
-//             &:not(button) {
-//                 pointer-events: none;
-//             }
-//         }
-
-//         .left-annotation {
-//             left: 4px;
-//         }
-
-//         .right-annotation {
-//             right: 4px;
-//         }
-
-//         .value-display,
-//         input:not([type='checkbox']):not([type='radio']),
-//         textarea {
-//             padding: 0;
-//             width: 100%;
-//             box-sizing: border-box;
-//             border-radius: 2px;
-//             color: $--clr-g-80;
-//             border-width: 1px;
-//             border-style: solid;
-//             font: inherit;
-//             border-color: $--clr-g-40;
-//             font-weight: $--font-weight-normal;
-//             outline: 0;
-//             background-color: $--clr-white;
-//             text-align: left;
-//             resize: none;
-
-//             @include textSizeLG();
-
-//             ~ .clear-button {
-//                 right: 4px;
-//                 display: none;
-
-//                 &:focus {
-//                     display: flex;
-//                 }
-//             }
-
-//             &::-webkit-input-placeholder {
-//                 // don't combine placeholder selectors
-//                 // Some browsers don't like it
-//                 color: $--input-placeholder;
-//             }
-
-//             &::-moz-placeholder {
-//                 // don't combine placeholder selectors
-//                 // Some browsers don't like it
-//                 color: $--input-placeholder;
-//             }
-
-//             &::-ms-placeholder {
-//                 // don't combine placeholder selectors
-//                 // Some browsers don't like it
-//                 color: $--input-placeholder;
-//             }
-
-//             &::placeholder {
-//                 // don't combine placeholder selectors
-//                 // Some browsers don't like it
-//                 color: $--input-placeholder;
-//             }
-
-//             &.has-value {
-//                 color: $--clr-g-90;
-//                 border-color: $--clr-g-80;
-//             }
-
-//             &:disabled:disabled,
-//             &.disabled.disabled {
-//                 color: $--clr-g-40;
-//                 background-color: $--clr-g-10;
-//                 border: solid 1px $--clr-g-10;
-//                 cursor: not-allowed;
-//             }
-
-//             &:focus:focus,
-//             &.focus.focus {
-//                 border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
-//                 box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-primary-base, "clr");
-
-//                 &.has-value {
-//                     ~ .clear-button {
-//                         display: flex;
-
-//                         ~ .right-annotation {
-//                             display: none;
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-
-//         .value-display {
-//             display: inline-flex;
-//             align-items: center;
-//             background-color: $--clr-g-4;
-//             border: 0;
-//             white-space: nowrap;
-//             overflow: hidden;
-//             text-overflow: ellipsis;
-//         }
-
-//         .value-display,
-//         input:not([type='checkbox']):not([type='radio']) {
-//             padding: 0 12px;
-//         }
-
-//         textarea {
-//             &.padding-sm {
-//                 padding: 16px;
-//             }
-
-//             &.padding-md {
-//                 padding: 24px;
-//             }
-
-//             &.padding-lg {
-//                 padding: 32px;
-//             }
-//         }
-//     }
-
-//     &.size-sm {
-//         .input-container {
-//             .left-annotation,
-//             .right-annotation,
-//             .clear-button {
-//                 top: 2px;
-//             }
-
-//             .left-annotation {
-//                 left: 2px;
-//             }
-
-//             .right-annotation {
-//                 right: 2px;
-//             }
-
-//             .value-display,
-//             input:not([type='checkbox']):not([type='radio']) {
-//                 height: $input-sm;
-//             }
-
-//             &.has-clear-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     &.has-value {
-//                         &:focus,
-//                         &.focus {
-//                             padding-right: 32px;
-//                         }
-//                     }
-//                 }
-//             }
-
-//             &.has-left-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     padding-left: 32px;
-//                 }
-//             }
-
-//             &.has-right-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     padding-right: 32px;
-//                 }
-//             }
-//         }
-//     }
-
-//     &.size-md {
-//         .input-container {
-//             .left-annotation,
-//             .right-annotation,
-//             .clear-button {
-//                 top: 4px;
-//             }
-
-//             .left-annotation {
-//                 left: 4px;
-//             }
-
-//             .right-annotation {
-//                 right: 4px;
-//             }
-
-//             .value-display,
-//             input:not([type='checkbox']):not([type='radio']) {
-//                 height: $input-md;
-//             }
-
-//             &.has-clear-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     &.has-value {
-//                         &:focus,
-//                         &.focus {
-//                             padding-right: 40px;
-//                         }
-//                     }
-//                 }
-//             }
-
-//             &.has-left-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     padding-left: 40px;
-//                 }
-//             }
-
-//             &.has-right-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     padding-right: 40px;
-//                 }
-//             }
-//         }
-//     }
-
-//     &.size-lg {
-//         .input-container {
-//             .left-annotation,
-//             .right-annotation,
-//             .clear-button {
-//                 top: 4px;
-//             }
-
-//             .left-annotation {
-//                 left: 4px;
-//             }
-
-//             .right-annotation {
-//                 right: 4px;
-//             }
-
-//             .value-display,
-//             input:not([type='checkbox']):not([type='radio']),
-//             textarea {
-//                 @include textSizeXL();
-//             }
-
-//             .value-display,
-//             input:not([type='checkbox']):not([type='radio']) {
-//                 height: $input-lg;
-//             }
-
-//             &.has-clear-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     &.has-value {
-//                         &:focus,
-//                         &.focus {
-//                             padding-right: 50px;
-//                         }
-//                     }
-//                 }
-//             }
-
-//             &.has-left-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     padding-left: 50px;
-//                 }
-//             }
-
-//             &.has-right-annotation {
-//                 .value-display,
-//                 input:not([type='checkbox']):not([type='radio']),
-//                 textarea {
-//                     padding-right: 50px;
-//                 }
-//             }
-//         }
-//     }
-
-//     .ra-input-label {
-//         @extend .no-select;
-
-//         display: block;
-//         font: inherit;
-//         outline: none;
-//         // transform-style: preserve-3d;
-
-//         .label-text {
-//             padding-left: 4px;
-//             text-overflow: ellipsis;
-//             white-space: nowrap;
-//             overflow: hidden;
-//             padding-bottom: 8px;
-//             display: block;
-
-//             &:empty {
-//                 &::before {
-//                     content: ' ';
-//                     white-space: pre;
-//                 }
-//             }
-//         }
-
-//         &:empty {
-//             &::before {
-//                 content: ' ';
-//                 white-space: pre;
-//             }
-//         }
-//     }
-
-//     &.failure.failure {
-//         .ra-input-label {
-//             color:  map.get($--ra-config-interactive-color-danger-base, "active-clr");
-//         }
-
-//         // Double valid is a legal way to increase specificity. Come at me!!!
-//         .input-container {
-//             .value-display,
-//             input:not([type='checkbox']):not([type='radio']),
-//             textarea {
-//                 border-color: map.get($--ra-config-interactive-color-danger-base, "clr");
-
-//                 &:focus,
-//                 &.focus {
-//                     box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-danger-base, "clr");
-//                 }
-//             }
-//         }
-//     }
-
-//     .date-range-inputs {
-//         display: flex;
-
-//         .input-container {
-//             flex: 1;
-//             flex-shrink: 1;
-//             flex-basis: auto;
-//         }
-//     }
-// }
-
-// .ra-select-anchor {
-//     // TODO: improve this class name
-//     .clear,
-//     .arrow {
-//         margin-top: 4px;
-//         align-self: flex-start;
-//     }
-
-//     .clear {
-//         display: none;
-//         color: $--clr-g-90;
-//         z-index: 11;
-//     }
-
-//     .anchor-content {
-//         padding-top: 0;
-//         padding-bottom: 0;
-//         padding-left: 12px;
-//         padding-right: 4px;
-//         color: $--clr-g-60;
-//         width: 100%;
-//         box-sizing: border-box;
-//         outline: 0;
-//         background-color: $--clr-white;
-//         text-align: left;
-//         display: flex;
-//         justify-content: space-between;
-//         align-items: center;
-//         overflow: hidden;
-//         min-height: inherit;
-
-//         .anchor-selected-item {
-//             overflow: hidden;
-//             white-space: pre;
-//             max-height: 100%;
-//             width: 100%;
-//             margin-right: 12px;
-//         }
-
-//         .anchor-selected-items {
-//             height: 100%;
-//             box-sizing: border-box;
-//             overflow: hidden;
-//             padding: 6px 0;
-
-//             .ra-removable-chip {
-//                 margin-right: 4px;
-//                 margin-top: 2px;
-//                 margin-bottom: 2px;
-
-//                 .remove-btn {
-//                     z-index: 11;
-//                 }
-//             }
-//         }
-
-//         .icon-container {
-//             align-self: flex-start;
-//         }
-
-//         .ra-icon-box {
-//             flex-shrink: 0;
-//         }
-//     }
-
-//     .ra-anchor-boundary {
-//         position: relative;
-//         width: 100%;
-//         min-height: inherit;
-//         box-sizing: border-box;
-//         overflow: hidden;
-//         z-index: 10;
-//         line-height: normal;
-
-//         .button-anchor {
-//             margin: 0;
-//             padding: 0;
-//             outline: none;
-//             box-shadow: initial;
-//             background-color: transparent;
-//             position: absolute;
-//             top: 0;
-//             left: 0;
-//             right: 0;
-//             width: 100%;
-//             bottom: 0;
-//             cursor: pointer;
-//             z-index: 1;
-//             border: none;
-
-//             &::before {
-//                 content: '';
-//                 position: absolute;
-//                 top: 0;
-//                 left: 0;
-//                 right: 0;
-//                 bottom: 0;
-//                 border: solid 1px $--clr-g-40;
-//                 border-radius: 2px;
-//                 z-index: 10;
-//                 pointer-events: none;
-//             }
-
-//             &.has-value {
-//                 ~ .anchor-content {
-//                     color: $--clr-g-90;
-//                 }
-
-//                 &::before {
-//                     border-color: $--clr-g-80;
-//                 }
-//             }
-
-//             &:focus,
-//             &.focus {
-//                 &::before {
-//                     border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
-//                     border-width: 2px;
-//                 }
-
-//                 &.has-value {
-//                     ~ .anchor-content {
-//                         .clear {
-//                             display: flex;
-//                         }
-
-//                         .arrow:not(:last-child) {
-//                             display: none;
-//                         }
-//                     }
-//                 }
-//             }
-
-//             &:disabled {
-//                 cursor: not-allowed;
-
-//                 ~ .anchor-content {
-//                     color: $--clr-g-40;
-//                     background-color: $--clr-g-10;
-//                 }
-
-//                 &::before {
-//                     border: none;
-//                 }
-//             }
-//         }
-//     }
-
-//     &.size-2xs {
-//         min-height: $input-sm;
-//         font-size: 14px;
-//     }
-
-//     &.size-xs {
-//         min-height: $input-sm;
-//         font-size: 14px;
-//     }
-
-//     &.size-sm {
-//         min-height: $input-sm;
-//         font-size: 14px;
-
-//         .clear,
-//         .arrow {
-//             margin-top: 2px;
-//         }
-
-//         .anchor-content {
-//             padding-right: 2px;
-
-//             .anchor-selected-items {
-//                 padding: 4px 0;
-//             }
-//         }
-//     }
-
-//     &.size-md {
-//         min-height: $input-md;
-//         font-size: 16px;
-
-//         .clear,
-//         .arrow {
-//             margin-top: 4px;
-//         }
-
-//         .anchor-content {
-//             padding-right: 4px;
-
-//             .anchor-selected-items {
-//                 padding: 6px 0;
-//             }
-//         }
-//     }
-
-//     &.size-lg {
-//         min-height: $input-lg;
-//         font-size: 18px;
-
-//         .clear,
-//         .arrow {
-//             margin-top: 4px;
-//         }
-
-//         .anchor-content {
-//             padding-right: 4px;
-
-//             .anchor-selected-items {
-//                 padding: 8px 0;
-//             }
-//         }
-//     }
-
-//     /* stylelint-disable no-duplicate-selectors */
-//     .ra-anchor-boundary {
-//         &.expandable {
-//             &:hover,
-//             &:focus-within,
-//             &.focus {
-//                 clip-path: inset(0 0 0 0 round 2px);
-//                 transition-duration: 0.5s;
-//                 transform: translateZ(1px);
-//                 transform-style: unset;
-
-//                 div {
-//                     transform-style: unset;
-//                 }
-
-//                 .button-anchor {
-//                     bottom: 0;
-//                     transition-duration: 0.5s;
-//                 }
-//             }
-//         }
-//     }
-//     /* stylelint-enable no-duplicate-selectors */
-// }
-
-// .ra-multi-select {
-//     &.expandable {
-//         // transform-style: preserve-3d;
-
-//         .ra-select {
-//             // transform-style: preserve-3d;
-
-//             .anchor-binding {
-//                 // transform-style: preserve-3d;
-
-//                 .ra-multi-select-anchor {
-//                     // transform-style: preserve-3d;
-
-//                     &.size-2xs {
-//                         .ra-anchor-boundary {
-//                             clip-path: inset(
-//                                 0 0 calc(100% - #{$input-sm}) 0 round 2px
-//                             );
-
-//                             .button-anchor {
-//                                 bottom: calc(100% - #{$input-sm});
-//                             }
-//                         }
-//                     }
-
-//                     &.size-xs {
-//                         .ra-anchor-boundary {
-//                             clip-path: inset(
-//                                 0 0 calc(100% - #{$input-sm}) 0 round 2px
-//                             );
-
-//                             .button-anchor {
-//                                 bottom: calc(100% - #{$input-sm});
-//                             }
-//                         }
-//                     }
-
-//                     &.size-sm {
-//                         .ra-anchor-boundary {
-//                             clip-path: inset(
-//                                 0 0 calc(100% - #{$input-sm}) 0 round 2px
-//                             );
-
-//                             .button-anchor {
-//                                 bottom: calc(100% - #{$input-sm});
-//                             }
-//                         }
-//                     }
-
-//                     &.size-md {
-//                         .ra-anchor-boundary {
-//                             clip-path: inset(
-//                                 0 0 calc(100% - #{$input-md}) 0 round 2px
-//                             );
-
-//                             .button-anchor {
-//                                 bottom: calc(100% - #{$input-md});
-//                             }
-//                         }
-//                     }
-
-//                     &.size-lg {
-//                         .ra-anchor-boundary {
-//                             clip-path: inset(
-//                                 0 0 calc(100% - #{$input-lg}) 0 round 2px
-//                             );
-
-//                             .button-anchor {
-//                                 bottom: calc(100% - #{$input-lg});
-//                             }
-//                         }
-//                     }
-
-//                     .ra-anchor-boundary {
-//                         &:hover,
-//                         &:focus-within,
-//                         &.focus {
-//                             clip-path: inset(0 0 0 0 round 2px);
-//                             transition-duration: 0.5s;
-//                             transform: translateZ(1px);
-//                             transform-style: unset;
-
-//                             div {
-//                                 transform-style: unset;
-//                             }
-
-//                             .button-anchor {
-//                                 bottom: 0;
-//                                 transition-duration: 0.5s;
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-
-//         .ra-anchor-boundary {
-//             position: absolute;
-//             top: 0;
-//             left: 0;
-//             right: 0;
-//             overflow: hidden;
-//             transition: clip-path 0s cubic-bezier(0, 0.33, 0.33, 1);
-
-//             .button-anchor {
-//                 transition: bottom 0s cubic-bezier(0, 0.33, 0.33, 1);
-//             }
-//         }
-//     }
-// }
-
-// .failure.failure {
-//     .ra-select-anchor {
-//         .ra-anchor-boundary {
-//             .anchor-control {
-//                 &.button-anchor {
-//                     &::before {
-//                         border-color: map.get($--ra-config-interactive-color-danger-base, "clr");
-//                     }
-
-//                     &:focus,
-//                     &.focus {
-//                         &::before {
-//                             border-color: map.get($--ra-config-interactive-color-danger-base, "clr");
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// .action-selector-anchor {
-//     &.sch-opaque,
-//     &.sch-outline {
-//         .ra-icon {
-//             color: $--clr-g-50;
-//         }
-//     }
-// }
-
-// .ra-select-tray {
-//     display: flex;
-//     flex-direction: column;
-
-//     .ra-dd-list-filter {
-//         flex-shrink: 0;
-//         flex-grow: 1;
-//         flex-basis: auto;
-//         overflow: scroll;
-//         width: 100%;
-//         box-sizing: border-box;
-//         outline: none;
-//         border: 0;
-//         line-height: 2.5;
-//         padding: 0 16px;
-//         border-bottom: 1px solid $--clr-g-10;
-//         color: $--clr-g-90;
-//         margin-top: 8px;
-//     }
-
-//     .ra-dd-list {
-//         .ra-dd-list-item.no-options {
-//             color: $--clr-g-40;
-//         }
-//     }
-
-//     &.size-2xs {
-//         .ra-dd-list-filter {
-//             height: 24px;
-//             font-size: 14px;
-//         }
-//     }
-
-//     &.size-xs {
-//         .ra-dd-list-filter {
-//             height: 24px;
-//             font-size: 14px;
-//         }
-//     }
-
-//     &.size-sm {
-//         .ra-dd-list-filter {
-//             height: $input-sm;
-//             font-size: 14px;
-//         }
-//     }
-
-//     &.size-md {
-//         .ra-dd-list-filter {
-//             height: $input-md;
-//             font-size: 16px;
-//         }
-//     }
-
-//     &.size-lg {
-//         .ra-dd-list-filter {
-//             height: $input-lg;
-//         }
-//     }
-
-//     .ra-spinner {
-//         margin-right: 8px;
-//     }
-// }
-
-// .ra-input-group {
-//     margin-bottom: 16px;
-//     margin-right: 16px;
-//     display: inline-block;
-
-//     .ra-input {
-//         margin-bottom: 0;
-//         margin-right: 0;
-//         margin-left: 16px;
-
-//         &:first-child {
-//             margin-left: 0;
-//         }
-//     }
-// }
-
-// @mixin hideResults {
-//     .input-container .value-display,
-//     .input-container input:not([type='checkbox']):not([type='radio']),
-//     .input-container textarea,
-//     .ra-drop-down .input-button {
-//         border: solid 1px $--clr-g-40;
-
-//         &:focus,
-//         &.focus {
-//             border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
-//             box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-primary-base, "clr");
-//         }
-//     }
-
-//     .ra-select-anchor {
-//         .button-anchor {
-//             ~ div {
-//                 border-color: $--clr-g-40;
-//             }
-
-//             &:focus,
-//             &.focus {
-//                 ~ div {
-//                     border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
-//                     box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-primary-base, "clr");
-//                 }
-//             }
-//         }
-//     }
-
-//     .ra-input-description {
-//         .failure-messages {
-//             margin-top: 0;
-//             display: none;
-//         }
-//     }
-
-//     .ra- {
-//         color: $--clr-g-80;
-//     }
-// }
-
-// .ra-data {
-//     display: inline-block;
-//     width: 100%;
-
-//     &:not(.show-results-on-execute) {
-//         &.show-results-on-touch {
-//             .ra-data-field {
-//                 &:not(.touched) {
-//                     @include hideResults;
-//                 }
-//             }
-//         }
-//     }
-
-//     &.show-results-on-execute {
-//         &:not(.executed) {
-//             &:not(.show-results-on-touch) {
-//                 .ra-data-field {
-//                     @include hideResults;
-//                 }
-//             }
-
-//             &.show-results-on-touch {
-//                 .ra-data-field {
-//                     &:not(.touched) {
-//                         @include hideResults;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-
-//     fieldset {
-//         border: none;
-//         padding: 0;
-//         margin: 0;
-//         width: 100%;
-//     }
-// }
+/* stylelint-disable no-descending-specificity */
+// @import '~react-day-picker/lib/style.css';
+
+$--input-placeholder: $--clr-g-60;
+
+$input-sm: 32px;
+$input-md: 40px;
+$input-lg: 48px;
+
+.ra-input-description {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding-left: 0;
+        font-size: calc(1em - 2px);
+        font-weight: 500;
+        color: $--clr-g-60;
+        margin-top: 8px;
+
+        li {
+            text-indent: 4px;
+            margin: 0;
+            display: block;
+            color: $--clr-g-60;
+            line-height: 22px;
+        }
+
+        &.success-messages {
+            li {
+                color: map.get($--ra-config-interactive-color-success-base, "clr");
+            }
+        }
+
+        &.failure-messages {
+            li {
+                color: map.get($--ra-config-interactive-color-danger-base, "clr");
+            }
+        }
+    }
+}
+
+.ra-input {
+    width: 100%;
+    max-width: 100%;
+    vertical-align: top;
+    box-sizing: border-box;
+    min-width: 0;
+
+    &.ra-drop-down-input {
+        .ra-drop-down {
+            width: 100%;
+        }
+
+        &.ra-action-selector {
+            width: auto;
+            max-width: none;
+            display: inline-block;
+        }
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <$-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield; /* Firefox */
+    }
+
+    input::-ms-clear {
+        display: none;
+    }
+
+    .input-container {
+        position: relative;
+
+        .left-annotation,
+        .right-annotation,
+        .clear-button {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 4px;
+        }
+
+        .left-annotation,
+        .right-annotation {
+            &:not(button) {
+                pointer-events: none;
+            }
+        }
+
+        .left-annotation {
+            left: 4px;
+        }
+
+        .right-annotation {
+            right: 4px;
+        }
+
+        .value-display,
+        input:not([type='checkbox']):not([type='radio']),
+        textarea {
+            padding: 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 2px;
+            color: $--clr-g-80;
+            border-width: 1px;
+            border-style: solid;
+            font: inherit;
+            border-color: $--clr-g-40;
+            font-weight: $--font-weight-normal;
+            outline: 0;
+            background-color: $--clr-white;
+            text-align: left;
+            resize: none;
+
+            @include textSizeLG();
+
+            ~ .clear-button {
+                right: 4px;
+                display: none;
+
+                &:focus {
+                    display: flex;
+                }
+            }
+
+            &::-webkit-input-placeholder {
+                // don't combine placeholder selectors
+                // Some browsers don't like it
+                color: $--input-placeholder;
+            }
+
+            &::-moz-placeholder {
+                // don't combine placeholder selectors
+                // Some browsers don't like it
+                color: $--input-placeholder;
+            }
+
+            &::-ms-placeholder {
+                // don't combine placeholder selectors
+                // Some browsers don't like it
+                color: $--input-placeholder;
+            }
+
+            &::placeholder {
+                // don't combine placeholder selectors
+                // Some browsers don't like it
+                color: $--input-placeholder;
+            }
+
+            &.has-value {
+                color: $--clr-g-90;
+                border-color: $--clr-g-80;
+            }
+
+            &:disabled:disabled,
+            &.disabled.disabled {
+                color: $--clr-g-40;
+                background-color: $--clr-g-10;
+                border: solid 1px $--clr-g-10;
+                cursor: not-allowed;
+            }
+
+            &:focus:focus,
+            &.focus.focus {
+                border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
+                box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-primary-base, "clr");
+
+                &.has-value {
+                    ~ .clear-button {
+                        display: flex;
+
+                        ~ .right-annotation {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .value-display {
+            display: inline-flex;
+            align-items: center;
+            background-color: $--clr-g-4;
+            border: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .value-display,
+        input:not([type='checkbox']):not([type='radio']) {
+            padding: 0 12px;
+        }
+
+        textarea {
+            &.padding-sm {
+                padding: 16px;
+            }
+
+            &.padding-md {
+                padding: 24px;
+            }
+
+            &.padding-lg {
+                padding: 32px;
+            }
+        }
+    }
+
+    &.size-sm {
+        .input-container {
+            .left-annotation,
+            .right-annotation,
+            .clear-button {
+                top: 2px;
+            }
+
+            .left-annotation {
+                left: 2px;
+            }
+
+            .right-annotation {
+                right: 2px;
+            }
+
+            .value-display,
+            input:not([type='checkbox']):not([type='radio']) {
+                height: $input-sm;
+            }
+
+            &.has-clear-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    &.has-value {
+                        &:focus,
+                        &.focus {
+                            padding-right: 32px;
+                        }
+                    }
+                }
+            }
+
+            &.has-left-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    padding-left: 32px;
+                }
+            }
+
+            &.has-right-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    padding-right: 32px;
+                }
+            }
+        }
+    }
+
+    &.size-md {
+        .input-container {
+            .left-annotation,
+            .right-annotation,
+            .clear-button {
+                top: 4px;
+            }
+
+            .left-annotation {
+                left: 4px;
+            }
+
+            .right-annotation {
+                right: 4px;
+            }
+
+            .value-display,
+            input:not([type='checkbox']):not([type='radio']) {
+                height: $input-md;
+            }
+
+            &.has-clear-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    &.has-value {
+                        &:focus,
+                        &.focus {
+                            padding-right: 40px;
+                        }
+                    }
+                }
+            }
+
+            &.has-left-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    padding-left: 40px;
+                }
+            }
+
+            &.has-right-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    padding-right: 40px;
+                }
+            }
+        }
+    }
+
+    &.size-lg {
+        .input-container {
+            .left-annotation,
+            .right-annotation,
+            .clear-button {
+                top: 4px;
+            }
+
+            .left-annotation {
+                left: 4px;
+            }
+
+            .right-annotation {
+                right: 4px;
+            }
+
+            .value-display,
+            input:not([type='checkbox']):not([type='radio']),
+            textarea {
+                @include textSizeXL();
+            }
+
+            .value-display,
+            input:not([type='checkbox']):not([type='radio']) {
+                height: $input-lg;
+            }
+
+            &.has-clear-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    &.has-value {
+                        &:focus,
+                        &.focus {
+                            padding-right: 50px;
+                        }
+                    }
+                }
+            }
+
+            &.has-left-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    padding-left: 50px;
+                }
+            }
+
+            &.has-right-annotation {
+                .value-display,
+                input:not([type='checkbox']):not([type='radio']),
+                textarea {
+                    padding-right: 50px;
+                }
+            }
+        }
+    }
+
+    .ra-input-label {
+        @extend .no-select;
+
+        display: block;
+        font: inherit;
+        outline: none;
+        // transform-style: preserve-3d;
+
+        .ra-input-label-text {
+            padding-left: 4px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            padding-bottom: 8px;
+            display: block;
+
+            &:empty {
+                &::before {
+                    content: ' ';
+                    white-space: pre;
+                }
+            }
+        }
+
+        &:empty {
+            &::before {
+                content: ' ';
+                white-space: pre;
+            }
+        }
+    }
+
+    &.failure.failure {
+        .ra-input-label {
+            color:  map.get($--ra-config-interactive-color-danger-base, "active-clr");
+        }
+
+        // Double valid is a legal way to increase specificity. Come at me!!!
+        .input-container {
+            .value-display,
+            input:not([type='checkbox']):not([type='radio']),
+            textarea {
+                border-color: map.get($--ra-config-interactive-color-danger-base, "clr");
+
+                &:focus,
+                &.focus {
+                    box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-danger-base, "clr");
+                }
+            }
+        }
+    }
+
+    .date-range-inputs {
+        display: flex;
+
+        .input-container {
+            flex: 1;
+            flex-shrink: 1;
+            flex-basis: auto;
+        }
+    }
+}
+
+.ra-select-anchor {
+    // TODO: improve this class name
+    .clear,
+    .arrow {
+        margin-top: 4px;
+        align-self: flex-start;
+    }
+
+    .clear {
+        display: none;
+        color: $--clr-g-90;
+        z-index: 11;
+    }
+
+    .anchor-content {
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 12px;
+        padding-right: 4px;
+        color: $--clr-g-60;
+        width: 100%;
+        box-sizing: border-box;
+        outline: 0;
+        background-color: $--clr-white;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+        min-height: inherit;
+
+        .anchor-selected-item {
+            overflow: hidden;
+            white-space: pre;
+            max-height: 100%;
+            width: 100%;
+            margin-right: 12px;
+        }
+
+        .anchor-selected-items {
+            height: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            padding: 6px 0;
+
+            .ra-removable-chip {
+                margin-right: 4px;
+                margin-top: 2px;
+                margin-bottom: 2px;
+
+                .remove-btn {
+                    z-index: 11;
+                }
+            }
+        }
+
+        .icon-container {
+            align-self: flex-start;
+        }
+
+        .ra-icon-box {
+            flex-shrink: 0;
+        }
+    }
+
+    .ra-anchor-boundary {
+        position: relative;
+        width: 100%;
+        min-height: inherit;
+        box-sizing: border-box;
+        overflow: hidden;
+        z-index: 10;
+        line-height: normal;
+
+        .button-anchor {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-shadow: initial;
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            bottom: 0;
+            cursor: pointer;
+            z-index: 1;
+            border: none;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border: solid 1px $--clr-g-40;
+                border-radius: 2px;
+                z-index: 10;
+                pointer-events: none;
+            }
+
+            &.has-value {
+                ~ .anchor-content {
+                    color: $--clr-g-90;
+                }
+
+                &::before {
+                    border-color: $--clr-g-80;
+                }
+            }
+
+            &:focus,
+            &.focus {
+                &::before {
+                    border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
+                    border-width: 2px;
+                }
+
+                &.has-value {
+                    ~ .anchor-content {
+                        .clear {
+                            display: flex;
+                        }
+
+                        .arrow:not(:last-child) {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+
+                ~ .anchor-content {
+                    color: $--clr-g-40;
+                    background-color: $--clr-g-10;
+                }
+
+                &::before {
+                    border: none;
+                }
+            }
+        }
+    }
+
+    &.size-2xs {
+        min-height: $input-sm;
+        font-size: 14px;
+    }
+
+    &.size-xs {
+        min-height: $input-sm;
+        font-size: 14px;
+    }
+
+    &.size-sm {
+        min-height: $input-sm;
+        font-size: 14px;
+
+        .clear,
+        .arrow {
+            margin-top: 2px;
+        }
+
+        .anchor-content {
+            padding-right: 2px;
+
+            .anchor-selected-items {
+                padding: 4px 0;
+            }
+        }
+    }
+
+    &.size-md {
+        min-height: $input-md;
+        font-size: 16px;
+
+        .clear,
+        .arrow {
+            margin-top: 4px;
+        }
+
+        .anchor-content {
+            padding-right: 4px;
+
+            .anchor-selected-items {
+                padding: 6px 0;
+            }
+        }
+    }
+
+    &.size-lg {
+        min-height: $input-lg;
+        font-size: 18px;
+
+        .clear,
+        .arrow {
+            margin-top: 4px;
+        }
+
+        .anchor-content {
+            padding-right: 4px;
+
+            .anchor-selected-items {
+                padding: 8px 0;
+            }
+        }
+    }
+
+    /* stylelint-disable no-duplicate-selectors */
+    .ra-anchor-boundary {
+        &.expandable {
+            &:hover,
+            &:focus-within,
+            &.focus {
+                clip-path: inset(0 0 0 0 round 2px);
+                transition-duration: 0.5s;
+                transform: translateZ(1px);
+                transform-style: unset;
+
+                div {
+                    transform-style: unset;
+                }
+
+                .button-anchor {
+                    bottom: 0;
+                    transition-duration: 0.5s;
+                }
+            }
+        }
+    }
+    /* stylelint-enable no-duplicate-selectors */
+}
+
+.ra-multi-select {
+    &.expandable {
+        // transform-style: preserve-3d;
+
+        .ra-select {
+            // transform-style: preserve-3d;
+
+            .anchor-binding {
+                // transform-style: preserve-3d;
+
+                .ra-multi-select-anchor {
+                    // transform-style: preserve-3d;
+
+                    &.size-2xs {
+                        .ra-anchor-boundary {
+                            clip-path: inset(
+                                0 0 calc(100% - #{$input-sm}) 0 round 2px
+                            );
+
+                            .button-anchor {
+                                bottom: calc(100% - #{$input-sm});
+                            }
+                        }
+                    }
+
+                    &.size-xs {
+                        .ra-anchor-boundary {
+                            clip-path: inset(
+                                0 0 calc(100% - #{$input-sm}) 0 round 2px
+                            );
+
+                            .button-anchor {
+                                bottom: calc(100% - #{$input-sm});
+                            }
+                        }
+                    }
+
+                    &.size-sm {
+                        .ra-anchor-boundary {
+                            clip-path: inset(
+                                0 0 calc(100% - #{$input-sm}) 0 round 2px
+                            );
+
+                            .button-anchor {
+                                bottom: calc(100% - #{$input-sm});
+                            }
+                        }
+                    }
+
+                    &.size-md {
+                        .ra-anchor-boundary {
+                            clip-path: inset(
+                                0 0 calc(100% - #{$input-md}) 0 round 2px
+                            );
+
+                            .button-anchor {
+                                bottom: calc(100% - #{$input-md});
+                            }
+                        }
+                    }
+
+                    &.size-lg {
+                        .ra-anchor-boundary {
+                            clip-path: inset(
+                                0 0 calc(100% - #{$input-lg}) 0 round 2px
+                            );
+
+                            .button-anchor {
+                                bottom: calc(100% - #{$input-lg});
+                            }
+                        }
+                    }
+
+                    .ra-anchor-boundary {
+                        &:hover,
+                        &:focus-within,
+                        &.focus {
+                            clip-path: inset(0 0 0 0 round 2px);
+                            transition-duration: 0.5s;
+                            transform: translateZ(1px);
+                            transform-style: unset;
+
+                            div {
+                                transform-style: unset;
+                            }
+
+                            .button-anchor {
+                                bottom: 0;
+                                transition-duration: 0.5s;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .ra-anchor-boundary {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            transition: clip-path 0s cubic-bezier(0, 0.33, 0.33, 1);
+
+            .button-anchor {
+                transition: bottom 0s cubic-bezier(0, 0.33, 0.33, 1);
+            }
+        }
+    }
+}
+
+.failure.failure {
+    .ra-select-anchor {
+        .ra-anchor-boundary {
+            .anchor-control {
+                &.button-anchor {
+                    &::before {
+                        border-color: map.get($--ra-config-interactive-color-danger-base, "clr");
+                    }
+
+                    &:focus,
+                    &.focus {
+                        &::before {
+                            border-color: map.get($--ra-config-interactive-color-danger-base, "clr");
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.action-selector-anchor {
+    &.sch-opaque,
+    &.sch-outline {
+        .ra-icon {
+            color: $--clr-g-50;
+        }
+    }
+}
+
+.ra-select-tray {
+    display: flex;
+    flex-direction: column;
+
+    .ra-dd-list-filter {
+        flex-shrink: 0;
+        flex-grow: 1;
+        flex-basis: auto;
+        overflow: scroll;
+        width: 100%;
+        box-sizing: border-box;
+        outline: none;
+        border: 0;
+        line-height: 2.5;
+        padding: 0 16px;
+        border-bottom: 1px solid $--clr-g-10;
+        color: $--clr-g-90;
+        margin-top: 8px;
+    }
+
+    .ra-dd-list {
+        .ra-dd-list-item.no-options {
+            color: $--clr-g-40;
+        }
+    }
+
+    &.size-2xs {
+        .ra-dd-list-filter {
+            height: 24px;
+            font-size: 14px;
+        }
+    }
+
+    &.size-xs {
+        .ra-dd-list-filter {
+            height: 24px;
+            font-size: 14px;
+        }
+    }
+
+    &.size-sm {
+        .ra-dd-list-filter {
+            height: $input-sm;
+            font-size: 14px;
+        }
+    }
+
+    &.size-md {
+        .ra-dd-list-filter {
+            height: $input-md;
+            font-size: 16px;
+        }
+    }
+
+    &.size-lg {
+        .ra-dd-list-filter {
+            height: $input-lg;
+        }
+    }
+
+    .ra-spinner {
+        margin-right: 8px;
+    }
+}
+
+.ra-input-group {
+    margin-bottom: 16px;
+    margin-right: 16px;
+    display: inline-block;
+
+    .ra-input {
+        margin-bottom: 0;
+        margin-right: 0;
+        margin-left: 16px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+}
+
+@mixin hideResults {
+    .input-container .value-display,
+    .input-container input:not([type='checkbox']):not([type='radio']),
+    .input-container textarea,
+    .ra-drop-down .input-button {
+        border: solid 1px $--clr-g-40;
+
+        &:focus,
+        &.focus {
+            border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
+            box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-primary-base, "clr");
+        }
+    }
+
+    .ra-select-anchor {
+        .button-anchor {
+            ~ div {
+                border-color: $--clr-g-40;
+            }
+
+            &:focus,
+            &.focus {
+                ~ div {
+                    border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
+                    box-shadow: inset 0 0 0 1px map.get($--ra-config-interactive-color-primary-base, "clr");
+                }
+            }
+        }
+    }
+
+    .ra-input-description {
+        .failure-messages {
+            margin-top: 0;
+            display: none;
+        }
+    }
+
+    .ra- {
+        color: $--clr-g-80;
+    }
+}
+
+.ra-data {
+    display: inline-block;
+    width: 100%;
+
+    &:not(.show-results-on-execute) {
+        &.show-results-on-touch {
+            .ra-data-field {
+                &:not(.touched) {
+                    @include hideResults;
+                }
+            }
+        }
+    }
+
+    &.show-results-on-execute {
+        &:not(.executed) {
+            &:not(.show-results-on-touch) {
+                .ra-data-field {
+                    @include hideResults;
+                }
+            }
+
+            &.show-results-on-touch {
+                .ra-data-field {
+                    &:not(.touched) {
+                        @include hideResults;
+                    }
+                }
+            }
+        }
+    }
+
+    fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+}

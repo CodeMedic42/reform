@@ -10,6 +10,40 @@ import changeSize from '../../../../util/change-size';
 import PropTypes from '../../../../common/prop-types';
 
 class BaseCursorInput extends React.PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        disabled: PropTypes.bool,
+        onChange: PropTypes.func,
+        onClear: PropTypes.func,
+        size: PropTypes.oneOf(['sm', 'md', 'lg']),
+        leftIcon: PropTypes.shape({
+            icon: PropTypes.icon.isRequired,
+            onClick: PropTypes.func,
+        }),
+        rightIcon: PropTypes.shape({
+            icon: PropTypes.icon.isRequired,
+            onClick: PropTypes.func,
+            overrideClear: PropTypes.bool,
+        }),
+        children: PropTypes.func.isRequired,
+        hideClearButton: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        value: null,
+        disabled: false,
+        onClear: null,
+        leftIcon: null,
+        rightIcon: null,
+        hideClearButton: false,
+        size: 'md',
+        onChange: noop,
+    };
+
     constructor(props) {
         super(props);
 
@@ -188,40 +222,6 @@ class BaseCursorInput extends React.PureComponent {
         );
     }
 }
-
-BaseCursorInput.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    disabled: PropTypes.bool,
-    onChange: PropTypes.func,
-    onClear: PropTypes.func,
-    size: PropTypes.oneOf(['sm', 'md', 'lg']),
-    leftIcon: PropTypes.shape({
-        icon: PropTypes.icon.isRequired,
-        onClick: PropTypes.func,
-    }),
-    rightIcon: PropTypes.shape({
-        icon: PropTypes.icon.isRequired,
-        onClick: PropTypes.func,
-        overrideClear: PropTypes.bool,
-    }),
-    children: PropTypes.func.isRequired,
-    hideClearButton: PropTypes.bool,
-};
-
-BaseCursorInput.defaultProps = {
-    id: null,
-    className: null,
-    value: null,
-    disabled: false,
-    onClear: null,
-    leftIcon: null,
-    rightIcon: null,
-    hideClearButton: false,
-    size: 'md',
-    onChange: noop,
-};
 
 export default BaseCursorInput;
 

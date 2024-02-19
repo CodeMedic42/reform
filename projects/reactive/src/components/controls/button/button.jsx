@@ -10,6 +10,32 @@ import {
 import PropTypes from '../../../common/prop-types';
 
 class Button extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        Component: PropTypes.Component,
+        // color: Represents color to use.
+        color: PropTypes.string,
+        // design: Represents coloring features.
+        design: PropTypes.string,
+        // variant: Represents Size and other none coloring features.
+        variant: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        focusOnMount: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        Component: 'button',
+        className: null,
+        design: null,
+        color: null,
+        children: null,
+        variant: null,
+        focusOnMount: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -84,31 +110,5 @@ class Button extends PureComponent {
         );
     }
 }
-
-Button.propTypes = {
-    className: PropTypes.string,
-    Component: PropTypes.Component,
-    // color: Represents color to use.
-    color: PropTypes.string,
-    // design: Represents coloring features.
-    design: PropTypes.string,
-    // variant: Represents Size and other none coloring features.
-    variant: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    focusOnMount: PropTypes.bool,
-};
-
-Button.defaultProps = {
-    Component: 'button',
-    className: null,
-    design: null,
-    color: null,
-    children: null,
-    variant: null,
-    focusOnMount: false,
-};
 
 export default Button;

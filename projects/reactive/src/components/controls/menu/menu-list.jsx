@@ -5,6 +5,21 @@ import classnames from 'classnames';
 import DropDownList from '../drop-down/drop-down-list';
 
 class MenuList extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+    };
+
     constructor(...args) {
         super(...args);
 
@@ -29,20 +44,5 @@ class MenuList extends PureComponent {
         );
     }
 }
-
-MenuList.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-};
-
-MenuList.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-};
 
 export default MenuList;

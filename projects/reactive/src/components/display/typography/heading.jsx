@@ -7,6 +7,24 @@ import Typography from './typography';
 import applyForwardRef from '../../../common/apply-forward-ref';
 
 class Heading extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        level: PropTypes.oneOf(['1', '2', '3', '4', '5']).isRequired,
+        forwardRef: PropTypes.instanceOf(Object),
+        responsive: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        className: null,
+        children: null,
+        forwardRef: null,
+        responsive: false,
+    };
+
     render() {
         const {
             level, className, children, forwardRef, responsive, ...rest
@@ -35,23 +53,5 @@ class Heading extends PureComponent {
         );
     }
 }
-
-Heading.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    level: PropTypes.oneOf(['1', '2', '3', '4', '5']).isRequired,
-    forwardRef: PropTypes.instanceOf(Object),
-    responsive: PropTypes.bool,
-};
-
-Heading.defaultProps = {
-    className: null,
-    children: null,
-    forwardRef: null,
-    responsive: false,
-};
 
 export default applyForwardRef(Heading);

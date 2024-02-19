@@ -9,6 +9,30 @@ import ListItemContent from './list-item-content';
  * A Button component to be used inside a DropDownListItem component.
  */
 class ListItemButton extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        'aria-label': PropTypes.string,
+        tabIndex: PropTypes.string,
+        disabled: PropTypes.bool,
+        dropDownContext: PropTypes.shape({
+            open: PropTypes.bool.isRequired,
+        }).isRequired,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+        'aria-label': null,
+        tabIndex: null,
+        disabled: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -64,29 +88,5 @@ class ListItemButton extends PureComponent {
         );
     }
 }
-
-ListItemButton.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    'aria-label': PropTypes.string,
-    tabIndex: PropTypes.string,
-    disabled: PropTypes.bool,
-    dropDownContext: PropTypes.shape({
-        open: PropTypes.bool.isRequired,
-    }).isRequired,
-};
-
-ListItemButton.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-    'aria-label': null,
-    tabIndex: null,
-    disabled: false,
-};
 
 export default ApplyConsumer(ListItemButton);

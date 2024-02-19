@@ -13,7 +13,87 @@ import Provider from './drop-down-context';
 const DEFAULTS = {
     openOnClick: true,
 };
+
+const dropPositionTypes = PropTypes.oneOf(['top', 'bottom', 'left', 'right']);
+
 class DropDown extends Component {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        trayClassName: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        onBlur: PropTypes.func,
+        onFocus: PropTypes.func,
+        disabled: PropTypes.bool,
+        dropPositions: PropTypes.arrayOf(dropPositionTypes),
+        closeTrayOnClick: PropTypes.bool,
+        closeTrayOnEnter: PropTypes.bool,
+        minTrayWidth: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.oneOf(['anchor']),
+        ]),
+        maxTrayWidth: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.oneOf(['anchor']),
+        ]),
+        maxTrayHeight: PropTypes.number,
+        onOpen: PropTypes.func,
+        onClose: PropTypes.func,
+        onKeyDown: PropTypes.func,
+        Anchor: PropTypes.elementType.isRequired,
+        // eslint-disable-next-line react/forbid-prop-types
+        anchorProps: PropTypes.object,
+        openOnHover: PropTypes.bool,
+        hoverOpenTime: PropTypes.number,
+        autoCloseTime: PropTypes.number,
+        openOnFocus: PropTypes.bool,
+        onAnchorClick: PropTypes.func,
+        openOnClick: PropTypes.bool,
+        horizontallyCenter: PropTypes.bool,
+        dockRight: PropTypes.bool,
+        enableTail: PropTypes.bool,
+        onClick: PropTypes.func,
+        onOpened: PropTypes.func,
+        onClosed: PropTypes.func,
+        keepLoaded: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        trayClassName: null,
+        children: null,
+        onBlur: noop,
+        onFocus: noop,
+        disabled: false,
+        dropPositions: ['bottom', 'top', 'right', 'left'],
+        closeTrayOnClick: true,
+        closeTrayOnEnter: true,
+        minTrayWidth: null,
+        maxTrayWidth: null,
+        maxTrayHeight: null,
+        onOpen: null,
+        onClose: null,
+        onKeyDown: null,
+        anchorProps: {},
+        openOnHover: false,
+        hoverOpenTime: 500,
+        autoCloseTime: null,
+        openOnFocus: false,
+        onAnchorClick: noop,
+        openOnClick: true,
+        horizontallyCenter: false,
+        dockRight: false,
+        enableTail: false,
+        onClick: null,
+        onOpened: null,
+        onClosed: null,
+        keepLoaded: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -528,84 +608,5 @@ class DropDown extends Component {
         );
     }
 }
-
-const dropPositionTypes = PropTypes.oneOf(['top', 'bottom', 'left', 'right']);
-
-DropDown.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    trayClassName: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    onBlur: PropTypes.func,
-    onFocus: PropTypes.func,
-    disabled: PropTypes.bool,
-    dropPositions: PropTypes.arrayOf(dropPositionTypes),
-    closeTrayOnClick: PropTypes.bool,
-    closeTrayOnEnter: PropTypes.bool,
-    minTrayWidth: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.oneOf(['anchor']),
-    ]),
-    maxTrayWidth: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.oneOf(['anchor']),
-    ]),
-    maxTrayHeight: PropTypes.number,
-    onOpen: PropTypes.func,
-    onClose: PropTypes.func,
-    onKeyDown: PropTypes.func,
-    Anchor: PropTypes.elementType.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
-    anchorProps: PropTypes.object,
-    openOnHover: PropTypes.bool,
-    hoverOpenTime: PropTypes.number,
-    autoCloseTime: PropTypes.number,
-    openOnFocus: PropTypes.bool,
-    onAnchorClick: PropTypes.func,
-    openOnClick: PropTypes.bool,
-    horizontallyCenter: PropTypes.bool,
-    dockRight: PropTypes.bool,
-    enableTail: PropTypes.bool,
-    onClick: PropTypes.func,
-    onOpened: PropTypes.func,
-    onClosed: PropTypes.func,
-    keepLoaded: PropTypes.bool,
-};
-
-DropDown.defaultProps = {
-    id: null,
-    className: null,
-    trayClassName: null,
-    children: null,
-    onBlur: noop,
-    onFocus: noop,
-    disabled: false,
-    dropPositions: ['bottom', 'top', 'right', 'left'],
-    closeTrayOnClick: true,
-    closeTrayOnEnter: true,
-    minTrayWidth: null,
-    maxTrayWidth: null,
-    maxTrayHeight: null,
-    onOpen: null,
-    onClose: null,
-    onKeyDown: null,
-    anchorProps: {},
-    openOnHover: false,
-    hoverOpenTime: 500,
-    autoCloseTime: null,
-    openOnFocus: false,
-    onAnchorClick: noop,
-    openOnClick: true,
-    horizontallyCenter: false,
-    dockRight: false,
-    enableTail: false,
-    onClick: null,
-    onOpened: null,
-    onClosed: null,
-    keepLoaded: false,
-};
 
 export default DropDown;

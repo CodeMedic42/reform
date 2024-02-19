@@ -1,4 +1,4 @@
-function forLoop(start = 0, end = 0, cb) {
+function forLoop(cb, start = 0, end = 0) {
     const items = [];
 
     for (let counter = start; counter < end; counter += 1) {

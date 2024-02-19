@@ -9,6 +9,32 @@ import {
 } from '../../../common/color-list';
 
 class IconBox extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        // eslint-disable-next-line react/forbid-prop-types
+        style: PropTypes.object,
+        'aria-label': PropTypes.string,
+        title: PropTypes.string,
+        icon: PropTypes.icon.isRequired,
+        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
+        color: schemeColorPropType,
+        hidden: PropTypes.bool,
+        alignToIcon: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: '',
+        className: '',
+        style: null,
+        'aria-label': null,
+        title: null,
+        size: 'md',
+        color: null,
+        hidden: false,
+        alignToIcon: false,
+    };
+
     render() {
         const {
             id,
@@ -49,31 +75,5 @@ class IconBox extends PureComponent {
         );
     }
 }
-
-IconBox.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
-    'aria-label': PropTypes.string,
-    title: PropTypes.string,
-    icon: PropTypes.icon.isRequired,
-    size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
-    color: schemeColorPropType,
-    hidden: PropTypes.bool,
-    alignToIcon: PropTypes.bool,
-};
-
-IconBox.defaultProps = {
-    id: '',
-    className: '',
-    style: null,
-    'aria-label': null,
-    title: null,
-    size: 'md',
-    color: null,
-    hidden: false,
-    alignToIcon: false,
-};
 
 export default IconBox;

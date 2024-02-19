@@ -21,6 +21,7 @@ class HarnessControl {
 
     async clearHarness(keepProps) {
         await this.page.evaluate((serKeepProps) => {
+            // eslint-disable-next-line no-console
             console.log(serKeepProps);
             clearHarness(serKeepProps);
         }, keepProps);

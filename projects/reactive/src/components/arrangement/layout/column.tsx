@@ -240,4 +240,20 @@ function Column(props: ColumnProps) {
     );
 }
 
+Column.defaultProps = {
+    className: null,
+    justify: null,
+    align: null,
+    width: null,
+    minWidth: null,
+    maxWidth: null,
+    paddingTop: null,
+    leftOffset: null,
+    rightOffset: null,
+    order: null,
+    useContentBox: null,
+    style: null,
+    children: null,
+};
+
 export default Column;

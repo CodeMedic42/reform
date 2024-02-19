@@ -44,7 +44,6 @@ const BaseMaskInput = forwardRef((props, ref) => {
 				inputRef.current.inputElement.focus();
 			}
 		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
 

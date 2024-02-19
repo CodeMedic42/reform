@@ -1,8 +1,10 @@
 import React, { memo, useCallback, useMemo } from 'react';
+/* eslint-disable import/no-duplicates */
 import formatFnc from 'date-fns/format';
-import toUpper from 'lodash/toUpper';
 import parse from 'date-fns/parse';
 import startOfToday from 'date-fns/startOfToday';
+/* eslint-enable import/no-duplicates */
+import toUpper from 'lodash/toUpper';
 import isNil from 'lodash/isNil';
 import reduce from 'lodash/reduce';
 import includes from 'lodash/includes';

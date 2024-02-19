@@ -1,8 +1,9 @@
-import React, { Component, createRef, PropsWithChildren } from 'react';
+import React, { Component, createRef } from 'react';
 // import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import isNil from 'lodash/isNil';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import PropTypes from '../../../common/prop-types';
 
 // interface DropDownListPropsInt {
 //     id?: string,
@@ -30,6 +31,22 @@ function scrollTo(listElement, targetIndex) {
  * This component is used within the Tray component. It is normally used within the DropDown component.
  */
 class DropDownList extends Component {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.children,
+        size: PropTypes.string,
+        'aria-labelledby': PropTypes.string,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+        size: null,
+        'aria-labelledby': null,
+    };
+
     constructor(props) {
         super(props);
 

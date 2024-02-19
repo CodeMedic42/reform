@@ -607,7 +607,6 @@ function buildContextOptions(enableFiltering, enableSorting, excludeValues, filt
 }
 
 function useMemoDeps(cb, deps) {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     return useMemo(() => cb(...deps), deps);
 }
 

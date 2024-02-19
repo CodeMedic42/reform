@@ -3,6 +3,21 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 class ListItemContent extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+    };
+
     getRootNode() {
         return this.buttonRef.current;
     }
@@ -20,20 +35,5 @@ class ListItemContent extends PureComponent {
         );
     }
 }
-
-ListItemContent.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-};
-
-ListItemContent.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-};
 
 export default ListItemContent;

@@ -1,6 +1,5 @@
 import isNil from 'lodash/isNil';
 
-/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable class-methods-use-this */
 class Aspect {
     constructor(aspectId) {

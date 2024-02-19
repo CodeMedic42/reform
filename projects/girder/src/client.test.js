@@ -1,4 +1,3 @@
-/* eslint-disable jest/valid-expect-in-promise */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 import isFunction from 'lodash/isFunction';

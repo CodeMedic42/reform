@@ -1,9 +1,11 @@
 import React, { forwardRef, useRef, useImperativeHandle, useMemo } from 'react';
 import classnames from 'classnames';
+/* eslint-disable import/no-duplicates */
 import getDate from 'date-fns/getDate';
 import getMonth from 'date-fns/getMonth';
 import getYear from 'date-fns/getYear';
 import isEqual from 'date-fns/isEqual';
+/* eslint-enable import/no-duplicates */
 import isNil from 'lodash/isNil';
 import PickerMonth from './picker-month';
 import PropTypes from '../../../common/prop-types';
@@ -63,7 +65,6 @@ const DatePicker = forwardRef((props, ref) => {
 
             return [year, month];
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
 

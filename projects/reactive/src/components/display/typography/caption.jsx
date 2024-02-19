@@ -7,6 +7,22 @@ import Typography from './typography';
 import applyForwardRef from '../../../common/apply-forward-ref';
 
 class Caption extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        label: PropTypes.string.isRequired,
+        forwardRef: PropTypes.instanceOf(Object),
+    };
+
+    static defaultProps = {
+        className: null,
+        children: null,
+        forwardRef: null,
+    };
+
     render() {
         const {
             className, label, forwardRef, children, ...rest
@@ -33,21 +49,5 @@ class Caption extends PureComponent {
         );
     }
 }
-
-Caption.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    label: PropTypes.string.isRequired,
-    forwardRef: PropTypes.instanceOf(Object),
-};
-
-Caption.defaultProps = {
-    className: null,
-    children: null,
-    forwardRef: null,
-};
 
 export default applyForwardRef(Caption);

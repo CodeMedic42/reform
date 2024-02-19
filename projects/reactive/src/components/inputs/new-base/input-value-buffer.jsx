@@ -3,6 +3,17 @@ import noop from 'lodash/noop';
 import PropTypes from '../../../common/prop-types';
 
 class InputValueBuffer extends React.PureComponent {
+    static propTypes = {
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        onChange: PropTypes.func,
+        children: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        value: null,
+        onChange: noop,
+    };
+
     constructor(props) {
         super(props);
 
@@ -60,16 +71,5 @@ class InputValueBuffer extends React.PureComponent {
         );
     }
 }
-
-InputValueBuffer.propTypes = {
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    onChange: PropTypes.func,
-    children: PropTypes.func.isRequired,
-};
-
-InputValueBuffer.defaultProps = {
-    value: null,
-    onChange: noop,
-};
 
 export default InputValueBuffer;

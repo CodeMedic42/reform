@@ -7,6 +7,33 @@ import PropTypes from '../../../common/prop-types';
 import Provider, { Consumer } from '../drop-down/drop-down-context';
 
 class Menu extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        // eslint-disable-next-line react/forbid-prop-types
+        Anchor: PropTypes.any,
+        // eslint-disable-next-line react/forbid-prop-types
+        anchorProps: PropTypes.object,
+        size: PropTypes.oneOf(['sm', 'md', 'lg']),
+        dark: PropTypes.bool,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        disabled: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        Anchor: null,
+        anchorProps: null,
+        children: null,
+        size: 'md',
+        dark: false,
+        disabled: false,
+    };
+
     render() {
         const {
             className,
@@ -55,32 +82,5 @@ const menuItemShape = {
 const menuItemsType = PropTypes.arrayOf(PropTypes.shape(menuItemShape));
 
 menuItemShape.menuItems = menuItemsType;
-
-Menu.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    Anchor: PropTypes.any,
-    // eslint-disable-next-line react/forbid-prop-types
-    anchorProps: PropTypes.object,
-    size: PropTypes.oneOf(['sm', 'md', 'lg']),
-    dark: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    disabled: PropTypes.bool,
-};
-
-Menu.defaultProps = {
-    id: null,
-    className: null,
-    Anchor: null,
-    anchorProps: null,
-    children: null,
-    size: 'md',
-    dark: false,
-    disabled: false,
-};
 
 export default Menu;

@@ -1,6 +1,6 @@
 import isNil from 'lodash/isNil';
 
-function forMap(collection, start = 0, end = 0, cb) {
+function forMap(collection, cb, start = 0, end = 0) {
     const items = [];
 
     if (!isNil(collection)) {

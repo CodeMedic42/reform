@@ -1,8 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
 import classnames from 'classnames';
 import isNil from 'lodash/isNil';
+/* eslint-disable import/no-duplicates */
 import addDays from 'date-fns/addDays';
 import startOfToday from 'date-fns/startOfToday';
+/* eslint-enable import/no-duplicates */
 import DatePicker from '../../../controls/date-picker';
 import DropDown from '../../../controls/drop-down';
 import InputLabel from '../input-label';

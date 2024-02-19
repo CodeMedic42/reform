@@ -9,6 +9,67 @@ import {
 } from '../../../common/color-list';
 
 class IconButton extends React.Component {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        // eslint-disable-next-line react/forbid-prop-types
+        style: PropTypes.object,
+        'aria-label': PropTypes.string,
+        title: PropTypes.string,
+        icon: PropTypes.icon,
+        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
+        variant: PropTypes.oneOf([
+            'none',
+            'fill',
+            'outline',
+            'opaque',
+            'fill-dark',
+        ]),
+        shape: PropTypes.oneOf(['circle', 'square']),
+        color: schemeColorPropType,
+        hidden: PropTypes.bool,
+        disabled: PropTypes.bool,
+        onClick: PropTypes.func,
+        onFocus: PropTypes.func,
+        onBlur: PropTypes.func,
+        onKeyUp: PropTypes.func,
+        onKeyDown: PropTypes.func,
+        onKeyPress: PropTypes.func,
+        onMouseDown: PropTypes.func,
+        tabIndex: PropTypes.string,
+        alignToIcon: PropTypes.bool,
+        children: PropTypes.node,
+        disableControlFeatures: PropTypes.bool,
+        responsive: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        style: null,
+        icon: null,
+        'aria-label': null,
+        title: null,
+        size: 'md',
+        color: null,
+        shape: 'circle',
+        variant: 'opaque',
+        hidden: false,
+        disabled: false,
+        onClick: null,
+        onFocus: null,
+        onBlur: null,
+        onKeyUp: null,
+        onKeyPress: null,
+        onKeyDown: null,
+        tabIndex: null,
+        onMouseDown: null,
+        alignToIcon: false,
+        children: null,
+        disableControlFeatures: false,
+        responsive: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -111,66 +172,5 @@ class IconButton extends React.Component {
         );
     }
 }
-
-IconButton.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
-    'aria-label': PropTypes.string,
-    title: PropTypes.string,
-    icon: PropTypes.icon,
-    size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
-    variant: PropTypes.oneOf([
-        'none',
-        'fill',
-        'outline',
-        'opaque',
-        'fill-dark',
-    ]),
-    shape: PropTypes.oneOf(['circle', 'square']),
-    color: schemeColorPropType,
-    hidden: PropTypes.bool,
-    disabled: PropTypes.bool,
-    onClick: PropTypes.func,
-    onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
-    onKeyUp: PropTypes.func,
-    onKeyDown: PropTypes.func,
-    onKeyPress: PropTypes.func,
-    onMouseDown: PropTypes.func,
-    tabIndex: PropTypes.string,
-    alignToIcon: PropTypes.bool,
-    children: PropTypes.node,
-    disableControlFeatures: PropTypes.bool,
-    responsive: PropTypes.bool,
-};
-
-IconButton.defaultProps = {
-    id: null,
-    className: null,
-    style: null,
-    icon: null,
-    'aria-label': null,
-    title: null,
-    size: 'md',
-    color: null,
-    shape: 'circle',
-    variant: 'opaque',
-    hidden: false,
-    disabled: false,
-    onClick: null,
-    onFocus: null,
-    onBlur: null,
-    onKeyUp: null,
-    onKeyPress: null,
-    onKeyDown: null,
-    tabIndex: null,
-    onMouseDown: null,
-    alignToIcon: false,
-    children: null,
-    disableControlFeatures: false,
-    responsive: false,
-};
 
 export default IconButton;

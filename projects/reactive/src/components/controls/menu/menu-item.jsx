@@ -4,6 +4,37 @@ import DropDownListItem from '../drop-down/drop-down-list-item';
 import PropTypes from '../../../common/prop-types';
 
 class MenuItem extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        selected: PropTypes.bool,
+        targeted: PropTypes.bool,
+        onMouseEnter: PropTypes.func,
+        onMouseLeave: PropTypes.func,
+        borderBottom: PropTypes.bool,
+        borderTop: PropTypes.bool,
+        onClick: PropTypes.func,
+        preventCloseOnClick: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+        selected: false,
+        targeted: false,
+        onMouseEnter: null,
+        onMouseLeave: null,
+        borderBottom: false,
+        borderTop: false,
+        onClick: null,
+        preventCloseOnClick: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -48,36 +79,5 @@ class MenuItem extends PureComponent {
         );
     }
 }
-
-MenuItem.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    selected: PropTypes.bool,
-    targeted: PropTypes.bool,
-    onMouseEnter: PropTypes.func,
-    onMouseLeave: PropTypes.func,
-    borderBottom: PropTypes.bool,
-    borderTop: PropTypes.bool,
-    onClick: PropTypes.func,
-    preventCloseOnClick: PropTypes.bool,
-};
-
-MenuItem.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-    selected: false,
-    targeted: false,
-    onMouseEnter: null,
-    onMouseLeave: null,
-    borderBottom: false,
-    borderTop: false,
-    onClick: null,
-    preventCloseOnClick: false,
-};
 
 export default MenuItem;

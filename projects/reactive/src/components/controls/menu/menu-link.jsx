@@ -7,6 +7,39 @@ import PropTypes from '../../../common/prop-types';
 import MenuItem from './menu-item';
 
 class MenuLink extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        icon: PropTypes.icon,
+        children: PropTypes.string,
+        onClick: PropTypes.func,
+        'aria-label': PropTypes.string,
+        // eslint-disable-next-line react/forbid-prop-types
+        onClickMeta: PropTypes.any,
+        selected: PropTypes.bool,
+        targeted: PropTypes.bool,
+        disabled: PropTypes.bool,
+        href: PropTypes.string,
+        borderBottom: PropTypes.bool,
+        borderTop: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        onClick: null,
+        onClickMeta: null,
+        selected: false,
+        targeted: false,
+        disabled: false,
+        icon: null,
+        children: null,
+        href: null,
+        borderBottom: false,
+        borderTop: false,
+        'aria-label': null,
+    };
+
     constructor(props) {
         super(props);
 
@@ -67,38 +100,5 @@ class MenuLink extends PureComponent {
         );
     }
 }
-
-MenuLink.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    icon: PropTypes.icon,
-    children: PropTypes.string,
-    onClick: PropTypes.func,
-    'aria-label': PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    onClickMeta: PropTypes.any,
-    selected: PropTypes.bool,
-    targeted: PropTypes.bool,
-    disabled: PropTypes.bool,
-    href: PropTypes.string,
-    borderBottom: PropTypes.bool,
-    borderTop: PropTypes.bool,
-};
-
-MenuLink.defaultProps = {
-    id: null,
-    className: null,
-    onClick: null,
-    onClickMeta: null,
-    selected: false,
-    targeted: false,
-    disabled: false,
-    icon: null,
-    children: null,
-    href: null,
-    borderBottom: false,
-    borderTop: false,
-    'aria-label': null,
-};
 
 export default MenuLink;

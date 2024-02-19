@@ -6,6 +6,20 @@ import Button from '../../button';
 import applyAnchorBinding from '../anchor-binding';
 
 class AnchorButton extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        open: PropTypes.bool.isRequired,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+    };
+
+    static defaultProps = {
+        className: null,
+        children: null,
+    };
+
     render() {
         const {
             className, open, children, ...rest
@@ -24,19 +38,5 @@ class AnchorButton extends PureComponent {
         );
     }
 }
-
-AnchorButton.propTypes = {
-    className: PropTypes.string,
-    open: PropTypes.bool.isRequired,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-};
-
-AnchorButton.defaultProps = {
-    className: null,
-    children: null,
-};
 
 export default applyAnchorBinding(AnchorButton);

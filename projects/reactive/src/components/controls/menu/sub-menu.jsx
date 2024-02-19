@@ -37,6 +37,57 @@ function getString(content) {
 }
 
 class SubMenu extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        icon: PropTypes.icon,
+        content: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        onClick: PropTypes.func,
+        'aria-label': PropTypes.string,
+        // eslint-disable-next-line react/forbid-prop-types
+        onClickMeta: PropTypes.any,
+        selected: PropTypes.bool,
+        targeted: PropTypes.bool,
+        disabled: PropTypes.bool,
+        dropDownContext: PropTypes.shape({
+            open: PropTypes.bool.isRequired,
+            size: PropTypes.string.isRequired,
+            dark: PropTypes.bool.isRequired,
+        }).isRequired,
+        borderBottom: PropTypes.bool,
+        borderTop: PropTypes.bool,
+        checkbox: PropTypes.shape({
+            onChange: PropTypes.func.isRequired,
+            value: PropTypes.bool,
+            disabled: PropTypes.bool,
+            variant: PropTypes.oneOf(['check', 'indeterminate']),
+        }),
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+        onClick: null,
+        onClickMeta: null,
+        selected: false,
+        targeted: false,
+        disabled: false,
+        icon: null,
+        content: null,
+        borderBottom: false,
+        borderTop: false,
+        checkbox: null,
+        'aria-label': null,
+    };
+
     constructor(props) {
         super(props);
 
@@ -213,56 +264,5 @@ class SubMenu extends PureComponent {
         );
     }
 }
-
-SubMenu.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    icon: PropTypes.icon,
-    content: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    onClick: PropTypes.func,
-    'aria-label': PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    onClickMeta: PropTypes.any,
-    selected: PropTypes.bool,
-    targeted: PropTypes.bool,
-    disabled: PropTypes.bool,
-    dropDownContext: PropTypes.shape({
-        open: PropTypes.bool.isRequired,
-        size: PropTypes.string.isRequired,
-        dark: PropTypes.bool.isRequired,
-    }).isRequired,
-    borderBottom: PropTypes.bool,
-    borderTop: PropTypes.bool,
-    checkbox: PropTypes.shape({
-        onChange: PropTypes.func.isRequired,
-        value: PropTypes.bool,
-        disabled: PropTypes.bool,
-        variant: PropTypes.oneOf(['check', 'indeterminate']),
-    }),
-};
-
-SubMenu.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-    onClick: null,
-    onClickMeta: null,
-    selected: false,
-    targeted: false,
-    disabled: false,
-    icon: null,
-    content: null,
-    borderBottom: false,
-    borderTop: false,
-    checkbox: null,
-    'aria-label': null,
-};
 
 export default ApplyConsumer(SubMenu);

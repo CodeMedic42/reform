@@ -6,6 +6,21 @@ import Typography from './typography';
 import applyForwardRef from '../../../common/apply-forward-ref';
 
 class Overline extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        forwardRef: PropTypes.instanceOf(Object),
+    };
+
+    static defaultProps = {
+        className: null,
+        children: null,
+        forwardRef: null,
+    };
+
     render() {
         const {
             className, children, forwardRef, ...rest
@@ -22,20 +37,5 @@ class Overline extends PureComponent {
         );
     }
 }
-
-Overline.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    forwardRef: PropTypes.instanceOf(Object),
-};
-
-Overline.defaultProps = {
-    className: null,
-    children: null,
-    forwardRef: null,
-};
 
 export default applyForwardRef(Overline);

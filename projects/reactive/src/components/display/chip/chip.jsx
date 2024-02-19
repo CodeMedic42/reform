@@ -6,10 +6,44 @@ import {
 	colorPropType,
 	getColorInfo,
 	shadePropType,
-} from '../../common/color-list';
+} from '../../../common/color-list';
 import { getDefaultSize } from './utils';
 
 class Chip extends PureComponent {
+	static propTypes = {
+		id: PropTypes.string,
+		className: PropTypes.string,
+		color: colorPropType,
+		shade: shadePropType,
+		size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
+		disabled: PropTypes.bool,
+		floating: PropTypes.bool,
+		children: PropTypes.oneOfType([
+			PropTypes.node,
+			PropTypes.arrayOf(PropTypes.node),
+		]),
+		variant: PropTypes.oneOf(['rectangle', 'pill']),
+		onClick: PropTypes.func,
+		// eslint-disable-next-line react/forbid-prop-types
+		onClickMeta: PropTypes.any,
+		asButton: PropTypes.bool,
+	};
+
+	static defaultProps = {
+		id: null,
+		className: null,
+		shade: 'lighter',
+		children: null,
+		size: 'md',
+		floating: false,
+		variant: 'rectangle',
+		onClick: null,
+		onClickMeta: null,
+		disabled: false,
+		asButton: false,
+		color: null,
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -106,39 +140,5 @@ class Chip extends PureComponent {
 		);
 	}
 }
-
-Chip.propTypes = {
-	id: PropTypes.string,
-	className: PropTypes.string,
-	color: colorPropType,
-	shade: shadePropType,
-	size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
-	disabled: PropTypes.bool,
-	floating: PropTypes.bool,
-	children: PropTypes.oneOfType([
-		PropTypes.node,
-		PropTypes.arrayOf(PropTypes.node),
-	]),
-	variant: PropTypes.oneOf(['rectangle', 'pill']),
-	onClick: PropTypes.func,
-	// eslint-disable-next-line react/forbid-prop-types
-	onClickMeta: PropTypes.any,
-	asButton: PropTypes.bool,
-};
-
-Chip.defaultProps = {
-	id: null,
-	className: null,
-	shade: 'lighter',
-	children: null,
-	size: 'md',
-	floating: false,
-	variant: 'rectangle',
-	onClick: null,
-	onClickMeta: null,
-	disabled: false,
-	asButton: false,
-	color: null,
-};
 
 export default Chip;

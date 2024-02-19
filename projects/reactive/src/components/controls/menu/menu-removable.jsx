@@ -3,12 +3,41 @@ import classnames from 'classnames';
 import isNil from 'lodash/isNil';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import ListItemContent from '../drop-down/list-item-content';
-import IconButton from '../../icon-button';
+import IconButton from '../../display/icon-button';
 import MenuItem from './menu-item';
 import Icon from '../../display/icon';
 import PropTypes from '../../../common/prop-types';
 
 class MenuRemovable extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.string,
+        onRemove: PropTypes.func,
+        // eslint-disable-next-line react/forbid-prop-types
+        onRemoveMeta: PropTypes.any,
+        selected: PropTypes.bool,
+        targeted: PropTypes.bool,
+        disabled: PropTypes.bool,
+        borderBottom: PropTypes.bool,
+        borderTop: PropTypes.bool,
+        icon: PropTypes.icon,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        onRemove: null,
+        onRemoveMeta: null,
+        selected: false,
+        targeted: false,
+        disabled: false,
+        children: null,
+        borderBottom: false,
+        borderTop: false,
+        icon: null,
+    };
+
     render() {
         const {
             id,
@@ -52,34 +81,5 @@ class MenuRemovable extends PureComponent {
         );
     }
 }
-
-MenuRemovable.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.string,
-    onRemove: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    onRemoveMeta: PropTypes.any,
-    selected: PropTypes.bool,
-    targeted: PropTypes.bool,
-    disabled: PropTypes.bool,
-    borderBottom: PropTypes.bool,
-    borderTop: PropTypes.bool,
-    icon: PropTypes.icon,
-};
-
-MenuRemovable.defaultProps = {
-    id: null,
-    className: null,
-    onRemove: null,
-    onRemoveMeta: null,
-    selected: false,
-    targeted: false,
-    disabled: false,
-    children: null,
-    borderBottom: false,
-    borderTop: false,
-    icon: null,
-};
 
 export default MenuRemovable;

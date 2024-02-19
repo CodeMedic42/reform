@@ -2,9 +2,9 @@ import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import isNil from 'lodash/isNil';
-import { faXmark } from '@audacious/icons/solid/faXmark';
-import { faCircleXmark } from '@audacious/icons/solid/faCircleXmark';
-import { colorPropType, shadePropType } from '../../common/color-list';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons/faCircleXmark';
+import { colorPropType, shadePropType } from '../../../common/color-list';
 import Chip from './chip';
 import Icon from '../icon';
 
@@ -23,6 +23,7 @@ function RemovableChip(props) {
 		clearType,
 		tabIndex,
 		disabled,
+		'aria-label': ariaLabel
 	} = props;
 
 	const handleClick = useCallback(
@@ -55,6 +56,7 @@ function RemovableChip(props) {
 				onClick={handleClick}
 				tabIndex={tabIndex}
 				disabled={disabled}
+				aria-label={ariaLabel}
 			>
 				<Icon
 					icon={clearType === 'inverse' ? faCircleXmark : faXmark}
@@ -82,6 +84,7 @@ RemovableChip.propTypes = {
 	clearType: PropTypes.oneOf(['normal', 'inverse']),
 	tabIndex: PropTypes.string,
 	disabled: PropTypes.bool,
+	'aria-label': PropTypes.string,
 };
 
 RemovableChip.defaultProps = {
@@ -97,6 +100,7 @@ RemovableChip.defaultProps = {
 	clearType: 'normal',
 	tabIndex: null,
 	disabled: false,
+	'aria-label': 'Remove',
 };
 
 export default memo(RemovableChip);

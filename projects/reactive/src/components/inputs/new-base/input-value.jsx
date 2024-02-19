@@ -3,6 +3,17 @@ import noop from 'lodash/noop';
 import PropTypes from '../../../common/prop-types';
 
 class InputValue extends React.PureComponent {
+    static propTypes = {
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        onChange: PropTypes.func,
+        children: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        value: null,
+        onChange: noop,
+    };
+
     constructor(props) {
         super(props);
 
@@ -71,15 +82,15 @@ class InputValue extends React.PureComponent {
     }
 }
 
-InputValue.propTypes = {
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    onChange: PropTypes.func,
-    children: PropTypes.func.isRequired,
-};
+// InputValue.propTypes = {
+//     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+//     onChange: PropTypes.func,
+//     children: PropTypes.func.isRequired,
+// };
 
-InputValue.defaultProps = {
-    value: null,
-    onChange: noop,
-};
+// InputValue.defaultProps = {
+//     value: null,
+//     onChange: noop,
+// };
 
 export default InputValue;

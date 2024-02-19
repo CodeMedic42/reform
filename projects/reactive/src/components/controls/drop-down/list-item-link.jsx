@@ -8,6 +8,34 @@ import buildId from '../../../common/build-id';
 import ListItemContent from './list-item-content';
 
 class ListItemLink extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        onClick: PropTypes.func,
+        'aria-label': PropTypes.string,
+        tabIndex: PropTypes.string,
+        disabled: PropTypes.bool,
+        dropDownContext: PropTypes.shape({
+            open: PropTypes.bool.isRequired,
+        }).isRequired,
+        href: PropTypes.string,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+        onClick: null,
+        'aria-label': null,
+        tabIndex: null,
+        disabled: false,
+        href: null,
+    };
+
     constructor(props) {
         super(props);
 
@@ -77,33 +105,5 @@ class ListItemLink extends PureComponent {
         );
     }
 }
-
-ListItemLink.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    onClick: PropTypes.func,
-    'aria-label': PropTypes.string,
-    tabIndex: PropTypes.string,
-    disabled: PropTypes.bool,
-    dropDownContext: PropTypes.shape({
-        open: PropTypes.bool.isRequired,
-    }).isRequired,
-    href: PropTypes.string,
-};
-
-ListItemLink.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-    onClick: null,
-    'aria-label': null,
-    tabIndex: null,
-    disabled: false,
-    href: null,
-};
 
 export default ApplyConsumer(ListItemLink);

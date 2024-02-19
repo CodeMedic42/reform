@@ -44,7 +44,7 @@ function chooseColor(index) {
     return 'cyan';
 }
 
-export default function DefaultStory(props) {
+export default function DefaultStory() {
     return (
         <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
             <InfiniteList

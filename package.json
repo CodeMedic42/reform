@@ -2,7 +2,8 @@
   "name": "reform",
   "private": true,
   "scripts": {
-    "build": "lerna run build --stream"
+    "build": "lerna run build --stream",
+    "lint": "lerna run lint --stream"
   },
   "dependencies": {
     "lerna": "^8.1.2"

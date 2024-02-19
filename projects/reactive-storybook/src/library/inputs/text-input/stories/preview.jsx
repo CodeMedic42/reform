@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useMemo } from 'react';
 import reduce from 'lodash/reduce';

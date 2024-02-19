@@ -15,7 +15,6 @@ function useThrottleCallback(cb, dep, wait, options) {
         old.current = t;
 
         return t;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, dep);
 }
 

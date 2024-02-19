@@ -28,6 +28,7 @@ TabBottom.propTypes = {
 TabBottom.defaultProps = {
     id: null,
     className: null,
+    children: null,
 };
 
 export default TabBottom;

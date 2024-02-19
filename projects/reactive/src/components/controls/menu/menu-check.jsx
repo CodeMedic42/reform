@@ -9,6 +9,34 @@ import ListItemContent from '../drop-down/list-item-content';
 import Icon from '../../display/icon';
 
 class MenuCheck extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        children: PropTypes.string,
+        borderBottom: PropTypes.bool,
+        borderTop: PropTypes.bool,
+        value: PropTypes.bool,
+        onChange: PropTypes.func,
+        disabled: PropTypes.bool,
+        variant: PropTypes.oneOf(['check', 'indeterminate']),
+        icon: PropTypes.icon,
+        'aria-label': PropTypes.string,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        children: null,
+        borderBottom: false,
+        borderTop: false,
+        value: false,
+        onChange: null,
+        disabled: false,
+        variant: null,
+        icon: null,
+        'aria-label': null,
+    };
+
     constructor(props) {
         super(props);
 
@@ -65,33 +93,5 @@ class MenuCheck extends PureComponent {
         );
     }
 }
-
-MenuCheck.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.string,
-    borderBottom: PropTypes.bool,
-    borderTop: PropTypes.bool,
-    value: PropTypes.bool,
-    onChange: PropTypes.func,
-    disabled: PropTypes.bool,
-    variant: PropTypes.oneOf(['check', 'indeterminate']),
-    icon: PropTypes.icon,
-    'aria-label': PropTypes.string,
-};
-
-MenuCheck.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-    borderBottom: false,
-    borderTop: false,
-    value: false,
-    onChange: null,
-    disabled: false,
-    variant: null,
-    icon: null,
-    'aria-label': null,
-};
 
 export default MenuCheck;

@@ -9,6 +9,19 @@ import {
 } from '../../../common/color-list';
 
 class Icon extends PureComponent {
+    static propTypes = {
+        className: PropTypes.string,
+        icon: PropTypes.icon.isRequired,
+        color: schemeColorPropType,
+        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
+    };
+
+    static defaultProps = {
+        className: '',
+        size: null,
+        color: null,
+    };
+
     render() {
         const {
             className, color, size, icon, ...rest
@@ -39,18 +52,5 @@ class Icon extends PureComponent {
         );
     }
 }
-
-Icon.propTypes = {
-    className: PropTypes.string,
-    icon: PropTypes.icon.isRequired,
-    color: schemeColorPropType,
-    size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
-};
-
-Icon.defaultProps = {
-    className: '',
-    size: null,
-    color: null,
-};
 
 export default Icon;

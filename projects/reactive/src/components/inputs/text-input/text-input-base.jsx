@@ -22,7 +22,6 @@ const TextInputBase = forwardRef((props, ref) => {
 		if (focusOnMount) {
 			ref.current.focus();
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

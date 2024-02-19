@@ -10,6 +10,37 @@ import InputMessages from '../../input-messages/index';
 import { Text } from '../../../display/typography/index';
 
 class InputLabel extends PureComponent {
+    static propTypes = {
+        id: PropTypes.string,
+        className: PropTypes.string,
+        label: PropTypes.string,
+        messages: PropTypes.shape({
+            general: PropTypes.arrayOf(PropTypes.string),
+            success: PropTypes.arrayOf(PropTypes.string),
+            failure: PropTypes.arrayOf(PropTypes.string),
+        }),
+        failure: PropTypes.bool,
+        'aria-labelledby': PropTypes.string,
+        'aria-describedby': PropTypes.string,
+        hidden: PropTypes.bool,
+        disabled: PropTypes.bool,
+        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg']),
+        children: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        id: null,
+        messages: null,
+        failure: false,
+        className: null,
+        label: null,
+        'aria-labelledby': null,
+        'aria-describedby': null,
+        hidden: false,
+        disabled: false,
+        size: 'md',
+    };
+
     constructor(props) {
         super(props);
 
@@ -141,37 +172,6 @@ class InputLabel extends PureComponent {
         );
     }
 }
-
-InputLabel.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    label: PropTypes.string,
-    messages: PropTypes.shape({
-        general: PropTypes.arrayOf(PropTypes.string),
-        success: PropTypes.arrayOf(PropTypes.string),
-        failure: PropTypes.arrayOf(PropTypes.string),
-    }),
-    failure: PropTypes.bool,
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-    hidden: PropTypes.bool,
-    disabled: PropTypes.bool,
-    size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg']),
-    children: PropTypes.func.isRequired,
-};
-
-InputLabel.defaultProps = {
-    id: null,
-    messages: null,
-    failure: false,
-    className: null,
-    label: null,
-    'aria-labelledby': null,
-    'aria-describedby': null,
-    hidden: false,
-    disabled: false,
-    size: 'md',
-};
 
 export default InputLabel;
 

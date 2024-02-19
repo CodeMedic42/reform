@@ -9,6 +9,62 @@ import InputMessages from '../input-messages';
 import buildLabeledControlProps from '../../../common/build-labeled-control-props';
 
 class CheckInput extends PureComponent {
+    static propTypes = {
+        // eslint-disable-next-line react/no-unused-prop-types
+        id: PropTypes.string,
+        className: PropTypes.string,
+        label: PropTypes.string,
+        messages: PropTypes.shape({
+            general: PropTypes.arrayOf(PropTypes.string),
+            success: PropTypes.arrayOf(PropTypes.string),
+            failure: PropTypes.arrayOf(PropTypes.string),
+        }),
+        // eslint-disable-next-line react/no-unused-prop-types
+        'aria-label': PropTypes.string,
+        // eslint-disable-next-line react/no-unused-prop-types
+        'aria-labelledby': PropTypes.string,
+        // eslint-disable-next-line react/no-unused-prop-types
+        'aria-describedby': PropTypes.string,
+        title: PropTypes.string,
+        color: schemeColorPropType,
+        variant: PropTypes.oneOf(['check', 'indeterminate']),
+        value: PropTypes.bool,
+        size: PropTypes.oneOf(['sm', 'md', 'lg']),
+        onChange: PropTypes.func,
+        // eslint-disable-next-line react/forbid-prop-types
+        onChangeMeta: PropTypes.any,
+        onClick: PropTypes.func,
+        // eslint-disable-next-line react/forbid-prop-types
+        onClickMeta: PropTypes.any,
+        disabled: PropTypes.bool,
+        hidden: PropTypes.bool,
+        ignoreHalo: PropTypes.bool,
+        constrictField: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        id: null,
+        className: null,
+        value: false,
+        variant: 'check',
+        label: null,
+        messages: null,
+        'aria-label': null,
+        'aria-labelledby': null,
+        'aria-describedby': null,
+        title: null,
+        color: 'primary',
+        size: 'md',
+        onChange: null,
+        onChangeMeta: null,
+        onClick: null,
+        onClickMeta: null,
+        disabled: false,
+        hidden: false,
+        ignoreHalo: false,
+        constrictField: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -173,61 +229,5 @@ class CheckInput extends PureComponent {
         );
     }
 }
-
-CheckInput.propTypes = {
-    // eslint-disable-next-line react/no-unused-prop-types
-    id: PropTypes.string,
-    className: PropTypes.string,
-    label: PropTypes.string,
-    messages: PropTypes.shape({
-        general: PropTypes.arrayOf(PropTypes.string),
-        success: PropTypes.arrayOf(PropTypes.string),
-        failure: PropTypes.arrayOf(PropTypes.string),
-    }),
-    // eslint-disable-next-line react/no-unused-prop-types
-    'aria-label': PropTypes.string,
-    // eslint-disable-next-line react/no-unused-prop-types
-    'aria-labelledby': PropTypes.string,
-    // eslint-disable-next-line react/no-unused-prop-types
-    'aria-describedby': PropTypes.string,
-    title: PropTypes.string,
-    color: schemeColorPropType,
-    variant: PropTypes.oneOf(['check', 'indeterminate']),
-    value: PropTypes.bool,
-    size: PropTypes.oneOf(['sm', 'md', 'lg']),
-    onChange: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    onChangeMeta: PropTypes.any,
-    onClick: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    onClickMeta: PropTypes.any,
-    disabled: PropTypes.bool,
-    hidden: PropTypes.bool,
-    ignoreHalo: PropTypes.bool,
-    constrictField: PropTypes.bool,
-};
-
-CheckInput.defaultProps = {
-    id: null,
-    className: null,
-    value: false,
-    variant: 'check',
-    label: null,
-    messages: null,
-    'aria-label': null,
-    'aria-labelledby': null,
-    'aria-describedby': null,
-    title: null,
-    color: 'primary',
-    size: 'md',
-    onChange: null,
-    onChangeMeta: null,
-    onClick: null,
-    onClickMeta: null,
-    disabled: false,
-    hidden: false,
-    ignoreHalo: false,
-    constrictField: false,
-};
 
 export default CheckInput;

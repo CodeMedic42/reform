@@ -1,0 +1,305 @@
+$input-sm: 32px;
+$input-md: 40px;
+$input-lg: 48px;
+
+.ra-select-anchor {
+    // TODO: improve this class name
+    .clear,
+    .arrow {
+        margin-top: 4px;
+        align-self: flex-start;
+    }
+
+    .clear {
+        display: none;
+        color: $--clr-g-90;
+        z-index: 11;
+    }
+
+    .anchor-content {
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 12px;
+        padding-right: 4px;
+        color: $--clr-g-60;
+        width: 100%;
+        box-sizing: border-box;
+        outline: 0;
+        background-color: $--clr-white;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+        min-height: inherit;
+
+        .anchor-selected-item {
+            overflow: hidden;
+            white-space: pre;
+            max-height: 100%;
+            width: 100%;
+            margin-right: 12px;
+        }
+
+        .anchor-selected-items {
+            height: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            padding: 6px 0;
+
+            .ra-removable-chip {
+                margin-right: 4px;
+                margin-top: 2px;
+                margin-bottom: 2px;
+
+                .remove-btn {
+                    z-index: 11;
+                }
+            }
+        }
+
+        .icon-container {
+            align-self: flex-start;
+        }
+
+        .ra-icon-box {
+            flex-shrink: 0;
+        }
+    }
+
+    .ra-anchor-boundary {
+        position: relative;
+        width: 100%;
+        min-height: inherit;
+        box-sizing: border-box;
+        overflow: hidden;
+        z-index: 10;
+        line-height: normal;
+
+        .button-anchor {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-shadow: initial;
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            bottom: 0;
+            cursor: pointer;
+            z-index: 1;
+            border: none;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border: solid 1px $--clr-g-40;
+                border-radius: 2px;
+                z-index: 10;
+                pointer-events: none;
+            }
+
+            &.has-value {
+                ~ .anchor-content {
+                    color: $--clr-g-90;
+                }
+
+                &::before {
+                    border-color: $--clr-g-80;
+                }
+            }
+
+            &:focus,
+            &.focus {
+                &::before {
+                    border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
+                    border-width: 2px;
+                }
+
+                &.has-value {
+                    ~ .anchor-content {
+                        .clear {
+                            display: flex;
+                        }
+
+                        .arrow:not(:last-child) {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+
+                ~ .anchor-content {
+                    color: $--clr-g-40;
+                    background-color: $--clr-g-10;
+                }
+
+                &::before {
+                    border: none;
+                }
+            }
+        }
+    }
+
+    &.size-2xs {
+        min-height: $input-sm;
+        font-size: 14px;
+    }
+
+    &.size-xs {
+        min-height: $input-sm;
+        font-size: 14px;
+    }
+
+    &.size-sm {
+        min-height: $input-sm;
+        font-size: 14px;
+
+        .clear,
+        .arrow {
+            margin-top: 2px;
+        }
+
+        .anchor-content {
+            padding-right: 2px;
+
+            .anchor-selected-items {
+                padding: 4px 0;
+            }
+        }
+    }
+
+    &.size-md {
+        min-height: $input-md;
+        font-size: 16px;
+
+        .clear,
+        .arrow {
+            margin-top: 4px;
+        }
+
+        .anchor-content {
+            padding-right: 4px;
+
+            .anchor-selected-items {
+                padding: 6px 0;
+            }
+        }
+    }
+
+    &.size-lg {
+        min-height: $input-lg;
+        font-size: 18px;
+
+        .clear,
+        .arrow {
+            margin-top: 4px;
+        }
+
+        .anchor-content {
+            padding-right: 4px;
+
+            .anchor-selected-items {
+                padding: 8px 0;
+            }
+        }
+    }
+
+    /* stylelint-disable no-duplicate-selectors */
+    .ra-anchor-boundary {
+        &.expandable {
+            &:hover,
+            &:focus-within,
+            &.focus {
+                clip-path: inset(0 0 0 0 round 2px);
+                transition-duration: 0.5s;
+                transform: translateZ(1px);
+                transform-style: unset;
+
+                div {
+                    transform-style: unset;
+                }
+
+                .button-anchor {
+                    bottom: 0;
+                    transition-duration: 0.5s;
+                }
+            }
+        }
+    }
+    /* stylelint-enable no-duplicate-selectors */
+}
+
+.ra-select-tray {
+    display: flex;
+    flex-direction: column;
+
+    .ra-dd-list-filter {
+        flex-shrink: 0;
+        flex-grow: 1;
+        flex-basis: auto;
+        overflow: scroll;
+        width: 100%;
+        box-sizing: border-box;
+        outline: none;
+        border: 0;
+        line-height: 2.5;
+        padding: 0 16px;
+        border-bottom: 1px solid $--clr-g-10;
+        color: $--clr-g-90;
+        margin-top: 8px;
+    }
+
+    .ra-dd-list {
+        .ra-dd-list-item.no-options {
+            color: $--clr-g-40;
+        }
+    }
+
+    &.size-2xs {
+        .ra-dd-list-filter {
+            height: 24px;
+            font-size: 14px;
+        }
+    }
+
+    &.size-xs {
+        .ra-dd-list-filter {
+            height: 24px;
+            font-size: 14px;
+        }
+    }
+
+    &.size-sm {
+        .ra-dd-list-filter {
+            height: $input-sm;
+            font-size: 14px;
+        }
+    }
+
+    &.size-md {
+        .ra-dd-list-filter {
+            height: $input-md;
+            font-size: 16px;
+        }
+    }
+
+    &.size-lg {
+        .ra-dd-list-filter {
+            height: $input-lg;
+        }
+    }
+
+    .ra-spinner {
+        margin-right: 8px;
+    }
+}

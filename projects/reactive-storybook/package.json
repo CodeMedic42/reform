@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "storybook2": "storybook dev",
     "start": "storybook",
-    "lint": "npx eslint ./src"
+    "lint": "npx eslint ./src",
+    "build-storybook": "storybook build"
   },
   "keywords": [],
   "author": "",

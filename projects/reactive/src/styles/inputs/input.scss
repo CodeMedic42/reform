@@ -1,18 +1,113 @@
+@function getKey($map, $key, $default:null) {
+    @if (map.has-key($map, $key)) {
+        @return map.get($map, $key);
+    }
+
+    @return $default;
+}
+
+@mixin applyKey($property, $map, $key, $default:null) {
+    $value: getKey($map, $key, $default);
+
+    @if ($value) {
+        #{$property}: $value;
+    }
+}
+
+@mixin buildInputContainerVariantSettings($variant, $default-values) {
+    .ra-input-label {
+        .ra-input-label-text {
+            @include applyKey('font-size', $variant, 'label-font-size');
+        }
+    }
+
+    .ra-input-container {
+        @include applyKey('background-color', $variant, 'background-color');
+        @include applyKey('border-width', $variant, 'border-width');
+        @include applyKey('border-radius', $variant, 'border-radius');
+        @include applyKey('border-color', $variant, 'border-color');
+
+        &.focus,
+        &:focus-within {
+            box-shadow: inset 0 0 0 map.get($variant, 'focus-outline-width') $--ra-config-inputs-focus-color;
+        }
+    }
+
+    .ra-input-field {
+        // The 4px is to account for the border width and
+        // padding added to prevent the box shadow from
+        // being blocked.
+
+        $border-width: 0;
+
+        @if map.has-key($variant, 'border-width') {
+            $border-width: map.get($variant, 'border-width');
+        } @else if map.has-key($default-values, 'border-width') {
+            $border-width: map.get($default-values, 'border-width');
+        }
+
+        @if (map.has-key($variant, 'height')) {
+            height: map.get($variant, 'height') - ($border-width * 2);
+        } @else if (map.has-key($default-values, 'height')) {
+            height: map.get($default-values, 'height') - ($border-width * 2);
+        }
+
+        @include applyKey('padding-top', $variant, 'padding-v');
+        @include applyKey('padding-bottom', $variant, 'padding-v');
+        @include applyKey('padding-left', $variant, 'padding-h');
+        @include applyKey('padding-right', $variant, 'padding-h');
+        @include applyKey('font-size', $variant, 'font-size');
+        @include applyKey('font-weight', $variant, 'font-weight');
+        @include applyKey('line-height', $variant, 'line-height');
+    }
+}
+
+@mixin buildInputContainerVariantResponsiveSettings($variant, $default-values) {
+    $respChanges: map.get($variant, 'resp-changes');
+
+    @if ($respChanges) {
+        @for $i from 1 through length($respChanges) {
+            $change: nth($respChanges, $i);
+            $breakpoint: nth($-ra-config-resp-breakpoints, $i);
+
+            @if ($breakpoint) {
+                @media only screen and (min-width: $breakpoint) {
+                    @include buildInputContainerVariantSettings($change, $default-values);
+                }
+            }
+        }
+    }
+}
+
+@mixin buildInputContainerVariant($variant, $default-values) {
+    @include buildInputContainerVariantSettings($variant, $default-values);
+    @include buildInputContainerVariantResponsiveSettings($variant, $default-values);
+}
+
+@mixin buildInputContainerVariants() {
+    @include buildInputContainerVariant($--ra-config-input-container-default-variant);
+
+    @each $variantId, $variant in $--ra-config-input-container-variants {
+        &.ra-input-variant-#{$variantId} {
+            @include buildInputContainerVariant($variant);
+        }
+    }
+}
+
 .ra-input {
     width: 100%;
     max-width: 100%;
     vertical-align: top;
     box-sizing: border-box;
     min-width: 0;
+    font: inherit;
 }
 
 .ra-input-label {
     @extend .no-select;
 
     display: block;
-    font: inherit;
     outline: none;
-    // transform-style: preserve-3d;
 
     .ra-input-label-text {
         padding-left: 4px;
@@ -35,5 +130,86 @@
             content: ' ';
             white-space: pre;
         }
+    }
+}
+
+.ra-input-container {
+    width: 100%;
+    box-sizing: border-box;
+    border-style: solid;
+    display: flex;
+    align-items: stretch;
+
+    &.focus,
+    &:focus-within {
+        border-color: $--ra-config-inputs-focus-color;
+    }
+}
+
+.ra-input-field {
+    padding: 0;
+    color: $--clr-g-80;
+    font: inherit;
+    font-weight: $--font-weight-normal;
+    outline: 0;
+    background: transparent;
+    border: 0;
+    height: 100%;
+    z-index: 1;
+    position: relative;
+
+    * {
+        background: transparent;
+    }
+}
+
+.ra-text-field {
+    width: 100%;
+}
+
+.ra-text-input,
+.ra-select-text-input {
+    width: 100%;
+}
+
+.ra-input-annotation {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    overflow: hidden;
+}
+
+.ra-input-content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@function getDefaults() {
+    @return (
+        "height": getKey($--ra-config-input-default-variant, 'height', 40px),
+        "padding-h": getKey($--ra-config-input-default-variant, 'padding-h', 12px),
+        "padding-v": getKey($--ra-config-input-default-variant, 'padding-v', 0),
+        "font-size": getKey($--ra-config-input-default-variant, 'height', 16px),
+        "font-weight": getKey($--ra-config-input-default-variant, 'font-weight', 400),
+        "line-height": getKey($--ra-config-input-default-variant, 'line-height', 24px),
+        "background-color": getKey($--ra-config-input-default-variant, 'background-color', #fff),
+        "border-width": getKey($--ra-config-input-default-variant, 'border-width', 1px),
+        "focus-outline-width": getKey($--ra-config-input-default-variant, 'focus-outline-width', 1px),
+        "label-font-size": getKey($--ra-config-input-default-variant, 'label-font-size', inherit),
+        "border-radius": getKey($--ra-config-input-default-variant, 'border-radius', 5px),
+        "border-color": getKey($--ra-config-input-default-variant, 'border-color', #000),
+    );
+}
+
+$default-values: getDefaults();
+
+@include buildInputContainerVariant($default-values, $default-values);
+
+@each $variantId, $variant in $--ra-config-input-variants {
+    .ra-input-variant-#{$variantId} {
+        @include buildInputContainerVariant($variant, $default-values);
     }
 }

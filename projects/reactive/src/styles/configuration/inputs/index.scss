@@ -1,1 +1,10 @@
-@import './input-container.scss';
+$--ra-config-inputs-focus-color: #0870f5 !default;
+$--ra-config-inputs-border-radius: 5px !default;
+$--ra-config-inputs-border-width: 1px !default;
+$--ra-config-inputs-focused-border-width: 2px !default;
+
+$--ra-config-input-default-variant: (
+) !default;
+
+$--ra-config-input-variants: (
+) !default;

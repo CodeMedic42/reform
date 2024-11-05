@@ -37,11 +37,11 @@ function buildFinalConfig(settings) {
     };
 }
 
-function runHooks(hookList, contextAccess, value) {
+function runHooks(hookList, contextAccess, value, settings) {
     let onGoingValue = value;
 
     forEach(hookList, (hook) => {
-        const result = hook(contextAccess, value);
+        const result = hook(contextAccess, value, settings);
 
         onGoingValue = !isNil(result) ? result : onGoingValue;
     });
@@ -49,11 +49,11 @@ function runHooks(hookList, contextAccess, value) {
     return onGoingValue;
 }
 
-function runHooksWithHandled(hookList, contextAccess, value) {
+function runHooksWithHandled(hookList, contextAccess, value, settings) {
     let handled = false;
 
     forEach(hookList, (hook) => {
-        handled = hook(contextAccess, value) || handled;
+        handled = hook(contextAccess, value, settings) || handled;
     });
 
     return handled;
@@ -85,9 +85,9 @@ class Command {
 
             const context = getContext();
 
-            try {
-                let finalSettings = settings;
+            let finalSettings = settings;
 
+            try {
                 finalSettings = runHooks(hooks.onBeforeRequest, context, settings);
 
                 finalSettings = buildFinalConfig(finalSettings);
@@ -98,16 +98,16 @@ class Command {
 
                 result = await instance.request(settings);
 
-                runHooks(hooks.onSuccess, context, result);
+                runHooks(hooks.onSuccess, context, result, finalSettings);
             } catch (caughtError) {
                 error = caughtError;
 
-                runHooksWithHandled(hooks.onFailure, context, error);
+                runHooksWithHandled(hooks.onFailure, context, error, finalSettings);
             }
 
             const returnValue = [error, result];
 
-            runHooks(hooks.onAfterRequest, context, returnValue);
+            runHooks(hooks.onAfterRequest, context, returnValue, finalSettings);
 
             return returnValue;
         };

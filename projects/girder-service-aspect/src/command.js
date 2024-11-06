@@ -64,9 +64,9 @@ class Command {
         this.config = config;
     }
 
-    build(groupConfig, getContext) {
+    build(parentConfiguration, getContext) {
         const commandConfig = mergeConfigs(
-            groupConfig,
+            parentConfiguration,
             this.config,
         );
 

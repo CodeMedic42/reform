@@ -23,34 +23,34 @@ class ServiceAspect extends Aspect {
         const{ getContext, hooks } = config;
 
         const globalConfigurations = [DEFAULT_CONFIG];
-        const finalConfigurations = {};
+        const finalDefinitions = {};
 
         forEach(hooks, (hook) => {
             const {
                 globalConfiguration,
-                groupConfigurations,
+                groupDefinitions,
             } = hook;
 
             if (!isNil(globalConfiguration)) {
                 globalConfigurations.push(globalConfiguration);
             }
 
-            forEach(groupConfigurations, (
-                groupConfiguration,
-                groupConfigurationId,
+            forEach(groupDefinitions, (
+                groupDefinition,
+                groupDefinitionId,
             ) => {
-                if (!isNil(finalConfigurations[groupConfigurationId])) {
-                    throw new Error(`A service group configuration already exists with id "${groupConfigurationId}"`);
+                if (!isNil(finalDefinitions[groupDefinitionId])) {
+                    throw new Error(`A service group definition already exists with id "${groupDefinitionId}"`);
                 }
 
-                finalConfigurations[groupConfigurationId] = groupConfiguration;
+                finalDefinitions[groupDefinitionId] = groupDefinition;
             });
         });
 
         const globalConfiguration = mergeConfigs(...globalConfigurations);
 
         const controls = mapValues(
-            finalConfigurations,
+            finalDefinitions,
             (groupConfiguration) => groupConfiguration.build(globalConfiguration, getContext),
         );
 

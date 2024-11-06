@@ -102,7 +102,11 @@ class Command {
             } catch (caughtError) {
                 error = caughtError;
 
-                runHooksWithHandled(hooks.onFailure, context, error, finalSettings);
+                const handled = runHooksWithHandled(hooks.onFailure, context, error, finalSettings);
+
+                if (!handled) {
+                    throw caughtError;
+                }
             }
 
             const returnValue = [error, result];

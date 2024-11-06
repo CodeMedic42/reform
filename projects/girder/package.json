@@ -30,16 +30,17 @@
     "extends": "@reformjs/eslint-config"
   },
   "dependencies": {
-    "@reformjs/toolbox": "workspace:*",
+    "@reformjs/toolbox": "0.0.3-rc.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
+    "@reformjs/eslint-config": "0.0.3-rc.2",
     "eslint": "^8.56.0",
     "jest": "^29.0.0",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.0.0",
     "typescript": "~5.3.3"
-  }
+  },
+  "gitHead": "df8ac10512761eaf1e67b3d81526ae0e41de5927"
 }

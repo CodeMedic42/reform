@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@reformjs/reactive": "workspace:*",
+    "@reformjs/reactive": "0.0.3-rc.2",
     "@types/react": "^17",
     "@types/react-dom": "^17",
     "classnames": "^2.3.2",
@@ -58,7 +58,7 @@
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.21.4",
-    "@reformjs/eslint-config": "workspace:*",
+    "@reformjs/eslint-config": "0.0.3-rc.2",
     "@storybook/addon-essentials": "^7.0.6",
     "@storybook/addon-interactions": "^7.0.6",
     "@storybook/addon-links": "^7.0.6",
@@ -91,5 +91,6 @@
     "webpack-merge": "5.7.3",
     "webpack-node-externals": "^3.0.0",
     "worker-loader": "^3.0.8"
-  }
+  },
+  "gitHead": "df8ac10512761eaf1e67b3d81526ae0e41de5927"
 }

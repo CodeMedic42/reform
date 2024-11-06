@@ -29,12 +29,13 @@
     "extends": "@reformjs/eslint-config"
   },
   "dependencies": {
-    "@reformjs/girder": "workspace:*"
+    "@reformjs/girder": "0.0.3-rc.2"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
+    "@reformjs/eslint-config": "0.0.3-rc.2",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"
-  }
+  },
+  "gitHead": "df8ac10512761eaf1e67b3d81526ae0e41de5927"
 }

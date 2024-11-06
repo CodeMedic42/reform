@@ -1,6 +1,6 @@
 {
     "name": "girder-example",
-    "version": "0.0.1",
+    "version": "0.0.3-rc.0",
     "private": true,
     "scripts": {
         "start": "webpack serve --config ./webpack/webpack.config.js --stats verbose",
@@ -12,15 +12,15 @@
     ],
     "author": "Christian Micle <cam42.dev@outlook.com>",
     "eslintConfig": {
-      "extends": "@reformjs/eslint-config"
+        "extends": "@reformjs/eslint-config"
     },
     "dependencies": {
         "@reformjs/girder": "workspace:*"
     },
     "devDependencies": {
-        "@reformjs/eslint-config": "workspace:*",
         "@babel/preset-env": "^7.21.4",
         "@babel/preset-react": "^7.18.6",
+        "@reformjs/eslint-config": "workspace:*",
         "babel-loader": "^9.1.2",
         "css-loader": "^6.7.3",
         "file-loader": "^6.2.0",

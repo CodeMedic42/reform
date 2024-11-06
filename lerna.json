@@ -1,6 +1,6 @@
 {
     "version": "0.0.2-rc.11",
-    "npmCLient": "pnpm",
+    "npmClient": "pnpm",
     "packages": [
         "examples/*",
         "packages/*",

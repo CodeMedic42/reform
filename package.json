@@ -6,6 +6,6 @@
     "lint": "lerna run lint --stream"
   },
   "dependencies": {
-    "lerna": "^8.1.2"
+    "lerna": "^8.1.9"
   }
 }

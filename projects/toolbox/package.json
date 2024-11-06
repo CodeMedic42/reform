@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/toolbox",
-  "version": "0.0.2-rc.9",
+  "version": "0.0.3-rc.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -45,6 +45,6 @@
     "@reformjs/eslint-config": "workspace:*",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",
-		"typescript": "~5.3.3"
+    "typescript": "~5.3.3"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/reactive-storybook",
-  "version": "0.0.2-rc.1",
+  "version": "0.0.3-rc.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -75,12 +75,12 @@
     "html-webpack-plugin": "^5.5.0",
     "lorem-ipsum": "^2.0.4",
     "mini-css-extract-plugin": "^2.1.0",
-    "sass": "latest",
-    "sass-package-importer": "latest",
     "pdfjs-dist": "2.6.347",
     "react-element-to-jsx-string": "^15.0.0",
     "resolve-url-loader": "3.1.4",
+    "sass": "latest",
     "sass-loader": "^13.2.0",
+    "sass-package-importer": "latest",
     "storybook": "^7.0.6",
     "style-loader": "^3.3.1",
     "typescript": "~5.3.3",

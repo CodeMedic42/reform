@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/web-unit",
-  "version": "0.0.3-rc.2",
+  "version": "0.0.3-rc.3",
   "description": "",
   "bin": {
     "wunit": "./cli.js"
@@ -70,7 +70,7 @@
     "webpack-virtual-modules": "^0.4.6"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "0.0.3-rc.2",
+    "@reformjs/eslint-config": "workspace:*",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"

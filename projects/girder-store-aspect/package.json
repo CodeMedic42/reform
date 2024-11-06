@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/girder-store-aspect",
-  "version": "0.0.3-rc.2",
+  "version": "0.0.3-rc.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -44,11 +44,11 @@
     "redux": "^4.2.1"
   },
   "dependencies": {
-    "@reformjs/girder": "0.0.3-rc.2",
+    "@reformjs/girder": "workspace:*",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "0.0.3-rc.2",
+    "@reformjs/eslint-config": "workspace:*",
     "ncp": "2.0.0",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"

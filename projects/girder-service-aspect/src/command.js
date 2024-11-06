@@ -64,9 +64,9 @@ class Command {
         this.config = config;
     }
 
-    build(groupConfig, getContext) {
+    build(parentConfiguration, getContext) {
         const commandConfig = mergeConfigs(
-            groupConfig,
+            parentConfiguration,
             this.config,
         );
 
@@ -102,7 +102,11 @@ class Command {
             } catch (caughtError) {
                 error = caughtError;
 
-                runHooksWithHandled(hooks.onFailure, context, error, finalSettings);
+                const handled = runHooksWithHandled(hooks.onFailure, context, error, finalSettings);
+
+                if (!handled) {
+                    throw caughtError;
+                }
             }
 
             const returnValue = [error, result];

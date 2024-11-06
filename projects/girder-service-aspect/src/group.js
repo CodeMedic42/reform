@@ -2,23 +2,23 @@ import mapValues from 'lodash/mapValues';
 import mergeConfigs from './merge-configs';
 
 class Group {
-    constructor({ commands = [], configuration = {}}) {
-        this.commands = commands;
+    constructor({ definitions = {}, configuration = {}}) {
+        this.definitions = definitions;
         this.configuration = configuration;
     }
 
-    build(globalConfiguration, getContext) {
+    build(parentConfiguration, getContext) {
         const groupConfiguration = mergeConfigs(
-            globalConfiguration,
+            parentConfiguration,
             this.configuration,
         );
 
-        const commands = mapValues(
-            this.commands,
-            (command) => command.build(groupConfiguration, getContext),
+        const definitions = mapValues(
+            this.definitions,
+            (definition) => definition.build(groupConfiguration, getContext),
         );
 
-        return commands;
+        return definitions;
     }
 }
 

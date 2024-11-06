@@ -18,7 +18,10 @@ function useAction(action) {
         // Swallow everything, the dev should get data from the store.
         // The only thing they should know is the action finished.
         .then(noop)
-        .catch(noop),
+        .catch((err) => {
+            // eslint-disable-next-line no-console
+            console.error(err);
+        }),
         [action, context]
     );
 }

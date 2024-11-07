@@ -82,7 +82,7 @@ class Client {
 
                             return clientContext;
                         },
-                        hooks: this.hooks[aspectId] || [],
+                        getHooks: (hookId) =>  this.hooks[hookId] || [],
                         stopClient: () => this.stop(),
                     }))
                     .then((controls) => {

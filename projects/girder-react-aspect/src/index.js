@@ -1,13 +1,11 @@
 import ReactAspect from './react-aspect';
 import { useAspect, useAction } from './context-access';
-import systemContext from './context';
-
-const { Provider } = systemContext;
+import girderReactContext from './girder-react-context';
 
 export default ReactAspect;
 
 export {
     useAspect,
     useAction,
-    Provider,
+    girderReactContext,
 };

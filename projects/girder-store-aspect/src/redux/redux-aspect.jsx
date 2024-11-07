@@ -20,20 +20,24 @@ class ReduxAspect extends Aspect {
     hooks() {
         return {
             react: {
-                // eslint-disable-next-line react/prop-types
-                Component: ({ children }) => (
-                    <Provider store={this.store}>
-                        {children}
-                    </Provider>
-                )
+                '*': {
+                    // eslint-disable-next-line react/prop-types
+                    Component: ({ children }) => (
+                        <Provider store={this.store}>
+                            {children}
+                        </Provider>
+                    )
+                }
             }
         };
     }
 
     onInitialize(config) {
         const {
-            hooks,
+            getHooks,
         } = config;
+
+        const hooks = getHooks('redux');
 
         const reducers = {};
 

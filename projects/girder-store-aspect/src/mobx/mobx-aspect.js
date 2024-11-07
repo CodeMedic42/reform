@@ -9,9 +9,9 @@ class MobxAspect extends Aspect {
 
     // eslint-disable-next-line class-methods-use-this
     onInitialize(config) {
-        const {
-            hooks,
-        } = config;
+        const { getHooks } = config;
+
+        const hooks = getHooks('mobx');
 
         const stores = [];
 

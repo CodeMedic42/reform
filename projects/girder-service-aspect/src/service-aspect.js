@@ -20,10 +20,12 @@ class ServiceAspect extends Aspect {
 
     // eslint-disable-next-line class-methods-use-this
     onInitialize(config) {
-        const{ getContext, hooks } = config;
+        const{ getContext, getHooks } = config;
 
         const configurations = [DEFAULT_CONFIG];
         const finalDefinitions = {};
+
+        const hooks = getHooks('service');
 
         forEach(hooks, (hook) => {
             const {

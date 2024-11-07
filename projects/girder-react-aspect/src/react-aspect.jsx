@@ -1,12 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+import Promise from 'bluebird';
 import isNil from 'lodash/isNil';
+import noop from 'lodash/noop';
 import forEach from 'lodash/forEach';
 import reduce from 'lodash/reduce';
 import { Aspect } from '@reformjs/girder';
-import systemContext from './context';
-
-const { Provider } = systemContext;
+import girderReactContext from './girder-react-context';
 
 function build(aspectComponents, root) {
     return reduce(
@@ -33,7 +33,13 @@ class ReactAspect extends Aspect {
     onInitialize(config) {
         this.aspectComponents = [];
 
-        forEach(config.hooks, (hook) => {
+        const hooks = config.getHooks('react');
+
+        forEach(hooks, (hook, hookId) => {
+            if (hookId !== '*' && hookId !== this.id) {
+                return;
+            }
+
             const { Component } = hook;
 
             if (isNil(Component)) {
@@ -44,8 +50,8 @@ class ReactAspect extends Aspect {
         });
     }
 
-    onStart(context) {
-        super.onStart(context);
+    onStart(systemContext) {
+        super.onStart(systemContext);
 
         const mountId = `${this.id}-container`;
 
@@ -65,38 +71,42 @@ class ReactAspect extends Aspect {
 
         const { RootComponent } = this;
 
+        const useAspect = (aspectId) => systemContext[aspectId];
+
+        const useAction = (action, ...args) =>
+             Promise
+                .try(() => action(systemContext, ...args))
+                // Swallow everything, the dev should get data from the store.
+                // The only thing they should know is the action finished.
+                .then(noop)
+                .catch((err) => {
+                    // eslint-disable-next-line no-console
+                    console.error(err);
+                });
+
+        const reactContext = {
+            useAspect,
+            useAction,
+        };
+
         const appRoot = (
-            <Provider value={context}>
+            <girderReactContext.Provider value={reactContext}>
                 {build(this.aspectComponents, <RootComponent />)}
-            </Provider>
+            </girderReactContext.Provider>
         );
 
-        import('react-dom/client')
-            .then((client) => {
-                this.root = client.createRoot(container);
+        this.root = createRoot(container);
 
-                this.root.render(appRoot);
-            })
-            .catch(() => {
-                // eslint-disable-next-line react/no-deprecated
-                ReactDOM.render(appRoot, container);
-            });
+        this.root.render(appRoot);
     }
 
     onStop() {
         super.stop();
 
-        if (!isNil(this.root)) {
-            this.root.unmount();
-
-            this.root = null;
-        } else {
-            // eslint-disable-next-line react/no-deprecated
-            ReactDOM.unmountComponentAtNode(this.container);
-        }
+        this.root.unmount();
+        this.root = null;
 
         this.container.remove();
-
         this.container = null;
     }
 }

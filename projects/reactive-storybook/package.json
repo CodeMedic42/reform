@@ -3,6 +3,7 @@
   "version": "0.0.3-rc.10",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "storybook2": "storybook dev",

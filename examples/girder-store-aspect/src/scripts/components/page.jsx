@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { observer } from 'mobx-react';
-import { useAspect } from '@reformjs/girder-react-aspect';
+import { useAspect, useAction } from '@reformjs/girder-react-aspect';
 import Todo from './todo';
+import { toggleAll } from '../actions/todo-actions';
 
 function Page() {
     const todoStore = useAspect('mobx').getStore('TodoListStore');
@@ -17,6 +18,8 @@ function Page() {
         setTempValue('');
     });
 
+    const handleToggleClick = useAction(toggleAll);
+
     return (
         <div>
             <input
@@ -27,6 +30,11 @@ function Page() {
                 onClick={handleClick}
             >
                 Create Todo
+            </button>
+            <button
+                onClick={() => handleToggleClick(true)}
+            >
+                Mark All Completed
             </button>
             {
                 todoStore.todos.map((todo, index) => {

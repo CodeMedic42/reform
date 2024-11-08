@@ -1,10 +1,10 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
 import Promise from 'bluebird';
 import isNil from 'lodash/isNil';
 import noop from 'lodash/noop';
 import forEach from 'lodash/forEach';
 import reduce from 'lodash/reduce';
+import isFunction from 'lodash/isFunction';
 import { Aspect } from '@reformjs/girder';
 import girderReactContext from './girder-react-context';
 
@@ -20,7 +20,7 @@ function build(aspectComponents, root) {
     );
 }
 
-class ReactAspect extends Aspect {
+class ReactAspectBase extends Aspect {
     constructor(aspectId, RootComponent) {
         super(aspectId);
 
@@ -69,12 +69,14 @@ class ReactAspect extends Aspect {
 
         document.body.appendChild(container);
 
-        const { RootComponent } = this;
-
         const useAspect = (aspectId) => systemContext[aspectId];
 
-        const useAction = (action, ...args) =>
-             Promise
+        const useAction = (action, ...args) => {
+            if (!isFunction(action)) {
+                throw new Error('useAction must be provided a function.');
+            }
+
+            return Promise
                 .try(() => action(systemContext, ...args))
                 // Swallow everything, the dev should get data from the store.
                 // The only thing they should know is the action finished.
@@ -83,32 +85,28 @@ class ReactAspect extends Aspect {
                     // eslint-disable-next-line no-console
                     console.error(err);
                 });
+            };
 
         const reactContext = {
             useAspect,
             useAction,
         };
 
-        const appRoot = (
+        const { RootComponent } = this;
+
+        return (
             <girderReactContext.Provider value={reactContext}>
                 {build(this.aspectComponents, <RootComponent />)}
             </girderReactContext.Provider>
         );
-
-        this.root = createRoot(container);
-
-        this.root.render(appRoot);
     }
 
     onStop() {
-        super.stop();
-
-        this.root.unmount();
-        this.root = null;
-
         this.container.remove();
         this.container = null;
+
+        super.stop();
     }
 }
 
-export default ReactAspect;
+export default ReactAspectBase;

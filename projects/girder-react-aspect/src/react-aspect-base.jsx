@@ -33,14 +33,14 @@ class ReactAspectBase extends Aspect {
     onInitialize(config) {
         this.aspectComponents = [];
 
-        const hooks = config.getHooks('react');
+        const settings = config.getSettings('react');
 
-        forEach(hooks, (hook, hookId) => {
-            if (hookId !== '*' && hookId !== this.id) {
+        forEach(settings, (setting, settingId) => {
+            if (settingId !== '*' && settingId !== this.id) {
                 return;
             }
 
-            const { Component } = hook;
+            const { Component } = setting;
 
             if (isNil(Component)) {
                 return;

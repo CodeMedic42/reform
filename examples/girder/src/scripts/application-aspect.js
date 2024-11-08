@@ -6,7 +6,7 @@ class ApplicationAspect extends Aspect {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    hooks() {
+    settings() {
         return {
             messagePrint: [
                 'Hello World.',

@@ -1,6 +1,6 @@
 {
     "name": "girder-store-example",
-    "version": "0.0.3-rc.9",
+    "version": "0.0.3-rc.10",
     "private": true,
     "scripts": {
         "start": "webpack serve --config ./webpack/webpack.config.js --stats verbose"

@@ -1,8 +1,9 @@
 {
   "name": "@reformjs/reactive",
-  "version": "0.0.3-rc.9",
+  "version": "0.0.3-rc.10",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "run": "node ./run-web-unit/run.js",
     "wunit": "wunit -h SelectInput -p '{\"value\":\"Foo\"}'",
@@ -227,5 +228,5 @@
     "webpack-merge": "5.7.3",
     "webpack-node-externals": "^3.0.0"
   },
-  "gitHead": "df8ac10512761eaf1e67b3d81526ae0e41de5927"
+  "gitHead": "e00fafa04e0bd313dd2810feaa2dc5d23c3103fd"
 }

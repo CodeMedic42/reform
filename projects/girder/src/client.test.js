@@ -207,8 +207,8 @@ describe('Client', () => {
             const barAspect = new Aspect('bar');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ hooks, getContext, stopClient }) => {
-                    expect(hooks.length).toBe(0);
+                .mockImplementation(({ settings, getContext, stopClient }) => {
+                    expect(settings.length).toBe(0);
                     expect(isFunction(getContext)).toBeTruthy();
                     expect(isFunction(stopClient)).toBeTruthy();
                 });
@@ -221,17 +221,17 @@ describe('Client', () => {
             });
         });
 
-        test('onInitialize basic call with hook', async () => {
+        test('onInitialize basic call with setting', async () => {
             const client = new Client();
 
             const fooAspect = new Aspect('foo');
             const barAspect = new Aspect('bar');
 
-            const barHookSpy = jest.spyOn(barAspect, 'hooks').mockReturnValue({ foo: 42 });
+            const barSettingSpy = jest.spyOn(barAspect, 'settings').mockReturnValue({ foo: 42 });
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ hooks, getContext, stopClient }) => {
-                    expect(hooks?.[0]).toBe(42);
+                .mockImplementation(({ settings, getContext, stopClient }) => {
+                    expect(settings?.[0]).toBe(42);
                     expect(isFunction(getContext)).toBeTruthy();
                     expect(isFunction(stopClient)).toBeTruthy();
                 });
@@ -240,7 +240,7 @@ describe('Client', () => {
             client.registerAspect(barAspect);
 
             return client.start().then(() => {
-                expect(barHookSpy).toHaveBeenCalled();
+                expect(barSettingSpy).toHaveBeenCalled();
                 expect(fooOnInitializeSpy).toHaveBeenCalled();
             });
         });

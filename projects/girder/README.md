@@ -193,9 +193,9 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
       __Note:__ There are a series of methods which can be overridden which are called as part of the client startup and stopping workflows. We will go over these methods shortly. If extending directly from the Aspect you do not need to call the super instance of these methods. However if extending from a predefined Aspect from another library or a custom one then the super instance should be called. Further examples will illustrate this even though they are extending from the base Aspect. Failure to do so might prevent the system from fully starting up.
 
-      ### - __`hooks`__
+      ### - __`settings`__
 
-      The method, hooks, is synchronous, can be overridden, and is called as the client is starting up. The purpose of this method is to provide setup configuration to other Aspects as they are starting up. It takes no parameters and expects an object to be returned. We will get to how the Aspect accesses this information in a moment.
+      The method, settings, is synchronous, can be overridden, and is called as the client is starting up. The purpose of this method is to provide setup configuration to other Aspects as they are starting up. It takes no parameters and expects an object to be returned. We will get to how the Aspect accesses this information in a moment.
 
       For an example let's assume we have an Aspect like so...
 
@@ -223,7 +223,7 @@ There are only two primary parts to this system, the Client and the Aspect. Both
           super('MY_OTHER_STATIC_ID');
         }
 
-        hooks() {
+        settings() {
           return {
             MY_STATIC_ID: {} // Here is the configuration information.
           };
@@ -233,7 +233,7 @@ There are only two primary parts to this system, the Client and the Aspect. Both
       }
       ```
 
-      The hooks method expects an object to be returned where each property key is the id of the Aspect you want to pass information to. You are not obligated to override or use this method or even pass information to all aspects. Only provide information to those Aspects you want to. The information passed can be any data type.
+      The settings method expects an object to be returned where each property key is the id of the Aspect you want to pass information to. You are not obligated to override or use this method or even pass information to all aspects. Only provide information to those Aspects you want to. The information passed can be any data type.
 
       #### - __`onInitialize`__
 
@@ -285,9 +285,9 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
         The onInitialize method is passed one object called the configuration. The configuration provides two properties.
 
-        - getHooks
+        - getSettings
 
-          This will be a function which when called with the hookID, will return an array of all configuration data provided by hook ids from other Aspects. It will be up to the running Aspect to combine that data together. An Aspect should not require any order to the hooks as no guarantee can be given on the order of how Aspects are registered.
+          This will be a function which when called with the settingID, will return an array of all configuration data provided by setting ids from other Aspects. It will be up to the running Aspect to combine that data together. An Aspect should not require any order to the settings as no guarantee can be given on the order of how Aspects are registered.
 
           ```js
           import { Aspect } = "@reformjs/girder";
@@ -298,9 +298,9 @@ There are only two primary parts to this system, the Client and the Aspect. Both
             }
 
             onInitialize(config) {
-              const { getHooks } = config;
+              const { getSettings } = config;
 
-              // Do what you will with the provided hooks.
+              // Do what you will with the provided settings.
             }
 
             // ... overrides

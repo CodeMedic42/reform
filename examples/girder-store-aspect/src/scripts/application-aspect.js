@@ -7,7 +7,7 @@ class ApplicationAspect extends ReactAspect {
         super('todoApp', Page);
     }
 
-    hooks() {
+    settings() {
         return {
             mobx: {
                 stores,

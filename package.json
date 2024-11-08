@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build": "lerna run build --stream",
-    "lint": "lerna run lint --stream"
+    "lint": "lerna run lint --stream",
+    "test": "lerna run lint --stream"
   },
   "dependencies": {
     "lerna": "^8.1.9"

@@ -8,7 +8,7 @@ import promiseForEach from '@reformjs/toolbox/promise-for-each';
 class Client {
     constructor() {
         this.aspects = {};
-        this.hooks = {};
+        this.settings = {};
 
         this.status = 'stopped';
         this.startingPromise = null;
@@ -46,12 +46,12 @@ class Client {
 
         this.aspects[aspect.id] = aspect;
 
-        forEach(aspect.hooks(), (hook, hookId) => {
-            const aspectHooks = get(this.hooks, hookId, []);
+        forEach(aspect.settings(), (setting, settingId) => {
+            const aspectSettings = get(this.settings, settingId, []);
 
-            aspectHooks.push(hook);
+            aspectSettings.push(setting);
 
-            set(this.hooks, hookId, aspectHooks);
+            set(this.settings, settingId, aspectSettings);
         });
 
         return this;
@@ -82,7 +82,7 @@ class Client {
 
                             return clientContext;
                         },
-                        getHooks: (hookId) =>  this.hooks[hookId] || [],
+                        getSettings: (settingId) =>  this.settings[settingId] || [],
                         stopClient: () => this.stop(),
                     }))
                     .then((controls) => {

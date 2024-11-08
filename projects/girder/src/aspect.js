@@ -14,7 +14,7 @@ class Aspect {
         return this.aspectId;
     }
 
-    hooks() {
+    settings() {
         return null;
     }
 

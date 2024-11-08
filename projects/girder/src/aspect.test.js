@@ -17,10 +17,10 @@ describe('Aspect', () => {
         });
     });
 
-    test('hooks returns null', () => {
+    test('settings returns null', () => {
         const aspect = new Aspect('foo');
 
-        expect(aspect.hooks()).toBe(null);
+        expect(aspect.settings()).toBe(null);
     });
 
     test('getControls returns null', () => {

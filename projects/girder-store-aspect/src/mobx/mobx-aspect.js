@@ -9,14 +9,14 @@ class MobxAspect extends Aspect {
 
     // eslint-disable-next-line class-methods-use-this
     onInitialize(config) {
-        const { getHooks } = config;
+        const { getSettings } = config;
 
-        const hooks = getHooks('mobx');
+        const settings = getSettings('mobx');
 
         const stores = [];
 
-        forEach(hooks, (hook) => {
-            forEach(hook.stores, (store) => {
+        forEach(settings, (setting) => {
+            forEach(setting.stores, (store) => {
                 const storeId = store.id;
 
                 if (!isNil(stores[storeId])) {

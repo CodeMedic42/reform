@@ -17,7 +17,7 @@ class ReduxAspect extends Aspect {
         this.combineCallback = combineCallback;
     }
 
-    hooks() {
+    settings() {
         return {
             react: {
                 '*': {
@@ -34,15 +34,15 @@ class ReduxAspect extends Aspect {
 
     onInitialize(config) {
         const {
-            getHooks,
+            getSettings,
         } = config;
 
-        const hooks = getHooks('redux');
+        const settings = getSettings('redux');
 
         const reducers = {};
 
-        forEach(hooks, (hook) => {
-            const aspectReducers = hook.reducers;
+        forEach(settings, (setting) => {
+            const aspectReducers = setting.reducers;
 
             if (isNil(aspectReducers)) {
                 return;

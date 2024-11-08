@@ -122,6 +122,79 @@ importers:
         specifier: ^4.11.1
         version: 4.15.2(webpack-cli@5.1.4)(webpack@5.96.1)
 
+  examples/girder-store-aspect:
+    dependencies:
+      '@reformjs/girder':
+        specifier: workspace:*
+        version: link:../../projects/girder
+      '@reformjs/girder-react-aspect':
+        specifier: workspace:*
+        version: link:../../projects/girder-react-aspect
+      '@reformjs/girder-store-aspect':
+        specifier: workspace:*
+        version: link:../../projects/girder-store-aspect
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      mobx:
+        specifier: ''
+        version: 6.13.5
+      mobx-react:
+        specifier: ''
+        version: 9.1.1(mobx@6.13.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      mobx-state-tree:
+        specifier: ''
+        version: 6.0.1(mobx@6.13.5)
+      prop-types:
+        specifier: ^15.8.1
+        version: 15.8.1
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@babel/preset-env':
+        specifier: ^7.21.4
+        version: 7.26.0(@babel/core@7.26.0)
+      '@babel/preset-react':
+        specifier: ^7.18.6
+        version: 7.25.9(@babel/core@7.26.0)
+      babel-loader:
+        specifier: ^9.1.2
+        version: 9.2.1(@babel/core@7.26.0)(webpack@5.96.1)
+      css-loader:
+        specifier: ^6.7.3
+        version: 6.11.0(webpack@5.96.1)
+      file-loader:
+        specifier: ^6.2.0
+        version: 6.2.0(webpack@5.96.1)
+      html-webpack-plugin:
+        specifier: ^5.5.0
+        version: 5.6.3(webpack@5.96.1)
+      portfinder:
+        specifier: ^1.0.32
+        version: 1.0.32
+      process:
+        specifier: ^0.11.10
+        version: 0.11.10
+      sass-loader:
+        specifier: ^13.2.0
+        version: 13.3.3(sass@1.80.6)(webpack@5.96.1)
+      style-loader:
+        specifier: ^3.3.2
+        version: 3.3.4(webpack@5.96.1)
+      webpack:
+        specifier: ^5.75.0
+        version: 5.96.1(@swc/core@1.9.1)(webpack-cli@5.1.4)
+      webpack-cli:
+        specifier: ^5.0.1
+        version: 5.1.4(webpack-dev-server@4.15.2)(webpack@5.96.1)
+      webpack-dev-server:
+        specifier: ^4.11.1
+        version: 4.15.2(webpack-cli@5.1.4)(webpack@5.96.1)
+
   packages/eslint-config:
     dependencies:
       '@typescript-eslint/eslint-plugin':
@@ -249,10 +322,10 @@ importers:
         specifier: ^15.8.1
         version: 15.8.1
       react:
-        specifier: ^18
+        specifier: ^16 || ^17 || ^18
         version: 18.3.1
       react-dom:
-        specifier: ^18
+        specifier: ^16 || ^17 || ^18
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@reformjs/eslint-config':
@@ -7454,6 +7527,40 @@ packages:
 
   mlly@1.7.2:
     resolution: {integrity: sha512-tN3dvVHYVz4DhSXinXIk7u9syPYaJvio118uomkovAtWBT+RdbP6Lfh/5Lvo519YMmwBafwlh20IPTXIStscpA==}
+
+  mobx-react-lite@4.0.7:
+    resolution: {integrity: sha512-RjwdseshK9Mg8On5tyJZHtGD+J78ZnCnRaxeQDSiciKVQDUbfZcXhmld0VMxAwvcTnPEHZySGGewm467Fcpreg==}
+    peerDependencies:
+      mobx: ^6.9.0
+      react: ^16.8.0 || ^17 || ^18
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+
+  mobx-react@9.1.1:
+    resolution: {integrity: sha512-gVV7AdSrAAxqXOJ2bAbGa5TkPqvITSzaPiiEkzpW4rRsMhSec7C2NBCJYILADHKp2tzOAIETGRsIY0UaCV5aEw==}
+    peerDependencies:
+      mobx: ^6.9.0
+      react: ^16.8.0 || ^17 || ^18
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+
+  mobx-state-tree@6.0.1:
+    resolution: {integrity: sha512-ZmC90+aaZj4Tvwz/G8kihAcZzejiHfkaIrwyneH7ACoZwWY2Gw5SP1mPPPQbVehsXJ8/OhDT4cPUvvzy//+Qog==}
+    peerDependencies:
+      mobx: ^6.3.0
+
+  mobx@6.13.5:
+    resolution: {integrity: sha512-/HTWzW2s8J1Gqt+WmUj5Y0mddZk+LInejADc79NJadrWla3rHzmRHki/mnEUH1AvOmbNTZ1BRbKxr8DSgfdjMA==}
 
   modify-values@1.0.1:
     resolution: {integrity: sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==}
@@ -18978,6 +19085,28 @@ snapshots:
       pathe: 1.1.2
       pkg-types: 1.2.1
       ufo: 1.5.4
+
+  mobx-react-lite@4.0.7(mobx@6.13.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      mobx: 6.13.5
+      react: 18.3.1
+      use-sync-external-store: 1.2.2(react@18.3.1)
+    optionalDependencies:
+      react-dom: 18.3.1(react@18.3.1)
+
+  mobx-react@9.1.1(mobx@6.13.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      mobx: 6.13.5
+      mobx-react-lite: 4.0.7(mobx@6.13.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+    optionalDependencies:
+      react-dom: 18.3.1(react@18.3.1)
+
+  mobx-state-tree@6.0.1(mobx@6.13.5):
+    dependencies:
+      mobx: 6.13.5
+
+  mobx@6.13.5: {}
 
   modify-values@1.0.1: {}
 

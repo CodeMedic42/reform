@@ -31,7 +31,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### __Prerequisites__
 
-This project requires [NodeJS](http://nodejs.org/) (version 16 or later), [PNPM](https://https://pnpm.io/), and [RushJS](https://rushjs.io/).
+This project requires [NodeJS](http://nodejs.org/) (version 16 or later), [PNPM](https://https://pnpm.io/).
 Please follow their respective installation instructions. To verify if they are installed and available each has a "-v" command option for getting the installed version.
 
 ### __Setup__
@@ -43,10 +43,10 @@ $ git clone https://github.com/CodeMedic42/reform.git
 $ cd girder
 ```
 
-To install dependencies run this Rush command
+To install dependencies run this command
 
 ```sh
-$ rush install
+$ pnpm install
 ```
 
 ### __Project Commands__
@@ -56,10 +56,6 @@ This project has these high level commands
 - build
 
   To build all project the command "rush build" will run the build command for each project which has changes from the last time this command was ran.
-
-- deploy
-
-  To build and publish a new version the command "rush deploy" will perform a build and will deploy the latest version of the changes for those projects who have changes.
 
 - test
 
@@ -97,7 +93,7 @@ To install and set up the library, run:
 
 ### __Overview__
 
-There are only two primary parts to this system, the Client and the Aspect. Both are the building blocks to an application which is compartmentalized and flexible. The next two sections will provide information on both and how to take advantage of their functionality.
+There are only two primary parts to this system, the Client and the Aspect. Both are the building blocks to an application which is compartmentalized and flexible. The next two sections will provide information on both, and how to take advantage of their functionality.
 
   1. ### Client
 
@@ -109,15 +105,15 @@ There are only two primary parts to this system, the Client and the Aspect. Both
       const client = new Client();
       ```
 
-      However the client it really nothing more than a startup workflow implementation. Its the [Aspects](#aspect) which really do the work. We'll get to them in a minute. First we need to know how to add them to the client. Let's take a look at that.
+      However the client is really nothing more than a startup workflow implementation. Its the [Aspects](#aspect) which really do the work. We'll get to them in a minute. First we need to know how to add them to the client. Let's take a look at that.
 
       ```js
       client.registerAspect(YOUR_ASPECT_HERE);
       ```
 
-      You can register as many different aspects as you want. However as we will see, each Aspect has a unique id, and all registered Aspects must be unique.
+      You can register as many different aspects as you want. However as we will see, each Aspect has a unique id, and all registered Aspect Ids must be unique.
 
-      Once you have registered all your Aspects all that's needed is to start the client. This will start the process of setting up and executing the logic inside each Aspect.
+      Once you have registered all your Aspects all that is needed is to start the client. This will start the process of setting up and executing the logic inside each Aspect.
 
       ```js
       client.start();
@@ -159,7 +155,7 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
       All an aspect requires is an ID as the first parameter to the constructor.
 
-      However this Aspect is not going to do anything. We need to extend from it to take advantage of it functionality.
+      However this Aspect is not going to do anything. We need to extend from it to take advantage of it's functionality.
 
       ```js
       import { Aspect } = "@reformjs/girder";
@@ -199,7 +195,7 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
       ### - __`hooks`__
 
-      The method, hooks, is synchronous, can be overridden, and is called as the client is starting up. The purpose of this method is to provide setup configuration to other Aspects as they are starting up. It takes no parameters and expects an object to er returned. We will get to how the Aspect accesses this information in a moment.
+      The method, hooks, is synchronous, can be overridden, and is called as the client is starting up. The purpose of this method is to provide setup configuration to other Aspects as they are starting up. It takes no parameters and expects an object to be returned. We will get to how the Aspect accesses this information in a moment.
 
       For an example let's assume we have an Aspect like so...
 
@@ -229,8 +225,7 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
         hooks() {
           return {
-            ...super.hooks(),
-            MY_OTHER_STATIC_ID: {} // Here is the configuration information.
+            MY_STATIC_ID: {} // Here is the configuration information.
           };
         }
 
@@ -248,32 +243,28 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
         Before we get to the parameters provided to this method we first need to talk about what can be returned from it and how that information is used.
 
-        The return value can be generally be anything. If it is a promise then the Client will wait for this and any other Aspects to complete their initialization before starting the system fully. What's important is what happens to what you return directly or through a promise. Inside the client when it is started as each onInitialize method is called, their return values, if not nil, are place in an object called the clientContext under a key matching the id of the Aspect. As an example given the MyAspect example above, if it were to return something like this...
+        The return value can generally be anything. If it is a promise then the Client will wait for this and any other Aspects to complete their initialization before starting the system fully. What's important is what happens to the information you return directly or through a promise. Inside the client when it is started as each onInitialize method is called, their return values, if not nil, are place in an object called the clientContext under a key matching the id of the Aspect. As an example given the MyAspect example above, if it were to return something like this...
 
         ```js
         import { Aspect } = "@reformjs/girder";
 
         class MyAspect extends Aspect {
-          constructor() {
-            super('MY_STATIC_ID');
-          }
+            constructor() {
+                super('MY_STATIC_ID');
+            }
 
-          onInitialize(config) {
-            return super.onInitialize(config)
-              .then((superControls) => {
+            onInitialize(config) {
                 return {
-                  ...superControls,
-                  startInterval: (cb, delay, ...args) => {
-                    this.interval = setInterval(cb, delay, ...args);
-                  },
-                  clearInterval: () => {
-                    clearInterval(this.interval);
-                  }
+                    startInterval: (cb, delay, ...args) => {
+                        this.interval = setInterval(cb, delay, ...args);
+                    },
+                    clearInterval: () => {
+                        clearInterval(this.interval);
+                    }
                 };
-              });
-          }
+            }
 
-          // ... overrides
+            // ... overrides
         }
         ```
 
@@ -281,10 +272,10 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
         ```js
         {
-          MY_STATIC_ID: {
-            startInterval,
-            clearInterval,
-          }
+            MY_STATIC_ID: {
+                startInterval,
+                clearInterval,
+            }
         }
         ```
 
@@ -294,9 +285,9 @@ There are only two primary parts to this system, the Client and the Aspect. Both
 
         The onInitialize method is passed one object called the configuration. The configuration provides two properties.
 
-        - hooks
+        - getHooks
 
-          This will be an array of all hooks gathered from all the registered Aspects who specified a hook for that AspectId. It will be up to the running Aspect to combine that data together. An Aspect should not require any order to the hooks as no guarantee can be given on the order of how Aspects are registered.
+          This will be a function which when called with the hookID, will return an array of all configuration data provided by hook ids from other Aspects. It will be up to the running Aspect to combine that data together. An Aspect should not require any order to the hooks as no guarantee can be given on the order of how Aspects are registered.
 
           ```js
           import { Aspect } = "@reformjs/girder";
@@ -307,7 +298,7 @@ There are only two primary parts to this system, the Client and the Aspect. Both
             }
 
             onInitialize(config) {
-              const { hooks } = config;
+              const { getHooks } = config;
 
               // Do what you will with the provided hooks.
             }
@@ -367,4 +358,4 @@ See also the list of [contributors](https://github.com/CodeMedic42/reform/graphs
 
 ## __License__
 
-[MIT License](https://andreasonny.mit-license.org/2019) © Christian Micle
+[GNU GENERAL PUBLIC LICENSE](https://github.com/CodeMedic42/reform/tree/main/LICENSE.md) © Christian Micle

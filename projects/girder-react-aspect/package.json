@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/girder-react-aspect",
-  "version": "0.0.3-rc.6",
+  "version": "0.0.3-rc.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,14 +20,24 @@
       "import": "./lib",
       "require": "./lib",
       "types": "./lib/index.d.ts"
+    },
+    "./17": {
+      "import": "./lib/react-aspect-17.js",
+      "require": "./lib/react-aspect-17.js",
+      "types": "./lib/react-aspect-17.d.ts"
+    },
+    "./18": {
+      "import": "./lib/react-aspect-18.js",
+      "require": "./lib/react-aspect-18.js",
+      "types": "./lib/react-aspect-18.d.ts"
     }
   },
   "files": [
     "/lib"
   ],
   "peerDependencies": {
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^16 || ^17 || ^18",
+    "react-dom": "^16 || ^17 || ^18"
   },
   "eslintConfig": {
     "extends": "@reformjs/eslint-config"

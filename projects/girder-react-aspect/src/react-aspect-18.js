@@ -2,19 +2,26 @@ import { createRoot } from 'react-dom/client';
 import ReactAspectBase from './react-aspect-base';
 
 class ReactAspect18 extends ReactAspectBase {
-    onStart(systemContext) {
-        const appRoot = super.onStart(systemContext);
+    constructor(aspectId, RootComponent) {
+        super(aspectId, RootComponent);
 
-        this.root = createRoot(this.container);
-
-        this.root.render(appRoot);
+        this.root = null;
+        this.mounted = false;
     }
 
-    onStop() {
-        this.root.unmount();
-        this.root = null;
+    mount(container, appRoot) {
+        if (!this.mounted) {
+            this.root = createRoot(container);
 
-        super.stop();
+            this.root.render(appRoot);
+        }
+    }
+
+    unmount() {
+        if (this.mounted) {
+            this.root.unmount();
+            this.root = null;
+        }
     }
 }
 

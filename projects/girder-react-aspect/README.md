@@ -151,7 +151,7 @@ Be sure to make the Aspect name to also be unique with the ids of all the elemen
 You can have as many React apps running at a time. Just be sure to give each a unique id.
 
 ```js
-import ReactAspect from '@reformjs/girder-react-aspect';
+import ReactAspect from '@reformjs/girder-react-aspect/18';
 import RootComponentA from './components/RootComponentA';
 import RootComponentB from './components/RootComponentB';
 
@@ -174,6 +174,91 @@ new Client()
 ```
 
 Each Aspect will create it's own div and will mount at that point.
+
+
+#### Settings
+
+This aspect does have settings it accepts. If you need to have the root component wrapped in a Component as the React app is starting up then using these settings will allow you to do that.
+
+The settings returned must be an object with a property key of "react". The value of this should be an array of objects. Each object can have two properties, "target" and "Component". The "target" property takes either a string or a Regular Expression and is used to identify the React Aspect which should have the Component applied to. If the target is not provided then the Component will be applied to every React Aspect. The "Component" should be a React component which must render children. Failure to do this will result in the React app not mounting correctly. If the component is not provided then that setting will be skipped.
+
+As an example, if you have a context that you need to setup you can use the settings to do that.
+
+```js
+import React, { createContext } from 'react';
+import ReactAspect from '@reformjs/girder-react-aspect/18';
+import RootComponent from './components/RootComponent';
+
+const myContext = createContext();
+
+class ThemeAspect extends Aspect {
+    constructor(theme) {
+        super('theme-aspect');
+
+        this.theme = theme;
+    }
+
+    settings() {
+        return {
+            react: [{
+                // No target means match all react apps.
+                Component: ({ children }) => (
+                    <myContext.Provider value={this.theme}>
+                        {children}
+                    </myContext.Provider>
+                )
+            }]
+        };
+    }
+}
+
+new Client()
+    .registerAspect(new ThemeAspect({ theme }))
+    .registerAspect(new ReactAspect('my-application', RootComponent))
+    .start();
+```
+
+These settings are a good way to create a reusable aspect to be used across many client apps.
+
+You can make this as complicated as you want.
+
+```jsx
+import React, { createContext } from 'react';
+import ReactAspect from '@reformjs/girder-react-aspect/18';
+import RootComponent from './components/RootComponent';
+
+class MyComplicatedAspect extends Aspect {
+    constructor() {
+        super('my-complicated-aspect');
+    }
+
+    settings() {
+        return {
+            react: [
+                {
+                    // Not target means it will match all three
+                    Component: ({ children }) => <span>{children}</span>,
+                },
+                {
+                    target: 'my-react-app-a',  // Will match just my-react-app-a
+                    Component: ({ children }) => <span>{children}</span>,
+                },
+                {
+                    target: /my-react/, // Will match only my-react-app-a and my-react-app-b
+                    Component: ({ children }) => <span>{children}</span>,
+                }
+            ],
+        };
+    }
+}
+
+new Client()
+    .registerAspect(new MyComplicatedAspect())
+    .registerAspect(new ReactAspect('my-react-app-a', RootComponent))
+    .registerAspect(new ReactAspect('my-react-app-b', RootComponent))
+    .registerAspect(new ReactAspect('app-c', RootComponent))
+    .start();
+```
 
 #### Accessing the Client Context
 
@@ -275,6 +360,10 @@ class IncrementClass extends Component {
 
 export default IncrementClass;
 ```
+
+#### Manual Mounting and Unmounting
+
+If you find yourself in the need to manually unmount a React Aspect without stopping the Client then you do have the option to do this. The React Aspects have class methods providing controls to do both of these actions. Bear in mind that utilizing these methods before the Client is fully started will result in failure or an inconsistent app state.
 
 ## __Examples__
 

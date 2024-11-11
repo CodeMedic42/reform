@@ -19,16 +19,14 @@ class ReduxAspect extends Aspect {
 
     settings() {
         return {
-            react: {
-                '*': {
-                    // eslint-disable-next-line react/prop-types
-                    Component: ({ children }) => (
-                        <Provider store={this.store}>
-                            {children}
-                        </Provider>
-                    )
-                }
-            }
+            react: [{
+                // eslint-disable-next-line react/prop-types
+                Component: ({ children }) => (
+                    <Provider store={this.store}>
+                        {children}
+                    </Provider>
+                )
+            }]
         };
     }
 

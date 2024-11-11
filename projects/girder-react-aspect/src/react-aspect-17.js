@@ -1,18 +1,29 @@
+/* eslint-disable class-methods-use-this */
 // eslint-disable-next-line react/no-deprecated
 import ReactDom, { unmountComponentAtNode } from 'react-dom';
 import ReactAspectBase from './react-aspect-base';
 
 class ReactAspect17 extends ReactAspectBase {
-    onStart(systemContext) {
-        const appRoot = super.onStart(systemContext);
+    constructor(aspectId, RootComponent) {
+        super(aspectId, RootComponent);
 
-        ReactDom.render(appRoot, this.container);
+        this.mounted = false;
     }
 
-    onStop() {
-        unmountComponentAtNode(this.container);
+    mount(container, appRoot) {
+        if (!this.mounted) {
+            ReactDom.render(appRoot, container);
+        }
 
-        super.stop();
+        this.mounted = true;
+    }
+
+    unmount(container) {
+        if (this.mounted) {
+            unmountComponentAtNode(container);
+        }
+
+        this.mounted = false;
     }
 }
 

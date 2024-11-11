@@ -207,8 +207,8 @@ describe('Client', () => {
             const barAspect = new Aspect('bar');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ settings, getContext, stopClient }) => {
-                    expect(settings.length).toBe(0);
+                .mockImplementation(({ getSettings, getContext, stopClient }) => {
+                    expect(isFunction(getSettings)).toBeTruthy();
                     expect(isFunction(getContext)).toBeTruthy();
                     expect(isFunction(stopClient)).toBeTruthy();
                 });
@@ -230,8 +230,9 @@ describe('Client', () => {
             const barSettingSpy = jest.spyOn(barAspect, 'settings').mockReturnValue({ foo: 42 });
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ settings, getContext, stopClient }) => {
-                    expect(settings?.[0]).toBe(42);
+                .mockImplementation(({ getSettings, getContext, stopClient }) => {
+                    const r = getSettings('foo');
+                    expect(r?.[0]).toBe(42);
                     expect(isFunction(getContext)).toBeTruthy();
                     expect(isFunction(stopClient)).toBeTruthy();
                 });

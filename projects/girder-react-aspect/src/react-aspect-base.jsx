@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import React from 'react';
 import Promise from 'bluebird';
 import isNil from 'lodash/isNil';
@@ -35,19 +36,38 @@ class ReactAspectBase extends Aspect {
 
         const settings = config.getSettings('react');
 
-        forEach(settings, (setting, settingId) => {
-            if (settingId !== '*' && settingId !== this.id) {
-                return;
-            }
-
-            const { Component } = setting;
+        forEach(settings, (setting) => {
+            const {
+                target,
+                Component,
+            } = setting ?? {};
 
             if (isNil(Component)) {
                 return;
             }
 
-            this.aspectComponents.push(Component);
+            let match = false;
+
+            if (target instanceof RegExp) {
+                match = target.test(this.id);
+            } else if (target === this.id) {
+                match = true;
+            } else if (isNil(target)) {
+                match = true;
+            }
+
+            if (match) {
+                this.aspectComponents.push(Component);
+            }
         });
+    }
+
+    mount() {
+        throw new Error('A React Aspect must have a mount method');
+    }
+
+    unmount() {
+        throw new Error('A React Aspect must have an unmount method');
     }
 
     onStart(systemContext) {
@@ -94,18 +114,22 @@ class ReactAspectBase extends Aspect {
 
         const { RootComponent } = this;
 
-        return (
+        const appRoot = (
             <girderReactContext.Provider value={reactContext}>
                 {build(this.aspectComponents, <RootComponent />)}
             </girderReactContext.Provider>
         );
+
+        this.mount(this.container, appRoot);
     }
 
     onStop() {
+        super.stop();
+
+        this.unmount(this.container);
+
         this.container.remove();
         this.container = null;
-
-        super.stop();
     }
 }
 

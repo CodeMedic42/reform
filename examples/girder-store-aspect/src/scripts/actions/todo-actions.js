@@ -1,9 +1,5 @@
 export function toggleAll(context, value) {
-    const {
-        mobx: {
-            getStore,
-        }
-    } = context;
+    const { getStore } = context.getAspect('mobx');
 
     const todoListStore = getStore('TodoListStore');
 

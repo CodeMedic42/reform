@@ -20,7 +20,7 @@ class ServiceAspect extends Aspect {
 
     // eslint-disable-next-line class-methods-use-this
     onInitialize(config) {
-        const{ getContext, getSettings } = config;
+        const{ getAspect, getSettings } = config;
 
         const configurations = [DEFAULT_CONFIG];
         const finalDefinitions = {};
@@ -53,12 +53,12 @@ class ServiceAspect extends Aspect {
 
         const controls = mapValues(
             finalDefinitions,
-            (definition) => definition.build(finalConfiguration, getContext),
+            (definition) => definition.build(finalConfiguration, {
+                getAspect
+            }),
         );
 
-        return {
-            controls
-        };
+        return controls;
     }
 }
 

@@ -18,5 +18,16 @@
 			"type": "pwa-node",
 			"sourceMaps": true,
 		},
+		{
+			"name": "Example Service Server",
+			"request": "launch",
+			"runtimeArgs": ["start:server"],
+			"runtimeExecutable": "pnpm",
+			"skipFiles": ["<node_internals>/**"],
+			"console": "integratedTerminal",
+			"cwd": "${workspaceFolder}/examples/girder-service-aspect",
+			"type": "pwa-node",
+			"sourceMaps": true,
+		},
     ]
 }

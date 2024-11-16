@@ -7,16 +7,19 @@ import axiosRetry from 'axios-retry';
 import mergeConfigs from './merge-configs';
 
 function replaceRouteParams(url, params = {}) {
-    const regex = /{(#[a-zA-Z. ]+)?[a-zA-Z. ]+.[a-zA-Z. ]}/g;
+    const regex = /(:\w+)/g;
     const placeholders = url.match(regex);
 
     return reduce(placeholders, (acc, placeholder) => {
-        const key = placeholder.substring(1, placeholder.length - 1);
+        const key = placeholder.substring(1, placeholder.length);
         const value = get(params, key, null);
 
-        if (!isNil(value)) {
-            acc.replaceAll(placeholder, value);
+        if (isNil(value)) {
+            throw new Error(`A param with key "${key}" was not found in the routeParams.`);
         }
+
+        // eslint-disable-next-line no-param-reassign
+        acc = acc.replaceAll(placeholder, value);
 
         return acc;
     }, url);
@@ -64,13 +67,13 @@ class Command {
         this.config = config;
     }
 
-    build(parentConfiguration, getContext) {
+    build(parentConfiguration, girderContext) {
         const commandConfig = mergeConfigs(
             parentConfiguration,
             this.config,
         );
 
-        return async (instanceConfiguration) => {
+        return async (instanceConfiguration = {}) => {
             let result = null;
             let error = null;
 
@@ -83,26 +86,26 @@ class Command {
                 instanceConfiguration,
             );
 
-            const context = getContext();
+            // const context = getContext();
 
             let finalSettings = settings;
 
             try {
-                finalSettings = runHooks(hooks.onBeforeRequest, context, settings);
+                finalSettings = runHooks(hooks.onBeforeRequest, girderContext, settings);
 
-                finalSettings = buildFinalConfig(finalSettings);
+                const instanceSettings = buildFinalConfig(finalSettings);
 
-                const instance = axios.create(finalSettings);
+                const instance = axios.create(instanceSettings);
 
                 axiosRetry(instance, retry);
 
-                result = await instance.request(settings);
+                result = await instance.request(instanceSettings);
 
-                runHooks(hooks.onSuccess, context, result, finalSettings);
+                runHooks(hooks.onSuccess, girderContext, result, finalSettings);
             } catch (caughtError) {
                 error = caughtError;
 
-                const handled = runHooksWithHandled(hooks.onFailure, context, error, finalSettings);
+                const handled = runHooksWithHandled(hooks.onFailure, girderContext, error, finalSettings);
 
                 if (!handled) {
                     throw caughtError;
@@ -111,7 +114,7 @@ class Command {
 
             const returnValue = [error, result];
 
-            runHooks(hooks.onAfterRequest, context, returnValue, finalSettings);
+            runHooks(hooks.onAfterRequest, girderContext, returnValue, finalSettings);
 
             return returnValue;
         };

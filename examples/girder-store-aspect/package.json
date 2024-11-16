@@ -1,6 +1,6 @@
 {
     "name": "girder-store-example",
-    "version": "0.0.3-rc.10",
+    "version": "0.0.3-rc.11",
     "private": true,
     "scripts": {
         "start": "webpack serve --config ./webpack/webpack.config.js --stats verbose"
@@ -15,9 +15,8 @@
         "@reformjs/girder-react-aspect": "workspace:*",
         "@reformjs/girder-store-aspect": "workspace:*",
         "lodash": "^4.17.21",
-        "mobx": "",
-        "mobx-react": "",
-        "mobx-state-tree": "",
+        "mobx-react": "9.1.1",
+        "mobx-state-tree": "6.0.1",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"

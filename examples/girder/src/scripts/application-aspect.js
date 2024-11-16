@@ -17,7 +17,7 @@ class ApplicationAspect extends Aspect {
 
     // eslint-disable-next-line class-methods-use-this
     onStart(context) {
-        context.messagePrint.print();
+        context.getAspect('messagePrint').print();
     }
 
     // eslint-disable-next-line class-methods-use-this

@@ -1,9 +1,9 @@
 import { useCallback, useContext } from 'react';
 import isFunction from 'lodash/isFunction';
-import systemContext from './girder-react-context';
+import reactContext from './girder-react-context';
 
 function useAspect(aspectId) {
-    return useContext(systemContext).useAspect(aspectId);
+    return useContext(reactContext).useAspect(aspectId);
 }
 
 function useAction(action) {
@@ -11,7 +11,7 @@ function useAction(action) {
         throw new Error('useAction must be provided a function.');
     }
 
-    const context = useContext(systemContext);
+    const context = useContext(reactContext);
 
     // The reason for using the
     return useCallback(

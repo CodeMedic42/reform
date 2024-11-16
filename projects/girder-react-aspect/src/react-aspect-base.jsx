@@ -70,8 +70,8 @@ class ReactAspectBase extends Aspect {
         throw new Error('A React Aspect must have an unmount method');
     }
 
-    onStart(systemContext) {
-        super.onStart(systemContext);
+    onStart(girderContext) {
+        super.onStart(girderContext);
 
         const mountId = `${this.id}-container`;
 
@@ -89,7 +89,7 @@ class ReactAspectBase extends Aspect {
 
         document.body.appendChild(container);
 
-        const useAspect = (aspectId) => systemContext[aspectId];
+        const useAspect = (aspectId) => girderContext.getAspect(aspectId);
 
         const useAction = (action, ...args) => {
             if (!isFunction(action)) {
@@ -97,7 +97,7 @@ class ReactAspectBase extends Aspect {
             }
 
             return Promise
-                .try(() => action(systemContext, ...args))
+                .try(() => action(girderContext, ...args))
                 // Swallow everything, the dev should get data from the store.
                 // The only thing they should know is the action finished.
                 .then(noop)

@@ -4,7 +4,11 @@
   "scripts": {
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream",
-    "test": "lerna run test --stream"
+    "test": "lerna run test --stream",
+    "start:examples:girder": "lerna run start --scope=girder-example",
+    "start:examples:girder-react": "lerna run start --scope=girder-react-example",
+    "start:examples:girder-store": "lerna run start --scope=girder-store-example",
+    "start:examples:girder-service": "lerna run start --scope=girder-service-example"
   },
   "dependencies": {
     "lerna": "^8.1.9"

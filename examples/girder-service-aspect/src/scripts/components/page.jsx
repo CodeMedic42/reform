@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { useAspect, useAction } from '@reformjs/girder-react-aspect';
 import isEmpty from 'lodash/isEmpty';
@@ -8,15 +8,26 @@ import { toggleAll } from '../actions/todo-actions';
 function Page() {
     const todoStore = useAspect('mobx').getStore('TodoListStore');
 
+    const {
+        todos: {
+            retrieve,
+            create,
+        }
+    } = useAspect('service');
+
+    useEffect(() => { retrieve() }, []);
+
     const [tempValue, setTempValue] = useState('');
 
     const handleClick = useCallback(() => {
-        todoStore.addTodo({
-            text: tempValue,
-            completed: false,
+        create({
+            data: {
+                text: tempValue,
+                completed: false,
+            }
+        }).then(() => {
+            setTempValue('');
         });
-
-        setTempValue('');
     });
 
     const handleToggleClick = useAction(toggleAll);

@@ -73,15 +73,17 @@ class Client {
             .then(() => {
                 const clientContext = {};
 
+                const getAspect = (aspectId) => {
+                    if (!this.isStarted()) {
+                        throw new Error('The client has not started yet.');
+                    }
+
+                    return clientContext[aspectId];
+                };
+
                 return promiseForEach(this.aspects, (aspect, aspectId) =>
                     Promise.resolve(aspect.onInitialize({
-                        getContext: () => {
-                            if (!this.isStarted()) {
-                                throw new Error('The client has not started yet.');
-                            }
-
-                            return clientContext;
-                        },
+                        getAspect,
                         getSettings: (settingId) =>  this.settings[settingId] || [],
                         stopClient: () => this.stop(),
                     }))
@@ -94,7 +96,9 @@ class Client {
                     this.status = 'started';
 
                     forEach(this.aspects, (aspect) => {
-                        aspect.onStart(clientContext);
+                        aspect.onStart({
+                            getAspect
+                        });
                     });
                 }).catch((error) => {
                     this.status = 'stopped';

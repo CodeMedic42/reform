@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/girder-store-aspect",
-  "version": "0.0.3-rc.11",
+  "version": "0.0.3-rc.12",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,11 @@
       "import": "./lib/store-aspect.js",
       "require": "./lib/store-aspect.js",
       "types": "./lib/store-aspect.d.ts"
+    },
+    "./fluxible": {
+      "import": "./lib/fluxible",
+      "require": "./lib/fluxible",
+      "types": "./lib/fluxible/index.d.ts"
     },
     "./mobx": {
       "import": "./lib/mobx",
@@ -45,7 +50,11 @@
   },
   "dependencies": {
     "@reformjs/girder": "workspace:*",
-    "lodash": "^4.17.21"
+    "fluxible": "^1.4.2",
+    "fluxible-addons-react": "^1.2.0",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@reformjs/eslint-config": "workspace:*",

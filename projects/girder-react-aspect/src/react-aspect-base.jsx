@@ -2,6 +2,7 @@
 import React from 'react';
 import Promise from 'bluebird';
 import isNil from 'lodash/isNil';
+import isArray from 'lodash/isArray';
 import noop from 'lodash/noop';
 import forEach from 'lodash/forEach';
 import reduce from 'lodash/reduce';
@@ -13,10 +14,10 @@ function build(aspectComponents, root) {
     return reduce(
         aspectComponents,
         (acc, Component) => (
-                <Component>
-                    {acc}
-                </Component>
-            ),
+            <Component>
+                {acc}
+            </Component>
+        ),
         root
     );
 }
@@ -37,28 +38,36 @@ class ReactAspectBase extends Aspect {
         const settings = config.getSettings('react');
 
         forEach(settings, (setting) => {
-            const {
-                target,
-                Component,
-            } = setting ?? {};
+            let componentDefinitions = setting;
 
-            if (isNil(Component)) {
-                return;
+            if (!isArray(componentDefinitions)) {
+                componentDefinitions = [componentDefinitions];
             }
 
-            let match = false;
+            forEach(componentDefinitions, (componentDefinition) => {
+                const {
+                    target,
+                    Component,
+                } = componentDefinition ?? [];
 
-            if (target instanceof RegExp) {
-                match = target.test(this.id);
-            } else if (target === this.id) {
-                match = true;
-            } else if (isNil(target)) {
-                match = true;
-            }
+                if (isNil(Component)) {
+                    return;
+                }
 
-            if (match) {
-                this.aspectComponents.push(Component);
-            }
+                let match = false;
+
+                if (target instanceof RegExp) {
+                    match = target.test(this.id);
+                } else if (target === this.id) {
+                    match = true;
+                } else if (isNil(target)) {
+                    match = true;
+                }
+
+                if (match) {
+                    this.aspectComponents.push(Component);
+                }
+            });
         });
     }
 

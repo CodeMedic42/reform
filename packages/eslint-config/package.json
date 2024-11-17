@@ -1,6 +1,6 @@
 {
   "name": "@reformjs/eslint-config",
-  "version": "0.0.3-rc.11",
+  "version": "0.0.3-rc.12",
   "description": "Shared eslint rules",
   "private": true,
   "main": "index.js",

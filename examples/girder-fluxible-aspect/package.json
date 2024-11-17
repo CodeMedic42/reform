@@ -1,0 +1,42 @@
+{
+    "name": "girder-fluxible-example",
+    "version": "0.0.3-rc.11",
+    "private": true,
+    "scripts": {
+        "start": "webpack serve --config ./webpack/webpack.config.js --stats verbose"
+    },
+    "browserslist": [
+        "> 0.25%",
+        "not dead"
+    ],
+    "author": "Christian Micle <cam42.dev@outlook.com>",
+    "dependencies": {
+        "@reformjs/girder": "workspace:*",
+        "@reformjs/girder-react-aspect": "workspace:*",
+        "@reformjs/girder-store-aspect": "workspace:*",
+        "fluxible": "^1.4.2",
+        "fluxible-addons-react": "^1.2.0",
+        "lodash": "^4.17.21",
+        "mobx-react": "9.1.1",
+        "mobx-state-tree": "6.0.1",
+        "prop-types": "^15.8.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "shortid": "^2.2.15"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.21.4",
+        "@babel/preset-react": "^7.18.6",
+        "babel-loader": "^9.1.2",
+        "css-loader": "^6.7.3",
+        "file-loader": "^6.2.0",
+        "html-webpack-plugin": "^5.5.0",
+        "portfinder": "^1.0.32",
+        "process": "^0.11.10",
+        "sass-loader": "^13.2.0",
+        "style-loader": "^3.3.2",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.1",
+        "webpack-dev-server": "^4.11.1"
+    }
+}

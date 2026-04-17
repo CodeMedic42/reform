@@ -1,0 +1,67 @@
+.ra-date-field {
+    &::before {
+        content: attr(data-text);
+        visibility: hidden;
+    }
+
+    input {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        border: 0;
+        margin: 0;
+        padding: inherit;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: inherit;
+        outline: none;
+    }
+
+    &.to-date {
+        input {
+            text-align: right;
+        }
+    }
+}
+
+.ra-date-base {
+    width: 100%;
+
+    &.fit-to {
+        display: inline-block;
+        width: initial;
+    }
+}
+
+.ra-date-range-inputs {
+    align-items: self-start;
+}
+
+.ra-date-range-input {
+    .ra-input-content {
+        overflow: hidden;
+        margin-left: 5px;
+
+        .to-date {
+            position: relative;
+        }
+
+        .ra-input-field {
+            margin-right: 5px;
+        }
+
+        .ra-date-range-dash {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            vertical-align: middle;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(-100%);
+            line-height: 100%;
+        }
+    }
+}

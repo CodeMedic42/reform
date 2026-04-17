@@ -1,0 +1,180 @@
+.ra-icon {
+  &.size-2xs {
+      font-size: 10px;
+  }
+
+  &.size-xs {
+      font-size: 12px;
+  }
+
+  &.size-sm {
+      font-size: 14px;
+  }
+
+  &.size-md {
+      font-size: 16px;
+  }
+
+  &.size-lg {
+      font-size: 18px;
+  }
+
+  &.size-xl {
+      font-size: 20px;
+  }
+
+  &.size-2xl {
+      font-size: 22px;
+  }
+}
+
+@mixin _2xsIconBox {
+  font-size: 10px;
+
+  &:not(.align-to-icon),
+  &.align-to-icon > .border-target {
+      height: 24px;
+      width: 24px;
+  }
+}
+
+@mixin xsIconBox {
+  font-size: 12px;
+
+  &:not(.align-to-icon),
+  &.align-to-icon > .border-target {
+      height: 28px;
+      width: 28px;
+  }
+}
+
+@mixin smIconBox {
+  font-size: 16px;
+
+  &:not(.align-to-icon),
+  &.align-to-icon > .border-target {
+      height: 32px;
+      width: 32px;
+  }
+}
+
+@mixin mdIconBox {
+  font-size: 20px;
+
+  &:not(.align-to-icon),
+  &.align-to-icon > .border-target {
+      height: 40px;
+      width: 40px;
+  }
+}
+
+@mixin lgIconBox {
+  font-size: 24px;
+
+  &:not(.align-to-icon),
+  &.align-to-icon > .border-target {
+      height: 48px;
+      width: 48px;
+  }
+}
+
+@mixin xlIconBox {
+  font-size: 28px;
+
+  &:not(.align-to-icon),
+  &.align-to-icon > .border-target {
+      height: 56px;
+      width: 56px;
+  }
+}
+
+@mixin _2xlIconBox {
+  font-size: 32px;
+
+  &:not(.align-to-icon),
+  &.align-to-icon > .border-target {
+      height: 60px;
+      width: 60px;
+  }
+}
+
+.ra-icon-box {
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  padding: 0;
+  position: relative;
+  text-align: center;
+  display: inline-flex;
+  vertical-align: bottom;
+  z-index: 3;
+  // transform-style: preserve-3d;
+
+  > svg {
+      z-index: 2;
+  }
+
+  &.shp-circle {
+      border-radius: 50%;
+
+      > span {
+          border-radius: 50%;
+      }
+  }
+
+  &.shp-square {
+      border-radius: 4px;
+
+      > span {
+          border-radius: 4px;
+      }
+  }
+
+  &.align-to-icon {
+      > .border-target {
+          position: absolute;
+          background-color: inherit;
+          z-index: 1;
+          pointer-events: none;
+      }
+  }
+
+  &.size-2xs {
+      @include _2xsIconBox();
+  }
+
+  &.size-xs {
+      @include xsIconBox();
+  }
+
+  &.size-sm {
+      @include smIconBox();
+  }
+
+  &.size-md {
+      @include mdIconBox();
+  }
+
+  &.size-lg {
+      @include lgIconBox();
+  }
+
+  &.size-xl {
+      @include xlIconBox();
+  }
+
+  &.size-2xl {
+      @include _2xlIconBox();
+  }
+}
+
+.ra-icon-btn {
+  outline: none;
+  font: inherit;
+  cursor: pointer;
+
+  &:disabled {
+      cursor: not-allowed;
+  }
+}

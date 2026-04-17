@@ -6,11 +6,11 @@ import getMonth from 'date-fns/getMonth';
 import getYear from 'date-fns/getYear';
 import isEqual from 'date-fns/isEqual';
 /* eslint-enable import/no-duplicates */
-import isNil from 'lodash/isNil';
-import PickerMonth from './picker-month';
-import PropTypes from '../../../common/prop-types';
-import buildId from '../../../common/build-id';
-import InfiniteList, { InfiniteListItems } from '../../arrangement/infinite-list';
+import { isNil } from 'lodash-es';
+import PickerMonth from './picker-month.js';
+import PropTypes from '../../../common/prop-types.js';
+import buildId from '../../../common/build-id.js';
+import InfiniteList, { InfiniteListItems } from '../../arrangement/infinite-list/index.js';
 
 function getDateArray(date) {
     const day = getDate(date);

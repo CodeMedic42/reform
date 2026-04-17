@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 import isFunction from 'lodash/isFunction';
-import Client from './client';
-import Aspect from './aspect';
+import Client from './client.js';
+import Aspect from './aspect.js';
 
 describe('Client', () => {
     describe('Constructor', () => {

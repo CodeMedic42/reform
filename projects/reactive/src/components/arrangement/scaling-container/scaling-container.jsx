@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import PropTypes from '../../../common/prop-types';
+import PropTypes from '../../../common/prop-types.js';
 
 function ScalingContainer(props) {
     const {

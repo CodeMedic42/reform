@@ -2,8 +2,8 @@ import React, {
     Component,
     createRef,
 } from 'react';
-import isNil from 'lodash/isNil';
-import findScrollingContainer from '../../../common/find-scrolling-container';
+import { isNil } from 'lodash-es';
+import findScrollingContainer from '../../../common/find-scrolling-container.js';
 
 // let lastCalledFor: Element | null = null;
 // let lastCalledForContainer: Element | null = null;
@@ -98,7 +98,7 @@ class ExternalBoundary extends Component<ExternalBoundaryPropsInt> {
                 this.clickListenerUpdate = this.applyClick;
             }
         } else if (!isNil(this.clickListenerUpdate)) {
-            this.clickListenerUpdate();
+            this.clickListenerUpdate!();
 
             this.clickListenerUpdate = null;
         }
@@ -108,7 +108,7 @@ class ExternalBoundary extends Component<ExternalBoundaryPropsInt> {
                 this.wheelListenerUpdate = this.applyWheel();
             }
         } else if (!isNil(this.wheelListenerUpdate)) {
-            this.wheelListenerUpdate();
+            this.wheelListenerUpdate!();
 
             this.wheelListenerUpdate = null;
         }
@@ -116,13 +116,13 @@ class ExternalBoundary extends Component<ExternalBoundaryPropsInt> {
 
     componentWillUnmount() {
         if (!isNil(this.clickListenerUpdate)) {
-            this.clickListenerUpdate();
+            this.clickListenerUpdate!();
 
             this.clickListenerUpdate = null;
         }
 
         if (!isNil(this.wheelListenerUpdate)) {
-            this.wheelListenerUpdate();
+            this.wheelListenerUpdate!();
 
             this.wheelListenerUpdate = null;
         }

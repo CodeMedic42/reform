@@ -1,8 +1,8 @@
 const pti = require('puppeteer-to-istanbul');
-const RunContext = require('./run-context');
-const startServer = require('./harness-server/start-server');
-const startPuppeteer = require('./harness-server/start-puppeteer');
-const HarnessControl = require('./harness-control');
+const RunContext = require('./run-context.js');
+const startServer = require('./harness-server/start-server.js');
+const startPuppeteer = require('./harness-server/start-puppeteer.js');
+const HarnessControl = require('./harness-control.js');
 
 async function initialize() {
     const runContext = new RunContext();

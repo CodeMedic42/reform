@@ -1,3 +1,3 @@
-import PendoAspect from './pendo-aspect';
+import PendoAspect from './pendo-aspect.js';
 
 export default PendoAspect;

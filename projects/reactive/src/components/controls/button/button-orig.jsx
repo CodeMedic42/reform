@@ -2,13 +2,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import {
     schemeColorPropType,
     getSchemeColorClasses,
-} from '../../../common/color-list';
+} from '../../../common/color-list.js';
 // import Icon from '../icon';
-import PropTypes from '../../../common/prop-types';
+import PropTypes from '../../../common/prop-types.js';
 
 class Button extends PureComponent {
     static propTypes = {

@@ -1,0 +1,342 @@
+@mixin textSizeXL($includeLineHeight: true) {
+    font-size: 18px;
+
+    @if $includeLineHeight {
+        line-height: 22px;
+    }
+}
+
+@mixin textSizeLG($includeLineHeight: true) {
+    font-size: 16px;
+
+    @if $includeLineHeight {
+        line-height: 20px;
+    }
+}
+
+@mixin textSizeMD($includeLineHeight: true) {
+    font-size: 15px;
+
+    @if $includeLineHeight {
+        line-height: 19px;
+    }
+}
+
+@mixin textSizeSM($includeLineHeight: true) {
+    font-size: 14px;
+
+    @if $includeLineHeight {
+        line-height: 18px;
+    }
+}
+
+@mixin textSizeXS($includeLineHeight: true) {
+    font-size: 12px;
+
+    @if $includeLineHeight {
+        line-height: 16px;
+    }
+}
+
+.ra-typography {
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    padding: 0;
+
+    &.inline {
+        display: inline-block;
+    }
+}
+
+@mixin headingLevel1 {
+    font-size: 56px;
+    line-height: 64px;
+}
+
+@mixin headingLevel2 {
+    font-size: 48px;
+    line-height: 56px;
+}
+
+@mixin headingLevel3 {
+    font-size: 40px;
+    line-height: 48px;
+}
+
+@mixin headingLevel4 {
+    font-size: 32px;
+    line-height: 40px;
+}
+
+@mixin headingLevel5 {
+    font-size: 28px;
+    line-height: 34px;
+}
+
+.ra-heading {
+    color: $--clr-g-90;
+    font-weight: $--font-weight-bold;
+    margin-bottom: 4px;
+
+    &.level-1 {
+        @include headingLevel1;
+    }
+
+    &.level-2 {
+        @include headingLevel2;
+    }
+
+    &.level-3 {
+        @include headingLevel3;
+    }
+
+    &.level-4 {
+        @include headingLevel4;
+    }
+
+    &.level-5 {
+        @include headingLevel5;
+    }
+
+    // Responsive logic was determined with very little information.
+    // It was determined using the Page Title spec which stated
+    // SubHeading 2 => SubHeading 5 at mobile size(less than tablet)
+    // If there is ever anything which conflicts with this then
+    // it needs to be reevaluated.
+    &.responsive {
+        &.level-1 {
+            @include headingLevel4;
+        }
+
+        &.level-2,
+        &.level-3,
+        &.level-4 {
+            @include headingLevel5;
+        }
+    }
+}
+
+@mixin subHeadingLevel1 {
+    font-size: 28px;
+    line-height: 34px;
+}
+
+@mixin subHeadingLevel2 {
+    font-size: 24px;
+    line-height: 30px;
+}
+
+@mixin subHeadingLevel3 {
+    font-size: 22px;
+    line-height: 28px;
+}
+
+@mixin subHeadingLevel4 {
+    font-size: 20px;
+    line-height: 24px;
+}
+
+@mixin subHeadingLevel5 {
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.ra-sub-heading {
+    color: $--clr-g-90;
+    font-weight: $--font-weight-bold;
+
+    &.level-1 {
+        @include subHeadingLevel1;
+    }
+
+    &.level-2 {
+        @include subHeadingLevel2;
+    }
+
+    &.level-3 {
+        @include subHeadingLevel3;
+    }
+
+    &.level-4 {
+        @include subHeadingLevel4;
+    }
+
+    &.level-5 {
+        @include subHeadingLevel5;
+    }
+
+    // Responsive logic was determined with very little information.
+    // It was determined using the Page Title spec which stated
+    // SubHeading 2 => SubHeading 5 at mobile size(less than tablet)
+    // If there is ever anything which conflicts with this then
+    // it needs to be reevaluated.
+    &.responsive {
+        &.level-1 {
+            @include subHeadingLevel4;
+        }
+
+        &.level-2,
+        &.level-3,
+        &.level-4 {
+            @include subHeadingLevel5;
+        }
+    }
+}
+
+.ra-paragraph {
+    color: $--clr-g-80;
+    font-weight: $--font-weight-normal;
+
+    &.size-sm {
+        font-size: 16px;
+        line-height: 22px;
+
+        &:not(:last-of-type) {
+            margin-bottom: 24px;
+        }
+    }
+
+    &.size-md {
+        font-size: 18px;
+        line-height: 24px;
+
+        &:not(:last-of-type) {
+            margin-bottom: 32px;
+        }
+    }
+
+    &.size-lg {
+        font-size: 20px;
+        line-height: 26px;
+
+        &:not(:last-of-type) {
+            margin-bottom: 32px;
+        }
+    }
+
+    ~ .ra-paragraph {
+        margin-top: 16px;
+    }
+}
+
+.ra-caption {
+    font-size: 14px;
+    line-height: 18px;
+    color: $--clr-g-90;
+
+    .ra-caption-label {
+        font-weight: $--font-weight-bold;
+    }
+
+    .ra-caption-body {
+        font-weight: $--font-weight-normal;
+    }
+}
+
+.ra-overline {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: $--font-weight-semi-bold;
+    color: $--clr-g-60;
+}
+
+.ra-text {
+    font-weight: $--font-weight-normal;
+
+    &.apply-margin {
+        margin-bottom: 4px;
+    }
+
+    &.size-xl {
+        @include textSizeXL();
+    }
+
+    &.size-lg {
+        @include textSizeLG();
+    }
+
+    &.size-md {
+        @include textSizeMD();
+    }
+
+    &.size-sm {
+        @include textSizeSM();
+    }
+
+    &.size-xs {
+        @include textSizeXS();
+    }
+
+    &.single-line {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+        display: inline-block;
+    }
+}
+
+.weight-medium {
+    font-weight: $--font-weight-normal;
+}
+
+.weight-normal {
+    font-weight: $--font-weight-normal;
+}
+
+.weight-semi-bold {
+    font-weight: $--font-weight-semi-bold;
+}
+
+.weight-bold {
+    font-weight: $--font-weight-bold;
+}
+
+.ra-text-list {
+    padding-left: 25px;
+    margin: 0;
+}
+
+@media only screen and (min-width: $-ra-config-tablet-resp-breakpoint) {
+    .ra-heading {
+        &.responsive {
+            &.level-1 {
+                @include headingLevel1;
+            }
+
+            &.level-2 {
+                @include headingLevel2;
+            }
+
+            &.level-3 {
+                @include headingLevel3;
+            }
+
+            &.level-4 {
+                @include headingLevel4;
+            }
+        }
+    }
+
+
+    .ra-sub-heading {
+        &.responsive {
+            &.level-1 {
+                @include subHeadingLevel1;
+            }
+
+            &.level-2 {
+                @include subHeadingLevel2;
+            }
+
+            &.level-3 {
+                @include subHeadingLevel3;
+            }
+
+            &.level-4 {
+                @include subHeadingLevel4;
+            }
+        }
+    }
+}

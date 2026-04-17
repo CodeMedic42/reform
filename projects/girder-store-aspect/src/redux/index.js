@@ -1,3 +1,3 @@
-import ReduxAspect from './redux-aspect';
+import ReduxAspect from './redux-aspect.js';
 
 export default ReduxAspect;

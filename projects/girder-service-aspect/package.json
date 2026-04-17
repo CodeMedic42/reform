@@ -2,14 +2,12 @@
   "name": "@reformjs/girder-service-aspect",
   "version": "0.0.3-rc.12",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "build:push": "ncp ./build ./lib ; rimraf build",
-    "build:commit": "rimraf lib ; pnpm build:push",
-    "build:clean": "rimraf build",
-    "compile:js": "tsc",
-    "build:compile": "pnpm compile:js",
-    "build": "pnpm build:clean ; pnpm build:compile ; pnpm build:commit",
+    "clean": "rimraf dist",
+    "build:js": "pnpm rollup --config rollup.config.mjs",
+    "build": "npm run clean && npm run build:js",
     "lint": "npx eslint ./src"
   },
   "keywords": [],
@@ -17,16 +15,15 @@
   "license": "ISC",
   "exports": {
     ".": {
-      "import": "./lib",
-      "require": "./lib",
-      "types": "./lib/index.d.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
-    "/lib"
+    "/dist"
   ],
   "eslintConfig": {
-    "extends": "@reformjs/eslint-config"
+    "extends": "@config/eslint-config"
   },
   "dependencies": {
     "@reformjs/girder": "workspace:*",
@@ -35,8 +32,8 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
-    "ncp": "2.0.0",
+    "@config/eslint-config": "workspace:*",
+    "@config/rollup-config": "workspace:*",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"
   },

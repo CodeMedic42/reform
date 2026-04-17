@@ -3,8 +3,8 @@ const path = require('path');
 // const dedent = require('ts-dedent');
 const { scan } = require('picomatch');
 const slash = require('slash');
-const { normalizeStoryPath } = require('./paths');
-const globToRegexp = require('./glob-to-regexp');
+const { normalizeStoryPath } = require('./paths.js');
+const globToRegexp = require('./glob-to-regexp.js');
 
 const DEFAULT_TITLE_PREFIX = '';
 const DEFAULT_FILES = '**/*.stories.@(mdx|tsx|ts|jsx|js)';

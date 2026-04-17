@@ -1,0 +1,183 @@
+/* stylelint-disable no-descending-specificity */
+.ra-chip {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  font-weight: $--font-weight-bold;
+  border: 0;
+  float: initial;
+  width: initial;
+  height: initial;
+  max-width: 100%;
+
+  &:focus,
+  &:active,
+  &:hover {
+      outline: none;
+      box-shadow: none;
+  }
+
+  * {
+      color: inherit;
+  }
+
+  &.ra-removable-chip {
+      .remove-btn {
+          font-size: inherit;
+          border: none;
+          outline: none;
+          background-color: transparent;
+          height: initial;
+          width: initial;
+          padding: 0;
+          margin: 0;
+          line-height: inherit;
+          cursor: pointer;
+
+          svg {
+              vertical-align: middle;
+          }
+      }
+  }
+
+  &.size-xs {
+      @include textSizeXS();
+
+      min-height: 16px;
+      padding-left: 4px;
+      padding-right: 4px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+
+      > .ra-icon:first-child {
+          margin-right: 4px;
+      }
+
+      > .ra-icon:last-child,
+      &.ra-removable-chip .remove-btn {
+          margin-left: 4px;
+      }
+  }
+
+  &.size-sm {
+      @include textSizeXS();
+
+      min-height: 18px;
+      padding-left: 4px;
+      padding-right: 4px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+
+      > .ra-icon:first-child {
+          margin-right: 4px;
+      }
+
+      > .ra-icon:last-child,
+      &.ra-removable-chip .remove-btn {
+          margin-left: 4px;
+      }
+  }
+
+  &.size-md {
+      @include textSizeSM();
+
+      min-height: 20px;
+      padding-left: 4px;
+      padding-right: 4px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+
+      > .ra-icon:first-child {
+          margin-right: 6px;
+      }
+
+      > .ra-icon:last-child,
+      &.ra-removable-chip .remove-btn {
+          margin-left: 6px;
+      }
+  }
+
+  &.size-lg {
+      @include textSizeSM();
+
+      min-height: 24px;
+      padding-left: 6px;
+      padding-right: 6px;
+      padding-top: 4px;
+      padding-bottom: 3px;
+
+      > .ra-icon:first-child {
+          margin-right: 6px;
+      }
+
+      > .ra-icon:last-child,
+      &.ra-removable-chip .remove-btn {
+          margin-left: 6px;
+      }
+  }
+
+  &.size-xl {
+      @include textSizeMD();
+
+      min-height: 28px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+
+      > .ra-icon:first-child {
+          margin-right: 6px;
+      }
+
+      > .ra-icon:last-child,
+      &.ra-removable-chip .remove-btn {
+          margin-left: 6px;
+      }
+  }
+
+  &.variant-rectangle {
+      border-radius: 2px;
+  }
+
+  &.variant-pill {
+      border-radius: 100px;
+
+      &.ra-removable-chip {
+          .remove-btn.circle-icon {
+              margin-right: -2px;
+          }
+      }
+
+      &.size-xs {
+          padding: 0 5px;
+      }
+
+      &.size-sm {
+          padding: 0 6px;
+      }
+
+      &.size-md {
+          padding: 0 6px;
+      }
+
+      &.size-lg {
+          padding: 0 8px;
+
+          &.ra-removable-chip {
+              .remove-btn.circle-icon {
+                  margin-right: -3px;
+              }
+          }
+      }
+
+      &.size-xl {
+          padding: 0 12px;
+
+          &.ra-removable-chip {
+              .remove-btn.circle-icon {
+                  margin-right: -5px;
+              }
+          }
+      }
+  }
+}

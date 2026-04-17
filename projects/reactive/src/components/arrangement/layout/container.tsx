@@ -1,10 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import isString from 'lodash/isString';
-import isEmpty from 'lodash/isEmpty';
-import forEach from 'lodash/forEach';
+import { isNil, isString, isEmpty, forEach } from 'lodash-es';
 
 type GutterValueType = string;
 type gutterType = GutterValueType | GutterValueType[];
@@ -54,7 +51,7 @@ function buildGutterClassGroup(acc: AccInt, gutter?: gutterType, additionalPrefi
     if (isString(gutter)) {
         buildGutterClassName(acc, gutter, additionalPrefix, '');
     } else {
-        forEach(gutter as GutterValueType[], (valueItem, index) => {
+        forEach(gutter as GutterValueType[], (valueItem: GutterValueType, index: number) => {
             let size = '';
 
             if (index > 0) {

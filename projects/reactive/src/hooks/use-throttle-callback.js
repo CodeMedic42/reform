@@ -1,6 +1,5 @@
 import { useMemo, useRef } from 'react';
-import isNil from 'lodash/isNil';
-import throttle from 'lodash/throttle';
+import { isNil, throttle } from 'lodash-es';
 
 function useThrottleCallback(cb, dep, wait, options) {
     const old = useRef();

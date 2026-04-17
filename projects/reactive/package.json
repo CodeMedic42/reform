@@ -2,142 +2,106 @@
   "name": "@reformjs/reactive",
   "version": "0.0.3-rc.12",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "private": true,
   "scripts": {
-    "run": "node ./run-web-unit/run.js",
-    "wunit": "wunit -h SelectInput -p '{\"value\":\"Foo\"}'",
-    "test-broken": "jest",
-    "build:push": "ncp ./build ./lib ; rimraf build",
-    "build:commit": "rimraf lib ; npm run build:push",
-    "build:clean": "rimraf build",
-    "compile:js": "tsc",
-    "watch:js": "npm run build:clean ; npm run compile:js ; npm run build:push",
-    "compile:styles": "make-dir ./build/styles/scss && ncp ./src/styles ./build/styles/scss && sass ./build/styles/scss/index.scss:./build/styles/css/index.css",
-    "copy:styles": "ncp ./src/styles ./build/styles/scss",
-    "watch:styles": "npm run build:clean ; npm run compile:styles ; npm run build:push",
-    "compile:assets": "ncp ./src/assets ./build/assets",
-    "watch:assets": "npm run build:clean ; npm run compile:assets ; npm run build:push",
-    "build:compile": "npm run compile:js && npm run compile:styles && npm run compile:assets",
-    "build": "npm run build:clean ; npm run build:compile ; npm run build:commit",
-    "start": "npm-watch",
+    "clean": "rimraf dist",
+    "build:js": "pnpm rollup --config rollup.config.mjs",
+    "build:styles": "make-dir ./dist/styles/scss && ncp ./src/styles ./dist/styles/scss && sass ./dist/styles/scss/index.scss:./dist/styles/css/index.css",
+    "build:assets": "ncp ./src/assets ./dist/assets",
+    "build": "npm run clean && npm run build:js && npm run build:styles && npm run build:assets",
     "lint": "npx eslint ./src"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "files": [
-    "/lib"
+    "/dist"
   ],
   "exports": {
     ".": {
-      "import": "./lib",
-      "require": "./lib",
-      "types": "./lib/index.d.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     },
     "./arrangement/infinite-list": {
-      "import": "./lib/components/arrangement/infinite-list",
-      "require": "./lib/components/arrangement/infinite-list",
-      "types": "./lib/components/arrangement/infinite-list/index.d.ts"
+      "import": "./dist/components/arrangement/infinite-list/index.mjs",
+      "types": "./dist/components/arrangement/infinite-list/index.d.ts"
     },
     "./arrangement/layout": {
-      "import": "./lib/components/arrangement/layout",
-      "require": "./lib/components/arrangement/layout",
-      "types": "./lib/components/arrangement/layout/index.d.ts"
+      "import": "./dist/components/arrangement/layout/index.mjs",
+      "types": "./dist/components/arrangement/layout/index.d.ts"
     },
     "./arrangement/scaling-container": {
-      "import": "./lib/components/arrangement/scaling-container",
-      "require": "./lib/components/arrangement/scaling-container",
-      "types": "./lib/components/arrangement/scaling-container/index.d.ts"
+      "import": "./dist/components/arrangement/scaling-container/index.mjs",
+      "types": "./dist/components/arrangement/scaling-container/index.d.ts"
     },
     "./arrangement/tab-bar": {
-      "import": "./lib/components/arrangement/tab-bar",
-      "require": "./lib/components/arrangement/tab-bar",
-      "types": "./lib/components/arrangement/tab-bar/index.d.ts"
+      "import": "./dist/components/arrangement/tab-bar/index.mjs",
+      "types": "./dist/components/arrangement/tab-bar/index.d.ts"
     },
     "./arrangement/tray": {
-      "import": "./lib/components/arrangement/tray",
-      "require": "./lib/components/arrangement/tray",
-      "types": "./lib/components/arrangement/tray/index.d.ts"
+      "import": "./dist/components/arrangement/tray/index.mjs",
+      "types": "./dist/components/arrangement/tray/index.d.ts"
     },
     "./controls/button": {
-      "import": "./lib/components/controls/button",
-      "require": "./lib/components/controls/button",
-      "types": "./lib/components/controls/button/index.d.ts"
+      "import": "./dist/components/controls/button/index.mjs",
+      "types": "./dist/components/controls/button/index.d.ts"
     },
     "./controls/date-picker": {
-      "import": "./lib/components/controls/date-picker",
-      "require": "./lib/components/controls/date-picker",
-      "types": "./lib/components/controls/date-picker/index.d.ts"
+      "import": "./dist/components/controls/date-picker/index.mjs",
+      "types": "./dist/components/controls/date-picker/index.d.ts"
     },
     "./controls/drop-down": {
-      "import": "./lib/components/controls/drop-down",
-      "require": "./lib/components/controls/drop-down",
-      "types": "./lib/components/controls/drop-down/index.d.ts"
+      "import": "./dist/components/controls/drop-down/index.mjs",
+      "types": "./dist/components/controls/drop-down/index.d.ts"
     },
     "./controls/menu": {
-      "import": "./lib/components/controls/menu",
-      "require": "./lib/components/controls/menu",
-      "types": "./lib/components/controls/menu/index.d.ts"
+      "import": "./dist/components/controls/menu/index.mjs",
+      "types": "./dist/components/controls/menu/index.d.ts"
     },
     "./display/spinner": {
-      "import": "./lib/components/display/spinner",
-      "require": "./lib/components/display/spinner",
-      "types": "./lib/components/display/spinner/index.d.ts"
+      "import": "./dist/components/display/spinner/index.mjs",
+      "types": "./dist/components/display/spinner/index.d.ts"
     },
-    "./inputs/check-box": {
-      "import": "./lib/components/inputs/check-box",
-      "require": "./lib/components/inputs/check-box",
-      "types": "./lib/components/inputs/check-box/index.d.ts"
+    "./fields/date-input-field": {
+      "import": "./dist/components/fields/date-input-field/index.mjs",
+      "types": "./dist/components/fields/date-input-field/index.d.ts"
     },
-    "./inputs/date-input": {
-      "import": "./lib/components/inputs/date-input",
-      "require": "./lib/components/inputs/date-input",
-      "types": "./lib/components/inputs/date-input/index.d.ts"
+    "./fields/date-range-input-field": {
+      "import": "./dist/components/fields/date-range-input-field/index.mjs",
+      "types": "./dist/components/fields/date-range-input-field/index.d.ts"
     },
-    "./inputs/date-range-input": {
-      "import": "./lib/components/inputs/date-range-input",
-      "require": "./lib/components/inputs/date-range-input",
-      "types": "./lib/components/inputs/date-range-input/index.d.ts"
+    "./fields/multi-select-input-field": {
+      "import": "./dist/components/fields/multi-select-input-field/index.mjs",
+      "types": "./dist/components/fields/multi-select-input-field/index.d.ts"
     },
-    "./inputs/multi-select-input": {
-      "import": "./lib/components/inputs/multi-select-input",
-      "require": "./lib/components/inputs/multi-select-input",
-      "types": "./lib/components/inputs/multi-select-input/index.d.ts"
+    "./fields/select-input-field": {
+      "import": "./dist/components/fields/select-input-field/index.mjs",
+      "types": "./dist/components/fields/select-input-field/index.d.ts"
     },
-    "./inputs/select-input": {
-      "import": "./lib/components/inputs/select-input/index.js",
-      "require": "./lib/components/inputs/select-input/index.js",
-      "types": "./lib/components/inputs/select-input/index.d.ts"
+    "./fields/select-text-input-field": {
+      "import": "./dist/components/fields/select-text-input-field/index.mjs",
+      "types": "./dist/components/fields/select-text-input-field/index.d.ts"
     },
-    "./inputs/select-text-input": {
-      "import": "./lib/components/inputs/select-text-input",
-      "require": "./lib/components/inputs/select-text-input",
-      "types": "./lib/components/inputs/select-text-input/index.d.ts"
+    "./fields/text-input-field": {
+      "import": "./dist/components/fields/text-input-field/index.mjs",
+      "types": "./dist/components/fields/text-input-field/index.d.ts"
     },
-    "./inputs/text-input": {
-      "import": "./lib/components/inputs/text-input",
-      "require": "./lib/components/inputs/text-input",
-      "types": "./lib/components/inputs/text-input/index.d.ts"
+    "./form": {
+      "import": "./dist/components/form/index.mjs",
+      "types": "./dist/components/form/index.d.ts"
     },
-    "./inputs/base/input-container": {
-      "import": "./lib/components/inputs/new-base/input-container",
-      "require": "./lib/components/inputs/new-base/input-container",
-      "types": "./lib/components/inputs/new-base/input-container/index.d.ts"
-    },
-    "./inputs/base/input-label": {
-      "import": "./lib/components/inputs/new-base/input-label",
-      "require": "./lib/components/inputs/new-base/input-label",
-      "types": "./lib/components/inputs/new-base/input-label/index.d.ts"
+    "./workflow/async-value": {
+      "import": "./dist/components/workflow/async-value/index.mjs",
+      "types": "./dist/components/workflow/async-value/index.d.ts"
     },
     "./class-builders/hidden": {
-      "import": "./lib/class-builders/hidden",
-      "require": "./lib/class-builders/hidden",
-      "types": "./lib/class-builders/hidden.d.ts"
+      "import": "./dist/class-builders/hidden.mjs",
+      "types": "./dist/class-builders/hidden.d.ts"
     },
     "./styles/": {
-      "import": "./lib/styles/",
-      "require": "./lib/styles/"
+      "import": "./dist/styles/"
     }
   },
   "watch": {
@@ -168,7 +132,7 @@
     }
   },
   "eslintConfig": {
-    "extends": "@reformjs/eslint-config"
+    "extends": "@config/eslint-config"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
@@ -176,6 +140,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@reformjs/toolbox": "workspace:*",
+    "@reformjs/reactive-data": "workspace:*",
+    "@reformjs/reactive-hooks": "workspace:*",
     "@types/lodash": "^4.14.186",
     "@types/react": "^17",
     "@types/react-dom": "^17",
@@ -184,17 +150,20 @@
     "date-fns": "2.30.0",
     "fs-extra": "^9.0.1",
     "jest-puppeteer": "^6.2.0",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "react-text-mask": "^5.5.0",
     "scroll-into-view-if-needed": "^3.0.10",
     "shortid": "^2.2.15",
     "uuid": "^9.0.0"
   },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
+    "@config/eslint-config": "workspace:*",
+    "@config/rollup-config": "workspace:*",
     "@reformjs/web-unit": "workspace:*",
     "@reformjs/web-unit-jest": "workspace:*",
     "@svgr/webpack": "^6.2.1",

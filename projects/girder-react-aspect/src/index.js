@@ -1,5 +1,5 @@
-import { useAspect, useAction } from './context-access';
-import girderReactContext from './girder-react-context';
+import { useAspect, useAction } from './context-access.js';
+import girderReactContext from './girder-react-context.js';
 
 export {
     useAspect,

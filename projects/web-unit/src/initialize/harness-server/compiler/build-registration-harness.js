@@ -1,7 +1,7 @@
 // const path = require('path');
 // const fs = require('fs');
-const { normalizeStories } = require('./normalize-stories');
-const { toRequireContextString } = require('./to-require-context');
+const { normalizeStories } = require('./normalize-stories.js');
+const { toRequireContextString } = require('./to-require-context.js');
 
 function buildRegistrationHarness(runContext) {
     // const registrationHarnessTemplatePath = path.resolve(

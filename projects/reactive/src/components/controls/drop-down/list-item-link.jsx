@@ -2,10 +2,10 @@
 import React, { PureComponent, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import { ApplyConsumer } from './drop-down-context';
-import buildId from '../../../common/build-id';
-import ListItemContent from './list-item-content';
+import { isNil } from 'lodash-es';
+import { ApplyConsumer } from './drop-down-context.js';
+import buildId from '../../../common/build-id.js';
+import ListItemContent from './list-item-content.js';
 
 class ListItemLink extends PureComponent {
     static propTypes = {

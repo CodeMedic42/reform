@@ -1,0 +1,73 @@
+// Widths should be divisible by 4px.
+// This is because of a bug in how firefox renders borders with a border radius to make a circle.
+// If it is not divisible by 4px there will be 4 slightly off color portions of the spinner.
+$spinner-xs-width: 16px;
+$spinner-sm-width: 24px;
+$spinner-md-width: 48px;
+$spinner-lg-width: 80px;
+$spinner-xl-width: 140px;
+
+@mixin spinnerColor($colorName, $darkColor, $lightColor) {
+    &.color-#{$colorName} {
+        border-color: $lightColor;
+        border-left-color: $darkColor;
+    }
+}
+
+.ra-spinner {
+    box-sizing: border-box;
+    display: inline-block;
+    border-style: solid;
+    vertical-align: top;
+    transform-origin: center;
+    width: var(--prg-spinner-length);
+    height: var(--prg-spinner-length);
+    animation: spin 0.6s linear infinite;
+    border-radius: 50%;
+    border-width: 4px;
+
+    &.size-xs {
+        --prg-spinner-length: #{$spinner-xs-width};
+    }
+
+    &.size-sm {
+        --prg-spinner-length: #{$spinner-sm-width};
+    }
+
+    &.size-md {
+        --prg-spinner-length: #{$spinner-md-width};
+
+        border-width: 6px;
+    }
+
+    &.size-lg {
+        --prg-spinner-length: #{$spinner-lg-width};
+
+        border-width: 10px;
+    }
+
+    &.size-xl {
+        --prg-spinner-length: #{$spinner-xl-width};
+
+        border-width: 16px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @include spinnerColor('blue', $--clr-plt-blue-700, $--clr-plt-blue-100);
+    // @include spinnerColor('cyan', $--var-cyan-dark, $--var-cyan-light);
+    // @include spinnerColor('green', $--var-green-dark, $--var-green-light);
+    // @include spinnerColor('grey', $--var-g-700, $--var-g-40);
+    // @include spinnerColor('navy', $--var-navy-dark, $--var-navy-light);
+    // @include spinnerColor('orange', $--var-orange-dark, $--var-orange-light);
+    // @include spinnerColor('purple', $--var-purple-dark, $--var-purple-light);
+    // @include spinnerColor('red', $--var-red-dark, $--var-red-light);
+    // @include spinnerColor('yellow', $--var-yellow-dark, $--var-yellow-light);
+}

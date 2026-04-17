@@ -2,8 +2,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Button from '../../button';
-import applyAnchorBinding from '../anchor-binding';
+import Button from '../../button/index.js';
+import applyAnchorBinding from '../anchor-binding.js';
 
 class AnchorButton extends PureComponent {
     static propTypes = {

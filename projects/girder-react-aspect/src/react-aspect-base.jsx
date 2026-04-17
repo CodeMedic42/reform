@@ -8,7 +8,7 @@ import forEach from 'lodash/forEach';
 import reduce from 'lodash/reduce';
 import isFunction from 'lodash/isFunction';
 import { Aspect } from '@reformjs/girder';
-import girderReactContext from './girder-react-context';
+import girderReactContext from './girder-react-context.js';
 
 function build(aspectComponents, root) {
     return reduce(

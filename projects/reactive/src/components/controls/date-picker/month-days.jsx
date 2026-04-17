@@ -3,12 +3,10 @@ import React from 'react';
 import format from 'date-fns/format';
 import lastDayOfMonth from 'date-fns/lastDayOfMonth';
 /* eslint-enable import/no-duplicates */
-import toFinite from 'lodash/toFinite';
-import isNil from 'lodash/isNil';
-import map from 'lodash/map';
-import PickerWeek from './picker-week';
-import PickerDay from './picker-day';
-import PropTypes from '../../../common/prop-types';
+import { toFinite, isNil, map } from 'lodash-es';
+import PickerWeek from './picker-week.js';
+import PickerDay from './picker-day.js';
+import PropTypes from '../../../common/prop-types.js';
 
 function MonthDays(props) {
     const {

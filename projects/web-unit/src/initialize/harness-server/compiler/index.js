@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const buildRegistrationHarness = require('./build-registration-harness');
+const buildRegistrationHarness = require('./build-registration-harness.js');
 
 const mapAliases = (dependencies, folder) => dependencies.reduce(
     (acc, dependency) => ({

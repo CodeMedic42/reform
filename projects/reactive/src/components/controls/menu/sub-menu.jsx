@@ -1,20 +1,16 @@
 import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import isString from 'lodash/isString';
-import map from 'lodash/map';
-import isArray from 'lodash/isArray';
-import join from 'lodash/join';
+import { isNil, isString, map, isArray, join } from 'lodash-es';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
-import ListItemButton from '../drop-down/list-item-button';
-import Tray from '../../arrangement/tray';
-import MenuList from './menu-list';
-import Icon from '../../display/icon';
-import Provider, { ApplyConsumer } from '../drop-down/drop-down-context';
-import PropTypes from '../../../common/prop-types';
-import MenuItem from './menu-item';
-import CheckInput from '../../inputs/check-input';
-import buildId from '../../../common/build-id';
+import ListItemButton from '../drop-down/list-item-button.js';
+import Tray from '../../arrangement/tray/index.js';
+import MenuList from './menu-list.js';
+import Icon from '../../display/icon/index.js';
+import Provider, { ApplyConsumer } from '../drop-down/drop-down-context.js';
+import PropTypes from '../../../common/prop-types.js';
+import MenuItem from './menu-item.js';
+import CheckInput from '../../fields/check-input-field/index.js';
+import buildId from '../../../common/build-id.js';
 
 function preventDefault({ event }) {
     event.preventDefault();

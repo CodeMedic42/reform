@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import { colorPropType, getColorInfo } from '../../../common/color-list';
-import applyForwardRef from '../../../common/apply-forward-ref';
+import { isNil } from 'lodash-es';
+import { colorPropType, getColorInfo } from '../../../common/color-list.js';
+import applyForwardRef from '../../../common/apply-forward-ref.js';
 
 class Text extends PureComponent {
     static propTypes = {

@@ -1,0 +1,84 @@
+@mixin buildButtonVariantSettings($variant) {
+    padding-top: map.get($variant, 'padding-v');
+    padding-bottom: map.get($variant, 'padding-v');
+    padding-left: map.get($variant, 'padding-h');
+    padding-right: map.get($variant, 'padding-h');
+    min-width: map.get($variant, 'min-width');
+    border-width: map.get($variant, 'border-width');
+    border-style: map.get($variant, 'border-style');
+    font-size: map.get($variant, 'font-size');
+    font-weight: map.get($variant, 'font-weight');
+    line-height: map.get($variant, 'line-height');
+    border-radius: map.get($variant, 'border-radius');
+}
+
+@mixin buildButtonVariantResponsiveSettings($variant) {
+    $respChanges: map.get($variant, 'resp-changes');
+
+    @if ($respChanges) {
+        @for $i from 1 through length($respChanges) {
+            $change: nth($respChanges, $i);
+            $breakpoint: nth($-ra-config-resp-breakpoints, $i);
+
+            @if ($breakpoint) {
+                @media only screen and (min-width: $breakpoint) {
+                    @include buildButtonVariantSettings($change);
+                }
+            }
+        }
+    }
+}
+
+@mixin buildButtonVariant($variant) {
+    @include buildButtonVariantSettings($variant);
+    @include buildButtonVariantResponsiveSettings($variant);
+}
+
+@mixin buildButtonVariants() {
+    @include buildButtonVariant($--ra-config-button-default-variant);
+
+    @each $variantId, $variant in $--ra-config-button-variants {
+        &.ra-btn-variant-#{$variantId} {
+            @include buildButtonVariant($variant);
+        }
+    }
+}
+
+.ra-button {
+    font-family: inherit;
+    box-sizing: border-box;
+    cursor: pointer;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: inherit;
+
+    @include buildButtonVariants();
+
+    &:disabled,
+    .disabled {
+        cursor: not-allowed;
+    }
+}
+
+.ra-button-group {
+    margin: -6px;
+
+    .ra-button,
+    .ra-icon-button {
+        margin: 6px;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: auto;
+        vertical-align: middle;
+    }
+
+    &.vertical {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+    }
+}

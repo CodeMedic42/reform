@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import React from 'react';
 
 export default (Context, Component, contextName) => {

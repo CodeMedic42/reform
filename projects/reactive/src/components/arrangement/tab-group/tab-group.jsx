@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import get from 'lodash/get';
-import isNil from 'lodash/isNil';
-import map from 'lodash/map';
-import TabBar from '../tab-bar';
-import { schemeColorPropType } from '../../../common/color-list';
+import { get, isNil, map } from 'lodash-es';
+import TabBar from '../tab-bar/index.js';
+import { schemeColorPropType } from '../../../common/color-list.js';
 
 class TabGroup extends PureComponent {
     static propTypes = {

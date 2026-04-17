@@ -1,5 +1,4 @@
-import isNil from 'lodash/isNil';
-import isNaN from 'lodash/isNaN';
+import { isNil, isNaN } from 'lodash-es';
 
 function isInvalidDate(value) {
 	return isNil(value) || isNaN(value.getTime());

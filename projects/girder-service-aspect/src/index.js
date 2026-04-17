@@ -1,6 +1,6 @@
-import ServiceAspect from './service-aspect';
-import Group from './group';
-import Command from './command';
+import ServiceAspect from './service-aspect.js';
+import Group from './group.js';
+import Command from './command.js';
 
 export default ServiceAspect;
 

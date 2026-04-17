@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HarnessRoot from './harness-root';
-import ErrorBoundary from './error-boundary';
+import HarnessRoot from './harness-root.js';
+import ErrorBoundary from './error-boundary.js';
 
 window.addEventListener('unhandledrejection', (event) => {
     // eslint-disable-next-line no-console

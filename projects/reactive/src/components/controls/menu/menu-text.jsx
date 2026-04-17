@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import isNil from 'lodash/isNil';
-import ListItemContent from '../drop-down/list-item-content';
-import Icon from '../../display/icon';
-import PropTypes from '../../../common/prop-types';
-import MenuItem from './menu-item';
+import { isNil } from 'lodash-es';
+import ListItemContent from '../drop-down/list-item-content.js';
+import Icon from '../../display/icon/index.js';
+import PropTypes from '../../../common/prop-types.js';
+import MenuItem from './menu-item.js';
 
 class MenuText extends PureComponent {
     static propTypes = {

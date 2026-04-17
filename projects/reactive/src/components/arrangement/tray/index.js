@@ -1,3 +1,3 @@
-import Tray from './tray';
+import Tray from './tray.js';
 
 export default Tray;

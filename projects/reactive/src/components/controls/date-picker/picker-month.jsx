@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import MonthDays from './month-days';
-import PropTypes from '../../../common/prop-types';
+import MonthDays from './month-days.js';
+import PropTypes from '../../../common/prop-types.js';
 
 function getMonthName(month) {
     switch (month) {

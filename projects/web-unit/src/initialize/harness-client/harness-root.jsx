@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import getHarness from './harness-registration';
+import getHarness from './harness-registration.js';
 
 class TestRoot extends Component {
     constructor(props) {

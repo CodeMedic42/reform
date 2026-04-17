@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from '../../../common/prop-types';
+import PropTypes from '../../../common/prop-types.js';
 import {
     schemeColorPropType,
     getSchemeColorClasses,
-} from '../../../common/color-list';
+} from '../../../common/color-list.js';
 
 class Icon extends PureComponent {
     static propTypes = {

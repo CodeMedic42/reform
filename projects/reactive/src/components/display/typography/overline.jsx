@@ -2,8 +2,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Typography from './typography';
-import applyForwardRef from '../../../common/apply-forward-ref';
+import Typography from './typography.js';
+import applyForwardRef from '../../../common/apply-forward-ref.js';
 
 class Overline extends PureComponent {
     static propTypes = {

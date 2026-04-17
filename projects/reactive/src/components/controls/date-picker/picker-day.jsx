@@ -5,9 +5,9 @@ import isToday from 'date-fns/isToday';
 import isEqual from 'date-fns/isEqual';
 import getDate from 'date-fns/getDate';
 /* eslint-enable import/no-duplicates */
-import isNil from 'lodash/isNil';
-import PropTypes from '../../../common/prop-types';
-import preventDefault from '../../../common/prevent-default';
+import { isNil } from 'lodash-es';
+import PropTypes from '../../../common/prop-types.js';
+import preventDefault from '../../../common/prevent-default.js';
 
 function getDayType(dayDate, fromDate, toDate) {
     if (isEqual(dayDate, fromDate)) {

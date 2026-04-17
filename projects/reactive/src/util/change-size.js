@@ -1,5 +1,4 @@
-import clamp from 'lodash/clamp';
-import reduce from 'lodash/reduce';
+import { clamp, reduce } from 'lodash-es';
 
 const sizes = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl'];
 

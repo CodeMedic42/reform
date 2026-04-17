@@ -1,0 +1,46 @@
+$--ra-config-inputs-focus-color: #0870f5 !default;
+$--ra-config-inputs-border-radius: 5px !default;
+$--ra-config-inputs-border-width: 1px !default;
+$--ra-config-inputs-focused-border-width: 2px !default;
+// $--ra-config-inputs-background-color: #fff !default;
+
+$--ra-config-input-container-default-variant: (
+    height: 40px,
+    "padding-h": 12px,
+    "padding-v": 0,
+    "font-size": 16px,
+    "font-weight": 400,
+    "line-height": 24px,
+    "background-color": #fff,
+    "border-width": 1px,
+    "focus-outline-width": 1px,
+) !default;
+
+// $--ra-config-date-input-default-variant: (
+//     // width: 120px,
+// ) !default;
+
+// $--ra-config-input-container-variants: (
+//     "sm": (
+//         "padding-v": 3px,
+//         "padding-h": 10px,
+//         "border-radius": 5px,
+//         "font-size": 14px,
+//         "font-weight": 500,
+//         "line-height": 16px,
+//     ),
+//     "lg-long": (
+//         "padding-v": 16px,
+//         "padding-h": 20px,
+//         "border-radius": 5px,
+//         "font-size": 16px,
+//         "font-weight": 700,
+//         "line-height": 19px,
+//         "min-width": 335px,
+//     ),
+// );
+$--ra-config-input-container-variants: (
+) !default;
+
+// $--ra-config-date-input-variants: (
+// ) !default;

@@ -1,9 +1,8 @@
 import React, { Fragment, useContext } from 'react';
 import classnames from 'classnames';
-import get from 'lodash/get';
-import isNil from 'lodash/isNil';
-import InfiniteListContext from './infinite-list-context';
-import PropTypes from '../../../common/prop-types';
+import { get, isNil } from 'lodash-es';
+import InfiniteListContext from './infinite-list-context.js';
+import PropTypes from '../../../common/prop-types.js';
 
 function load(collection, context, cb) {
     const {

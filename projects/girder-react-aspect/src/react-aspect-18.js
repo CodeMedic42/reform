@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import ReactAspectBase from './react-aspect-base';
+import ReactAspectBase from './react-aspect-base.js';
 
 class ReactAspect18 extends ReactAspectBase {
     constructor(aspectId, RootComponent) {

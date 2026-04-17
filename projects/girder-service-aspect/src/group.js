@@ -1,5 +1,5 @@
 import mapValues from 'lodash/mapValues';
-import mergeConfigs from './merge-configs';
+import mergeConfigs from './merge-configs.js';
 
 class Group {
     constructor({ definitions = {}, configuration = {}}) {

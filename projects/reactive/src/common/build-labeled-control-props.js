@@ -1,6 +1,4 @@
-import isNil from 'lodash/isNil';
-import isEmpty from 'lodash/isEmpty';
-import trim from 'lodash/trim';
+import { isNil, isEmpty, trim } from 'lodash-es';
 
 export default function buildLabeledControlProps({
     id,

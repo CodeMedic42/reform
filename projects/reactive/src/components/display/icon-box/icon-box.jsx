@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import Icon from '../icon/index';
-import PropTypes from '../../../common/prop-types';
+import { isNil } from 'lodash-es';
+import Icon from '../icon/index.js';
+import PropTypes from '../../../common/prop-types.js';
 import {
     schemeColorPropType,
     getSchemeColorClasses,
-} from '../../../common/color-list';
+} from '../../../common/color-list.js';
 
 class IconBox extends PureComponent {
     static propTypes = {

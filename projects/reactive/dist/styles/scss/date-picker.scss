@@ -1,0 +1,199 @@
+$--picker-day-margin: 4px;
+
+.ra-date-picker {
+    @extend .no-select;
+
+    height: 530px;
+    position: relative;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    .ra-infinite-list-items {
+        display: inline-block;
+    }
+
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+}
+
+.ra-picker-month {
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 8px;
+}
+
+.ra-picker-month-header,
+.ra-picker-week {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.ra-picker-week-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.ra-year-selector {
+    width: 90px;
+    margin-left: 8px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+.ra-month-selector {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+}
+
+.ra-picker-week-day,
+.ra-picker-day {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    width: 28px;
+    padding: 0;
+    margin: $--picker-day-margin;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.ra-picker-week-day {
+    font-weight: 600;
+}
+
+.ra-picker-week {
+    &.passive {
+        height: 36px;
+    }
+}
+
+.ra-picker-month-header {
+    text-align: end;
+
+    + .ra-picker-week {
+        text-align: end;
+    }
+}
+
+.ra-picker-day {
+    border-radius: 6px;
+    background-color: transparent;
+    border: none;
+    position: relative;
+
+    &.today {
+        &::before {
+            content: '';
+            position: absolute;
+            background-color: #274684;
+            height: 2px;
+            width: 66%;
+            left: 17%;
+            bottom: 10%;
+        }
+    }
+
+    &.between-day {
+        // background-color: #b9d5fd;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 100%;
+            left: 0;
+            background-color: #b9d5fd;
+            z-index: -1;
+        }
+
+        &:last-child {
+            &::after {
+                width: 100%;
+            }
+        }
+    }
+
+    &.from-day {
+        background-color: #709fdc;
+
+        // + .between-day {
+        //     &::after {
+        //         width: 200%;
+        //         left: -50%;
+        //     }
+
+        //     &:last-child {
+        //         &::after {
+        //             width: 150%;
+        //         }
+        //     }
+        // }
+
+        &.in-range {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+
+            &:not(:last-child) {
+                &::after {
+                    content: '';
+                    position: absolute;
+                    width: $--picker-day-margin * 2;
+                    height: 100%;
+                    right: $--picker-day-margin * -2;
+                    background-color: #b9d5fd;
+                    z-index: -1;
+                }
+            }
+        }
+    }
+
+    &.to-day {
+        background-color: #709fdc;
+
+        &.in-range {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+
+    &:hover,
+    &:hover.in-range,
+    &.target,
+    &.target.in-range {
+        border-radius: 6px;
+        outline-style: solid;
+        outline-width: 4px;
+    }
+
+    &.target {
+        outline-color: #0077b6;
+    }
+
+    &:hover {
+        outline-color: lightsalmon;
+    }
+
+    &:disabled {
+        background-color: #ededed;
+        outline: none;
+    }
+}
+
+.ra-picker-month-name {
+    font-weight: 600;
+    padding-right: 8px;
+    font-size: 20px;
+}

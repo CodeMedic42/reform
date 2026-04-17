@@ -1,6 +1,6 @@
 import React from 'react';
-import SelectInput from '../../inputs/select-input';
-import PropTypes from '../../../common/prop-types';
+import SelectInput from '../../fields/select-input-field/index.js';
+import PropTypes from '../../../common/prop-types.js';
 
 const options = [
     {

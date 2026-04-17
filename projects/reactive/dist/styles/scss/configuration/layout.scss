@@ -1,0 +1,4 @@
+$-ra-config-resp-breakpoints: 600px, 992px, 1200px, 1800px !default;
+
+$-ra-config-tablet-resp-breakpoint: nth($-ra-config-resp-breakpoints, 2) !default;
+$-ra-config-desktop-res-breakpoint: nth($-ra-config-resp-breakpoints, 3) !default;

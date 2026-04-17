@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unused-prop-types, react/jsx-props-no-spreading */
-import createContext from '../../../common/create-context/create-context';
+import createContext from '../../../common/create-context/create-context.js';
 
 export const context = createContext('dropDownContext');
 

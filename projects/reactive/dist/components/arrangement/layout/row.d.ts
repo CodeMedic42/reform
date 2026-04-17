@@ -1,0 +1,4 @@
+declare const _default: React.ForwardRefExoticComponent<Omit<any, "ref"> & React.RefAttributes<any>>;
+export default _default;
+import React from 'react';
+//# sourceMappingURL=row.d.ts.map

@@ -1,0 +1,113 @@
+$shadow-14-color: rgba($--clr-g-90, 0.14);
+$shadow-12-color: rgba($--clr-g-90, 0.12);
+$shadow-20-color: rgba($--clr-g-90, 0.2);
+
+@mixin boxShadow1dp {
+    box-shadow:
+        0 1px 1px 0 $shadow-14-color,
+        0 2px 1px -1px $shadow-12-color,
+        0 1px 3px 0 $shadow-20-color;
+}
+
+@mixin boxShadow2dp {
+    box-shadow:
+        0 2px 2px 0 $shadow-14-color,
+        0 3px 1px -2px $shadow-12-color,
+        0 1px 5px 0 $shadow-20-color;
+}
+
+@mixin boxShadow3dp {
+    box-shadow:
+        0 3px 4px 0 $shadow-14-color,
+        0 3px 3px -2px $shadow-12-color,
+        0 1px 8px 0 $shadow-20-color;
+}
+
+@mixin boxShadow4dp {
+    box-shadow:
+        0 4px 5px 0 $shadow-14-color,
+        0 1px 10px 0 $shadow-12-color,
+        0 2px 4px -1px $shadow-20-color;
+}
+
+@mixin boxShadow6dp {
+    box-shadow:
+        0 6px 10px 0 $shadow-14-color,
+        0 1px 18px 0 $shadow-12-color,
+        0 3px 5px -1px $shadow-20-color;
+}
+
+@mixin boxShadow8dp {
+    box-shadow:
+        0 8px 10px 1px $shadow-14-color,
+        0 3px 14px 2px $shadow-12-color,
+        0 5px 5px -3px $shadow-20-color;
+}
+
+@mixin boxShadow9dp {
+    box-shadow:
+        0 9px 12px 1px $shadow-14-color,
+        0 3px 16px 2px $shadow-12-color,
+        0 5px 6px -3px $shadow-20-color;
+}
+
+@mixin boxShadow12dp {
+    box-shadow:
+        0 12px 17px 2px $shadow-14-color,
+        0 5px 22px 4px $shadow-12-color,
+        0 7px 8px -4px $shadow-20-color;
+}
+
+@mixin boxShadow16dp {
+    box-shadow:
+        0 16px 24px 2px $shadow-14-color,
+        0 6px 30px 5px $shadow-12-color,
+        0 8px 10px -5px $shadow-20-color;
+}
+
+@mixin boxShadow24dp {
+    box-shadow:
+        0 24px 38px 3px $shadow-14-color,
+        0 9px 46px 8px $shadow-12-color,
+        0 11px 15px -7px $shadow-20-color;
+}
+
+.box-shadow-1dp {
+    @include boxShadow1dp;
+}
+
+.box-shadow-2dp {
+    @include boxShadow2dp;
+}
+
+.box-shadow-3dp {
+    @include boxShadow3dp;
+}
+
+.box-shadow-4dp {
+    @include boxShadow4dp;
+}
+
+.box-shadow-6dp {
+    @include boxShadow6dp;
+}
+
+.box-shadow-8dp {
+    @include boxShadow8dp;
+}
+
+.box-shadow-9dp {
+    @include boxShadow9dp;
+}
+
+.box-shadow-12dp {
+    @include boxShadow12dp;
+}
+
+.box-shadow-16dp {
+    @include boxShadow16dp;
+}
+
+.box-shadow-24dp {
+    @include boxShadow24dp;
+}

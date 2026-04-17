@@ -1,10 +1,10 @@
-import Typography from './typography';
-import Text from './text';
-import Heading from './heading';
-import SubHeading from './sub-heading';
-import Caption from './caption';
-import Paragraph from './paragraph';
-import Overline from './overline';
+import Typography from './typography.js';
+import Text from './text.js';
+import Heading from './heading.js';
+import SubHeading from './sub-heading.js';
+import Caption from './caption.js';
+import Paragraph from './paragraph.js';
+import Overline from './overline.js';
 
 export default Typography;
 

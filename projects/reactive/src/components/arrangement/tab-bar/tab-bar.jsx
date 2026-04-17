@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import map from 'lodash/map';
-import isEmpty from 'lodash/isEmpty';
-import Tab from './tab';
+import { map, isEmpty } from 'lodash-es';
+import Tab from './tab.js';
 
 function TabBar(props) {
     const {

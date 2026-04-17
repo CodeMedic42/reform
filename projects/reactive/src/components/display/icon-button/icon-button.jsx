@@ -1,12 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import Icon from '../icon';
-import PropTypes from '../../../common/prop-types';
+import { isNil } from 'lodash-es';
+import Icon from '../icon/index.js';
+import PropTypes from '../../../common/prop-types.js';
 import {
     schemeColorPropType,
     getSchemeColorClasses,
-} from '../../../common/color-list';
+} from '../../../common/color-list.js';
 
 class IconButton extends React.Component {
     static propTypes = {

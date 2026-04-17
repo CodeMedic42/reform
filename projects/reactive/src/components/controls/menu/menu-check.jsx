@@ -1,12 +1,12 @@
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import PropTypes from '../../../common/prop-types';
-import CheckInput from '../../inputs/check-input';
-import MenuItem from './menu-item';
-import buildId from '../../../common/build-id';
-import ListItemContent from '../drop-down/list-item-content';
-import Icon from '../../display/icon';
+import { isNil } from 'lodash-es';
+import PropTypes from '../../../common/prop-types.js';
+import CheckInput from '../../fields/check-input-field/index.js';
+import MenuItem from './menu-item.js';
+import buildId from '../../../common/build-id.js';
+import ListItemContent from '../drop-down/list-item-content.js';
+import Icon from '../../display/icon/index.js';
 
 class MenuCheck extends PureComponent {
     static propTypes = {

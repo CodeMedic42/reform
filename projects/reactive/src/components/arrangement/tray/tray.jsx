@@ -7,10 +7,7 @@ import React, {
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import forEach from 'lodash/forEach';
-import merge from 'lodash/merge';
-import isNil from 'lodash/isNil';
-import noop from 'lodash/noop';
+import { forEach, merge, isNil, noop } from 'lodash-es';
 import shortId from 'shortid';
 
 const TrayContext = createContext({

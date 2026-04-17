@@ -1,5 +1,5 @@
-import DropDown from './drop-down';
-import AnchorButton from './anchors/anchor-button';
+import DropDown from './drop-down.js';
+import AnchorButton from './anchors/anchor-button.js';
 
 export default DropDown;
 

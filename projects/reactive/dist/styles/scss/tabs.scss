@@ -1,0 +1,102 @@
+@mixin setTabBorderRadius($style) {
+    @if $style == 'rounded' {
+        border-top-left-radius: $--ra-config-tab-border-radius;
+        border-top-right-radius: $--ra-config-tab-border-radius;
+    } @else if $style == 'rounded-ends' {
+        &:first-child {
+            border-top-left-radius: $--ra-config-tab-border-radius;
+        }
+
+        &:last-child {
+            border-top-right-radius: $--ra-config-tab-border-radius;
+        }
+    }
+}
+
+.ra-tab {
+    @include setTabBorderRadius($--ra-config-tab-corner-style);
+
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    color: $--ra-config-tab-text-color;
+    background-color: $--ra-config-tab-bg-color;
+    padding-top: $--ra-config-tab-vertical-padding;
+    padding-bottom: $--ra-config-tab-vertical-padding;
+    padding-left: $--ra-config-tab-horizontal-padding;
+    padding-right: $--ra-config-tab-horizontal-padding;
+    font-size: $--ra-config-tab-font-size;
+    font-weight: $--ra-config-tab-font-weight;
+    line-height: $--ra-config-tab-line-height;
+    border-left: $--ra-config-tab-inner-border;
+    border-right: $--ra-config-tab-inner-border;
+    border-top: $--ra-config-tab-outer-border;
+    vertical-align: middle;
+
+    &:first-child {
+        border-left: $--ra-config-tab-outer-border;
+    }
+
+    &:last-child {
+        border-right: $--ra-config-tab-outer-border;
+    }
+
+    > button {
+        padding: 0;
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    &.active {
+        color: $--ra-config-tab-active-text-color;
+        background-color: $--ra-config-tab-active-bg-color;
+        padding-top: $--ra-config-tab-active-vertical-padding;
+        padding-bottom: $--ra-config-tab-active-vertical-padding;
+        padding-left: $--ra-config-tab-active-horizontal-padding;
+        padding-right: $--ra-config-tab-active-horizontal-padding;
+        font-size: $--ra-config-tab-active-font-size;
+        font-weight: $--ra-config-tab-active-font-weight;
+        line-height: $--ra-config-tab-active-line-height;
+    }
+
+    &.disabled {
+        color: $--ra-config-tab-disabled-text-color;
+        background-color: $--ra-config-tab-disabled-bg-color;
+        padding-top: $--ra-config-tab-disabled-vertical-padding;
+        padding-bottom: $--ra-config-tab-disabled-vertical-padding;
+        padding-left: $--ra-config-tab-disabled-horizontal-padding;
+        padding-right: $--ra-config-tab-disabled-horizontal-padding;
+        font-size: $--ra-config-tab-disabled-font-size;
+        font-weight: $--ra-config-tab-disabled-font-weight;
+        line-height: $--ra-config-tab-disabled-line-height;
+    }
+}
+
+@mixin setTabBottomBorderRadius($style) {
+    @if $style == 'rounded' or $style == 'rounded-ends' {
+        border-top-right-radius: $--ra-config-tab-border-radius;
+        border-bottom-left-radius: $--ra-config-tab-border-radius;
+        border-bottom-right-radius: $--ra-config-tab-border-radius;
+    }
+}
+
+.ra-tab-bottom {
+    @include setTabBottomBorderRadius($--ra-config-tab-corner-style);
+
+    background-color: $--ra-config-tab-bottom-bg-color;
+    padding-top: $--ra-config-tab-bottom-padding-top;
+    padding-bottom: $--ra-config-tab-bottom-padding-bottom;
+    padding-left: $--ra-config-tab-bottom-padding-left;
+    padding-right: $--ra-config-tab-bottom-padding-right;
+    border-left: $--ra-config-tab-outer-border;
+    border-right: $--ra-config-tab-outer-border;
+    border-bottom: $--ra-config-tab-outer-border;
+}

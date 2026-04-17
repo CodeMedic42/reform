@@ -1,11 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import startsWith from 'lodash/startsWith';
-import isString from 'lodash/isString';
-import isArray from 'lodash/isArray';
-import forEach from 'lodash/forEach';
-import Row from './row';
+import { isNil, startsWith, isString, isArray, forEach } from 'lodash-es';
+import Row from './row.js';
 
 type StaticType = `static:${number}`;
 type JustifyType = null | 'left' | 'center' | 'right';
@@ -52,7 +48,7 @@ function buildClass(prop: string | string[], prefix: string): null | string {
         [key: string]: boolean,
     } = {};
 
-    forEach(prop, (value, index) => {
+    forEach(prop, (value: string, index: number) => {
         let size = '';
 
         if (index > 0) {
@@ -146,7 +142,7 @@ function buildClassState(
         if (isString(value)) {
             cb(states, value, '', ...args);
         } else {
-            forEach(value, (valueItem, index) => {
+            forEach(value, (valueItem: string, index: number) => {
                 let size = '';
 
                 if (index > 0) {

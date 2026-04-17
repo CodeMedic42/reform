@@ -4,7 +4,7 @@ import reduce from 'lodash/reduce';
 import get from 'lodash/get';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import mergeConfigs from './merge-configs';
+import mergeConfigs from './merge-configs.js';
 
 function replaceRouteParams(url, params = {}) {
     const regex = /(:\w+)/g;

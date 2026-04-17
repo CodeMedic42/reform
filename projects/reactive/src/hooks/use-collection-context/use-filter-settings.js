@@ -1,17 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import isNil from 'lodash/isNil';
-import toPath from 'lodash/toPath';
-import reduce from 'lodash/reduce';
-import isEmpty from 'lodash/isEmpty';
-import isString from 'lodash/isString';
-import startsWith from 'lodash/startsWith';
-import endsWith from 'lodash/endsWith';
-import isArray from 'lodash/isArray';
-import isFinite from 'lodash/isFinite';
-import isBoolean from 'lodash/isBoolean';
-import forEach from 'lodash/forEach';
-import toLower from 'lodash/toLower';
-import keys from 'lodash/keys';
+import { isNil, toPath, reduce, isEmpty, isString, startsWith, endsWith, isArray, isFinite, isBoolean, forEach, toLower, keys } from 'lodash-es';
 
 let doesMatch = null;
 

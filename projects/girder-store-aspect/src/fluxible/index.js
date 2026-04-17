@@ -1,5 +1,5 @@
-import FluxibleAspect from './fluxible-aspect';
-import FluxibleReactAspect from './fluxible-react-aspect';
+import FluxibleAspect from './fluxible-aspect.js';
+import FluxibleReactAspect from './fluxible-react-aspect.js';
 
 export default FluxibleAspect;
 

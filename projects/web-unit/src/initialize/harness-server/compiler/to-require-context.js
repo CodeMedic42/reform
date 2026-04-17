@@ -1,4 +1,4 @@
-const globToRegexp = require('./glob-to-regexp');
+const globToRegexp = require('./glob-to-regexp.js');
 
 const toRequireContext = (runContext, specifier) => {
     const { directory, files } = specifier;

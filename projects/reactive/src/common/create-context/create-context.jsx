@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-prop-types, react/jsx-props-no-spreading */
 import React from 'react';
-import wrappedContext from './wrapped-context';
+import wrappedContext from './wrapped-context.js';
 
 export default function createContext(propName) {
 	const context = React.createContext();

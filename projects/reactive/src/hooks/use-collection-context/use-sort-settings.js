@@ -1,10 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import isNil from 'lodash/isNil';
-import orderBy from 'lodash/orderBy';
-import isEmpty from 'lodash/isEmpty';
-import forEach from 'lodash/forEach';
-import isString from 'lodash/isString';
-import { isArray } from 'lodash';
+import { isNil, orderBy, isEmpty, forEach, isString, isArray } from 'lodash-es';
 
 function sortCheck(left, right) {
     if (left > right) {

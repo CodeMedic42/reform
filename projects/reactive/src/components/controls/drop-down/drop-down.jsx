@@ -3,12 +3,9 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import noop from 'lodash/noop';
-import get from 'lodash/get';
-import debounce from 'lodash/debounce';
-import Tray from '../../arrangement/tray';
-import Provider from './drop-down-context';
+import { isNil, noop, get, debounce } from 'lodash-es';
+import Tray from '../../arrangement/tray/index.js';
+import Provider from './drop-down-context.js';
 
 const DEFAULTS = {
     openOnClick: true,

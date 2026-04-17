@@ -1,13 +1,9 @@
 /* eslint-disable max-len */
 import { useCallback, useMemo } from 'react';
-import isFunction from 'lodash/isFunction';
-import forEach from 'lodash/forEach';
-import isEmpty from 'lodash/isEmpty';
-import map from 'lodash/map';
-import isNil from 'lodash/isNil';
-import useFilterSettings from './use-filter-settings';
-import useSortSettings from './use-sort-settings';
-import CollectionItem from './collection-item';
+import { isFunction, forEach, isEmpty, map, isNil } from 'lodash-es';
+import useFilterSettings from './use-filter-settings.js';
+import useSortSettings from './use-sort-settings.js';
+import CollectionItem from './collection-item.js';
 
 function echo(val) {
     return val;

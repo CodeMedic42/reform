@@ -1,12 +1,10 @@
 import React, { useLayoutEffect, forwardRef, useImperativeHandle, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import isNumber from 'lodash/isNumber';
+import { isNil, isNumber, isFinite } from 'lodash-es';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import isFinite from 'lodash/isFinite';
-import PropTypes from '../../../common/prop-types';
-import useThrottleCallback from '../../../hooks/use-throttle-callback';
-import InfiniteListContext from './infinite-list-context';
+import PropTypes from '../../../common/prop-types.js';
+import useThrottleCallback from '../../../hooks/use-throttle-callback.js';
+import InfiniteListContext from './infinite-list-context.js';
 
 function getNumberChildrenBefore(parent, itemsContainer, topOffset, getTopIndex) {
     let count = 0;

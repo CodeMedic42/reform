@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import isFunction from 'lodash/isFunction';
-import reactContext from './girder-react-context';
+import reactContext from './girder-react-context.js';
 
 function useAspect(aspectId) {
     return useContext(reactContext).useAspect(aspectId);

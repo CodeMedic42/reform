@@ -1,10 +1,11 @@
 {
     "name": "girder-service-example",
     "version": "0.0.3-rc.12",
+    "type": "module",
     "private": true,
     "scripts": {
-        "start:server": "node ./server/index.js",
-        "start:client": "webpack serve --config ./webpack/webpack.config.js --stats verbose",
+        "start:server": "node ./server/index.cjs",
+        "start:client": "webpack serve --config ./webpack/webpack.config.cjs --stats verbose",
         "start": "pnpm start:server & pnpm start:client"
     },
     "browserslist": [

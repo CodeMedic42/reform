@@ -2,39 +2,34 @@
   "name": "@reformjs/web-unit",
   "version": "0.0.3-rc.12",
   "description": "",
+  "type": "module",
   "bin": {
     "wunit": "./cli.js"
   },
   "scripts": {
-    "build:push": "ncp ./build ./lib ; rimraf build",
-    "build:commit": "rimraf lib ; pnpm build:push",
-    "build:clean": "rimraf build",
-    "compile:js": "tsc",
-    "compile:html": "ncp ./src/initialize/harness-client/template.html ./build/initialize/harness-client/template.html",
-    "build:compile": "pnpm compile:js && pnpm compile:html",
-    "build": "pnpm build:clean ; pnpm build:compile ; pnpm build:commit",
+    "clean": "rimraf dist",
+    "build:js": "pnpm rollup --config rollup.config.mjs",
+    "build": "npm run clean && npm run build:js",
     "lint": "npx eslint ./src"
   },
   "exports": {
     "./util": {
-      "import": "./lib/util",
-      "require": "./lib/util",
-      "types": "./lib/util/index.d.ts"
+      "import": "./dist/util/index.mjs",
+      "types": "./dist/util/index.d.ts"
     },
     "./initialize": {
-      "import": "./lib/initialize/index.js",
-      "require": "./lib/initialize/index.js",
-      "types": "./lib/util/index.d.ts"
+      "import": "./dist/initialize/index.mjs",
+      "types": "./dist/initialize/index.d.ts"
     }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "files": [
-    "/lib"
+    "/dist"
   ],
   "eslintConfig": {
-    "extends": "@reformjs/eslint-config"
+    "extends": "@config/eslint-config"
   },
   "dependencies": {
     "@babel/core": "^7.22.0",
@@ -70,8 +65,8 @@
     "webpack-virtual-modules": "^0.4.6"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
-    "ncp": "2.0.0",
+    "@config/eslint-config": "workspace:*",
+    "@config/rollup-config": "workspace:*",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"
   },

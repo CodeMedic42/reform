@@ -2,7 +2,7 @@ import React from 'react';
 import {
     provideContext,
 } from 'fluxible-addons-react';
-import FluxibleAspect from './fluxible-aspect';
+import FluxibleAspect from './fluxible-aspect.js';
 
 const BaseComponent = provideContext(({children}) => children);
 

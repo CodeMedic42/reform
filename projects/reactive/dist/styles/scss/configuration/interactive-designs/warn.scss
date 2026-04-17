@@ -1,0 +1,51 @@
+$base-warn-clr: #ffc107;
+$base-warn-fill-clr: $--clr-black;
+
+$--ra-config-interactive-color-warn-base: (
+    "clr": $base-warn-clr,
+    "bg": $--clr-transparent,
+    "br": $--clr-transparent,
+    "out": $--clr-transparent,
+
+    "hover-clr": #ffca2c,
+    "hover-bg": $--clr-transparent,
+    "hover-br": $--clr-transparent,
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": #ffca2c,
+    "focus-bg": $--clr-transparent,
+    "focus-br": $--clr-transparent,
+    "focus-out": $--clr-transparent,
+
+    "active": #ffcd39,
+    "active-bg": $--clr-transparent,
+    "active-br": $--clr-transparent,
+    "active-out": $--clr-transparent,
+) !default;
+
+$--ra-config-interactive-color-warn-fill: (
+    "clr": $base-warn-fill-clr,
+    "bg": $base-warn-clr,
+    "br": $base-warn-clr,
+    "out": $--clr-transparent,
+
+    "hover-clr": $base-warn-fill-clr,
+    "hover-bg": #ffca2c,
+    "hover-br": #ffca2c,
+    "hover-out": $--clr-transparent,
+
+    "focus-clr": $base-warn-fill-clr,
+    "focus-bg": #ffca2c,
+    "focus-br": #ffca2c,
+    "focus-out": rgba(217,164,6, 0.5),
+
+    "active-clr": $base-warn-fill-clr,
+    "active-bg": #ffcd39,
+    "active-br": #ffcd39,
+    "active-out": $--clr-transparent,
+) !default;
+
+$--ra-config-interactive-color-warn: (
+    "": $--ra-config-interactive-color-warn-base,
+    "fill": $--ra-config-interactive-color-warn-fill,
+) !default;

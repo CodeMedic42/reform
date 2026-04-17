@@ -1,9 +1,9 @@
 import React, { Component, createRef } from 'react';
 // import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import PropTypes from '../../../common/prop-types';
+import PropTypes from '../../../common/prop-types.js';
 
 // interface DropDownListPropsInt {
 //     id?: string,

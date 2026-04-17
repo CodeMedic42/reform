@@ -13,9 +13,8 @@ import React, {
 } from 'react';
 // import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import isFunction from 'lodash/isFunction';
-import PropTypes from '../../../common/prop-types';
+import { isNil, isFunction } from 'lodash-es';
+import PropTypes from '../../../common/prop-types.js';
 
 // interface BindingInterfaceInt {
 //     onClick?: (event: MouseEvent<HTMLElement>) => void,

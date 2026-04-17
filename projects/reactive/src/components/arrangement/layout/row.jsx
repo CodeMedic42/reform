@@ -2,11 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import isString from 'lodash/isString';
-import isEmpty from 'lodash/isEmpty';
-import forEach from 'lodash/forEach';
-import isPlainObject from 'lodash/isPlainObject';
+import { isNil, isString, isEmpty, forEach, isPlainObject } from 'lodash-es';
 
 function buildClass(prop, prefix) {
     if (isNil(prop)) {

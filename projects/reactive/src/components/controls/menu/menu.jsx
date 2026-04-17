@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import DropDown from '../drop-down';
-import MenuList from './menu-list';
-import PropTypes from '../../../common/prop-types';
-import Provider, { Consumer } from '../drop-down/drop-down-context';
+import DropDown from '../drop-down/index.js';
+import MenuList from './menu-list.js';
+import PropTypes from '../../../common/prop-types.js';
+import Provider, { Consumer } from '../drop-down/drop-down-context.js';
 
 class Menu extends PureComponent {
     static propTypes = {

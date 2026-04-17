@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 // eslint-disable-next-line react/no-deprecated
 import ReactDom, { unmountComponentAtNode } from 'react-dom';
-import ReactAspectBase from './react-aspect-base';
+import ReactAspectBase from './react-aspect-base.js';
 
 class ReactAspect17 extends ReactAspectBase {
     constructor(aspectId, RootComponent) {

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import { paletteColorOrder } from '../../../common/color-list';
+import { isNil } from 'lodash-es';
+import { paletteColorOrder } from '../../../common/color-list.js';
 
 function Spinner(props) {
     const {

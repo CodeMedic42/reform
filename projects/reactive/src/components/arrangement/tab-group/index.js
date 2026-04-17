@@ -1,3 +1,3 @@
-import TabGroup from './tab-group';
+import TabGroup from './tab-group.js';
 
 export default TabGroup;

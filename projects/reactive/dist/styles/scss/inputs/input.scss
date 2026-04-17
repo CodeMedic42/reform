@@ -1,0 +1,39 @@
+.ra-input {
+    width: 100%;
+    max-width: 100%;
+    vertical-align: top;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.ra-input-label {
+    @extend .no-select;
+
+    display: block;
+    font: inherit;
+    outline: none;
+    // transform-style: preserve-3d;
+
+    .ra-input-label-text {
+        padding-left: 4px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding-bottom: 8px;
+        display: block;
+
+        &:empty {
+            &::before {
+                content: ' ';
+                white-space: pre;
+            }
+        }
+    }
+
+    &:empty {
+        &::before {
+            content: ' ';
+            white-space: pre;
+        }
+    }
+}

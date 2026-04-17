@@ -1,0 +1,110 @@
+@mixin interactiveDesignContent($design, $designName: "") {
+    $designId: '';
+
+    @if (str-length($designName) > 0) {
+        $designId: '-#{$designName}';
+    }
+
+    @each $key, $value in $design {
+        --ra-int#{$designId}-#{$key}: #{$value};
+    }
+}
+
+@mixin buildInteractiveColor($colorId, $color) {
+    @if (str-length($colorId) < 0) {
+        @error "Color name cannot be empty";
+    }
+
+    .ra-clr-int.ra-clr-int-#{$colorId} {
+        @each $designName, $design in $color {
+            @include interactiveDesignContent($design, $designName);
+        }
+    }
+}
+
+@mixin interactiveDesignControl($designName) {
+    $designId: '';
+
+    @if (str-length($designName) > 0) {
+        $designId: '-#{$designName}';
+    }
+
+    color: var(--ra-int#{$designId}-clr);
+    background-color: var(--ra-int#{$designId}-bg);
+    outline-color: var(--ra-int#{$designId}-out);
+    border-color: var(--ra-int#{$designId}-br-clr);
+    border-style: var(--ra-int#{$designId}-br-sty);
+    border-width: var(--ra-int#{$designId}-br-wid);
+
+    &.ra-clr-int-control.ra-clr-int-control,
+    .ra-clr-int-control {
+        &:focus,
+        &.focus {
+            color: var(--ra-int#{$designId}-focus-clr);
+            background-color: var(--ra-int#{$designId}-focus-bg);
+            outline-color: var(--ra-int#{$designId}-focus-out);
+            border-color: var(--ra-int#{$designId}-focus-br-clr);
+            border-style: var(--ra-int#{$designId}-focus-br-sty);
+            border-width: var(--ra-int#{$designId}-focus-br-wid);
+        }
+
+        &:hover,
+        &.hover {
+            color: var(--ra-int#{$designId}-hover-clr);
+            background-color: var(--ra-int#{$designId}-hover-bg);
+            outline-color: var(--ra-int#{$designId}-hover-out);
+            border-color: var(--ra-int#{$designId}-hover-br-clr);
+            border-style: var(--ra-int#{$designId}-hover-br-sty);
+            border-width: var(--ra-int#{$designId}-hover-br-wid);
+        }
+
+        &:active,
+        &.active {
+            color: var(--ra-int#{$designId}-active-clr);
+            background-color: var(--ra-int#{$designId}-active-bg);
+            outline-color: var(--ra-int#{$designId}-active-out);
+            border-color: var(--ra-int#{$designId}-active-br-clr);
+            border-style: var(--ra-int#{$designId}-active-br-sty);
+            border-width: var(--ra-int#{$designId}-active-br-wid);
+        }
+
+        &:disabled,
+        &.disabled {
+            color: var(--ra-int#{$designId}-disabled-clr);
+            background-color: var(--ra-int#{$designId}-disabled-bg);
+            outline-color: var(--ra-int#{$designId}-disabled-out);
+            border-color: var(--ra-int#{$designId}-disabled-br-clr);
+            border-style: var(--ra-int#{$designId}-disabled-br-sty);
+            border-width: var(--ra-int#{$designId}-disabled-br-wid);
+        }
+    }
+}
+
+.ra-clr-int {
+    @include interactiveDesignControl('');
+
+    @each $designId in $--ra-config-interactive-designs {
+        @if (str-length($designId) <= 0) {
+            @error "A design must have a non empty id";
+        }
+
+        &.ra-clr-int-#{$designId},
+        .ra-clr-int-#{$designId} {
+            @include interactiveDesignControl($designId);
+        }
+    }
+}
+
+:root {
+    @each $designName, $colors in $--ra-config-interactive-color-default {
+        @include interactiveDesignContent($colors, $designName);
+    }
+}
+
+@mixin buildInteractiveColors($colors) {
+    @each $colorId, $color in $colors {
+        @include buildInteractiveColor($colorId, $color);
+    }
+}
+
+@include buildInteractiveColors($--ra-config-interactive-colors);

@@ -1,10 +1,10 @@
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import ListItemButton from '../drop-down/list-item-button';
-import Icon from '../../display/icon';
-import PropTypes from '../../../common/prop-types';
-import MenuItem from './menu-item';
+import { isNil } from 'lodash-es';
+import ListItemButton from '../drop-down/list-item-button.js';
+import Icon from '../../display/icon/index.js';
+import PropTypes from '../../../common/prop-types.js';
+import MenuItem from './menu-item.js';
 
 class MenuButton extends PureComponent {
     static propTypes = {

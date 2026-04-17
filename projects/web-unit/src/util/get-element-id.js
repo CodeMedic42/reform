@@ -1,4 +1,4 @@
-import getElementAttribute from './get-element-attribute';
+import getElementAttribute from './get-element-attribute.js';
 
 async function getElementId(elementHandle) {
     return getElementAttribute(elementHandle, 'id');

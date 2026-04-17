@@ -2,8 +2,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { colorPropType, getColorInfo } from '../../../common/color-list';
-import applyForwardRef from '../../../common/apply-forward-ref';
+import { colorPropType, getColorInfo } from '../../../common/color-list.js';
+import applyForwardRef from '../../../common/apply-forward-ref.js';
 
 class Typography extends PureComponent {
 

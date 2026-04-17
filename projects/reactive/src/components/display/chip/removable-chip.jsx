@@ -1,12 +1,12 @@
 import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons/faCircleXmark';
-import { colorPropType, shadePropType } from '../../../common/color-list';
-import Chip from './chip';
-import Icon from '../icon';
+import { colorPropType, shadePropType } from '../../../common/color-list.js';
+import Chip from './chip.js';
+import Icon from '../icon/index.js';
 
 function RemovableChip(props) {
 	const {

@@ -2,9 +2,9 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import Typography from './typography';
-import applyForwardRef from '../../../common/apply-forward-ref';
+import { isNil } from 'lodash-es';
+import Typography from './typography.js';
+import applyForwardRef from '../../../common/apply-forward-ref.js';
 
 function Paragraph(props) {
     const {

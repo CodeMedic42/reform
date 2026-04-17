@@ -1,7 +1,7 @@
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
-import DropDownListItem from '../drop-down/drop-down-list-item';
-import PropTypes from '../../../common/prop-types';
+import DropDownListItem from '../drop-down/drop-down-list-item.js';
+import PropTypes from '../../../common/prop-types.js';
 
 class MenuItem extends PureComponent {
     static propTypes = {

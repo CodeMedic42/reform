@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import {
 	colorPropType,
 	getColorInfo,
 	shadePropType,
-} from '../../../common/color-list';
-import { getDefaultSize } from './utils';
+} from '../../../common/color-list.js';
+import { getDefaultSize } from './utils.js';
 
 class Chip extends PureComponent {
 	static propTypes = {

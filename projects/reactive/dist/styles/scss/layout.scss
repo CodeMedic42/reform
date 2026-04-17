@@ -1,0 +1,377 @@
+/* stylelint-disable no-duplicate-selectors */
+/* stylelint-disable no-descending-specificity */
+@mixin columnWidth($colCount) {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: #{percentage(math.div($colCount, 12))};
+    max-width: #{percentage(math.div($colCount, 12))};
+    width: #{percentage(math.div($colCount, 12))};
+}
+
+@mixin columnOffsetLeft($colCount) {
+    margin-left: #{percentage(math.div($colCount, 12))};
+}
+
+@mixin columnOffsetRight($colCount) {
+    margin-right: #{percentage(math.div($colCount, 12))};
+}
+
+@mixin applyGutter($rezSize) {
+    $sizeName: '';
+
+    @if str-length($rezSize) > 0 {
+        $sizeName: '-#{$rezSize}';
+    }
+
+    &.gutter#{$sizeName},
+    &.gutter-h#{$sizeName} {
+        margin-right: calc(var(--layout-row-gutter-h#{$sizeName}) * -0.5);
+        margin-left: calc(var(--layout-row-gutter-h#{$sizeName}) * -0.5);
+
+        > .layout-col {
+            padding-right: calc(var(--layout-row-gutter-h#{$sizeName}) * 0.5);
+            padding-left: calc(var(--layout-row-gutter-h#{$sizeName}) * 0.5);
+        }
+
+        &::before,
+        &::after {
+            margin-right: calc(var(--layout-row-gutter-h#{$sizeName}) * 0.5);
+            margin-left: calc(var(--layout-row-gutter-h#{$sizeName}) * 0.5);
+        }
+    }
+
+    &.gutter#{$sizeName},
+    &.gutter-v#{$sizeName} {
+        margin-top: calc(var(--layout-row-gutter-v#{$sizeName}) * -1);
+
+        > .layout-col:not(:empty),
+        &::after,
+        &::before {
+            margin-top: var(--layout-row-gutter-v#{$sizeName});
+        }
+    }
+}
+
+@mixin applyBottomGutter($rezSize) {
+    $sizeName: '';
+
+    @if str-length($rezSize) > 0 {
+        $sizeName: '-#{$rezSize}';
+    }
+
+    &.gutter#{$sizeName} {
+        margin-bottom: var(--layout-container-gutter#{$sizeName});
+    }
+}
+
+.layout-row {
+    @include applyGutter('');
+
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    min-width: 100%;
+    align-self: stretch;
+
+    &::before,
+    &::after {
+        width: 100%;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    &.before-on {
+        &::before {
+            content: '';
+        }
+    }
+
+    &.after-on {
+        &::after {
+            content: '';
+        }
+    }
+}
+
+.layout-col {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    align-items: start;
+    align-content: start;
+    flex-wrap: wrap;
+    min-width: 0;
+
+    &.use-content-box {
+        box-sizing: content-box;
+    }
+
+    &.row-cell {
+        flex-direction: column;
+        align-content: stretch;
+    }
+
+    &.offset-left-0 {
+        margin-left: 0;
+    }
+
+    &.offset-right-0 {
+        margin-right: 0;
+    }
+
+    &.offset-left-fill {
+        margin-left: auto;
+    }
+
+    &.offset-right-fill {
+        margin-right: auto;
+    }
+
+    @for $i from 1 through 12 {
+        &.offset-left-#{$i} {
+            @include columnOffsetLeft($i);
+        }
+
+        &.offset-right-#{$i} {
+            @include columnOffsetRight($i);
+        }
+
+        &.width-#{$i} {
+            @include columnWidth($i);
+        }
+    }
+
+    &.width-content {
+        flex: 0 0 auto;
+        width: auto;
+        max-width: none;
+    }
+
+    &.width-fill {
+        flex-grow: 1;
+        flex-basis: 0;
+        max-width: 100%;
+    }
+
+    &.width-static {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: var(--layout-col-static);
+        max-width: var(--layout-col-static);
+        width: var(--layout-col-static);
+    }
+
+    &.sequence-order {
+        order: var(--layout-col-order);
+    }
+
+    &.min-width-static {
+        min-width: var(--layout-col-min-width-static);
+    }
+
+    &.max-width-static {
+        max-width: var(--layout-col-max-width-static);
+    }
+
+    &.padding-top-static {
+        padding-top: var(--layout-col-padding-top-static);
+    }
+}
+
+.layout-col,
+.layout-row {
+    &[class*=' align-top-'],div[class^='align-top-'],
+    &[class*=' align-center-'],div[class^='align-center-'],
+    &[class*=' align-bottom-'],div[class^='align-bottom-'],
+    &[class*=' justify-left-'],div[class^='justify-left-']
+    &[class*=' justify-center-'],div[class^='justify-center-']
+    &[class*=' justify-right-'],div[class^='justify-right-'] {
+        align-items: initial;
+    }
+
+    &.align-top {
+        align-items: start;
+        align-content: start;
+    }
+
+    &.align-center {
+        align-items: center;
+        align-content: center;
+    }
+
+    &.align-bottom {
+        align-items: end;
+        align-content: end;
+    }
+
+    &.justify-left {
+        justify-content: start;
+    }
+
+    &.justify-center {
+        justify-content: center;
+    }
+
+    &.justify-right {
+        justify-content: end;
+    }
+}
+
+.layout-container {
+    @include applyBottomGutter('');
+
+    width: 100%;
+
+    &.hide-overflow {
+        overflow: hidden; // Used to clip the overflow at the top of the row.
+    }
+}
+
+@mixin buildBreakPoint($breakPointId, $breakpoint) {
+    @media only screen and (min-width: $breakpoint) {
+        .layout-row {
+            @include applyGutter($breakPointId);
+
+            &.before-on-#{$breakPointId} {
+                &::before {
+                    content: '';
+                }
+            }
+
+            &.before-off-#{$breakPointId} {
+                &::before {
+                    content: none;
+                }
+            }
+
+            &.after-on-#{$breakPointId} {
+                &::after {
+                    content: '';
+                }
+            }
+
+            &.after-off-#{$breakPointId} {
+                &::after {
+                    content: none;
+                }
+            }
+        }
+
+        .layout-col {
+            &.offset-left-0-#{$breakPointId} {
+                margin-left: 0;
+            }
+
+            &.offset-right-0-#{$breakPointId} {
+                margin-right: 0;
+            }
+
+            &.offset-left-fill-#{$breakPointId} {
+                margin-left: auto;
+            }
+
+            &.offset-right-fill-#{$breakPointId} {
+                margin-right: auto;
+            }
+
+            @for $i from 1 through 12 {
+                &.width-#{$i}-#{$breakPointId} {
+                    @include columnWidth($i);
+                }
+
+                &.offset-left-#{$i}-#{$breakPointId} {
+                    @include columnOffsetLeft($i);
+                }
+
+                &.offset-right-#{$i}-#{$breakPointId} {
+                    @include columnOffsetRight($i);
+                }
+            }
+
+            &.width-content-#{$breakPointId} {
+                flex: 0 0 auto;
+                width: auto;
+                max-width: none;
+            }
+
+            &.width-fill-#{$breakPointId} {
+                flex-grow: 1;
+                flex-basis: 0;
+                max-width: 100%;
+            }
+
+            &.width-static-#{$breakPointId} {
+                flex-grow: 0;
+                flex-shrink: 0;
+                flex-basis: var(--layout-col-static-#{$breakPointId});
+                max-width: var(--layout-col-static-#{$breakPointId});
+                width: var(--layout-col-static-#{$breakPointId});
+            }
+
+            &.sequence-order-#{$breakPointId} {
+                order: var(--layout-col-order-#{$breakPointId});
+            }
+
+            &.min-width-static-#{$breakPointId} {
+                min-width: var(--layout-col-min-width-static-#{$breakPointId});
+            }
+
+            &.max-width-static-#{$breakPointId} {
+                max-width: var(--layout-col-max-width-static-#{$breakPointId});
+            }
+
+            &.padding-top-static-#{$breakPointId} {
+                padding-top: var(--layout-col-padding-top-static-#{$breakPointId});
+            }
+        }
+
+        .layout-col,
+        .layout-row {
+            &.align-top-#{$breakPointId} {
+                align-items: start;
+                align-content: start;
+            }
+
+            &.align-center-#{$breakPointId} {
+                align-items: center;
+                align-content: center;
+            }
+
+            &.align-bottom-#{$breakPointId} {
+                align-items: end;
+                align-content: end;
+            }
+
+            &.justify-left-#{$breakPointId} {
+                justify-content: start;
+            }
+
+            &.justify-center-#{$breakPointId} {
+                justify-content: center;
+            }
+
+            &.justify-right-#{$breakPointId} {
+                justify-content: end;
+            }
+        }
+
+        .layout-container {
+            @include applyBottomGutter($breakPointId);
+        }
+    }
+}
+
+@mixin buildBreakPoints($breakpoints) {
+    @for $i from 1 through length($breakpoints) {
+        @include buildBreakPoint(#{$i}, nth($breakpoints, $i));
+    }
+}
+
+@include buildBreakPoints($-ra-config-resp-breakpoints);
+
+.layout-row {
+    ~ .layout-row {
+        margin-top: 0;
+    }
+}

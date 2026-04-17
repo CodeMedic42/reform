@@ -1,5 +1,5 @@
 const { program } = require('commander');
-const initialize = require('../initialize').default;
+const initialize = require('../initialize/index.js').default;
 
 program
     .option('-h, --harness <string>')

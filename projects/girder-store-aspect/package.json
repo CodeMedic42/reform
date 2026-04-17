@@ -2,14 +2,12 @@
   "name": "@reformjs/girder-store-aspect",
   "version": "0.0.3-rc.12",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "build:push": "ncp ./build ./lib ; rimraf build",
-    "build:commit": "rimraf lib ; pnpm build:push",
-    "build:clean": "rimraf build",
-    "compile:js": "tsc",
-    "build:compile": "pnpm compile:js",
-    "build": "pnpm build:clean ; pnpm build:compile ; pnpm build:commit",
+    "clean": "rimraf dist",
+    "build:js": "pnpm rollup --config rollup.config.mjs",
+    "build": "npm run clean && npm run build:js",
     "lint": "npx eslint ./src"
   },
   "keywords": [],
@@ -17,31 +15,27 @@
   "license": "ISC",
   "exports": {
     ".": {
-      "import": "./lib/store-aspect.js",
-      "require": "./lib/store-aspect.js",
-      "types": "./lib/store-aspect.d.ts"
+      "import": "./dist/store-aspect.mjs",
+      "types": "./dist/store-aspect.d.ts"
     },
     "./fluxible": {
-      "import": "./lib/fluxible",
-      "require": "./lib/fluxible",
-      "types": "./lib/fluxible/index.d.ts"
+      "import": "./dist/fluxible/index.mjs",
+      "types": "./dist/fluxible/index.d.ts"
     },
     "./mobx": {
-      "import": "./lib/mobx",
-      "require": "./lib/mobx",
-      "types": "./lib/mobx/index.d.ts"
+      "import": "./dist/mobx/index.mjs",
+      "types": "./dist/mobx/index.d.ts"
     },
     "./redux": {
-      "import": "./lib/redux",
-      "require": "./lib/redux",
-      "types": "./lib/redux/index.d.ts"
+      "import": "./dist/redux/index.mjs",
+      "types": "./dist/redux/index.d.ts"
     }
   },
   "files": [
-    "/lib"
+    "/dist"
   ],
   "eslintConfig": {
-    "extends": "@reformjs/eslint-config"
+    "extends": "@config/eslint-config"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -57,8 +51,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
-    "ncp": "2.0.0",
+    "@config/eslint-config": "workspace:*",
+    "@config/rollup-config": "workspace:*",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"
   },

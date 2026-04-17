@@ -1,0 +1,31 @@
+$--ra-config-button-default-variant: (
+    "padding-v": 6px,
+    "padding-h": 12px,
+    "border-radius": 6px,
+    "font-size": 16px,
+    "font-weight": 400,
+    "line-height": 24px,
+    // "resp-changes": ({}, null, {})
+) !default;
+
+// $--ra-config-button-variants: (
+//     "sm": (
+//         "padding-v": 3px,
+//         "padding-h": 10px,
+//         "border-radius": 5px,
+//         "font-size": 14px,
+//         "font-weight": 500,
+//         "line-height": 16px,
+//     ),
+//     "lg-long": (
+//         "padding-v": 16px,
+//         "padding-h": 20px,
+//         "border-radius": 5px,
+//         "font-size": 16px,
+//         "font-weight": 700,
+//         "line-height": 19px,
+//         "min-width": 335px,
+//     ),
+// );
+$--ra-config-button-variants: (
+) !default;

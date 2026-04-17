@@ -2,11 +2,11 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import {
     schemeColorPropType,
     getSchemeColorClasses,
-} from '../../../common/color-list';
+} from '../../../common/color-list.js';
 
 /**
  * This component is used the base definition of an item being rendered inside the DropDownList component.

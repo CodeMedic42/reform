@@ -1,6 +1,6 @@
 const WebpackDevServer = require('webpack-dev-server');
 const Promise = require('bluebird');
-const getCompiler = require('./compiler');
+const getCompiler = require('./compiler/index.js');
 
 async function startServer(runContext) {
     const compiler = getCompiler(runContext);

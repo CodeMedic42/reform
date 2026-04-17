@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import reduce from 'lodash/reduce';
 import find from 'lodash/find';
 import isNil from 'lodash/isNil';
@@ -10,7 +9,7 @@ export const schemeColorOrder = [
     'success',
     'warn',
     'danger',
-];
+] as const;
 
 export const paletteColorOrder = [
     'purple',
@@ -22,7 +21,7 @@ export const paletteColorOrder = [
     'orange',
     'red',
     'grey',
-];
+] as const;
 
 export const paletteShades = [
     'darkest',
@@ -31,13 +30,18 @@ export const paletteShades = [
     'light',
     'lighter',
     'lightest',
-];
+] as const;
 
 export const colorOrder = [...schemeColorOrder, ...paletteColorOrder];
 
+export type SchemeColor = typeof schemeColorOrder[number];
+export type PaletteColor = typeof paletteColorOrder[number];
+export type Color = SchemeColor | PaletteColor;
+export type PaletteShade = typeof paletteShades[number];
+
 export const functionalColorLevels = reduce(
     schemeColorOrder,
-    (acc, color, index) => {
+    (acc: Record<string, number>, color, index) => {
         acc[color] = index;
 
         return acc;
@@ -47,7 +51,7 @@ export const functionalColorLevels = reduce(
 
 export const paletteColorLevels = reduce(
     paletteColorOrder,
-    (acc, color, index) => {
+    (acc: Record<string, number>, color, index) => {
         acc[color] = index;
 
         return acc;
@@ -55,13 +59,21 @@ export const paletteColorLevels = reduce(
     {},
 );
 
+interface SchemeColorClassesOptions {
+    colorRequired?: boolean;
+    color?: string | null;
+    enableBorder?: boolean;
+    design?: string | null;
+    borderWidth?: string | number | null;
+}
+
 export function getSchemeColorClasses({
     colorRequired = true,
     color,
     enableBorder,
     design,
     borderWidth,
-}) {
+}: SchemeColorClassesOptions): string {
     if (isNil(color) && colorRequired) {
         return '';
     }
@@ -77,6 +89,15 @@ export function getSchemeColorClasses({
     return classes;
 }
 
+interface PaletteColorClassesOptions {
+    colorRequired?: boolean;
+    color?: string | null;
+    enableBorder?: boolean;
+    enableBackground?: boolean;
+    shade?: string | null;
+    borderWidth?: string | number | null;
+}
+
 export function getPaletteColorClasses({
     colorRequired = true,
     color,
@@ -84,7 +105,7 @@ export function getPaletteColorClasses({
     enableBackground,
     shade,
     borderWidth,
-}) {
+}: PaletteColorClassesOptions): string {
     if (isNil(color) && colorRequired) {
         return '';
     }
@@ -101,7 +122,9 @@ export function getPaletteColorClasses({
     return classes;
 }
 
-export const getColorInfo = (options) => {
+type ColorInfoOptions = SchemeColorClassesOptions & PaletteColorClassesOptions;
+
+export const getColorInfo = (options: ColorInfoOptions): { colorClasses: string; isSchemeColor: boolean } => {
     const { colorRequired = true, color } = options;
 
     let colorClasses = '';
@@ -126,8 +149,3 @@ export const getColorInfo = (options) => {
 
     return { colorClasses, isSchemeColor };
 };
-
-export const schemeColorPropType = PropTypes.oneOf(schemeColorOrder);
-export const paletteColorPropType = PropTypes.oneOf(paletteColorOrder);
-export const colorPropType = PropTypes.oneOf(colorOrder);
-export const shadePropType = PropTypes.oneOf(paletteShades);

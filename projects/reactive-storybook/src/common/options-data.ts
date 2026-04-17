@@ -1,7 +1,18 @@
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 
-const abbreviated = [
+interface AbbreviatedOption {
+    label: string;
+    value: string;
+    selectedText: string;
+}
+
+interface Option {
+    label: string;
+    value: string;
+}
+
+const abbreviated: AbbreviatedOption[] = [
     {
         label: 'Bear Claw',
         value: 'bearClaw',
@@ -79,21 +90,21 @@ const abbreviated = [
     },
 ];
 
-const options = map(abbreviated, (option) => {
+const options: Option[] = map(abbreviated, (option) => {
     const { selectedText, ...rest } = option;
 
     return rest;
 });
 
-const labelOnly = map(abbreviated, (option) => {
+const labelOnly: string[] = map(abbreviated, (option) => {
     const { label } = option;
 
     return label;
 });
 
-const lookUp = reduce(
+const lookUp: Record<string, AbbreviatedOption> = reduce(
     abbreviated,
-    (acc, option) => {
+    (acc: Record<string, AbbreviatedOption>, option) => {
         acc[option.value] = option;
 
         return acc;

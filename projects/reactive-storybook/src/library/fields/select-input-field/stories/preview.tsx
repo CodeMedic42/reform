@@ -1,12 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import reduce from 'lodash/reduce';
 import SelectInputField from '../../../../../../reactive/dist/components/fields/select-input-field';
 import { abbreviated } from '../../../../common/options-data';
 
-function generateMessages(count = 0) {
-    const messages = [];
+function generateMessages(count: number = 0): string[] {
+    const messages: string[] = [];
 
     for (let counter = 0; counter < count; counter += 1) {
         messages.push(`Message Number ${counter + 1}`);
@@ -15,7 +14,14 @@ function generateMessages(count = 0) {
     return messages;
 }
 
-function Preview(props) {
+interface PreviewProps {
+    successMessageCount: number;
+    failureMessageCount: number;
+    generalMessageCount: number;
+    [key: string]: unknown;
+}
+
+function Preview(props: PreviewProps) {
     const [value, setValue] = useState(null);
 
     const {
@@ -46,7 +52,7 @@ function Preview(props) {
             return null;
         }
 
-        const mess = {};
+        const mess: Record<string, string[]> = {};
 
         if (successMessages.length > 0) {
             mess.success = successMessages;
@@ -67,7 +73,7 @@ function Preview(props) {
         <SelectInputField
             {...reduce(
                 rest,
-                (acc, prop, key) => {
+                (acc: Record<string, unknown>, prop: unknown, key: string) => {
                     if (prop === 'true') {
                         acc[key] = true;
                     } else if (prop === 'false') {
@@ -87,18 +93,6 @@ function Preview(props) {
         />
     );
 }
-
-Preview.propTypes = {
-    successMessageCount: PropTypes.number,
-    failureMessageCount: PropTypes.number,
-    generalMessageCount: PropTypes.number,
-};
-
-Preview.defaultProps = {
-    successMessageCount: 0,
-    failureMessageCount: 0,
-    generalMessageCount: 0,
-};
 
 Preview.storyName = 'Preview';
 

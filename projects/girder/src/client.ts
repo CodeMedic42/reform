@@ -4,8 +4,29 @@ import forEach from 'lodash/forEach';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import promiseForEach from '@reformjs/toolbox/promise-for-each';
+import Aspect, { AspectInitContext } from './aspect.js';
+
+type ClientStatus = 'stopped' | 'starting' | 'started' | 'stopping';
+
+interface AspectMap {
+    [aspectId: string]: Aspect;
+}
+
+interface SettingsMap {
+    [settingId: string]: unknown[];
+}
+
+interface ClientContext {
+    [aspectId: string]: unknown;
+}
 
 class Client {
+    private aspects: AspectMap;
+    private settings: SettingsMap;
+    private status: ClientStatus;
+    private startingPromise: Promise<void> | null;
+    private stoppingPromise: Promise<void> | null;
+
     constructor() {
         this.aspects = {};
         this.settings = {};
@@ -15,27 +36,27 @@ class Client {
         this.stoppingPromise = null;
     }
 
-    isRunning() {
+    isRunning(): boolean {
         return this.isStarting() || this.isStarted();
     }
 
-    isStarting() {
+    isStarting(): boolean {
         return this.status === 'starting';
     }
 
-    isStarted() {
+    isStarted(): boolean {
         return this.status === 'started';
     }
 
-    isStopping() {
+    isStopping(): boolean {
         return this.status === 'stopping';
     }
 
-    isStopped() {
+    isStopped(): boolean {
         return this.status === 'stopped';
     }
 
-    registerAspect(aspect) {
+    registerAspect(aspect: Aspect): this {
         if (this.isRunning()) {
             throw new Error('Cannot register an aspect when the system has already been started.');
         }
@@ -46,8 +67,8 @@ class Client {
 
         this.aspects[aspect.id] = aspect;
 
-        forEach(aspect.settings(), (setting, settingId) => {
-            const aspectSettings = get(this.settings, settingId, []);
+        forEach(aspect.settings(), (setting: unknown, settingId: string) => {
+            const aspectSettings: unknown[] = get(this.settings, settingId, []);
 
             aspectSettings.push(setting);
 
@@ -57,9 +78,9 @@ class Client {
         return this;
     }
 
-    async start() {
+    async start(): Promise<void> {
         if (this.isRunning()) {
-            return this.startingPromise;
+            return this.startingPromise as Promise<void>;
         }
 
         if (this.isStopping()) {
@@ -71,9 +92,9 @@ class Client {
 
         this.startingPromise = Promise.resolve()
             .then(() => {
-                const clientContext = {};
+                const clientContext: ClientContext = {};
 
-                const getAspect = (aspectId) => {
+                const getAspect = (aspectId: string): unknown => {
                     if (!this.isStarted()) {
                         throw new Error('The client has not started yet.');
                     }
@@ -81,13 +102,13 @@ class Client {
                     return clientContext[aspectId];
                 };
 
-                return promiseForEach(this.aspects, (aspect, aspectId) =>
+                return promiseForEach(this.aspects, (aspect: Aspect, aspectId: string) =>
                     Promise.resolve(aspect.onInitialize({
                         getAspect,
-                        getSettings: (settingId) =>  this.settings[settingId] || [],
+                        getSettings: (settingId: string): unknown[] => this.settings[settingId] || [],
                         stopClient: () => this.stop(),
-                    }))
-                    .then((controls) => {
+                    } as AspectInitContext))
+                    .then((controls: unknown) => {
                         if (!isNil(controls)) {
                             clientContext[aspectId] = controls;
                         }
@@ -95,12 +116,13 @@ class Client {
                 .then(() => {
                     this.status = 'started';
 
-                    forEach(this.aspects, (aspect) => {
+                    forEach(this.aspects, (aspect: Aspect) => {
                         aspect.onStart({
-                            getAspect
+                            getAspect,
+                            ...clientContext,
                         });
                     });
-                }).catch((error) => {
+                }).catch((error: Error) => {
                     this.status = 'stopped';
 
                     console.error('Failed to start client');
@@ -113,27 +135,27 @@ class Client {
         return this.startingPromise;
     }
 
-    stop() {
+    stop(): Promise<void> {
         if (this.isStopped()) {
             return Promise.resolve();
         }
 
         if (this.isStopping()) {
-            return this.stoppingPromise;
+            return this.stoppingPromise as Promise<void>;
         }
 
-        const finish = () => {
+        const finish = (): Promise<void> => {
             this.status = 'stopping';
             this.startingPromise = null;
 
-            return promiseForEach(this.aspects, (aspect) => aspect.onStop())
+            return promiseForEach(this.aspects, (aspect: Aspect) => aspect.onStop())
                 .then(() => {
 
                     this.stoppingPromise = null;
 
                     this.status = 'stopped';
                 })
-                .catch((error) => {
+                .catch((error: Error) => {
                     console.error('Failed to stop client');
                     console.error(error, error.stack);
 
@@ -141,13 +163,13 @@ class Client {
                 });
             };
         if (this.isStarting()) {
-            this.stoppingPromise = this.startingPromise.then(finish);
+            this.stoppingPromise = (this.startingPromise as Promise<void>).then(finish);
         } else {
             this.stoppingPromise = finish();
         }
 
         return this.stoppingPromise;
     }
-};
+}
 
 export default Client;

@@ -1,25 +1,44 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import classnames from 'classnames';
-import InputLabel from '../new-base/input-field-label.jsx';
-import PropTypes from '../../../common/prop-types.js';
-import NumericInputFieldBase from './numeric-input-field-base.jsx';
+import InputLabel from '../new-base/input-field-label.js';
+import NumericInputFieldBase from './numeric-input-field-base.js';
 
-const NumericInputField = forwardRef((props, ref) => {
+interface InputMessagesData {
+	general?: string[];
+	success?: string[];
+	failure?: string[];
+}
+
+interface NumericInputFieldProps {
+	id?: string | null;
+	className?: string | null;
+	label?: string | null;
+	disabled?: boolean;
+	variant?: string | null;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	hidden?: boolean;
+	failure?: boolean;
+	messages?: InputMessagesData | null;
+	[key: string]: unknown;
+}
+
+const NumericInputField = forwardRef<unknown, NumericInputFieldProps>((props, ref) => {
 	const {
-		className,
-		id,
-		label,
-		messages,
-		failure,
-		'aria-labelledby': ariaLabelledby,
-		'aria-describedby': ariaDescribedby,
-		hidden,
-		disabled,
-		variant,
+		className = null,
+		id = null,
+		label = null,
+		messages = null,
+		failure = false,
+		'aria-labelledby': ariaLabelledby = null,
+		'aria-describedby': ariaDescribedby = null,
+		hidden = false,
+		disabled = false,
+		variant = null,
 		...rest
 	} = props;
 
-	const inputRef = useRef();
+	const inputRef = useRef<any>();
 
 	useImperativeHandle(ref, () => ({
         getInputRef: () => inputRef,
@@ -45,7 +64,7 @@ const NumericInputField = forwardRef((props, ref) => {
 			disabled={disabled}
 			variant={variant}
 		>
-			{({ describedBy, labelledBy, inputId }) => (
+			{({ describedBy, labelledBy, inputId }: { describedBy: string | null; labelledBy: string; inputId: string }) => (
 				<NumericInputFieldBase
 					{...rest}
 					type="number"
@@ -58,32 +77,5 @@ const NumericInputField = forwardRef((props, ref) => {
 		</InputLabel>
 	);
 });
-
-NumericInputField.propTypes = {
-	id: PropTypes.string,
-	className: PropTypes.string,
-	label: PropTypes.string,
-	disabled: PropTypes.bool,
-	// variant: Represents Size and other none coloring features.
-    variant: PropTypes.string,
-	'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-	hidden: PropTypes.bool,
-	failure: PropTypes.bool,
-	messages: PropTypes.inputMessages,
-};
-
-NumericInputField.defaultProps = {
-	id: null,
-	className: null,
-	label: null,
-	disabled: false,
-	variant: null,
-	'aria-labelledby': null,
-    'aria-describedby': null,
-	hidden: false,
-	failure: false,
-	messages: null,
-};
 
 export default NumericInputField;

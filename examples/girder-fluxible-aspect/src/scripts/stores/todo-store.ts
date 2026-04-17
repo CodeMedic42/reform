@@ -2,6 +2,22 @@ import {createStore} from 'fluxible/addons';
 import find from 'lodash/find';
 import isNil from 'lodash/isNil';
 
+interface Todo {
+    id: string;
+    text: string;
+    completed: boolean;
+}
+
+interface TogglePayload {
+    id: string;
+    completed: boolean;
+}
+
+interface TodoStoreInstance {
+    todos: Todo[];
+    emitChange: () => void;
+}
+
 const TodoListStore = createStore({
     storeName: 'TodoListStore',
     handlers: {
@@ -9,23 +25,23 @@ const TodoListStore = createStore({
         'TOGGLE_ALL': 'toggleAll',
         'TOGGLE': 'toggle',
     },
-    initialize: function() {
+    initialize: function(this: TodoStoreInstance): void {
         this.todos = [];
     },
-    addTodo: function(todo) {
+    addTodo: function(this: TodoStoreInstance, todo: Todo): void {
         this.todos.push(todo);
 
         this.emitChange();
     },
-    toggleAll: function(completed) {
-        this.todos.forEach((todo) => {
+    toggleAll: function(this: TodoStoreInstance, completed: boolean): void {
+        this.todos.forEach((todo: Todo) => {
             todo.completed = completed;
         });
 
         this.emitChange();
     },
-    toggle: function({ id, completed }) {
-        const todo = find(this.todos, (todo) => todo.id === id);
+    toggle: function(this: TodoStoreInstance, { id, completed }: TogglePayload): void {
+        const todo = find(this.todos, (todo: Todo) => todo.id === id);
 
         if (!isNil(todo)) {
             todo.completed = completed;
@@ -33,7 +49,7 @@ const TodoListStore = createStore({
             this.emitChange();
         }
     },
-    getState: function() {
+    getState: function(this: TodoStoreInstance): { todos: Todo[] } {
         return {
             todos: this.todos
         }

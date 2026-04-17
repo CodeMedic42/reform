@@ -1,3 +1,3 @@
-import TextareaInputField from './textarea-input-field.jsx';
+import TextareaInputField from './textarea-input-field.js';
 
 export default TextareaInputField;

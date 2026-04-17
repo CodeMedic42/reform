@@ -1,3 +1,3 @@
-import DateRangeInput from './date-range-input-field.jsx';
+import DateRangeInput from './date-range-input-field.js';
 
 export default DateRangeInput;

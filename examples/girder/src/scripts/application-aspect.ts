@@ -1,12 +1,11 @@
-import { Aspect } from '@reformjs/girder';
+import { Aspect, AspectSettings, AspectStartContext } from '@reformjs/girder';
 
 class ApplicationAspect extends Aspect {
     constructor() {
         super('application');
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    settings() {
+    settings(): AspectSettings {
         return {
             messagePrint: [
                 'Hello World.',
@@ -15,14 +14,11 @@ class ApplicationAspect extends Aspect {
         };
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    onStart(context) {
-        context.getAspect('messagePrint').print();
+    onStart(context: AspectStartContext): void {
+        (context.getAspect('messagePrint') as { print: () => void }).print();
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    onStop() {
-        // eslint-disable-next-line no-console
+    onStop(): void {
         console.log('Application context is stopping');
     }
 }

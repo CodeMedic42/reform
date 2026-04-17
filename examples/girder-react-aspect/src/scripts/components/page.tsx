@@ -2,7 +2,7 @@ import React from 'react';
 import IncrementClass from "./increment-class";
 import IncrementHook from "./increment-hook";
 
-function Page() {
+function Page(): React.ReactElement {
     return (
         <div>
             <IncrementHook />

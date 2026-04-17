@@ -1,37 +1,30 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent, createRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import DropDownList from '../drop-down/drop-down-list.js';
 
-class MenuList extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-    };
+interface MenuListProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+    [key: string]: unknown;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-    };
+class MenuList extends PureComponent<MenuListProps> {
+    private listRef: React.RefObject<DropDownList>;
 
-    constructor(...args) {
-        super(...args);
+    constructor(props: MenuListProps) {
+        super(props);
 
         this.listRef = createRef();
     }
 
-    getRootNode() {
-        return this.listRef.current.getRootNode();
+    getRootNode(): HTMLElement | null {
+        return this.listRef.current?.getRootNode() ?? null;
     }
 
-    render() {
-        const { className, children, ...rest } = this.props;
+    render(): React.ReactNode {
+        const { className = null, children = null, ...rest } = this.props;
 
         return (
             <DropDownList

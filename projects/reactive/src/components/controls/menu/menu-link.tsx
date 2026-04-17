@@ -3,50 +3,32 @@ import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import ListItemLink from '../drop-down/list-item-link.js';
 import Icon from '../../display/icon/index.js';
-import PropTypes from '../../../common/prop-types.js';
 import MenuItem from './menu-item.js';
 
-class MenuLink extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        icon: PropTypes.icon,
-        children: PropTypes.string,
-        onClick: PropTypes.func,
-        'aria-label': PropTypes.string,
-        // eslint-disable-next-line react/forbid-prop-types
-        onClickMeta: PropTypes.any,
-        selected: PropTypes.bool,
-        targeted: PropTypes.bool,
-        disabled: PropTypes.bool,
-        href: PropTypes.string,
-        borderBottom: PropTypes.bool,
-        borderTop: PropTypes.bool,
-    };
+interface MenuLinkProps {
+    id?: string | null;
+    className?: string | null;
+    icon?: unknown | null;
+    children?: string | null;
+    onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
+    'aria-label'?: string | null;
+    onClickMeta?: unknown | null;
+    selected?: boolean;
+    targeted?: boolean;
+    disabled?: boolean;
+    href?: string | null;
+    borderBottom?: boolean;
+    borderTop?: boolean;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        onClick: null,
-        onClickMeta: null,
-        selected: false,
-        targeted: false,
-        disabled: false,
-        icon: null,
-        children: null,
-        href: null,
-        borderBottom: false,
-        borderTop: false,
-        'aria-label': null,
-    };
-
-    constructor(props) {
+class MenuLink extends PureComponent<MenuLinkProps> {
+    constructor(props: MenuLinkProps) {
         super(props);
 
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick({ event }) {
+    handleClick({ event }: { event: React.MouseEvent }): void {
         const { onClick, onClickMeta } = this.props;
 
         if (event.defaultPrevented) {
@@ -61,19 +43,19 @@ class MenuLink extends PureComponent {
         }
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            selected,
-            targeted,
-            disabled,
-            href,
-            borderBottom,
-            borderTop,
-            icon,
-            'aria-label': ariaLabel,
-            children,
+            id = null,
+            className = null,
+            selected = false,
+            targeted = false,
+            disabled = false,
+            href = null,
+            borderBottom = false,
+            borderTop = false,
+            icon = null,
+            'aria-label': ariaLabel = null,
+            children = null,
         } = this.props;
 
         return (

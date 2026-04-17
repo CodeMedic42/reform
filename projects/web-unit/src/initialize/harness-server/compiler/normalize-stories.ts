@@ -1,16 +1,37 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 // const dedent = require('ts-dedent');
-const { scan } = require('picomatch');
-const slash = require('slash');
-const { normalizeStoryPath } = require('./paths.js');
-const globToRegexp = require('./glob-to-regexp.js');
+import { scan } from 'picomatch';
+import slash from 'slash';
+import { normalizeStoryPath } from './paths.js';
+import globToRegexp from './glob-to-regexp.js';
 
-const DEFAULT_TITLE_PREFIX = '';
-const DEFAULT_FILES = '**/*.stories.@(mdx|tsx|ts|jsx|js)';
+const DEFAULT_TITLE_PREFIX: string = '';
+const DEFAULT_FILES: string = '**/*.stories.@(mdx|tsx|ts|jsx|js)';
+
+interface StorySpecifier {
+    titlePrefix: string;
+    directory: string;
+    files: string;
+}
+
+interface NormalizedStorySpecifier extends StorySpecifier {
+    constPathMatcher: RegExp;
+}
+
+interface DirectoryOptions {
+    configDir: string;
+    workingDir: string;
+}
+
+interface DirectoryFromWorkingDirParams {
+    configDir: string;
+    workingDir: string;
+    directory: string;
+}
 
 // eslint-disable-next-line arrow-body-style
-const detectBadGlob = (val) => {
+const detectBadGlob = (val: string): string => {
     // const match = val.match(/\.(\([^)]+\))/);
 
     // if (match) {
@@ -20,7 +41,7 @@ const detectBadGlob = (val) => {
     return val;
 };
 
-const isDirectory = (configDir, entry) => {
+const isDirectory = (configDir: string, entry: string): boolean => {
     try {
         return fs.lstatSync(path.resolve(configDir, entry)).isDirectory();
     } catch (err) {
@@ -32,9 +53,9 @@ export const getDirectoryFromWorkingDir = ({
     configDir,
     workingDir,
     directory,
-}) => {
-    const directoryFromConfig = path.resolve(configDir, directory);
-    const directoryFromWorking = path.relative(workingDir, directoryFromConfig);
+}: DirectoryFromWorkingDirParams): string => {
+    const directoryFromConfig: string = path.resolve(configDir, directory);
+    const directoryFromWorking: string = path.relative(workingDir, directoryFromConfig);
 
     // relative('/foo', '/foo/src') => 'src'
     // but we want `./src` to match constPaths
@@ -42,17 +63,17 @@ export const getDirectoryFromWorkingDir = ({
 };
 
 export const normalizeStoriesEntry = (
-    entry,
-    { configDir, workingDir },
-) => {
-    let specifierWithoutMatcher;
+    entry: string | Partial<StorySpecifier>,
+    { configDir, workingDir }: DirectoryOptions,
+): NormalizedStorySpecifier => {
+    let specifierWithoutMatcher: StorySpecifier;
 
     if (typeof entry === 'string') {
-        const fixedEntry = detectBadGlob(entry);
+        const fixedEntry: string = detectBadGlob(entry);
         const globResult = scan(fixedEntry);
         if (globResult.isGlob) {
-            const directory = globResult.prefix + globResult.base;
-            const files = globResult.glob;
+            const directory: string = globResult.prefix + globResult.base;
+            const files: string = globResult.glob;
 
             specifierWithoutMatcher = {
                 titlePrefix: DEFAULT_TITLE_PREFIX,
@@ -76,19 +97,20 @@ export const normalizeStoriesEntry = (
         specifierWithoutMatcher = {
             titlePrefix: DEFAULT_TITLE_PREFIX,
             files: DEFAULT_FILES,
+            directory: '',
             ...entry,
         };
     }
 
     // We are going to be doing everything with node constPaths which use
     // URL format, i.e. `/` as a separator, so let's make sure we've normalized
-    const files = slash(specifierWithoutMatcher.files);
+    const files: string = slash(specifierWithoutMatcher.files);
 
     // At this stage `directory` is relative to `main.js` (the config dir)
     // We want to work relative to the working dir, so we transform it here.
     const { directory: directoryRelativeToConfig } = specifierWithoutMatcher;
 
-    const directory = slash(
+    const directory: string = slash(
         getDirectoryFromWorkingDir({
             configDir,
             workingDir,
@@ -97,7 +119,7 @@ export const normalizeStoriesEntry = (
     ).replace(/\/$/, '');
 
     // Now make the constFn matcher.
-    const constPathMatcher = globToRegexp(`${directory}/${files}`);
+    const constPathMatcher: RegExp = globToRegexp(`${directory}/${files}`);
 
     return {
         ...specifierWithoutMatcher,
@@ -106,6 +128,9 @@ export const normalizeStoriesEntry = (
     };
 };
 
-module.exports.normalizeStories = (entries, options) => entries.map(
-    (entry) => normalizeStoriesEntry(entry, options),
+export const normalizeStories = (
+    entries: (string | Partial<StorySpecifier>)[],
+    options: DirectoryOptions,
+): NormalizedStorySpecifier[] => entries.map(
+    (entry: string | Partial<StorySpecifier>) => normalizeStoriesEntry(entry, options),
 );

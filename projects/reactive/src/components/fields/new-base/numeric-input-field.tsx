@@ -2,9 +2,14 @@
 import React, { forwardRef, useCallback } from 'react';
 import { isNil, isNaN } from 'lodash-es';
 
-import PropTypes from '../../../common/prop-types.js';
+interface NumericInputProps {
+	onChange: (value: number | null) => void;
+	value?: string | null;
+	Component: React.ElementType;
+	[key: string]: unknown;
+}
 
-function getNumericValue(value) {
+function getNumericValue(value: string | null | undefined): string {
 	if (isNil(value)) {
 		return '';
 	}
@@ -16,15 +21,15 @@ function getNumericValue(value) {
 	return toString(value);
 }
 
-const NumericInput = forwardRef((props, ref) => {
+const NumericInput = forwardRef<unknown, NumericInputProps>((props, ref) => {
 	const {
 		onChange,
-		value,
+		value = null,
 		Component,
 		...rest
 	} = props;
 
-	const handleChange = useCallback((event) => {
+	const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		const {
 			target: { value: newValue, valueAsNumber, validity },
 		} = event;
@@ -41,18 +46,6 @@ const NumericInput = forwardRef((props, ref) => {
 		/>
 	);
 });
-
-NumericInput.propTypes = {
-	onChange: PropTypes.func.isRequired,
-	value: PropTypes.string,
-	// eslint-disable-next-line react/forbid-prop-types
-	// eslint-disable-next-line react/forbid-prop-types
-	Component: PropTypes.Component.isRequired,
-};
-
-NumericInput.defaultProps = {
-	value: null,
-};
 
 NumericInput.displayName = 'StringInput';
 

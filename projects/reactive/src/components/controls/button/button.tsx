@@ -6,36 +6,12 @@ import { isNil, isEmpty } from 'lodash-es';
 import {
     getSchemeColorClasses,
 } from '../../../common/color-list.js';
-import PropTypes from '../../../common/prop-types.js';
+import { ButtonProps } from './button.types.js';
 
-class Button extends PureComponent {
-    static propTypes = {
-        className: PropTypes.string,
-        Component: PropTypes.Component,
-        // color: Represents color to use.
-        color: PropTypes.string,
-        // design: Represents coloring features.
-        design: PropTypes.string,
-        // variant: Represents Size and other none coloring features.
-        variant: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        focusOnMount: PropTypes.bool,
-    };
+class Button extends PureComponent<ButtonProps> {
+    private buttonRef: React.RefObject<HTMLElement>;
 
-    static defaultProps = {
-        Component: 'button',
-        className: null,
-        design: null,
-        color: null,
-        children: null,
-        variant: null,
-        focusOnMount: false,
-    };
-
-    constructor(props) {
+    constructor(props: ButtonProps) {
         super(props);
 
         this.buttonRef = React.createRef();
@@ -43,7 +19,7 @@ class Button extends PureComponent {
         this.focus = this.focus.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         const { focusOnMount } = this.props;
 
         if (focusOnMount) {
@@ -51,11 +27,11 @@ class Button extends PureComponent {
         }
     }
 
-    getRootNode() {
+    getRootNode(): HTMLElement | null {
         return this.buttonRef.current;
     }
 
-    focus() {
+    focus(): void {
         const { current } = this.buttonRef;
 
         if (isNil(current)) {
@@ -68,7 +44,7 @@ class Button extends PureComponent {
         current.focus();
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
             className,
             design,
@@ -77,7 +53,7 @@ class Button extends PureComponent {
             variant,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             focusOnMount,
-            Component,
+            Component = 'button',
             ...rest
         } = this.props;
 

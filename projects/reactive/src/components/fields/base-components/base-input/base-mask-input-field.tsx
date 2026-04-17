@@ -2,31 +2,58 @@ import React, { forwardRef, useImperativeHandle, useRef, useEffect } from 'react
 import classnames from 'classnames';
 import { isNil, noop } from 'lodash-es';
 import MaskedInput from 'react-text-mask';
-import BaseCursorInput from './base-cursor-input-field.jsx';
-import InputBase from './input-field-base.jsx';
-import PropTypes from '../../../../common/prop-types.js';
+import BaseCursorInput from './base-cursor-input-field.js';
+import InputBase from './input-field-base.js';
 
-const BaseMaskInput = forwardRef((props, ref) => {
+interface IconConfig {
+	icon: unknown;
+	onClick?: (() => void) | null;
+}
+
+interface RightIconConfig extends IconConfig {
+	overrideClear?: boolean;
+}
+
+interface BaseMaskInputProps {
+	id?: string | null;
+	className?: string | null;
+	value?: string | number | null;
+	disabled?: boolean;
+	onChange?: ((value: string | null) => void) | null;
+	onClear?: (() => void) | null;
+	size?: 'sm' | 'md' | 'lg';
+	leftIcon?: IconConfig | null;
+	rightIcon?: RightIconConfig | null;
+	focusOnMount?: boolean;
+	showFocused?: boolean;
+	mask: ((value: string) => Array<string | RegExp>) | Array<string | RegExp>;
+	showMask?: boolean | null;
+	guide?: boolean;
+	keepCharPositions?: boolean;
+	[key: string]: unknown;
+}
+
+const BaseMaskInput = forwardRef<unknown, BaseMaskInputProps>((props, ref) => {
 	const {
-		focusOnMount,
-		disabled,
-		id,
-		className,
-		value,
-		onChange,
-		onClear,
-		size,
-		rightIcon,
-		showFocused,
-		leftIcon,
+		focusOnMount = false,
+		disabled = false,
+		id = null,
+		className = null,
+		value = null,
+		onChange = noop,
+		onClear = null,
+		size = 'md',
+		rightIcon = null,
+		showFocused = false,
+		leftIcon = null,
 		mask,
-		showMask,
-		guide,
-		keepCharPositions,
+		showMask = null,
+		guide = false,
+		keepCharPositions = false,
 		...rest
 	} = props;
 
-	const inputRef = useRef();
+	const inputRef = useRef<any>();
 
 	useImperativeHandle(ref, () => ({
         focus: () => {
@@ -59,7 +86,7 @@ const BaseMaskInput = forwardRef((props, ref) => {
 			leftIcon={leftIcon}
 			rightIcon={rightIcon}
 		>
-			{({ value: baseValue, onChange: baseOnChange }) => (
+			{({ value: baseValue, onChange: baseOnChange }: { value: string | null; onChange: (value: string | null) => void }) => (
 				<InputBase
 					ref={inputRef}
 					Component={MaskedInput}
@@ -83,55 +110,5 @@ const BaseMaskInput = forwardRef((props, ref) => {
 });
 
 BaseMaskInput.displayName = 'BaseMaskInput';
-
-BaseMaskInput.propTypes = {
-	id: PropTypes.string,
-	className: PropTypes.string,
-	value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    disabled: PropTypes.bool,
-    onChange: PropTypes.func,
-    onClear: PropTypes.func,
-    size: PropTypes.oneOf(['sm', 'md', 'lg']),
-    leftIcon: PropTypes.shape({
-        icon: PropTypes.icon.isRequired,
-        onClick: PropTypes.func,
-    }),
-    rightIcon: PropTypes.shape({
-        icon: PropTypes.icon.isRequired,
-        onClick: PropTypes.func,
-        overrideClear: PropTypes.bool,
-    }),
-	focusOnMount: PropTypes.bool,
-	showFocused: PropTypes.bool,
-	mask: PropTypes.oneOfType([
-		PropTypes.func,
-		PropTypes.arrayOf(
-			PropTypes.oneOfType([
-				PropTypes.string,
-				PropTypes.instanceOf(RegExp),
-			]),
-		),
-	]).isRequired,
-	showMask: PropTypes.bool,
-	guide: PropTypes.bool,
-	keepCharPositions: PropTypes.bool,
-};
-
-BaseMaskInput.defaultProps = {
-	focusOnMount: false,
-	showFocused: false,
-	guide: false,
-	keepCharPositions: false,
-	showMask: null,
-	id: null,
-	className: null,
-    value: null,
-    disabled: false,
-    onClear: null,
-    leftIcon: null,
-    rightIcon: null,
-    size: 'md',
-    onChange: noop,
-};
 
 export default BaseMaskInput;

@@ -2,7 +2,18 @@ import React, { useCallback } from 'react';
 import { observer } from 'mobx-react';
 import { useAspect } from '@reformjs/girder-react-aspect';
 
-function Todo(props) {
+interface TodoItem {
+    text: string;
+    completed: boolean;
+    id?: string;
+    setCompleted(completed: boolean): void;
+}
+
+interface TodoProps {
+    todo: TodoItem;
+}
+
+function Todo(props: TodoProps): React.ReactElement {
     const {
         todo,
     } = props;

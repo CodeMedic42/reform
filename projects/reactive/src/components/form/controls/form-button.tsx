@@ -1,14 +1,13 @@
 import React from "react";
 import classNames from "classnames";
 import Button from "../../controls/button/index.js";
+import { ButtonProps } from "../../controls/button/button.types.js";
 import { isNil } from "lodash-es";
 import { Property, Data } from "@reformjs/reactive-data";
 import FormAccess, { FormAccessControl } from "../support/form-access.js";
 
-interface FormButtonProps extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onClick'> {
+interface FormButtonProps extends Omit<ButtonProps, 'onClick'> {
 	path?: string,
-	className?: string,
-	children: React.ReactNode,
 	onClick?: (event: React.MouseEvent<HTMLButtonElement>, form: { property: Property, data: Data}) => void,
 }
 

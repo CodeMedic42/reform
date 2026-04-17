@@ -1,3 +1,3 @@
-import SelectTextInput from './select-text-input-field.jsx';
+import SelectTextInput from './select-text-input-field.js';
 
 export default SelectTextInput;

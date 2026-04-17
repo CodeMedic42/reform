@@ -1,50 +1,37 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import {
-	colorPropType,
+	Color,
+	PaletteShade,
 	getColorInfo,
-	shadePropType,
 } from '../../../common/color-list.js';
 import { getDefaultSize } from './utils.js';
 
-class Chip extends PureComponent {
-	static propTypes = {
-		id: PropTypes.string,
-		className: PropTypes.string,
-		color: colorPropType,
-		shade: shadePropType,
-		size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
-		disabled: PropTypes.bool,
-		floating: PropTypes.bool,
-		children: PropTypes.oneOfType([
-			PropTypes.node,
-			PropTypes.arrayOf(PropTypes.node),
-		]),
-		variant: PropTypes.oneOf(['rectangle', 'pill']),
-		onClick: PropTypes.func,
-		// eslint-disable-next-line react/forbid-prop-types
-		onClickMeta: PropTypes.any,
-		asButton: PropTypes.bool,
-	};
+interface ChipClickEvent {
+	event: React.MouseEvent<HTMLButtonElement>;
+	meta: unknown;
+}
 
-	static defaultProps = {
-		id: null,
-		className: null,
-		shade: 'lighter',
-		children: null,
-		size: 'md',
-		floating: false,
-		variant: 'rectangle',
-		onClick: null,
-		onClickMeta: null,
-		disabled: false,
-		asButton: false,
-		color: null,
-	};
+interface ChipProps {
+	id?: string | null;
+	className?: string | null;
+	color?: Color | null;
+	shade?: PaletteShade | null;
+	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | null;
+	disabled?: boolean;
+	floating?: boolean;
+	children?: React.ReactNode;
+	variant?: 'rectangle' | 'pill' | null;
+	onClick?: ((event: ChipClickEvent) => void) | null;
+	onClickMeta?: unknown;
+	asButton?: boolean;
+}
 
-	constructor(props) {
+class Chip extends PureComponent<ChipProps> {
+	private buttonRef: React.RefObject<HTMLButtonElement | null>;
+
+	constructor(props: ChipProps) {
 		super(props);
 
 		this.buttonRef = React.createRef();
@@ -52,7 +39,7 @@ class Chip extends PureComponent {
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick(event) {
+	handleClick(event: React.MouseEvent<HTMLButtonElement>): void {
 		const { onClick, onClickMeta } = this.props;
 
 		if (isNil(onClick)) {
@@ -62,7 +49,7 @@ class Chip extends PureComponent {
 		onClick({ event, meta: onClickMeta });
 	}
 
-	focus() {
+	focus(): void {
 		const { onClick } = this.props;
 
 		if (isNil(onClick)) {
@@ -81,25 +68,24 @@ class Chip extends PureComponent {
 		current.focus();
 	}
 
-	render() {
+	render(): React.ReactNode {
 		const {
-			id,
-			className,
-			children,
-			color,
-			shade,
-			size,
-			floating,
-			variant,
-			onClick,
-			disabled,
-			asButton,
+			id = null,
+			className = null,
+			children = null,
+			color = null,
+			shade = 'lighter',
+			size = 'md',
+			floating = false,
+			variant = 'rectangle',
+			onClick = null,
+			disabled = false,
+			asButton = false,
 		} = this.props;
 
 		const { colorClasses } = getColorInfo({
 			color,
 			shade,
-			style: 'fill',
 			enableBackground: true,
 			colorRequired: false,
 		});
@@ -123,7 +109,7 @@ class Chip extends PureComponent {
 		if (!isNil(onClick) || asButton) {
 			return (
 				<button
-					id={id}
+					id={id ?? undefined}
 					className={finalClassName}
 					type="button"
 					onClick={this.handleClick}
@@ -134,7 +120,7 @@ class Chip extends PureComponent {
 			);
 		}
 		return (
-			<span id={id} className={finalClassName}>
+			<span id={id ?? undefined} className={finalClassName}>
 				{children}
 			</span>
 		);

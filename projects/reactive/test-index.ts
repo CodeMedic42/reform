@@ -1,1 +1,1 @@
-const tsPreset = require('ts-jest/jest-preset');
+const tsPreset: Record<string, unknown> = require('ts-jest/jest-preset');

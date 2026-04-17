@@ -2,7 +2,7 @@
 import React from 'react';
 import Spinner from '@reformjs/reactive/display/spinner';
 
-function example(props) {
+function example(props: Record<string, unknown>) {
     return (
         <Spinner {...props} />
     );

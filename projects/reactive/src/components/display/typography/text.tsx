@@ -1,50 +1,33 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import { colorPropType, getColorInfo } from '../../../common/color-list.js';
+import { Color, getColorInfo } from '../../../common/color-list.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-class Text extends PureComponent {
-    static propTypes = {
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        // eslint-disable-next-line react/forbid-prop-types
-        style: PropTypes.object,
-        singleLine: PropTypes.bool,
-        size: PropTypes.oneOf(['xl', 'lg', 'md', 'sm', 'xs']),
-        weight: PropTypes.oneOf(['bold', 'semi-bold', 'normal']),
-        color: colorPropType,
-        applyMargin: PropTypes.bool,
-        forwardRef: PropTypes.instanceOf(Object),
-    };
+interface TextProps {
+    className?: string | null;
+    children?: React.ReactNode;
+    style?: React.CSSProperties | null;
+    singleLine?: boolean;
+    size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs' | null;
+    weight?: 'bold' | 'semi-bold' | 'normal' | null;
+    color?: Color | null;
+    applyMargin?: boolean;
+    forwardRef?: React.Ref<HTMLSpanElement> | null;
+}
 
-    static defaultProps = {
-        className: null,
-        children: null,
-        color: null,
-        weight: null,
-        size: null,
-        singleLine: false,
-        style: null,
-        applyMargin: false,
-        forwardRef: null,
-    };
-
-    render() {
+class Text extends PureComponent<TextProps> {
+    render(): React.ReactNode {
         const {
-            color,
-            className,
-            size,
-            weight,
-            children,
-            style,
-            applyMargin,
-            singleLine,
-            forwardRef,
+            color = null,
+            className = null,
+            size = null,
+            weight = null,
+            children = null,
+            style = null,
+            applyMargin = false,
+            singleLine = false,
+            forwardRef = null,
         } = this.props;
 
         const sizeClass = !isNil(size) ? `size-${size}` : null;
@@ -66,7 +49,7 @@ class Text extends PureComponent {
                         'single-line': singleLine,
                     },
                 )}
-                style={style}
+                style={style ?? undefined}
             >
                 {children}
             </span>

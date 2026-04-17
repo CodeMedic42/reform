@@ -22,5 +22,3 @@ class SimpleModel extends BaseModel {
 }
 // Register this model type
 registerModel('simple', SimpleModel);
-
-export { SimpleModel as default };

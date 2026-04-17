@@ -1,31 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-class Caption extends PureComponent {
-    static propTypes = {
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        label: PropTypes.string.isRequired,
-        forwardRef: PropTypes.instanceOf(Object),
-    };
+interface CaptionProps {
+    className?: string | null;
+    children?: React.ReactNode;
+    label: string;
+    forwardRef?: React.Ref<unknown> | null;
+    [key: string]: unknown;
+}
 
-    static defaultProps = {
-        className: null,
-        children: null,
-        forwardRef: null,
-    };
-
-    render() {
+class Caption extends PureComponent<CaptionProps> {
+    render(): React.ReactNode {
         const {
-            className, label, forwardRef, children, ...rest
+            className = null, label, forwardRef = null, children = null, ...rest
         } = this.props;
 
         const labelValue = !isNil(label) ? (

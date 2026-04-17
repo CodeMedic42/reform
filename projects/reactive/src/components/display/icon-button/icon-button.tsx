@@ -1,82 +1,48 @@
 import React from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../icon/index.js';
-import PropTypes from '../../../common/prop-types.js';
 import {
-    schemeColorPropType,
+    SchemeColor,
     getSchemeColorClasses,
 } from '../../../common/color-list.js';
 
-class IconButton extends React.Component {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        // eslint-disable-next-line react/forbid-prop-types
-        style: PropTypes.object,
-        'aria-label': PropTypes.string,
-        title: PropTypes.string,
-        icon: PropTypes.icon,
-        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
-        variant: PropTypes.oneOf([
-            'none',
-            'fill',
-            'outline',
-            'opaque',
-            'fill-dark',
-        ]),
-        shape: PropTypes.oneOf(['circle', 'square']),
-        color: schemeColorPropType,
-        hidden: PropTypes.bool,
-        disabled: PropTypes.bool,
-        onClick: PropTypes.func,
-        onFocus: PropTypes.func,
-        onBlur: PropTypes.func,
-        onKeyUp: PropTypes.func,
-        onKeyDown: PropTypes.func,
-        onKeyPress: PropTypes.func,
-        onMouseDown: PropTypes.func,
-        tabIndex: PropTypes.string,
-        alignToIcon: PropTypes.bool,
-        children: PropTypes.node,
-        disableControlFeatures: PropTypes.bool,
-        responsive: PropTypes.bool,
-    };
+interface IconButtonProps {
+    id?: string | null;
+    className?: string | null;
+    style?: React.CSSProperties | null;
+    'aria-label'?: string | null;
+    title?: string | null;
+    icon?: IconProp | null;
+    size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+    variant?: 'none' | 'fill' | 'outline' | 'opaque' | 'fill-dark';
+    shape?: 'circle' | 'square';
+    color?: SchemeColor | null;
+    hidden?: boolean;
+    disabled?: boolean;
+    onClick?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | null;
+    onFocus?: ((event: React.FocusEvent<HTMLButtonElement>) => void) | null;
+    onBlur?: ((event: React.FocusEvent<HTMLButtonElement>) => void) | null;
+    onKeyUp?: ((event: React.KeyboardEvent<HTMLButtonElement>) => void) | null;
+    onKeyDown?: ((event: React.KeyboardEvent<HTMLButtonElement>) => void) | null;
+    onKeyPress?: ((event: React.KeyboardEvent<HTMLButtonElement>) => void) | null;
+    onMouseDown?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | null;
+    tabIndex?: string | null;
+    alignToIcon?: boolean;
+    children?: React.ReactNode;
+    disableControlFeatures?: boolean;
+    responsive?: boolean;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        style: null,
-        icon: null,
-        'aria-label': null,
-        title: null,
-        size: 'md',
-        color: null,
-        shape: 'circle',
-        variant: 'opaque',
-        hidden: false,
-        disabled: false,
-        onClick: null,
-        onFocus: null,
-        onBlur: null,
-        onKeyUp: null,
-        onKeyPress: null,
-        onKeyDown: null,
-        tabIndex: null,
-        onMouseDown: null,
-        alignToIcon: false,
-        children: null,
-        disableControlFeatures: false,
-        responsive: false,
-    };
-
-    constructor(props) {
+class IconButton extends React.Component<IconButtonProps> {
+    constructor(props: IconButtonProps) {
         super(props);
 
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(event) {
+    handleClick(event: React.MouseEvent<HTMLButtonElement>): void {
         const { onClick } = this.props;
 
         if (isNil(onClick)) {
@@ -86,39 +52,39 @@ class IconButton extends React.Component {
         onClick(event);
     }
 
-    renderIcon() {
-        const { icon, children } = this.props;
+    renderIcon(): React.ReactNode {
+        const { icon = null, children = null } = this.props;
 
         if (!isNil(children)) {
             return children;
         }
 
-        return <Icon icon={icon} />;
+        return <Icon icon={icon!} />;
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            style,
-            'aria-label': ariaLabel,
-            title,
-            size,
-            color,
-            hidden,
-            disabled,
-            onFocus,
-            onBlur,
-            onKeyUp,
-            onKeyDown,
-            onKeyPress,
-            variant,
-            shape,
-            tabIndex,
-            onMouseDown,
-            alignToIcon,
-            disableControlFeatures,
-            responsive,
+            id = null,
+            className = null,
+            style = null,
+            'aria-label': ariaLabel = null,
+            title = null,
+            size = 'md',
+            color = null,
+            hidden = false,
+            disabled = false,
+            onFocus = null,
+            onBlur = null,
+            onKeyUp = null,
+            onKeyDown = null,
+            onKeyPress = null,
+            variant = 'opaque',
+            shape = 'circle',
+            tabIndex = null,
+            onMouseDown = null,
+            alignToIcon = false,
+            disableControlFeatures = false,
+            responsive = false,
         } = this.props;
 
         const sizeClass = !isNil(size) ? `size-${size}` : 'size-xl';
@@ -136,8 +102,8 @@ class IconButton extends React.Component {
 
         return (
             <button
-                id={id}
-                style={style}
+                id={id ?? undefined}
+                style={style ?? undefined}
                 className={classnames(
                     className,
                     'ra-icon-btn',
@@ -154,17 +120,17 @@ class IconButton extends React.Component {
                     },
                 )}
                 type="button"
-                tabIndex={tabIndex}
-                aria-label={ariaLabel}
-                title={title}
+                tabIndex={tabIndex != null ? Number(tabIndex) : undefined}
+                aria-label={ariaLabel ?? undefined}
+                title={title ?? undefined}
                 disabled={disabled}
                 onClick={this.handleClick}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                onKeyUp={onKeyUp}
-                onKeyPress={onKeyPress}
-                onKeyDown={onKeyDown}
-                onMouseDown={onMouseDown}
+                onFocus={onFocus ?? undefined}
+                onBlur={onBlur ?? undefined}
+                onKeyUp={onKeyUp ?? undefined}
+                onKeyPress={onKeyPress ?? undefined}
+                onKeyDown={onKeyDown ?? undefined}
+                onMouseDown={onMouseDown ?? undefined}
             >
                 {floatBoxSizer}
                 {this.renderIcon()}

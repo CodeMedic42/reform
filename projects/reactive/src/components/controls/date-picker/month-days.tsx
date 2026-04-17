@@ -6,18 +6,28 @@ import lastDayOfMonth from 'date-fns/lastDayOfMonth';
 import { toFinite, isNil, map } from 'lodash-es';
 import PickerWeek from './picker-week.js';
 import PickerDay from './picker-day.js';
-import PropTypes from '../../../common/prop-types.js';
 
-function MonthDays(props) {
+interface MonthDaysProps {
+    currentYear: number;
+    currentMonth: number;
+    fromDate?: Date | null;
+    toDate?: Date | null;
+    targetDate?: Date | null;
+    onSelect?: ((date: Date) => void) | null;
+    firstDate?: number[] | null;
+    lastDate?: number[] | null;
+}
+
+function MonthDays(props: MonthDaysProps): React.ReactNode {
     const {
         currentYear,
         currentMonth,
-        fromDate,
-        toDate,
-        targetDate,
-        onSelect,
-        firstDate,
-        lastDate,
+        fromDate = null,
+        toDate = null,
+        targetDate = null,
+        onSelect = null,
+        firstDate = null,
+        lastDate = null,
     } = props;
 
     const firstMonthDay = 1;
@@ -29,8 +39,8 @@ function MonthDays(props) {
     firstDayWeekdayNumber = firstDayWeekdayNumber === 7 ? 1 : firstDayWeekdayNumber + 1;
 
     let weekDay = firstDayWeekdayNumber;
-    let currentWeek = [];
-    const weeks = [];
+    let currentWeek: React.ReactNode[] = [];
+    const weeks: React.ReactNode[][] = [];
 
     for (let dayCounter = firstMonthDay; dayCounter <= lastMonthDay; dayCounter += 1) {
         const dayDate = new Date(currentYear, currentMonth - 1, dayCounter);
@@ -78,25 +88,5 @@ function MonthDays(props) {
         </>
     );
 }
-
-MonthDays.propTypes = {
-    currentYear: PropTypes.number.isRequired,
-    currentMonth: PropTypes.number.isRequired,
-    fromDate: PropTypes.instanceOf(Date),
-    toDate: PropTypes.instanceOf(Date),
-    targetDate: PropTypes.instanceOf(Date),
-    onSelect: PropTypes.func,
-    firstDate: PropTypes.arrayOf(PropTypes.number),
-    lastDate: PropTypes.arrayOf(PropTypes.number),
-};
-
-MonthDays.defaultProps = {
-    fromDate: null,
-    toDate: null,
-    targetDate: null,
-    onSelect: null,
-    firstDate: null,
-    lastDate: null,
-};
 
 export default MonthDays;

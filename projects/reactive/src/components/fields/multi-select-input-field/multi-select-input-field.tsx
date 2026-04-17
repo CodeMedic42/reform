@@ -1,38 +1,46 @@
 import React, { useCallback, forwardRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil, clone, pullAt } from 'lodash-es';
-import Select, {
-	propTypes as selectPropTypes,
-	defaultProps as selectDefaultProps,
-} from '../base-components/select/index.js';
-import MultiSelectAnchor from './multi-select-input-field-anchor.jsx';
+import Select from '../base-components/select/index.js';
+import MultiSelectAnchor from './multi-select-input-field-anchor.js';
 
-const MultiSelectInput = forwardRef((props, ref) => {
+interface MultiSelectInputProps {
+	className?: string | null;
+	expandable?: boolean;
+	onChange?: ((value: Array<string | number> | null) => void) | null;
+	value?: Array<string | number> | null;
+	nullable?: boolean;
+	[key: string]: unknown;
+}
+
+const MultiSelectInput = forwardRef<unknown, MultiSelectInputProps>((props, ref) => {
 	const {
-		className,
-		expandable,
-		onChange,
-		value,
-		nullable,
+		className = null,
+		expandable = false,
+		onChange = null,
+		value = null,
+		nullable = false,
 		...rest
 	} = props;
 
     const handleClear = useCallback(() => {
-        onChange(null);
+        if (onChange) {
+            onChange(null);
+        }
     }, [ onChange ]);
 
-	const handleClearIndex = useCallback(({ index }) => {
+	const handleClearIndex = useCallback(({ index }: { index: number }) => {
         if (isNil(onChange)) {
             return;
         }
 
-        let newValue = clone(value);
+        let newValue = clone(value) as Array<string | number>;
 
         pullAt(newValue, [index]);
 
         if (newValue.length <= 0) {
-            newValue = null;
+            onChange(null);
+            return;
         }
 
         onChange(newValue);
@@ -59,27 +67,9 @@ const MultiSelectInput = forwardRef((props, ref) => {
             }}
 			useFilter
 			isMultiSelect
-			onSelect={onChange}
+			onSelect={onChange as ((value: unknown) => void) | null}
 		/>
 	);
 });
-
-MultiSelectInput.propTypes = {
-	...selectPropTypes,
-	value: PropTypes.arrayOf(
-		PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-	),
-	expandable: PropTypes.bool,
-	onChange: PropTypes.func,
-	nullable: PropTypes.bool,
-};
-
-MultiSelectInput.defaultProps = {
-	...selectDefaultProps,
-	value: null,
-	expandable: false,
-	onChange: null,
-	nullable: false,
-};
 
 export default MultiSelectInput;

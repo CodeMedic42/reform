@@ -2,10 +2,14 @@
 import React from 'react';
 import wrappedContext from './wrapped-context.js';
 
-export default function createContext(propName) {
-	const context = React.createContext();
+interface ContextWithConsumer<T> extends React.Context<T> {
+	ApplyConsumer: (Component: React.ComponentType<any>) => React.ComponentType<any>;
+}
 
-	context.ApplyConsumer = (Component) =>
+export default function createContext<T = unknown>(propName?: string): ContextWithConsumer<T> {
+	const context = React.createContext<T>(undefined as T) as ContextWithConsumer<T>;
+
+	context.ApplyConsumer = (Component: React.ComponentType<any>) =>
 		wrappedContext(context, Component, propName);
 
 	return context;

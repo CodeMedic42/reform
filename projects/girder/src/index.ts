@@ -6,3 +6,5 @@ export default Client;
 export {
     Aspect,
 };
+
+export type { AspectSettings, AspectInitContext, AspectStartContext } from './aspect.js';

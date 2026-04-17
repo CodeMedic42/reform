@@ -2,7 +2,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 import InfiniteList, { InfiniteListItems } from '@reformjs/reactive/arrangement/infinite-list';
 
-function chooseColor(index) {
+function chooseColor(index: number): string {
     const v = index % 10;
 
     if (v === 0) {
@@ -67,7 +67,7 @@ export default function DefaultStory() {
                 </div>
                 <InfiniteListItems
                     render={
-                        (item, [x, y]) => (
+                        (item: unknown, [x, y]: [number, number]) => (
                             <div
                                 style={{
                                     color: 'white',

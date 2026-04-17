@@ -1,29 +1,20 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-class Overline extends PureComponent {
-    static propTypes = {
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        forwardRef: PropTypes.instanceOf(Object),
-    };
+interface OverlineProps {
+    className?: string | null;
+    children?: React.ReactNode;
+    forwardRef?: React.Ref<unknown> | null;
+    [key: string]: unknown;
+}
 
-    static defaultProps = {
-        className: null,
-        children: null,
-        forwardRef: null,
-    };
-
-    render() {
+class Overline extends PureComponent<OverlineProps> {
+    render(): React.ReactNode {
         const {
-            className, children, forwardRef, ...rest
+            className = null, children = null, forwardRef = null, ...rest
         } = this.props;
 
         return (

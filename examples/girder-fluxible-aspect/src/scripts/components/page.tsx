@@ -7,12 +7,22 @@ import {
 import Todo from './todo';
 import { addTodo, toggleAll } from '../actions/todo-actions';
 
-function Page({ todos }) {
+interface TodoItem {
+    id: string;
+    text: string;
+    completed: boolean;
+}
+
+interface PageProps {
+    todos: TodoItem[];
+}
+
+function Page({ todos }: PageProps): React.ReactElement {
     const fluxContext = useFluxible();
 
-    const [tempValue, setTempValue] = useState('');
+    const [tempValue, setTempValue] = useState<string>('');
 
-    const handleClick = useCallback(() => {
+    const handleClick = useCallback((): void => {
         fluxContext.executeAction(addTodo, {
             text: tempValue,
             completed: false,
@@ -21,7 +31,7 @@ function Page({ todos }) {
         setTempValue('');
     });
 
-    const handleToggleClick = useCallback(() => {
+    const handleToggleClick = useCallback((): void => {
         fluxContext.executeAction(toggleAll, true);
     });
 
@@ -29,7 +39,7 @@ function Page({ todos }) {
         <div>
             <input
                 value={tempValue}
-                onChange={(event) => setTempValue(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setTempValue(event.target.value)}
             />
             <button
                 onClick={handleClick}
@@ -43,7 +53,7 @@ function Page({ todos }) {
                 Mark All Completed
             </button>
             {
-                todos.map((todo, index) => {
+                todos.map((todo: TodoItem, index: number) => {
                     return (
                         <Todo key={index} todo={todo}/>
                     );
@@ -56,7 +66,7 @@ function Page({ todos }) {
 export default connectToStores(
     Page,
     ['TodoListStore'],
-    (context, props) => {
+    (context: { getStore: (name: string) => { todos: TodoItem[] } }, props: Record<string, unknown>) => {
         const store = context.getStore('TodoListStore');
 
         return {

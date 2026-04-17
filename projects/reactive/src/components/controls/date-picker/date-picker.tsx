@@ -8,11 +8,26 @@ import isEqual from 'date-fns/isEqual';
 /* eslint-enable import/no-duplicates */
 import { isNil } from 'lodash-es';
 import PickerMonth from './picker-month.js';
-import PropTypes from '../../../common/prop-types.js';
 import buildId from '../../../common/build-id.js';
 import InfiniteList, { InfiniteListItems } from '../../arrangement/infinite-list/index.js';
 
-function getDateArray(date) {
+interface DatePickerProps {
+    id?: string | null;
+    className?: string | null;
+    fromDate?: Date | null;
+    toDate?: Date | null;
+    targetDate?: Date | null;
+    onSelect?: ((date: Date) => void) | null;
+    hold?: boolean;
+    minDate: Date;
+    maxDate?: Date | null;
+}
+
+export interface DatePickerHandle {
+    gotoDate: (date: Date) => void;
+}
+
+function getDateArray(date: Date): [number, number, number] {
     const day = getDate(date);
     const month = getMonth(date) + 1;
     const year = getYear(date);
@@ -20,15 +35,15 @@ function getDateArray(date) {
     return [year, month, day];
 }
 
-const DatePicker = forwardRef((props, ref) => {
+const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) => {
     const {
-        id,
-        className,
-        onSelect,
-        targetDate,
-        hold,
+        id = null,
+        className = null,
+        onSelect = null,
+        targetDate = null,
+        hold = false,
         minDate,
-        maxDate,
+        maxDate = null,
     } = props;
 
     let {
@@ -48,7 +63,7 @@ const DatePicker = forwardRef((props, ref) => {
         toDate = null;
     }
 
-    const infiniteListRef = useRef();
+    const infiniteListRef = useRef<{ gotoIndex: (index: [number, number]) => void }>(null);
 
 
     const startDate = useMemo(
@@ -76,9 +91,9 @@ const DatePicker = forwardRef((props, ref) => {
         const [year, month, day] = getDateArray(minDate);
 
         return {
-            minIndex: [year, 1],
-            firstIndex: [year, month],
-            fullFirstDate: [year, month, day],
+            minIndex: [year, 1] as [number, number],
+            firstIndex: [year, month] as [number, number],
+            fullFirstDate: [year, month, day] as [number, number, number],
         };
     }, [minDate]);
 
@@ -87,23 +102,23 @@ const DatePicker = forwardRef((props, ref) => {
         maxIndex,
         fullLastDate,
     } = useMemo(() => {
-        let year = null;
+        let year: number | null = null;
         let month = 12;
-        let day = null;
+        let day: number | null = null;
 
         if (!isNil(maxDate))  {
             [year, month, day] = getDateArray(maxDate);
         }
 
         return {
-            lastIndex: !isNil(year) ? [year, month] : null,
-            maxIndex: [year, 12],
-            fullLastDate: !isNil(day) ? [year, month, day] : null,
+            lastIndex: !isNil(year) ? [year, month] as [number, number] : null,
+            maxIndex: [year, 12] as [number | null, number],
+            fullLastDate: !isNil(day) ? [year, month, day] as [number | null, number, number] : null,
         };
     }, [maxDate]);
 
     useImperativeHandle(ref, () => ({
-        gotoDate: (date) => {
+        gotoDate: (date: Date) => {
             const [year, month] = getDateArray(date);
 
             let failed = false;
@@ -122,7 +137,7 @@ const DatePicker = forwardRef((props, ref) => {
                 throw new Error('The gotoDate value must between minDate and maxDate inclusively');
             }
 
-            infiniteListRef.current.gotoIndex([year, month]);
+            infiniteListRef.current!.gotoIndex([year, month]);
 		},
     }));
 
@@ -151,7 +166,7 @@ const DatePicker = forwardRef((props, ref) => {
                 <span className="ra-picker-week-day">Sa</span>
             </div>
             <InfiniteListItems
-                render={(_, [year, month]) => (
+                render={(_: unknown, [year, month]: [number, number]) => (
                     <PickerMonth
                         id={buildId(id, `${year}-${month}`)}
                         month={month}
@@ -170,28 +185,5 @@ const DatePicker = forwardRef((props, ref) => {
 });
 
 DatePicker.displayName = 'DatePicker';
-
-DatePicker.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    fromDate: PropTypes.instanceOf(Date),
-    toDate: PropTypes.instanceOf(Date),
-    targetDate: PropTypes.instanceOf(Date),
-    onSelect: PropTypes.func,
-    hold: PropTypes.bool,
-    minDate: PropTypes.instanceOf(Date).isRequired,
-    maxDate: PropTypes.instanceOf(Date),
-};
-
-DatePicker.defaultProps = {
-    id: null,
-    className: null,
-    fromDate: null,
-    toDate: null,
-    onSelect: null,
-    targetDate: null,
-    hold: false,
-    maxDate: null,
-};
 
 export default DatePicker;

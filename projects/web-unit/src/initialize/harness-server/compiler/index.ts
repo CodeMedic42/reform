@@ -1,20 +1,21 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const buildRegistrationHarness = require('./build-registration-harness.js');
+import webpack, { Compiler, Configuration } from 'webpack';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import buildRegistrationHarness from './build-registration-harness.js';
+import type RunContext from '../../run-context.js';
 
-const mapAliases = (dependencies, folder) => dependencies.reduce(
-    (acc, dependency) => ({
+const mapAliases = (dependencies: string[], folder: string): Record<string, string> => dependencies.reduce(
+    (acc: Record<string, string>, dependency: string) => ({
         [dependency]: path.resolve(`${folder}/${dependency}`),
         ...acc,
     }),
     {},
 );
 
-function getCompiler(runContext) {
-    const registrationHarness = buildRegistrationHarness(runContext);
+function getCompiler(runContext: RunContext): Compiler {
+    const registrationHarness: string = buildRegistrationHarness(runContext);
 
-    const config = {
+    const config: Configuration = {
         stats: 'none',
         infrastructureLogging: {
             level: 'none',
@@ -107,4 +108,4 @@ function getCompiler(runContext) {
     return webpack(config);
 }
 
-module.exports = getCompiler;
+export default getCompiler;

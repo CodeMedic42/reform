@@ -10,7 +10,7 @@ const paths = {
     workspaceRoot,
     srcRoot,
 	outputPath: path.resolve(workspaceRoot, 'dist'),
-	entryPath: path.resolve(srcRoot, 'index.js'),
+	entryPath: path.resolve(srcRoot, 'index.ts'),
 	templatePath: path.resolve(srcRoot, 'html/index.html'),
     jsFolder: 'js',
 }
@@ -65,7 +65,8 @@ module.exports = () =>
                                     cacheDirectory: true,
                                     presets: [
                                         "@babel/preset-env",
-                                        "@babel/preset-react"
+                                        "@babel/preset-react",
+                                        ["@babel/preset-typescript", { allowDeclareFields: true }]
                                     ],
                                 }
                             }
@@ -95,7 +96,7 @@ module.exports = () =>
                 ],
                 resolve: {
                     modules: ['node_modules', 'src'],
-                    extensions: ['*', '.js', '.jsx', '.css', '.scss', '.ts'],
+                    extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.css', '.scss'],
                 },
                 mode: 'development',
                 devtool: 'eval-source-map',

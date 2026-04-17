@@ -1,4 +1,3 @@
-
 import { types } from 'mobx-state-tree';
 
 const TodoModel = types.model('Todo', {
@@ -6,7 +5,7 @@ const TodoModel = types.model('Todo', {
     completed: types.boolean,
 })
 .actions((self) => ({
-    setCompleted(completed) {
+    setCompleted(completed: boolean): void {
         self.completed = completed;
     },
 }));

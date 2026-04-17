@@ -1,44 +1,35 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { get, isNil, map } from 'lodash-es';
 import TabBar from '../tab-bar/index.js';
-import { schemeColorPropType } from '../../../common/color-list.js';
+import { SchemeColor } from '../../../common/color-list.js';
 
-class TabGroup extends PureComponent {
-    static propTypes = {
-        defaultTabId: PropTypes.string,
-        size: PropTypes.oneOf(['lg', 'sm']),
-        justify: PropTypes.bool,
-        color: schemeColorPropType,
-        background: PropTypes.bool,
-        border: PropTypes.bool,
-        tabs: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.string,
-                heading: PropTypes.node,
-                body: PropTypes.node,
-                disabled: PropTypes.bool,
-                alwaysRenderBody: PropTypes.bool,
-            }),
-        ).isRequired,
-        onMove: PropTypes.func,
-        // eslint-disable-next-line react/forbid-prop-types
-        onMoveMeta: PropTypes.any,
-    };
+interface TabGroupTab {
+    id: string;
+    heading?: React.ReactNode;
+    body?: React.ReactNode;
+    disabled?: boolean;
+    alwaysRenderBody?: boolean;
+}
 
-    static defaultProps = {
-        defaultTabId: null,
-        size: 'lg',
-        justify: false,
-        background: false,
-        border: false,
-        color: 'primary',
-        onMove: null,
-        onMoveMeta: null,
-    };
+interface TabGroupProps {
+    defaultTabId?: string | null;
+    size?: 'lg' | 'sm';
+    justify?: boolean;
+    color?: SchemeColor;
+    background?: boolean;
+    border?: boolean;
+    tabs: TabGroupTab[];
+    onMove?: ((tabId: string, meta: { meta: unknown }) => boolean | void) | null;
+    onMoveMeta?: unknown;
+}
 
-    constructor(props) {
+interface TabGroupState {
+    selectedTabId: string | null;
+}
+
+class TabGroup extends PureComponent<TabGroupProps, TabGroupState> {
+    constructor(props: TabGroupProps) {
         super(props);
 
         this.handleSelect = this.handleSelect.bind(this);
@@ -48,7 +39,7 @@ class TabGroup extends PureComponent {
         };
     }
 
-    handleSelect(tabId) {
+    handleSelect(tabId: string): void {
         const { onMove, onMoveMeta } = this.props;
 
         if (!isNil(onMove)) {
@@ -66,9 +57,9 @@ class TabGroup extends PureComponent {
         });
     }
 
-    render() {
+    render(): React.ReactElement {
         const {
-            defaultTabId, size, justify, color, background, border, tabs,
+            defaultTabId = null, size = 'lg', justify = false, color = 'primary', background = false, border = false, tabs,
         } = this.props;
 
         let { selectedTabId } = this.state;

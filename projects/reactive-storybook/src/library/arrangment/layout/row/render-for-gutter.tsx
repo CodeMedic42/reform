@@ -2,7 +2,9 @@ import React from 'react';
 import { Container, Row, Column } from '@reformjs/reactive/arrangement/layout';
 import Content from '../common/content';
 
-export default function renderForGutter(gutter, hideOverflow) {
+type GutterValue = string | (string | null)[] | { h?: string | (string | null)[]; v?: string | (string | null)[] } | null;
+
+export default function renderForGutter(gutter: GutterValue, hideOverflow?: string) {
     return (
         <Container gutter={gutter} hideOverflow={hideOverflow}>
             <Row gutter="16">

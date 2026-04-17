@@ -1,23 +1,25 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, ReactNode } from 'react';
 
-class ErrorBoundary extends Component {
-    static propTypes = {
-        // eslint-disable-next-line react/forbid-prop-types
-        children: PropTypes.any.isRequired,
-    };
+interface ErrorBoundaryProps {
+    children: ReactNode;
+}
 
-    constructor(props) {
+interface ErrorBoundaryState {
+    errorMessage: string | null;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+    constructor(props: ErrorBoundaryProps) {
         super(props);
 
         this.state = { errorMessage: null };
     }
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError(error: Error): ErrorBoundaryState {
         return { errorMessage: error.message };
     }
 
-    render() {
+    render(): ReactNode {
         const { children } = this.props;
         const { errorMessage } = this.state;
 

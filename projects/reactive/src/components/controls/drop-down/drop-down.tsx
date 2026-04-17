@@ -1,102 +1,85 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { Component, createRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil, noop, get, debounce } from 'lodash-es';
 import Tray from '../../arrangement/tray/index.js';
 import Provider from './drop-down-context.js';
 
+type DropPosition = 'top' | 'bottom' | 'left' | 'right';
+
+interface DropDownProps {
+    id?: string | null;
+    className?: string | null;
+    trayClassName?: string | null;
+    children?: React.ReactNode;
+    onBlur?: ((event: React.FocusEvent) => void);
+    onFocus?: ((event: React.FocusEvent) => void);
+    disabled?: boolean;
+    dropPositions?: DropPosition[];
+    closeTrayOnClick?: boolean;
+    closeTrayOnEnter?: boolean;
+    minTrayWidth?: number | 'anchor' | null;
+    maxTrayWidth?: number | 'anchor' | null;
+    maxTrayHeight?: number | null;
+    onOpen?: (() => void) | null;
+    onClose?: (() => void) | null;
+    onKeyDown?: ((event: React.KeyboardEvent) => void) | null;
+    Anchor: React.ElementType;
+    anchorProps?: Record<string, unknown>;
+    openOnHover?: boolean;
+    hoverOpenTime?: number;
+    autoCloseTime?: number | null;
+    openOnFocus?: boolean;
+    onAnchorClick?: ((event: React.MouseEvent) => void);
+    openOnClick?: boolean;
+    horizontallyCenter?: boolean;
+    dockRight?: boolean;
+    enableTail?: boolean;
+    onClick?: ((event: React.MouseEvent) => void) | null;
+    onOpened?: (() => void) | null;
+    onClosed?: (() => void) | null;
+    keepLoaded?: boolean;
+    [key: string]: unknown;
+}
+
+interface DropDownState {
+    open: boolean;
+    openFromHover: boolean;
+    openFromFocus: boolean;
+}
+
 const DEFAULTS = {
     openOnClick: true,
 };
 
-const dropPositionTypes = PropTypes.oneOf(['top', 'bottom', 'left', 'right']);
+class DropDown extends Component<DropDownProps, DropDownState> {
+    private openRef: React.RefObject<boolean>;
+    private mainRef: React.RefObject<HTMLDivElement>;
+    private anchorRef: React.RefObject<unknown>;
+    private trayRef: React.RefObject<unknown>;
+    private openFromHoverTimer: ReturnType<typeof setTimeout> | null;
+    private autoCloseTimer: ReturnType<typeof setTimeout> | null;
+    private controlTimer: ReturnType<typeof setTimeout> | null;
+    private keyOnce: boolean;
+    private handleButtonKeyPress: (event: React.KeyboardEvent) => void;
+    private handleButtonClick: (event: React.MouseEvent) => void;
+    private handleTrayClick: (event: React.MouseEvent) => void;
+    private handleWindowEvent: ReturnType<typeof debounce>;
+    private handleButtonFocus: (event: React.FocusEvent) => void;
+    private handleBlur: (event: React.FocusEvent) => void;
+    private handleKeyUp: () => void;
+    declare setOpen: (open: boolean) => void;
+    private handleKeyDown: (event: React.KeyboardEvent) => void;
+    private handleAnchorPointerEnter: () => void;
+    private handleAnchorPointerLeave: () => void;
 
-class DropDown extends Component {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        trayClassName: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        onBlur: PropTypes.func,
-        onFocus: PropTypes.func,
-        disabled: PropTypes.bool,
-        dropPositions: PropTypes.arrayOf(dropPositionTypes),
-        closeTrayOnClick: PropTypes.bool,
-        closeTrayOnEnter: PropTypes.bool,
-        minTrayWidth: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.oneOf(['anchor']),
-        ]),
-        maxTrayWidth: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.oneOf(['anchor']),
-        ]),
-        maxTrayHeight: PropTypes.number,
-        onOpen: PropTypes.func,
-        onClose: PropTypes.func,
-        onKeyDown: PropTypes.func,
-        Anchor: PropTypes.elementType.isRequired,
-        // eslint-disable-next-line react/forbid-prop-types
-        anchorProps: PropTypes.object,
-        openOnHover: PropTypes.bool,
-        hoverOpenTime: PropTypes.number,
-        autoCloseTime: PropTypes.number,
-        openOnFocus: PropTypes.bool,
-        onAnchorClick: PropTypes.func,
-        openOnClick: PropTypes.bool,
-        horizontallyCenter: PropTypes.bool,
-        dockRight: PropTypes.bool,
-        enableTail: PropTypes.bool,
-        onClick: PropTypes.func,
-        onOpened: PropTypes.func,
-        onClosed: PropTypes.func,
-        keepLoaded: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        id: null,
-        className: null,
-        trayClassName: null,
-        children: null,
-        onBlur: noop,
-        onFocus: noop,
-        disabled: false,
-        dropPositions: ['bottom', 'top', 'right', 'left'],
-        closeTrayOnClick: true,
-        closeTrayOnEnter: true,
-        minTrayWidth: null,
-        maxTrayWidth: null,
-        maxTrayHeight: null,
-        onOpen: null,
-        onClose: null,
-        onKeyDown: null,
-        anchorProps: {},
-        openOnHover: false,
-        hoverOpenTime: 500,
-        autoCloseTime: null,
-        openOnFocus: false,
-        onAnchorClick: noop,
-        openOnClick: true,
-        horizontallyCenter: false,
-        dockRight: false,
-        enableTail: false,
-        onClick: null,
-        onOpened: null,
-        onClosed: null,
-        keepLoaded: false,
-    };
-
-    constructor(props) {
+    constructor(props: DropDownProps) {
         super(props);
 
         this.openRef = createRef(false);
 
-        this.openRef.current = false;
+        (this.openRef as React.MutableRefObject<boolean>).current = false;
 
         this.mainRef = createRef();
 
@@ -112,11 +95,11 @@ class DropDown extends Component {
 
         this.keyOnce = false;
 
-        this.handleButtonKeyPress = this.handleButtonKeyPress.bind(this);
-        this.handleButtonClick = this.handleButtonClick.bind(this);
-        this.handleTrayClick = this.handleTrayClick.bind(this);
+        this.handleButtonKeyPress = this._handleButtonKeyPress.bind(this);
+        this.handleButtonClick = this._handleButtonClick.bind(this);
+        this.handleTrayClick = this._handleTrayClick.bind(this);
         this.handleWindowEvent = debounce(
-            this.handleWindowEvent.bind(this),
+            this._handleWindowEvent.bind(this),
             200,
             {
                 leading: true,
@@ -124,9 +107,9 @@ class DropDown extends Component {
             },
         );
         // this.handleWindowKeyDown = this.handleWindowKeyDown.bind(this);
-        this.handleButtonFocus = this.handleButtonFocus.bind(this);
-        this.handleBlur = this.handleBlur.bind(this);
-        this.handleKeyUp = this.handleKeyUp.bind(this);
+        this.handleButtonFocus = this._handleButtonFocus.bind(this);
+        this.handleBlur = this._handleBlur.bind(this);
+        this.handleKeyUp = this._handleKeyUp.bind(this);
         // The debounce here is because there are a lot of different
         // events trying to open and close the tray.
         // It is getting hard to manage them all. Most utilize the
@@ -140,15 +123,15 @@ class DropDown extends Component {
         // to try to smooth them out and they require the user to
         // do things like click and hold the mouse for more than 200
         // milliseconds on the select button.
-        this.setOpen = debounce(this.setOpen.bind(this), 200, {
+        this.setOpen = debounce(this._setOpen.bind(this), 200, {
             leading: true,
             trailing: false,
         });
         this.focus = this.focus.bind(this);
         this.getAnchor = this.getAnchor.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-        this.handleAnchorPointerEnter = this.handleAnchorPointerEnter.bind(this);
-        this.handleAnchorPointerLeave = this.handleAnchorPointerLeave.bind(this);
+        this.handleKeyDown = this._handleKeyDown.bind(this);
+        this.handleAnchorPointerEnter = this._handleAnchorPointerEnter.bind(this);
+        this.handleAnchorPointerLeave = this._handleAnchorPointerLeave.bind(this);
 
         this.state = {
             open: false,
@@ -157,12 +140,12 @@ class DropDown extends Component {
         };
     }
 
-    componentDidMount() {
-        window.addEventListener('scroll', this.handleWindowEvent, true);
-        window.addEventListener('resize', this.handleWindowEvent);
+    componentDidMount(): void {
+        window.addEventListener('scroll', this.handleWindowEvent as unknown as EventListener, true);
+        window.addEventListener('resize', this.handleWindowEvent as unknown as EventListener);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(): void {
         const {
             onOpened,
             onClosed,
@@ -172,7 +155,7 @@ class DropDown extends Component {
             open
         } = this.state;
 
-        if (this.openRef.current !== open) {
+        if ((this.openRef as React.MutableRefObject<boolean>).current !== open) {
             if (open) {
                 if (!isNil(onOpened)) {
                     onOpened();
@@ -181,11 +164,11 @@ class DropDown extends Component {
                 onClosed();
             }
 
-            this.openRef.current = open;
+            (this.openRef as React.MutableRefObject<boolean>).current = open;
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         if (this.autoCloseTimer) {
             clearTimeout(this.autoCloseTimer);
 
@@ -204,23 +187,23 @@ class DropDown extends Component {
             this.controlTimer = null;
         }
 
-        window.removeEventListener('scroll', this.handleWindowEvent, true);
-        window.removeEventListener('resize', this.handleWindowEvent);
+        window.removeEventListener('scroll', this.handleWindowEvent as unknown as EventListener, true);
+        window.removeEventListener('resize', this.handleWindowEvent as unknown as EventListener);
     }
 
-    handleWindowEvent(event) {
+    _handleWindowEvent(event: Event): void {
         const { open } = this.state;
 
         if (!open) {
             return;
         }
 
-        const eventTarget = event.target;
+        const eventTarget = event.target as Node;
 
         if (
             eventTarget.nodeType === 1
-            && !isNil(this.trayRef.current)
-            && this.trayRef.current.contains(eventTarget)
+            && !isNil((this.trayRef as React.RefObject<HTMLElement>).current)
+            && (this.trayRef as React.RefObject<HTMLElement>).current!.contains(eventTarget)
         ) {
             return;
         }
@@ -242,7 +225,7 @@ class DropDown extends Component {
     //     }
     // }
 
-    handleButtonKeyPress(event) {
+    _handleButtonKeyPress(event: React.KeyboardEvent): void {
         const { openOnClick = DEFAULTS.openOnClick } = this.props;
 
         if (openOnClick && event.which === 13) {
@@ -251,7 +234,7 @@ class DropDown extends Component {
         }
     }
 
-    handleButtonClick(event) {
+    _handleButtonClick(event: React.MouseEvent): void {
         if (event.defaultPrevented) {
             return;
         }
@@ -271,7 +254,7 @@ class DropDown extends Component {
         }
     }
 
-    handleTrayClick(event) {
+    _handleTrayClick(event: React.MouseEvent): void {
         const { closeTrayOnClick } = this.props;
 
         if (closeTrayOnClick && !event.defaultPrevented) {
@@ -281,11 +264,11 @@ class DropDown extends Component {
         }
     }
 
-    handleKeyUp() {
+    _handleKeyUp(): void {
         this.keyOnce = false;
     }
 
-    handleKeyDown(event) {
+    _handleKeyDown(event: React.KeyboardEvent): void {
         if (this.keyOnce) {
             return;
         }
@@ -326,7 +309,7 @@ class DropDown extends Component {
         }
     }
 
-    handleButtonFocus(event) {
+    _handleButtonFocus(event: React.FocusEvent): void {
         const { onFocus, openOnFocus } = this.props;
 
         if (openOnFocus) {
@@ -350,12 +333,12 @@ class DropDown extends Component {
         }, 1);
     }
 
-    handleBlur(event) {
+    _handleBlur(event: React.FocusEvent): void {
         const { currentTarget, relatedTarget } = event;
 
         if (
-            (!isNil(this.trayRef.current)
-            && this.trayRef.current.contains(relatedTarget))
+            (!isNil((this.trayRef as React.RefObject<HTMLElement>).current)
+            && (this.trayRef as React.RefObject<HTMLElement>).current!.contains(relatedTarget))
             || currentTarget.contains(relatedTarget)
         ) {
             return;
@@ -372,7 +355,7 @@ class DropDown extends Component {
         onBlur(event);
     }
 
-    handleAnchorPointerEnter() {
+    _handleAnchorPointerEnter(): void {
         const { hoverOpenTime, openOnHover, disabled } = this.props;
 
         if (disabled || !openOnHover) {
@@ -386,7 +369,7 @@ class DropDown extends Component {
         }, hoverOpenTime);
     }
 
-    handleAnchorPointerLeave() {
+    _handleAnchorPointerLeave(): void {
         const { openFromHover } = this.state;
 
         if (!isNil(this.openFromHoverTimer)) {
@@ -400,19 +383,20 @@ class DropDown extends Component {
         }
     }
 
-    getRootNode() {
+    getRootNode(): HTMLDivElement | null {
         return this.mainRef.current;
     }
 
-    getAnchor() {
-        if (isNil(this.anchorRef.current)) {
+    getAnchor(): HTMLElement | null {
+        const anchorCurrent = (this.anchorRef as React.RefObject<{ getBoundingElement: () => HTMLElement }>).current;
+        if (isNil(anchorCurrent)) {
             return null;
         }
 
-        return this.anchorRef.current.getBoundingElement();
+        return anchorCurrent.getBoundingElement();
     }
 
-    setOpen(open) {
+    _setOpen(open: boolean): void {
         const {
             disabled, onOpen, onClose, autoCloseTime,
         } = this.props;
@@ -456,7 +440,7 @@ class DropDown extends Component {
         });
     }
 
-    focusOnAnchorContent() {
+    focusOnAnchorContent(): void {
         const focus = get(this.anchorRef, ['current', 'focus']);
 
         if (isNil(focus)) {
@@ -466,14 +450,14 @@ class DropDown extends Component {
         focus();
     }
 
-    focus() {
+    focus(): void {
         const { disabled } = this.props;
 
         if (disabled) {
             return;
         }
 
-        if (isNil(this.anchorRef) || isNil(this.anchorRef.current)) {
+        if (isNil(this.anchorRef) || isNil((this.anchorRef as React.RefObject<unknown>).current)) {
             // eslint-disable-next-line no-console
             console.warn('Attempting to focus on an unmounted component');
         }
@@ -487,13 +471,13 @@ class DropDown extends Component {
         // this.setOpen(true);
     }
 
-    isOpen() {
+    isOpen(): boolean {
         const { open } = this.state;
 
         return open;
     }
 
-    close(focusOnAnchor) {
+    close(focusOnAnchor?: boolean): void {
         this.setOpen(false);
 
         if (focusOnAnchor) {
@@ -501,11 +485,11 @@ class DropDown extends Component {
         }
     }
 
-    open() {
+    open(): void {
         this.setOpen(true);
     }
 
-    renderMainControl() {
+    renderMainControl(): React.ReactNode {
         const {
             Anchor, anchorProps, openOnHover, onKeyDown,
         } = this.props;
@@ -540,26 +524,26 @@ class DropDown extends Component {
         );
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
             id,
             className,
             trayClassName,
             children,
-            dropPositions,
-            minTrayWidth,
-            maxTrayWidth,
-            maxTrayHeight,
-            horizontallyCenter,
-            dockRight,
-            enableTail,
-            onClick,
-            keepLoaded,
+            dropPositions = ['bottom', 'top', 'right', 'left'],
+            minTrayWidth = null,
+            maxTrayWidth = null,
+            maxTrayHeight = null,
+            horizontallyCenter = false,
+            dockRight = false,
+            enableTail = false,
+            onClick = null,
+            keepLoaded = false,
         } = this.props;
 
         const { open, openFromHover, openFromFocus } = this.state;
 
-        let tray = null;
+        let tray: React.ReactNode = null;
 
         if (open || keepLoaded) {
             tray = (

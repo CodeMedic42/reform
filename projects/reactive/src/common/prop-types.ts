@@ -1,23 +1,16 @@
-import PropTypes from 'prop-types';
+import React from 'react';
 
-PropTypes.icon = PropTypes.shape({
-    // eslint-disable-next-line react/forbid-prop-types
-    icon: PropTypes.arrayOf(PropTypes.any).isRequired,
-    prefix: PropTypes.string.isRequired,
-    iconName: PropTypes.string.isRequired,
-});
+export interface IconType {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    icon: any[];
+    prefix: string;
+    iconName: string;
+}
 
-PropTypes.children = PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.arrayOf(PropTypes.node),
-]);
+export interface InputMessages {
+    general?: string[];
+    success?: string[];
+    failure?: string[];
+}
 
-PropTypes.Component = PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]);
-
-PropTypes.inputMessages = PropTypes.shape({
-    general: PropTypes.arrayOf(PropTypes.string),
-    success: PropTypes.arrayOf(PropTypes.string),
-    failure: PropTypes.arrayOf(PropTypes.string),
-});
-
-export default PropTypes;
+export type ComponentType = string | React.ElementType;

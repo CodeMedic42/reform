@@ -5,17 +5,23 @@ import React, {
     createRef,
 } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { forEach, merge, isNil, noop } from 'lodash-es';
 import shortId from 'shortid';
 
-const TrayContext = createContext({
+type DropPosition = 'top' | 'bottom' | 'left' | 'right';
+
+interface TrayContextValue {
+    renderIndex: number;
+    onRegister: (component: Tray) => () => void;
+}
+
+const TrayContext = createContext<TrayContextValue>({
     renderIndex: 0,
     onRegister: () => noop,
 });
 
-const DEFAULT_DROP_POSITIONS = ['bottom', 'top', 'right', 'left'];
+const DEFAULT_DROP_POSITIONS: DropPosition[] = ['bottom', 'top', 'right', 'left'];
 
 /*
 sidePadding: The minimum amount of padding between the tray and the edge of the screen.
@@ -42,7 +48,16 @@ tail: The little arrow which point back to the anchor
 // 4 represents the corner radius of the tray.
 const cornerRadius = 4;
 
-const clearStylesMeta = {
+interface StylesMeta {
+    top: string | null;
+    left: string | null;
+    bottom: string | null;
+    right: string | null;
+    zIndex: string | number | null;
+    [key: string]: string | number | null | undefined;
+}
+
+const clearStylesMeta: StylesMeta = {
     top: null,
     left: null,
     bottom: null,
@@ -50,10 +65,10 @@ const clearStylesMeta = {
     zIndex: null,
 };
 
-function applyStyles(trayElement, styles) {
+function applyStyles(trayElement: HTMLElement, styles: Record<string, string | number | null | undefined>): void {
     forEach(styles, (styleValue, styleId) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const trayElementStyle = trayElement.style;
+        const trayElementStyle = trayElement.style as any;
 
         if (trayElementStyle[styleId] !== styleValue) {
             // eslint-disable-next-line no-param-reassign
@@ -62,7 +77,7 @@ function applyStyles(trayElement, styles) {
     });
 }
 
-function clearStyles(trayElement) {
+function clearStyles(trayElement: HTMLElement): void {
     applyStyles(trayElement, clearStylesMeta);
 
     trayElement.classList.remove('top');
@@ -71,26 +86,44 @@ function clearStyles(trayElement) {
     trayElement.classList.remove('right');
 }
 
-function buildPx(value) {
+function buildPx(value: number | null | undefined): string | null {
     return !isNil(value) ? `${value}px` : null;
 }
 
-function determineAllowedHeight(windowHeight, positionValues) {
+interface PositionValues {
+    fromPosition: number;
+    toPosition: number;
+}
+
+function determineAllowedHeight(windowHeight: number, positionValues: PositionValues): number {
     const {
-        fromPosition, // Where to start the calc from.
+        fromPosition,
         toPosition,
     } = positionValues;
 
-    // The height of the window minus the from position and minus the sidePadding will result
-    // in the maximum height the tray can grow before it spills out the bottom of
-    // the window and get gets clipped. Here the sidePadding provides buffer at the
-    // bottom to give some space
-    // between the bottom the tray and the bottom of the window.
     return windowHeight - fromPosition - toPosition;
 }
 
-function attemptLevelTop(renderingParameters) {
-    // Here we attempt to level the top of the tray with the top of the anchoring parent.
+interface RenderingParameters {
+    anchorRect: DOMRect;
+    trayRect: DOMRect;
+    offset: { left: number; right: number; top: number; bottom: number };
+    horizontallyCenter: boolean;
+    dockRight: boolean;
+    tailOffset: number;
+    sidePadding: number;
+    windowWidth: number;
+    windowHeight: number;
+    paddingValue: number;
+    zIndex: number;
+}
+
+interface RenderResult {
+    styles: Record<string, string | null>;
+    location: string;
+}
+
+function attemptLevelTop(renderingParameters: RenderingParameters): Record<string, string | null> | null {
     const {
         anchorRect,
         windowHeight,
@@ -99,12 +132,9 @@ function attemptLevelTop(renderingParameters) {
         trayRect,
     } = renderingParameters;
 
-    // Where we want to try to render the tray. The offset comes from props. This is a way for the
-    // developer to align the tray as necessary.
     const topPosition = anchorRect.top + topOffset;
 
     if (topPosition < sidePadding) {
-        // The top position is too close to the top.
         return null;
     }
 
@@ -113,7 +143,7 @@ function attemptLevelTop(renderingParameters) {
     const allowedMaxHeight = determineAllowedHeight(
         windowHeight,
         {
-            fromPosition: topPosition, // Where we want to try to render the tray.
+            fromPosition: topPosition,
             toPosition: sidePadding,
         },
     );
@@ -126,29 +156,20 @@ function attemptLevelTop(renderingParameters) {
         return null;
     }
 
-    // Using that height information we need to see where the bottom of the tray will render at.
-    // We take where we want to render the tray, plus the final height of the tray,
-    // plus the padding at the bottom between the the tray and the bottom of the window.
     const bottomPosition = topPosition + finalHeight + sidePadding;
 
-    // If this value is below the bottom the screen then the tray is too close
-    // to the bottom and we cannot render here.
     const hasRoom = bottomPosition <= windowHeight;
 
     if (!hasRoom) {
         return null;
     }
 
-    // Otherwise lets set some styles.
-    // The top will position the tray.
-    // The maxHeight is in case the contents of the tray are dynamic while the tray is open.
-    // This lets the tray still grow as needed.
     return {
         top: buildPx(topPosition),
     };
 }
 
-function attemptLevelBottom(renderingParameters) {
+function attemptLevelBottom(renderingParameters: RenderingParameters): Record<string, string | null> | null {
     const {
         anchorRect,
         windowHeight,
@@ -160,11 +181,6 @@ function attemptLevelBottom(renderingParameters) {
     const bottomPosition = windowHeight - anchorRect.bottom + bottomOffset;
 
     if (bottomPosition < sidePadding) {
-        // The top position is too close to the top. Let's just use the sidePadding.
-        // Also since it is too close to the top we also know we cannot render either bottom or
-        // middle so we know this is the best choice.
-        // bottomPosition = sidePadding;
-
         return null;
     }
 
@@ -199,14 +215,14 @@ function attemptLevelBottom(renderingParameters) {
     };
 }
 
-function attemptLevelMiddle(renderingParameters) {
+function attemptLevelMiddle(renderingParameters: RenderingParameters): Record<string, string | null> {
     const {
         sidePadding, windowHeight, trayRect, anchorRect,
     } = renderingParameters;
 
     const finalHeight = trayRect.height;
 
-    const styles = {};
+    const styles: Record<string, string | null> = {};
 
     const hasRoom = sidePadding + sidePadding + finalHeight <= windowHeight;
 
@@ -240,9 +256,7 @@ function attemptLevelMiddle(renderingParameters) {
     return styles;
 }
 
-// If rendering left or right this will level the tray with the anchor vertically.
-function attemptLevel(renderingParameters) {
-    // First try to level with the top of the parent
+function attemptLevel(renderingParameters: RenderingParameters): RenderResult {
     let styles = attemptLevelTop(renderingParameters);
 
     if (!isNil(styles)) {
@@ -252,7 +266,6 @@ function attemptLevel(renderingParameters) {
         };
     }
 
-    // Next try to level with the bottom of the parent
     styles = attemptLevelBottom(renderingParameters);
 
     if (!isNil(styles)) {
@@ -262,28 +275,25 @@ function attemptLevel(renderingParameters) {
         };
     }
 
-    // Finally fit the tray somewhere in the middle.
     return {
         styles: attemptLevelMiddle(renderingParameters),
         location: 'middle',
     };
 }
 
-function calcCenter(trayWidth, otherWidth) {
+function calcCenter(trayWidth: number, otherWidth: number): number {
     return (trayWidth - otherWidth) / 2;
 }
 
 function centerHorizontally(
-    anchorRect,
-    finalWidth,
-    windowWidth,
-    sidePadding,
-) {
+    anchorRect: DOMRect,
+    finalWidth: number,
+    windowWidth: number,
+    sidePadding: number,
+): number {
     let offsetLeft = 0;
     let offsetRight = 0;
 
-    // Here we want to calc an additional offset from the left
-    // to center the tray to the anchor.
     const halfWidth = calcCenter(finalWidth, anchorRect.width);
 
     offsetLeft = anchorRect.left - halfWidth;
@@ -291,16 +301,10 @@ function centerHorizontally(
 
     let hasLeftRoom = offsetLeft >= sidePadding;
 
-    // We need to go through a series of check to make sure it all looks right.
     if (hasLeftRoom) {
-        // We have enough room on the left to fit the tray centered.
-
-        // But we also need to check to see if we have enough room on the right.
         const hasRightRoom = offsetRight <= windowWidth - sidePadding;
 
         if (!hasRightRoom) {
-            // If we do not have enough room on the right then we need to
-            // shift the tray left based on the right overflow amount..
             const rightDifference = offsetRight - (windowWidth - sidePadding);
 
             offsetRight -= rightDifference;
@@ -308,20 +312,14 @@ function centerHorizontally(
 
             hasLeftRoom = offsetLeft >= sidePadding;
 
-            // But we also need to check to see if we ar clipping the on the left again.
             if (!hasLeftRoom) {
-                // I guess we are and the tray is too wide either way.
                 return sidePadding;
             }
         }
 
-        // Ah we have a left offset!
         return offsetLeft;
     }
 
-    // Ok we do not have enough room on the left.
-
-    // Let's try shifting the tray to the right.
     const leftDifference = sidePadding - offsetLeft;
 
     offsetRight += leftDifference;
@@ -329,32 +327,24 @@ function centerHorizontally(
 
     const hasRightRoom = offsetRight <= windowWidth - sidePadding;
 
-    // Do we have enough room on the right?
     if (!hasRightRoom) {
-        // Nope we don't.
         return sidePadding;
     }
 
-    // I guess we do!
     return offsetLeft;
 }
 
 function dockLeftRight(
-    anchorRect,
-    finalWidth,
-    windowWidth,
-    sidePadding,
-    dockRight,
-) {
-    // This is used to set a location horizontally above or below the anchor.
-
+    anchorRect: DOMRect,
+    finalWidth: number,
+    windowWidth: number,
+    sidePadding: number,
+    dockRight: boolean,
+): RenderResult {
     if (!dockRight) {
-        // If we were to dock to the left then we need to check if clipped on the right.
         const rightPositionRight = anchorRect.left + finalWidth + sidePadding;
 
         if (rightPositionRight <= windowWidth) {
-            // Looks like we are not clipped on the right.
-
             return {
                 styles: {
                     left: buildPx(anchorRect.left),
@@ -364,8 +354,6 @@ function dockLeftRight(
         }
     }
 
-    // Okay so we are too close to the right. So if we were to dock from the right
-    // the we need to check if clipped on the left.
     const leftPositionRight = anchorRect.right - finalWidth - sidePadding;
 
     if (leftPositionRight >= 0) {
@@ -377,9 +365,6 @@ function dockLeftRight(
         };
     }
 
-    // We have no great solution so we will just dock matching the anchor
-    // on the left and the tray will just be clipped by the window on the right.
-    // By the way the rest of the system works this is increasingly an edge case.
     return {
         styles: {
             left: buildPx(sidePadding),
@@ -388,10 +373,19 @@ function dockLeftRight(
     };
 }
 
+interface AlignmentValues {
+    anchorRect: DOMRect;
+    finalWidth: number;
+    windowWidth: number;
+    sidePadding: number;
+    horizontallyCenter: boolean;
+    dockRight: boolean;
+}
+
 function determineLeftAlignment(
-    alignmentValues,
-    force,
-) {
+    alignmentValues: AlignmentValues,
+    force: boolean,
+): RenderResult | null {
     const {
         anchorRect,
         finalWidth,
@@ -403,11 +397,7 @@ function determineLeftAlignment(
 
     const anchorLeftClipped = anchorRect.left < sidePadding;
 
-    // If the anchor is clipped on the left of the window or is past the width of the sidePadding
-    // then there is nothing we can do but just dock the tray to the left
-    // of the window and hope for the best.
     if (anchorLeftClipped) {
-        // But only do this if we are forced to.
         if (force) {
             return {
                 styles: {
@@ -417,21 +407,14 @@ function determineLeftAlignment(
             };
         }
 
-        // If we are not forcing then let the rest of the system try another
-        // position like right or left before we do anything crazy.
-        // FYI Top should come to the same result since it uses this function.
         return null;
     }
 
     const anchorRightClipped = anchorRect.right > windowWidth - sidePadding;
 
-    // If the anchor is clipped on the right of the window or is past the width of the sidePadding
-    // then there is nothing we can do but just dock the tray to the right
-    // of the window and hope for the best.
     if (
         anchorRightClipped
     ) {
-        // But only do this if we are forced to.
         if (force) {
             return {
                 styles: {
@@ -441,9 +424,6 @@ function determineLeftAlignment(
             };
         }
 
-        // If we are not forcing then let the rest of the system try another
-        // position like right or left before we do anything crazy.
-        // FYI Top should come to the same result since it uses this function.
         return null;
     }
 
@@ -473,19 +453,15 @@ function determineLeftAlignment(
 }
 
 function getFinalHeights(
-    renderingParameters,
-    positionValues,
-    isClipped,
-    force,
-) {
+    renderingParameters: RenderingParameters,
+    positionValues: PositionValues,
+    isClipped: boolean,
+    force: boolean,
+): { finalHeight: number } | null {
     const { trayRect, windowHeight } = renderingParameters;
     const { fromPosition, toPosition } = positionValues;
     let finalHeight = trayRect.height;
 
-    // The allowed height is the absolute max the tray can grow to before
-    // clipping over the bottom of the window. This means that the
-    // allowedMaxHeight is from the top position of the tray down to the
-    // bottom of the window.
     const allowedMaxHeight = determineAllowedHeight(
         windowHeight,
         {
@@ -495,25 +471,13 @@ function getFinalHeights(
     );
 
     if (allowedMaxHeight <= 0) {
-        // There just is no room. Even forced this will not work.
         return null;
     }
 
     if (allowedMaxHeight <= finalHeight) {
-        // If we have a valid allowedMaxHeight but it is smaller than the height of the tray,
-        // then should try another position. When it comes to height, the left and right positions
-        // are the best and should take it as long as they have horizontal room.
-
         if (force || isClipped) {
-            // If however we are forced to render then we will just use the allowedMaxHeight
-            // and hope the tray has a scrolling context.
-
-            // Also if the anchor is clipped at the top then left and right actually NOT
-            // be the right way to go. This is more of an aesthetic decision.
             finalHeight = allowedMaxHeight;
-            // maxHeight = buildPx(allowedMaxHeight);
         } else {
-            // Otherwise let's try another position.
             return null;
         }
     }
@@ -523,12 +487,10 @@ function getFinalHeights(
     };
 }
 
-// Checks to see if below the parent has room.
-// If it does then render there.
 function attemptBottomRender(
-    renderingParameters,
-    force,
-) {
+    renderingParameters: RenderingParameters,
+    force: boolean,
+): RenderResult | null {
     const {
         anchorRect,
         windowWidth,
@@ -540,11 +502,8 @@ function attemptBottomRender(
         tailOffset,
     } = renderingParameters;
 
-    // This represents the top most position possible for the tray
-    // when positioning it below the anchor.
     const top = anchorRect.bottom + paddingValue + tailOffset;
 
-    // This is used to see if the anchor is clipped at the top.
     const isClipped = anchorRect.top < sidePadding;
 
     const finalHeights = getFinalHeights(
@@ -557,14 +516,12 @@ function attemptBottomRender(
         force,
     );
 
-    // If this is nill then that means that we might not have enough room.
     if (isNil(finalHeights)) {
         return null;
     }
 
     const finalWidth = trayRect.width;
 
-    // Now we need to figure out where we will render horizontally the tray below the anchor.
     const trayStylingResult = determineLeftAlignment(
         {
             anchorRect,
@@ -577,7 +534,6 @@ function attemptBottomRender(
         force,
     );
 
-    // If the above does not like what is available then we need to try another position.
     if (isNil(trayStylingResult)) {
         return null;
     }
@@ -593,12 +549,10 @@ function attemptBottomRender(
     };
 }
 
-// Checks to see if above the parent has room.
-// If it does then render there.
 function attemptTopRender(
-    renderingParameters,
-    force,
-) {
+    renderingParameters: RenderingParameters,
+    force: boolean,
+): RenderResult | null {
     const {
         anchorRect,
         windowHeight,
@@ -611,11 +565,8 @@ function attemptTopRender(
         tailOffset,
     } = renderingParameters;
 
-    // This represents the bottom most position possible for the tray
-    // when positioning it above the anchor.
     const bottom = windowHeight - anchorRect.top + paddingValue + tailOffset;
 
-    // This is used to see if the anchor is clipped at the bottom.
     const isClipped = anchorRect.bottom > windowHeight + sidePadding;
 
     const finalHeights = getFinalHeights(
@@ -628,14 +579,12 @@ function attemptTopRender(
         force,
     );
 
-    // If this is nill then that means that we might not have enough room.
     if (isNil(finalHeights)) {
         return null;
     }
 
     const finalWidth = trayRect.width;
 
-    // Now we need to figure out where we will render horizontally the tray below the anchor.
     const trayStylingResult = determineLeftAlignment(
         {
             anchorRect,
@@ -665,12 +614,10 @@ function attemptTopRender(
     };
 }
 
-// Checks to see if to the left the parent has room.
-// If it does then render there.
 function attemptLeftRender(
-    renderingParameters,
-    force,
-) {
+    renderingParameters: RenderingParameters,
+    force: boolean,
+): RenderResult | null {
     const {
         anchorRect,
         trayRect,
@@ -684,7 +631,6 @@ function attemptLeftRender(
     const hasZeroRoom = anchorRect.left - paddingValue - sidePadding - tailOffset <= 0;
 
     if (hasZeroRoom) {
-        // THERE NO ROOM AT ALL. Even if we render here the user will see nothing useful.
         return null;
     }
 
@@ -693,35 +639,24 @@ function attemptLeftRender(
     const needsRoom = anchorRect.left - paddingValue - sidePadding - finalWidth - tailOffset < 0;
 
     if (needsRoom && !force) {
-        // Okay there is SOME room but not enough for the whole width
-        // of the tray. Let's try another position. That is unless we
-        // are forced to.
         return null;
     }
 
     const isClipped = anchorRect.top < 0 || anchorRect.bottom > windowHeight;
 
     if (isClipped && !force) {
-        // Okay the anchor is clipped either on the top or bottom.
-        // Since most anchors have a width greater than their height
-        // it might be easier to try top or bottom. They have code
-        // that checks for this clipping as well and will render
-        // it if this is true. This is an aesthetic choice.
         return null;
     }
 
-    // This will position the tray vertically to get the location.
     const trayStylingResultInt = attemptLevel(renderingParameters);
 
     const { styles, location } = trayStylingResultInt;
 
-    // This will position the the tray to the left of the anchor.
     styles.right = buildPx(
         windowWidth - anchorRect.left + paddingValue + tailOffset,
     );
 
     if (anchorRect.left - trayRect.width - paddingValue - sidePadding < 0) {
-        // This will keep the tray from spilling outside the screen.
         styles.left = buildPx(sidePadding);
     }
 
@@ -731,12 +666,10 @@ function attemptLeftRender(
     };
 }
 
-// Checks to see if to the right the parent has room.
-// If it does then render there.
 function attemptRightRender(
-    renderingParameters,
-    force,
-) {
+    renderingParameters: RenderingParameters,
+    force: boolean,
+): RenderResult | null {
     const {
         anchorRect,
         sidePadding,
@@ -750,7 +683,6 @@ function attemptRightRender(
     const hasZeroRoom = anchorRect.right + paddingValue + sidePadding + tailOffset >= windowWidth;
 
     if (hasZeroRoom) {
-        // THERE NO ROOM AT ALL. Even if we render here the user will see nothing useful.
         return null;
     }
 
@@ -764,59 +696,53 @@ function attemptRightRender(
         > windowWidth;
 
     if (needsRoom && !force) {
-        // Okay there is SOME room but not enough for the whole width
-        // of the tray. Let's try another position. That is unless we
-        // are forced to.
         return null;
     }
 
     const isClipped = anchorRect.top < 0 || anchorRect.bottom > windowHeight;
 
     if (isClipped && !force) {
-        // Okay the anchor is clipped either on the top or bottom.
-        // Since most anchors have a width greater than their height it
-        // might be easier to try top or bottom. They have code that
-        // checks for this clipping as well and will render it if
-        // this is true. This is an aesthetic choice.
         return null;
     }
 
-    // This will position the tray vertically to get the location.
     const { styles, location } = attemptLevel(renderingParameters) || {};
 
-    // This will position the the tray to the right of the anchor.
-    styles.left = buildPx(anchorRect.right + paddingValue + tailOffset);
+    styles!.left = buildPx(anchorRect.right + paddingValue + tailOffset);
 
     if (
         anchorRect.right + trayRect.width + paddingValue + sidePadding > windowWidth
     ) {
-        // This will keep the tray from spilling outside the screen.
-        styles.right = buildPx(sidePadding);
+        styles!.right = buildPx(sidePadding);
     }
 
     return {
-        styles,
-        location,
+        styles: styles!,
+        location: location!,
     };
 }
 
-const attemptRender = {
+const attemptRenderMap: Record<string, (params: RenderingParameters, force: boolean) => RenderResult | null> = {
     bottom: attemptBottomRender,
     top: attemptTopRender,
     left: attemptLeftRender,
     right: attemptRightRender,
 };
 
-function executeRenderMethods(
-    dropPositions,
-    renderingParameters,
-    force = false,
-) {
-    let results = null;
+interface TrayRenderResult {
+    styles: Record<string, string | null>;
+    position: string;
+    location: string;
+}
 
-    // Loop over each drop position in order.
+function executeRenderMethods(
+    dropPositions: DropPosition[],
+    renderingParameters: RenderingParameters,
+    force = false,
+): TrayRenderResult | null {
+    let results: TrayRenderResult | null = null;
+
     forEach(dropPositions, (dropPosition) => {
-        const attemptRenderMethod = attemptRender[dropPosition];
+        const attemptRenderMethod = attemptRenderMap[dropPosition];
 
         if (isNil(attemptRenderMethod)) {
             throw new Error('Invalid Drop Position');
@@ -836,11 +762,9 @@ function executeRenderMethods(
                 location,
             };
 
-            // Stop Here
             return false;
         }
 
-        // Keep going
         return true;
     });
 
@@ -848,18 +772,16 @@ function executeRenderMethods(
 }
 
 function setTrayStyles(
-    trayElement,
-    dropPositions,
-    renderingParameters,
-) {
+    trayElement: HTMLElement,
+    dropPositions: DropPosition[],
+    renderingParameters: RenderingParameters,
+): { position: string; location: string } {
     let trayRenderResult = executeRenderMethods(
         dropPositions,
         renderingParameters,
     );
 
     if (isNil(trayRenderResult)) {
-        // If a good candidate was not found lets see if can
-        // find one that at least works well enough.
         trayRenderResult = executeRenderMethods(
             dropPositions,
             renderingParameters,
@@ -867,16 +789,15 @@ function setTrayStyles(
         );
     }
 
-    const { styles, position, location } = trayRenderResult;
+    const { styles, position, location } = trayRenderResult!;
 
-    styles.zIndex = renderingParameters.zIndex;
+    (styles as Record<string, string | number | null>).zIndex = renderingParameters.zIndex;
 
     applyStyles(trayElement, {
         ...clearStylesMeta,
         ...styles
     });
 
-    // This is in case we need to do something extra special in the css.
     if (trayElement.classList.contains('top')) {
         trayElement.classList.replace('top', position);
     } else if (trayElement.classList.contains('bottom')) {
@@ -889,14 +810,25 @@ function setTrayStyles(
         trayElement.classList.add(position);
     }
 
-    // These are used for the tail if needed.
     return {
         position,
         location,
     };
 }
 
-function setVerticalTailLocation(tailRenderingParameters) {
+interface TailRenderingParameters {
+    position: string;
+    location: string;
+    anchorRect: DOMRect;
+    trayRect: DOMRect;
+    tailRect: DOMRect;
+    windowWidth: number;
+    windowHeight: number;
+    sidePadding: number;
+    zIndex: number;
+}
+
+function setVerticalTailLocation(tailRenderingParameters: TailRenderingParameters): Record<string, string | null> {
     const {
         location,
         anchorRect,
@@ -905,18 +837,13 @@ function setVerticalTailLocation(tailRenderingParameters) {
         windowHeight,
     } = tailRenderingParameters;
 
-    const styles = {};
+    const styles: Record<string, string | null> = {};
 
     if (location === 'top') {
         if (anchorRect.height < trayRect.height) {
-            // Since th tray is larger than the anchor we need to
-            // focus on centering on the anchor.
             if (anchorRect.top < trayRect.top) {
-                // Unless the anchor is above the tray. In this case just
-                // dock the arrow to the bottom of the tray.
                 styles.top = buildPx(trayRect.top + cornerRadius);
             } else {
-                // Center the arrow on the anchor.
                 const anchorCenter = anchorRect.height / 2;
                 const tailCenter = tailRect.height / 2;
 
@@ -929,11 +856,7 @@ function setVerticalTailLocation(tailRenderingParameters) {
         }
     } else if (location === 'bottom') {
         if (anchorRect.height < trayRect.height) {
-            // Since th tray is larger than the anchor we need to
-            // focus on centering on the anchor.
             if (anchorRect.bottom > trayRect.bottom) {
-                // Unless the anchor is below the tray. In this case just
-                // dock the arrow to the bottom of the tray.
                 styles.bottom = buildPx(
                     windowHeight - trayRect.bottom + cornerRadius,
                 );
@@ -961,9 +884,9 @@ function setVerticalTailLocation(tailRenderingParameters) {
 }
 
 function setTailStyles(
-    tailElement,
-    tailRenderingParameters,
-) {
+    tailElement: HTMLElement,
+    tailRenderingParameters: TailRenderingParameters,
+): void {
     const {
         position,
         location,
@@ -974,14 +897,13 @@ function setTailStyles(
         tailRect,
     } = tailRenderingParameters;
 
-    const styles = {
+    const styles: Record<string, string | number | null> = {
         zIndex,
     };
 
     if (position === 'bottom') {
         tailElement.classList.add('bottom');
 
-        // 8 represents the half the width of the tail.
         styles.top = buildPx(anchorRect.bottom - tailRect.width / 2);
 
         if (location === 'left') {
@@ -999,7 +921,6 @@ function setTailStyles(
     } else if (position === 'top') {
         tailElement.classList.add('top');
 
-        // 8 represents the half the width of the tail.
         styles.top = buildPx(anchorRect.top - tailRect.width / 2);
 
         if (location === 'left') {
@@ -1017,7 +938,6 @@ function setTailStyles(
     } else if (position === 'left') {
         tailElement.classList.add('left');
 
-        // 8 represents the half the width of the tail.
         styles.left = buildPx(anchorRect.left - tailRect.height / 2);
 
         merge(
@@ -1027,7 +947,6 @@ function setTailStyles(
     } else if (position === 'right') {
         tailElement.classList.add('right');
 
-        // 8 represents the half the width of the tail.
         styles.left = buildPx(anchorRect.right - tailRect.height / 2);
 
         merge(
@@ -1042,65 +961,43 @@ function setTailStyles(
     merge(tailElement.style, styles);
 }
 
-const dropPositionTypes = PropTypes.oneOf(['top', 'bottom', 'left', 'right']);
+interface TrayProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+    open?: boolean;
+    dropPositions?: DropPosition[];
+    getAnchor: () => HTMLElement | null;
+    onClick?: ((event: React.MouseEvent) => void) | null;
+    parentPadding?: number | null;
+    onContainedFocus?: (() => void) | null;
+    onContainedBlur?: ((event: React.FocusEvent) => void) | null;
+    minWidth?: number | 'anchor' | null;
+    maxWidth?: number | 'anchor' | null;
+    maxHeight?: number | null;
+    offset?: {
+        left?: number;
+        right?: number;
+        top?: number;
+        bottom?: number;
+    } | null;
+    horizontallyCenter?: boolean;
+    dockRight?: boolean;
+    enableTail?: boolean;
+}
 
-class Tray extends Component {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        open: PropTypes.bool,
-        dropPositions: PropTypes.arrayOf(dropPositionTypes),
-        getAnchor: PropTypes.func.isRequired,
-        onClick: PropTypes.func,
-        parentPadding: PropTypes.number,
-        onContainedFocus: PropTypes.func,
-        onContainedBlur: PropTypes.func,
-        minWidth: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.oneOf(['anchor']),
-        ]),
-        maxWidth: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.oneOf(['anchor']),
-        ]),
-        maxHeight: PropTypes.number,
-        offset: PropTypes.shape({
-            left: PropTypes.number,
-            right: PropTypes.number,
-            top: PropTypes.number,
-            bottom: PropTypes.number,
-        }),
-        horizontallyCenter: PropTypes.bool,
-        dockRight: PropTypes.bool,
-        enableTail: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        id: null,
-        className: null,
-        open: false,
-        children: null,
-        dropPositions: ['bottom', 'top', 'right', 'left'],
-        onClick: null,
-        parentPadding: null,
-        onContainedFocus: null,
-        onContainedBlur: null,
-        minWidth: null,
-        maxWidth: null,
-        maxHeight: null,
-        offset: null,
-        horizontallyCenter: false,
-        dockRight: false,
-        enableTail: false,
-    };
-
+class Tray extends Component<TrayProps> {
     static contextType = TrayContext;
+    declare context: TrayContextValue;
 
-    constructor(props) {
+    uuid: string;
+    trayRef: React.RefObject<HTMLDivElement | null>;
+    tailRef: React.RefObject<HTMLDivElement | null>;
+    childTrays: Record<string, Tray>;
+    cleanUp: () => void;
+    pendingBlur: boolean;
+
+    constructor(props: TrayProps) {
         super(props);
 
         this.uuid = shortId();
@@ -1115,7 +1012,7 @@ class Tray extends Component {
         this.handleRegister = this.handleRegister.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         const {
             onRegister,
         } = this.context;
@@ -1123,20 +1020,20 @@ class Tray extends Component {
         this.cleanUp = onRegister(this);
     }
 
-    componentDidUpdate(previousProps) {
+    componentDidUpdate(previousProps: TrayProps): void {
         const { open: wasOpen } = previousProps;
         const { open: isOpen } = this.props;
 
         this.updatePosition(isOpen, wasOpen);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         if (!isNil(this.cleanUp)) {
             this.cleanUp();
         }
     }
 
-    handleFocus() {
+    handleFocus(): void {
         if (!this.pendingBlur) {
             const { onContainedFocus } = this.props;
 
@@ -1148,7 +1045,7 @@ class Tray extends Component {
         this.pendingBlur = false;
     }
 
-    handleBlur(event) {
+    handleBlur(event: React.FocusEvent): void {
         setTimeout(() => {
             const { onContainedBlur } = this.props;
 
@@ -1162,7 +1059,7 @@ class Tray extends Component {
         event.persist();
     }
 
-    handleRegister(component) {
+    handleRegister(component: Tray): () => void {
         this.childTrays[component.uuid] = component;
 
         return () => {
@@ -1170,11 +1067,11 @@ class Tray extends Component {
         };
     }
 
-    rootElement() {
+    rootElement(): HTMLDivElement | null {
         return this.trayRef.current;
     }
 
-    contains(targetElement) {
+    contains(targetElement: HTMLElement): boolean {
         if (isNil(this.trayRef.current)) {
             return false;
         }
@@ -1198,7 +1095,7 @@ class Tray extends Component {
         return found;
     }
 
-    updatePosition(isOpen, wasOpen) {
+    updatePosition(isOpen: boolean | undefined, wasOpen: boolean | undefined): void {
         const { renderIndex } = this.context;
 
         const {
@@ -1215,31 +1112,14 @@ class Tray extends Component {
             return;
         }
 
-        // Tray styles are updated by reference rather than through react here.
-        // The reason is that these style calculations can only happen after
-        // a render to get the size of the tray.
-        // We could call setState and incur a second render each time a render happens,
-        // but, this does not sound like a good idea.
-        // Also this would create an infinite loop unless we call setState conditionally
-        // based on the previous styles and the new ones.
-        // The problem is the size of the tray is dependant on the children it contains.
-        // We cannot guarantee that the size of the children do not change from render to render.
-        // We could still end up in another infinite loop.
-
         if (isNil(this.trayRef.current)) {
             return;
         }
 
-        // We need the exact elements to do this right
         const trayElement = this.trayRef.current;
         const tailElement = this.tailRef.current;
 
         if (!isOpen) {
-            // Only clear the styles when not open. Part of the reason for this is because if the
-            // the styles change too much it might affect the scroll position of a possible scrolled
-            // element. If we need to reset styles while open we need to
-            // clear them individually when
-            // new styles are set.
             clearStyles(trayElement);
 
             if (!isNil(tailElement)) {
@@ -1255,24 +1135,20 @@ class Tray extends Component {
             return;
         }
 
-        // We will also need the current rect info for each element.
         const anchorRect = anchorElement.getBoundingClientRect();
         const trayRect = trayElement.getBoundingClientRect();
 
-        // The window size is also needed to position the tray.
         const windowWidth = document.documentElement.clientWidth;
         const windowHeight = document.documentElement.clientHeight;
 
-        // This is the padding used between the tray and the window edges.
         const sidePadding = 10;
 
-        // This is the padding used between the anchor and the tray.
         const paddingValue = !isNil(parentPadding) ? parentPadding : 0;
 
-        const tailOffset = enableTail ? 12 : 0;
+        const tailOffsetValue = enableTail ? 12 : 0;
         const zIndex = renderIndex + 2000;
 
-        const renderingParameters = {
+        const renderingParameters: RenderingParameters = {
             anchorRect,
             trayRect,
             offset: merge(
@@ -1286,7 +1162,7 @@ class Tray extends Component {
             ),
             horizontallyCenter,
             dockRight,
-            tailOffset,
+            tailOffset: tailOffsetValue,
             sidePadding,
             windowWidth,
             windowHeight,
@@ -1294,7 +1170,6 @@ class Tray extends Component {
             zIndex,
         };
 
-        // Set the styles to position and size the tray.
         const { position, location } = setTrayStyles(
             trayElement,
             dropPositions || DEFAULT_DROP_POSITIONS,
@@ -1302,12 +1177,10 @@ class Tray extends Component {
         );
 
         if (!isNil(tailElement) && !isNil(position)) {
-            // Let's get this AFTER we ally the styles.
             const tailRect = tailElement.getBoundingClientRect();
 
-            const tailRenderingParameters = {
+            const tailRenderingParameters: TailRenderingParameters = {
                 anchorRect,
-                // TODO: Review this. It probably is forcing a repaint.
                 trayRect: trayElement.getBoundingClientRect(),
                 position,
                 location,
@@ -1318,12 +1191,11 @@ class Tray extends Component {
                 tailRect,
             };
 
-            // If we have a tail element then we need to position it.
             setTailStyles(tailElement, tailRenderingParameters);
         }
     }
 
-    render() {
+    render(): React.ReactElement {
         const { renderIndex } = this.context;
 
         const {
@@ -1331,8 +1203,8 @@ class Tray extends Component {
             className,
             children,
             onClick,
-            open,
-            enableTail,
+            open = false,
+            enableTail = false,
             maxHeight,
             getAnchor,
         } = this.props;
@@ -1340,8 +1212,6 @@ class Tray extends Component {
         let { minWidth, maxWidth } = this.props;
 
         if (minWidth === 'anchor' || maxWidth === 'anchor') {
-            // TODO: This requires the component to be mounted which
-            // will not be true the first time through.
             const anchor = getAnchor();
 
             if (!isNil(anchor)) {
@@ -1375,7 +1245,7 @@ class Tray extends Component {
                 }}
             >
                 <div
-                    id={id}
+                    id={id ?? undefined}
                     role="presentation"
                     ref={this.trayRef}
                     className={classnames(
@@ -1384,13 +1254,13 @@ class Tray extends Component {
                         className,
                     )}
                     tabIndex={-1}
-                    onClick={onClick}
+                    onClick={onClick ?? undefined}
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur}
                     style={{
-                        maxHeight,
-                        minWidth,
-                        maxWidth,
+                        maxHeight: maxHeight ?? undefined,
+                        minWidth: (minWidth as number) ?? undefined,
+                        maxWidth: (maxWidth as number) ?? undefined,
                     }}
                 >
                     {children}
@@ -1399,7 +1269,7 @@ class Tray extends Component {
             </TrayContext.Provider>
         );
 
-        return ReactDOM.createPortal(tray, window.document.body);
+        return ReactDOM.createPortal(tray, window.document.body) as React.ReactElement;
     }
 }
 

@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons/faAngleUp';
@@ -12,28 +11,44 @@ import IconButton from '../../display/icon-button/index.jsx';
 import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
 import changeSize from '../../../util/change-size.js';
 
-function prevent(event) {
+function prevent(event: React.MouseEvent) {
     event.preventDefault();
 }
 
-function SelectAnchor(props) {
+interface SelectAnchorProps {
+    id?: string | null;
+    disabled?: boolean;
+    'aria-labelledby'?: string | null;
+    'aria-describedby'?: string | null;
+    title?: string | null;
+    open: boolean;
+    value?: unknown;
+    nullable?: boolean;
+    size?: 'sm' | 'md' | 'lg' | null;
+    placeholder?: string | null;
+    'aria-label'?: string | null;
+    listBoxId: string;
+    onClear?: ((event?: React.MouseEvent) => void) | null;
+}
+
+function SelectAnchor(props: SelectAnchorProps): React.ReactElement {
     const {
-        id,
-        disabled,
-        'aria-labelledby': labelledBy,
-        'aria-describedby': describedBy,
-        title,
+        id = null,
+        disabled = false,
+        'aria-labelledby': labelledBy = null,
+        'aria-describedby': describedBy = null,
+        title = null,
         open,
-        value,
-        nullable,
-        size,
-        placeholder,
-        'aria-label': ariaLabel,
+        value = null,
+        nullable = true,
+        size = null,
+        placeholder = null,
+        'aria-label': ariaLabel = null,
         listBoxId,
-        onClear,
+        onClear = null,
     } = props;
 
-    const handleClear = useCallback((event) => {
+    const handleClear = useCallback((event: React.MouseEvent) => {
         if (isNil(onClear)) {
             return;
         }
@@ -43,9 +58,9 @@ function SelectAnchor(props) {
         onClear(event);
     }, [onClear]);
 
-    let selectedText = value;
+    let selectedText = value as string | null;
 
-    if (isNil(selectedText) || selectedText.length <= 0) {
+    if (isNil(selectedText) || (selectedText as string).length <= 0) {
         if (!isNil(placeholder) && placeholder.length > 0) {
             selectedText = placeholder;
         } else {
@@ -53,7 +68,7 @@ function SelectAnchor(props) {
         }
     }
 
-    const clearButton = (isNil(nullable) || nullable) && !isNil(value) && value.length > 0 ? (
+    const clearButton = (isNil(nullable) || nullable) && !isNil(value) && (value as string).length > 0 ? (
         <IconButton
             className="clear"
             tabIndex="-1"
@@ -65,14 +80,16 @@ function SelectAnchor(props) {
         />
     ) : null;
 
-    const handleKeyDown = useCallback((event) => {
+    const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
 
 
         if (
             event.which === 8 // backspace
             || event.which === 46 // delete
         ) {
-            onClear();
+            if (onClear) {
+                onClear();
+            }
         };
     }, [onClear]);
 
@@ -90,14 +107,14 @@ function SelectAnchor(props) {
                 })}
             >
                 <button
-                    id={id}
+                    id={id ?? undefined}
                     className={classnames(
                         'anchor-control',
                         'button-anchor',
                         {
                             nullable,
                             focus: open,
-                            'has-value': !isNil(value) && value.length > 0,
+                            'has-value': !isNil(value) && (value as string).length > 0,
                         },
                     )}
                     role="combobox"
@@ -105,12 +122,12 @@ function SelectAnchor(props) {
                     aria-expanded={open}
                     aria-haspopup="listbox"
                     type="button"
-                    aria-describedby={describedBy}
-                    aria-labelledby={labelledBy}
-                    title={title}
+                    aria-describedby={describedBy ?? undefined}
+                    aria-labelledby={labelledBy ?? undefined}
+                    title={title ?? undefined}
                     disabled={disabled}
-                    aria-label={ariaLabel}
-                    value={!isNil(value) && value.length > 0 ? value : null}
+                    aria-label={ariaLabel ?? undefined}
+                    value={!isNil(value) && (value as string).length > 0 ? (value as string) : undefined}
                     onKeyDown={handleKeyDown}
                 />
                 <div className="anchor-content">
@@ -131,37 +148,6 @@ function SelectAnchor(props) {
         </div>
     );
 }
-
-SelectAnchor.propTypes = {
-    id: PropTypes.string,
-    disabled: PropTypes.bool,
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-    title: PropTypes.string,
-    open: PropTypes.bool.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
-    value: PropTypes.any,
-    nullable: PropTypes.bool,
-    placeholder: PropTypes.string,
-    'aria-label': PropTypes.string,
-    size: PropTypes.oneOf(['sm', 'md', 'lg']),
-    onClear: PropTypes.func,
-    listBoxId: PropTypes.string.isRequired,
-};
-
-SelectAnchor.defaultProps = {
-    size: null,
-    id: null,
-    disabled: false,
-    'aria-labelledby': null,
-    'aria-describedby': null,
-    title: null,
-    value: null,
-    placeholder: null,
-    'aria-label': null,
-    onClear: null,
-    nullable: true,
-};
 
 export default applyAnchorBinding(SelectAnchor, {
     focusSelector: '.button-anchor',

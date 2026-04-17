@@ -3,42 +3,27 @@ import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import ListItemButton from '../drop-down/list-item-button.js';
 import Icon from '../../display/icon/index.js';
-import PropTypes from '../../../common/prop-types.js';
 import MenuItem from './menu-item.js';
 
-class MenuButton extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        icon: PropTypes.icon,
-        children: PropTypes.string,
-        onClick: PropTypes.func,
-        // eslint-disable-next-line react/forbid-prop-types
-        onClickMeta: PropTypes.any,
-        selected: PropTypes.bool,
-        targeted: PropTypes.bool,
-        disabled: PropTypes.bool,
-        borderBottom: PropTypes.bool,
-        borderTop: PropTypes.bool,
-        'aria-label': PropTypes.string,
-    };
+interface MenuButtonProps {
+    id?: string | null;
+    className?: string | null;
+    icon?: unknown | null;
+    children?: string | null;
+    onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
+    onClickMeta?: unknown | null;
+    selected?: boolean;
+    targeted?: boolean;
+    disabled?: boolean;
+    borderBottom?: boolean | null;
+    borderTop?: boolean;
+    'aria-label'?: string | null;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        onClick: null,
-        onClickMeta: null,
-        selected: false,
-        targeted: false,
-        disabled: false,
-        icon: null,
-        children: null,
-        borderBottom: null,
-        borderTop: false,
-        'aria-label': null,
-    };
+class MenuButton extends PureComponent<MenuButtonProps> {
+    private itemRef: React.RefObject<unknown>;
 
-    constructor(props) {
+    constructor(props: MenuButtonProps) {
         super(props);
 
         this.itemRef = createRef();
@@ -46,7 +31,7 @@ class MenuButton extends PureComponent {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick({ event }) {
+    handleClick({ event }: { event: React.MouseEvent }): void {
         const { onClick, onClickMeta } = this.props;
 
         if (event.defaultPrevented) {
@@ -61,22 +46,22 @@ class MenuButton extends PureComponent {
         }
     }
 
-    getRootNode() {
-        return this.itemRef.current.getRootNode();
+    getRootNode(): HTMLElement | null {
+        return (this.itemRef.current as { getRootNode: () => HTMLElement } | null)?.getRootNode() ?? null;
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            selected,
-            targeted,
-            disabled,
-            borderBottom,
-            borderTop,
-            icon,
-            children,
-            'aria-label': ariaLabel,
+            id = null,
+            className = null,
+            selected = false,
+            targeted = false,
+            disabled = false,
+            borderBottom = null,
+            borderTop = false,
+            icon = null,
+            children = null,
+            'aria-label': ariaLabel = null,
         } = this.props;
 
         return (

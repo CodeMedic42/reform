@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import React from 'react';
+import React, { type ComponentType, type ReactNode } from 'react';
 import Promise from 'bluebird';
 import isNil from 'lodash/isNil';
 import isArray from 'lodash/isArray';
@@ -9,11 +9,21 @@ import reduce from 'lodash/reduce';
 import isFunction from 'lodash/isFunction';
 import { Aspect } from '@reformjs/girder';
 import girderReactContext from './girder-react-context.js';
+import type { GirderContext, GirderReactContextValue, ActionFunction } from './girder-react-context.js';
 
-function build(aspectComponents, root) {
+interface ComponentDefinition {
+    target?: string | RegExp | null;
+    Component?: ComponentType<{ children?: ReactNode }>;
+}
+
+interface InitConfig {
+    getSettings: (key: string) => (ComponentDefinition | ComponentDefinition[])[];
+}
+
+function build(aspectComponents: ComponentType<{ children?: ReactNode }>[], root: ReactNode): ReactNode {
     return reduce(
         aspectComponents,
-        (acc, Component) => (
+        (acc: ReactNode, Component: ComponentType<{ children?: ReactNode }>) => (
             <Component>
                 {acc}
             </Component>
@@ -23,7 +33,12 @@ function build(aspectComponents, root) {
 }
 
 class ReactAspectBase extends Aspect {
-    constructor(aspectId, RootComponent) {
+    RootComponent: ComponentType;
+    container: HTMLDivElement | null;
+    root: unknown;
+    aspectComponents: ComponentType<{ children?: ReactNode }>[];
+
+    constructor(aspectId: string, RootComponent: ComponentType) {
         super(aspectId);
 
         this.RootComponent = RootComponent;
@@ -32,19 +47,21 @@ class ReactAspectBase extends Aspect {
         this.aspectComponents = [];
     }
 
-    onInitialize(config) {
+    onInitialize(config: InitConfig): void {
         this.aspectComponents = [];
 
         const settings = config.getSettings('react');
 
-        forEach(settings, (setting) => {
-            let componentDefinitions = setting;
+        forEach(settings, (setting: ComponentDefinition | ComponentDefinition[]) => {
+            let componentDefinitions: ComponentDefinition[];
 
-            if (!isArray(componentDefinitions)) {
-                componentDefinitions = [componentDefinitions];
+            if (!isArray(setting)) {
+                componentDefinitions = [setting as ComponentDefinition];
+            } else {
+                componentDefinitions = setting;
             }
 
-            forEach(componentDefinitions, (componentDefinition) => {
+            forEach(componentDefinitions, (componentDefinition: ComponentDefinition) => {
                 const {
                     target,
                     Component,
@@ -71,15 +88,15 @@ class ReactAspectBase extends Aspect {
         });
     }
 
-    mount() {
+    mount(_container: HTMLDivElement, _appRoot: ReactNode): void {
         throw new Error('A React Aspect must have a mount method');
     }
 
-    unmount() {
+    unmount(_container: HTMLDivElement): void {
         throw new Error('A React Aspect must have an unmount method');
     }
 
-    onStart(girderContext) {
+    onStart(girderContext: GirderContext): void {
         super.onStart(girderContext);
 
         const mountId = `${this.id}-container`;
@@ -92,15 +109,15 @@ class ReactAspectBase extends Aspect {
 
         container = document.createElement('div');
 
-        this.container = container;
+        this.container = container as HTMLDivElement;
 
         container.setAttribute('id', mountId);
 
         document.body.appendChild(container);
 
-        const useAspect = (aspectId) => girderContext.getAspect(aspectId);
+        const useAspect = (aspectId: string): unknown => girderContext.getAspect(aspectId);
 
-        const useAction = (action, ...args) => {
+        const useAction: GirderReactContextValue['useAction'] = (action: ActionFunction, ...args: unknown[]): Promise<void> => {
             if (!isFunction(action)) {
                 throw new Error('useAction must be provided a function.');
             }
@@ -110,13 +127,13 @@ class ReactAspectBase extends Aspect {
                 // Swallow everything, the dev should get data from the store.
                 // The only thing they should know is the action finished.
                 .then(noop)
-                .catch((err) => {
+                .catch((err: unknown) => {
                     // eslint-disable-next-line no-console
                     console.error(err);
                 });
             };
 
-        const reactContext = {
+        const reactContext: GirderReactContextValue = {
             useAspect,
             useAction,
         };
@@ -132,12 +149,12 @@ class ReactAspectBase extends Aspect {
         this.mount(this.container, appRoot);
     }
 
-    onStop() {
+    onStop(): void {
         super.stop();
 
-        this.unmount(this.container);
+        this.unmount(this.container!);
 
-        this.container.remove();
+        this.container!.remove();
         this.container = null;
     }
 }

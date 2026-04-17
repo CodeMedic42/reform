@@ -2,38 +2,25 @@ import React, { PureComponent } from 'react';
 import { isNil } from 'lodash-es';
 import ListItemContent from '../drop-down/list-item-content.js';
 import Icon from '../../display/icon/index.js';
-import PropTypes from '../../../common/prop-types.js';
 import MenuItem from './menu-item.js';
 
-class MenuText extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        menuIcon: PropTypes.icon,
-        children: PropTypes.string,
-        selected: PropTypes.bool,
-        targeted: PropTypes.bool,
-        borderBottom: PropTypes.bool,
-        borderTop: PropTypes.bool,
-        icon: PropTypes.icon,
-    };
+interface MenuTextProps {
+    id?: string | null;
+    className?: string | null;
+    menuIcon?: unknown | null;
+    children?: string | null;
+    selected?: boolean;
+    targeted?: boolean;
+    borderBottom?: boolean;
+    borderTop?: boolean;
+    icon?: unknown | null;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        selected: false,
-        targeted: false,
-        menuIcon: null,
-        children: null,
-        borderBottom: false,
-        borderTop: false,
-        icon: null,
-    };
+class MenuText extends PureComponent<MenuTextProps> {
+    renderListItemContent(): React.ReactNode {
+        const { children = null, menuIcon = null } = this.props;
 
-    renderListItemContent() {
-        const { children, menuIcon } = this.props;
-
-        let content = children;
+        let content: React.ReactNode = children;
 
         if (!isNil(menuIcon)) {
             content = (
@@ -47,15 +34,15 @@ class MenuText extends PureComponent {
         return content;
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            selected,
-            targeted,
-            borderBottom,
-            borderTop,
-            icon,
+            id = null,
+            className = null,
+            selected = false,
+            targeted = false,
+            borderBottom = false,
+            borderTop = false,
+            icon = null,
         } = this.props;
 
         return (

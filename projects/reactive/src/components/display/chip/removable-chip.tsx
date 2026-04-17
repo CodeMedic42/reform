@@ -1,33 +1,54 @@
 import React, { memo, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons/faCircleXmark';
-import { colorPropType, shadePropType } from '../../../common/color-list.js';
+import { Color, PaletteShade } from '../../../common/color-list.js';
 import Chip from './chip.js';
 import Icon from '../icon/index.js';
 
-function RemovableChip(props) {
+interface RemovableChipClearEvent {
+	event: React.MouseEvent<HTMLButtonElement>;
+	meta: unknown;
+}
+
+interface RemovableChipProps {
+	id?: string | null;
+	className?: string | null;
+	color: Color;
+	shade?: PaletteShade | null;
+	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | null;
+	floating?: boolean;
+	children?: React.ReactNode;
+	onClear?: ((event: RemovableChipClearEvent) => void) | null;
+	onClearMeta?: unknown;
+	variant?: 'rectangle' | 'pill';
+	clearType?: 'normal' | 'inverse';
+	tabIndex?: string | null;
+	disabled?: boolean;
+	'aria-label'?: string;
+}
+
+function RemovableChip(props: RemovableChipProps): React.ReactNode {
 	const {
-		id,
-		className,
-		children,
+		id = null,
+		className = null,
+		children = null,
 		color,
-		shade,
-		size,
-		floating,
-		variant,
-		onClear,
-		onClearMeta,
-		clearType,
-		tabIndex,
-		disabled,
-		'aria-label': ariaLabel
+		shade = 'lighter',
+		size = null,
+		floating = false,
+		variant = 'rectangle',
+		onClear = null,
+		onClearMeta = null,
+		clearType = 'normal',
+		tabIndex = null,
+		disabled = false,
+		'aria-label': ariaLabel = 'Remove',
 	} = props;
 
 	const handleClick = useCallback(
-		(event) => {
+		(event: React.MouseEvent<HTMLButtonElement>) => {
 			if (isNil(onClear)) {
 				return;
 			}
@@ -54,7 +75,7 @@ function RemovableChip(props) {
 				})}
 				type="button"
 				onClick={handleClick}
-				tabIndex={tabIndex}
+				tabIndex={tabIndex != null ? Number(tabIndex) : undefined}
 				disabled={disabled}
 				aria-label={ariaLabel}
 			>
@@ -65,42 +86,5 @@ function RemovableChip(props) {
 		</Chip>
 	);
 }
-
-RemovableChip.propTypes = {
-	id: PropTypes.string,
-	className: PropTypes.string,
-	color: colorPropType.isRequired,
-	shade: shadePropType,
-	size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
-	floating: PropTypes.bool,
-	children: PropTypes.oneOfType([
-		PropTypes.node,
-		PropTypes.arrayOf(PropTypes.node),
-	]),
-	onClear: PropTypes.func,
-	// eslint-disable-next-line react/forbid-prop-types
-	onClearMeta: PropTypes.any,
-	variant: PropTypes.oneOf(['rectangle', 'pill']),
-	clearType: PropTypes.oneOf(['normal', 'inverse']),
-	tabIndex: PropTypes.string,
-	disabled: PropTypes.bool,
-	'aria-label': PropTypes.string,
-};
-
-RemovableChip.defaultProps = {
-	id: null,
-	className: null,
-	shade: 'lighter',
-	children: null,
-	size: null,
-	floating: false,
-	onClear: null,
-	onClearMeta: null,
-	variant: 'rectangle',
-	clearType: 'normal',
-	tabIndex: null,
-	disabled: false,
-	'aria-label': 'Remove',
-};
 
 export default memo(RemovableChip);

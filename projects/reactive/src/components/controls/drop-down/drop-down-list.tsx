@@ -1,25 +1,24 @@
 import React, { Component, createRef } from 'react';
-// import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import PropTypes from '../../../common/prop-types.js';
 
-// interface DropDownListPropsInt {
-//     id?: string,
-//     className?: string,
-//     size: 'sm' | 'md' | 'lg',
-//     'aria-labelledby'?: string,
-// }
+interface DropDownListProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+    size?: string | null;
+    'aria-labelledby'?: string | null;
+}
 
-function scrollTo(listElement, targetIndex) {
+function scrollTo(listElement: HTMLElement, targetIndex: number): void {
     const optionElement = listElement.childNodes[targetIndex];
 
     if (isNil(optionElement)) {
         return;
     }
 
-    scrollIntoView(optionElement, {
+    scrollIntoView(optionElement as Element, {
         scrollMode: 'always',
         block: 'center',
         inline: 'center',
@@ -30,24 +29,10 @@ function scrollTo(listElement, targetIndex) {
 /**
  * This component is used within the Tray component. It is normally used within the DropDown component.
  */
-class DropDownList extends Component {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.children,
-        size: PropTypes.string,
-        'aria-labelledby': PropTypes.string,
-    };
+class DropDownList extends Component<DropDownListProps> {
+    private listRef: React.RefObject<HTMLOListElement>;
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-        size: null,
-        'aria-labelledby': null,
-    };
-
-    constructor(props) {
+    constructor(props: DropDownListProps) {
         super(props);
 
         this.listRef = createRef();
@@ -55,7 +40,7 @@ class DropDownList extends Component {
         this.handleWheel = this.handleWheel.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         if (!isNil(this.listRef.current)) {
             this.listRef.current.addEventListener('wheel', this.handleWheel, {
                 passive: false,
@@ -64,7 +49,7 @@ class DropDownList extends Component {
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         if (!isNil(this.listRef.current)) {
             this.listRef.current.removeEventListener('wheel', this.handleWheel);
         }
@@ -76,7 +61,7 @@ class DropDownList extends Component {
     // The purpose of the component is to be used inside the drop down component in the tray.
     // While the tray is open I don't want to scroll anywhere except the tray.
     // This method will prevent that scrolling.
-    handleWheel(event) {
+    handleWheel(event: WheelEvent): void {
         const { deltaY, deltaX } = event;
 
         if (isNil(this.listRef.current)) {
@@ -113,11 +98,11 @@ class DropDownList extends Component {
         }
     }
 
-    getRootNode() {
+    getRootNode(): HTMLOListElement | null {
         return this.listRef.current;
     }
 
-    scrollToIndex(index) {
+    scrollToIndex(index: number): void {
         if (isNil(this.listRef.current)) {
             return;
         }
@@ -125,13 +110,13 @@ class DropDownList extends Component {
         scrollTo(this.listRef.current, index);
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            children,
-            size,
-            'aria-labelledby': ariaLabeledBy,
+            id = null,
+            className = null,
+            children = null,
+            size = null,
+            'aria-labelledby': ariaLabeledBy = null,
         } = this.props;
 
         const sizeClass = !isNil(size) ? `size-${size}` : 'size-md';

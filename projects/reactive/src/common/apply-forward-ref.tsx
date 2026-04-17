@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef } from 'react';
 
-function applyForwardRef(Component) {
+function applyForwardRef(Component: React.ComponentType<any>) {
     const ForwardedComponent = forwardRef((props, ref) => (
         <Component {...props} forwardRef={ref} />
     ));

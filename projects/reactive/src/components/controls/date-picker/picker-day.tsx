@@ -6,10 +6,18 @@ import isEqual from 'date-fns/isEqual';
 import getDate from 'date-fns/getDate';
 /* eslint-enable import/no-duplicates */
 import { isNil } from 'lodash-es';
-import PropTypes from '../../../common/prop-types.js';
 import preventDefault from '../../../common/prevent-default.js';
 
-function getDayType(dayDate, fromDate, toDate) {
+interface PickerDayProps {
+    dayDate: Date;
+    fromDate?: Date | null;
+    toDate?: Date | null;
+    targetDate?: Date | null;
+    onSelect?: ((date: Date) => void) | null;
+    disabled?: boolean;
+}
+
+function getDayType(dayDate: Date, fromDate: Date | null | undefined, toDate: Date | null | undefined): string | null {
     if (isEqual(dayDate, fromDate)) {
         return 'from';
     }
@@ -25,7 +33,7 @@ function getDayType(dayDate, fromDate, toDate) {
     return null;
 }
 
-function inRange(dayDate, fromDate, toDate) {
+function inRange(dayDate: Date, fromDate: Date | null | undefined, toDate: Date | null | undefined): boolean {
     if (isNil(fromDate) || isNil(toDate)) {
         return false;
     }
@@ -33,14 +41,14 @@ function inRange(dayDate, fromDate, toDate) {
     return fromDate <= dayDate && dayDate <= toDate;
 }
 
-function PickerDay(props) {
+function PickerDay(props: PickerDayProps): React.ReactNode {
     const {
         dayDate,
-        fromDate,
-        toDate,
-        targetDate,
-        onSelect,
-        disabled,
+        fromDate = null,
+        toDate = null,
+        targetDate = null,
+        onSelect = null,
+        disabled = false,
     } = props;
 
     const day = getDate(dayDate);
@@ -76,22 +84,5 @@ function PickerDay(props) {
             {day}
         </button>);
 }
-
-PickerDay.propTypes = {
-    dayDate: PropTypes.instanceOf(Date).isRequired,
-    fromDate: PropTypes.instanceOf(Date),
-    toDate: PropTypes.instanceOf(Date),
-    targetDate: PropTypes.instanceOf(Date),
-    onSelect: PropTypes.func,
-    disabled: PropTypes.bool,
-};
-
-PickerDay.defaultProps = {
-    fromDate: null,
-    toDate: null,
-    targetDate: null,
-    onSelect: null,
-    disabled: false,
-};
 
 export default PickerDay;

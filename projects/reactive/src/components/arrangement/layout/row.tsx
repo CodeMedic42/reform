@@ -1,10 +1,33 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef } from 'react';
 import classnames from 'classnames';
 import { isNil, isString, isEmpty, forEach, isPlainObject } from 'lodash-es';
 
-function buildClass(prop, prefix) {
+type GutterValueType = string;
+type GutterType = GutterValueType | GutterValueType[];
+type GutterObjectType = { h?: GutterType; v?: GutterType };
+type GutterProp = GutterType | GutterObjectType;
+
+export interface RowProps {
+    className?: string | null;
+    justify?: string | string[] | null;
+    align?: string | string[] | null;
+    gutter?: GutterProp | null;
+    enableBefore?: boolean | null;
+    enableAfter?: boolean | null;
+    children?: React.ReactNode;
+    before?: string | null;
+    after?: string | null;
+    style?: Record<string, string | number | boolean | null | undefined>;
+    [key: string]: unknown;
+}
+
+interface ClassStates {
+    classNames: string[];
+    styles: Record<string, string>;
+}
+
+function buildClass(prop: string | string[] | null | undefined, prefix: string): null | string {
     if (isNil(prop)) {
         return null;
     }
@@ -13,9 +36,9 @@ function buildClass(prop, prefix) {
         return `${prefix}-${prop}`;
     }
 
-    const classNames = {};
+    const classNames: Record<string, boolean> = {};
 
-    forEach(prop, (value, index) => {
+    forEach(prop, (value: string, index: number) => {
         let size = '';
 
         if (index > 0) {
@@ -31,11 +54,11 @@ function buildClass(prop, prefix) {
 }
 
 function buildGutterClassName(
-    acc,
-    gutter,
-    additionalPrefix,
-    suffix,
-) {
+    acc: ClassStates,
+    gutter: GutterValueType | undefined,
+    additionalPrefix: string,
+    suffix: string,
+): void {
     if (isEmpty(gutter)) {
         return;
     }
@@ -50,7 +73,7 @@ function buildGutterClassName(
     }
 }
 
-function buildGutterClassGroup(acc, gutter, additionalPrefix) {
+function buildGutterClassGroup(acc: ClassStates, gutter: GutterType | undefined, additionalPrefix: string): void {
     if (isNil(gutter)) {
         return;
     }
@@ -58,7 +81,7 @@ function buildGutterClassGroup(acc, gutter, additionalPrefix) {
     if (isString(gutter)) {
         buildGutterClassName(acc, gutter, additionalPrefix, '');
     } else {
-        forEach(gutter, (valueItem, index) => {
+        forEach(gutter as GutterValueType[], (valueItem: GutterValueType, index: number) => {
             let size = '';
 
             if (index > 0) {
@@ -70,8 +93,8 @@ function buildGutterClassGroup(acc, gutter, additionalPrefix) {
     }
 }
 
-function buildGutterClasses(gutter) {
-    const states = {
+function buildGutterClasses(gutter: GutterProp | null | undefined): ClassStates {
+    const states: ClassStates = {
         classNames: [],
         styles: {},
     };
@@ -81,18 +104,18 @@ function buildGutterClasses(gutter) {
     }
 
     if (isPlainObject(gutter)) {
-        const { h: hGutter, v: vGutter } = gutter;
+        const { h: hGutter, v: vGutter } = gutter as GutterObjectType;
 
         buildGutterClassGroup(states, hGutter, '-h');
         buildGutterClassGroup(states, vGutter, '-v');
     } else {
-        buildGutterClassGroup(states, gutter, '');
+        buildGutterClassGroup(states, gutter as GutterType, '');
     }
 
     return states;
 }
 
-function Row(props, ref) {
+function Row(props: RowProps, ref: React.Ref<HTMLDivElement>): React.ReactElement {
     const {
         className,
         justify,
@@ -117,8 +140,8 @@ function Row(props, ref) {
 
     const classNames = classnames(
         'layout-row',
-        buildClass(justify, 'justify'),
-        buildClass(align, 'align'),
+        buildClass(justify as string, 'justify'),
+        buildClass(align as string, 'align'),
         buildClass(beforeFinal, 'before'),
         buildClass(afterFinal, 'after'),
         gutterClasses,

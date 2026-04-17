@@ -9,22 +9,43 @@
 /* eslint-disable one-var */
 /* eslint-disable no-var */
 import { Aspect } from '@reformjs/girder';
+import type { AspectInitContext, AspectStartContext } from '@reformjs/girder';
 import isFunction from 'lodash/isFunction';
 import isNil from 'lodash/isNil';
 
+interface PendoInstance {
+    initialize: (...args: unknown[]) => void;
+    _q: unknown[];
+    [method: string]: unknown;
+}
+
+declare global {
+    interface Window {
+        pendo?: PendoInstance;
+    }
+}
+
+type ApiKeyResolver = () => string | Promise<string>;
+
+interface PendoControls {
+    initialize: (...args: unknown[]) => void;
+}
+
 class PendoAspect extends Aspect {
-    constructor(apiKey) {
+    private apiKey: ApiKeyResolver;
+
+    constructor(apiKey: string | ApiKeyResolver) {
         super('pendo');
 
         this.apiKey = !isFunction(apiKey)
-            ? () => apiKey
-            : apiKey;
+            ? () => apiKey as string
+            : apiKey as ApiKeyResolver;
     }
 
     // eslint-disable-next-line class-methods-use-this
-    onInitialize() {
+    onInitialize(_context?: AspectInitContext): PendoControls {
         return {
-            initialize: (...args) => {
+            initialize: (...args: unknown[]): void => {
                 if (isNil(window.pendo)) {
                     throw new Error('Pendo has not been setup properly.');
                 }
@@ -34,39 +55,39 @@ class PendoAspect extends Aspect {
         };
     }
 
-    onStart(...args) {
+    onStart(...args: [AspectStartContext?]): void {
         super.onStart(...args);
 
         Promise.resolve(this.apiKey())
-        .then((apiKey) => {
-            (function(p, e, n, d, o) {
-                var v, w, x, y, z;
+        .then((apiKey: string) => {
+            (function(p: Window, e: Document, n: string, d: string, _o?: PendoInstance) {
+                var v: string[], w: number, x: number, y: HTMLScriptElement, z: HTMLScriptElement;
 
-                o = p[d] = p[d] || {};
+                _o = (p as unknown as Record<string, PendoInstance>)[d] = (p as unknown as Record<string, PendoInstance>)[d] || {} as PendoInstance;
 
-                o._q = [];
+                _o._q = [];
 
                 v = ['initialize', 'identify', 'updateOptions', 'pageLoad'];
 
                 for (w = 0, x = v.length; w < x; ++w)
-                    (function(m) {
-                        o[m] = o[m] || function() {
-                            o._q[m === v[0] ? 'unshift' : 'push']([m].concat([].slice.call(arguments, 0)));
+                    (function(m: string) {
+                        _o![m] = _o![m] || function() {
+                            _o!._q[m === v[0] ? 'unshift' : 'push']([m].concat([].slice.call(arguments, 0)));
                         };
                     })(v[w]);
 
-                y = e.createElement(n);
+                y = e.createElement(n) as HTMLScriptElement;
 
-                y.async = !0;
+                y.async = true;
 
                 y.src = `https://cdn.pendo.io/agent/static/${apiKey}/pendo.js`;
 
-                z = e.getElementsByTagName(n)[0];
+                z = e.getElementsByTagName(n)[0] as HTMLScriptElement;
 
-                z.parentNode.insertBefore(y, z);
+                z.parentNode!.insertBefore(y, z);
             })(window, document, 'script', 'pendo');
         })
-        .catch((error) => {
+        .catch((error: Error) => {
             console.error('Failed to setup Pendo');
             console.error(error, error.stack);
         });

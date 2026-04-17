@@ -1,3 +1,3 @@
-import InputMessages from './input-field-messages.jsx';
+import InputMessages from './input-field-messages.js';
 
 export default InputMessages;

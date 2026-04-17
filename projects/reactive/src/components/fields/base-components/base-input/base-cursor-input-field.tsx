@@ -6,30 +6,37 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import IconBox from '../../../display/icon-box/index.jsx';
 import IconButton from '../../../display/icon-button/index.jsx';
 import changeSize from '../../../../util/change-size.js';
-import PropTypes from '../../../../common/prop-types.js';
 
-class BaseCursorInput extends React.PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        disabled: PropTypes.bool,
-        onChange: PropTypes.func,
-        onClear: PropTypes.func,
-        size: PropTypes.oneOf(['sm', 'md', 'lg']),
-        leftIcon: PropTypes.shape({
-            icon: PropTypes.icon.isRequired,
-            onClick: PropTypes.func,
-        }),
-        rightIcon: PropTypes.shape({
-            icon: PropTypes.icon.isRequired,
-            onClick: PropTypes.func,
-            overrideClear: PropTypes.bool,
-        }),
-        children: PropTypes.func.isRequired,
-        hideClearButton: PropTypes.bool,
-    };
+interface IconConfig {
+    icon: unknown;
+    onClick?: (() => void) | null;
+}
 
+interface RightIconConfig extends IconConfig {
+    overrideClear?: boolean;
+}
+
+interface BaseCursorInputProps {
+    id?: string | null;
+    className?: string | null;
+    value?: string | number | null;
+    disabled?: boolean;
+    onChange?: ((value: string | null) => void);
+    onClear?: (() => void) | null;
+    size?: 'sm' | 'md' | 'lg';
+    leftIcon?: IconConfig | null;
+    rightIcon?: RightIconConfig | null;
+    children: (args: { value: string | number | null; onChange: (value: string | null) => void }) => React.ReactNode;
+    hideClearButton?: boolean;
+    [key: string]: unknown;
+}
+
+interface BaseCursorInputState {
+    value: string | number | null;
+    nextValue: string | number | null;
+}
+
+class BaseCursorInput extends React.PureComponent<BaseCursorInputProps, BaseCursorInputState> {
     static defaultProps = {
         id: null,
         className: null,
@@ -43,7 +50,7 @@ class BaseCursorInput extends React.PureComponent {
         onChange: noop,
     };
 
-    constructor(props) {
+    constructor(props: BaseCursorInputProps) {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
@@ -53,12 +60,12 @@ class BaseCursorInput extends React.PureComponent {
         const { value } = props;
 
         this.state = {
-            value,
-            nextValue: value,
+            value: value ?? null,
+            nextValue: value ?? null,
         };
     }
 
-    static getDerivedStateFromProps(nextProps, currentState) {
+    static getDerivedStateFromProps(nextProps: BaseCursorInputProps, currentState: BaseCursorInputState) {
         let { value } = nextProps;
 
         // If the new incoming value matches what we currently have
@@ -81,7 +88,7 @@ class BaseCursorInput extends React.PureComponent {
         };
     }
 
-    handleChange(value) {
+    handleChange(value: string | null) {
         const { onChange } = this.props;
 
         const { value: currentValue } = this.state;
@@ -94,13 +101,17 @@ class BaseCursorInput extends React.PureComponent {
             nextValue: value,
         });
 
-        onChange(value);
+        if (onChange) {
+            onChange(value);
+        }
     }
 
     handleClear() {
         const { onClear, onChange } = this.props;
 
-        onChange(null);
+        if (onChange) {
+            onChange(null);
+        }
 
         if (!isNil(onClear)) {
             onClear();
@@ -108,11 +119,11 @@ class BaseCursorInput extends React.PureComponent {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    handleMouseDown(event) {
+    handleMouseDown(event: React.MouseEvent) {
         event.preventDefault();
     }
 
-    renderIcon(className, icon, onClick) {
+    renderIcon(className: string, icon: unknown, onClick?: (() => void) | null) {
         let { size } = this.props;
 
         size = changeSize(size, 1);
@@ -124,7 +135,7 @@ class BaseCursorInput extends React.PureComponent {
                     icon={icon}
                     onClick={onClick}
                     size={size}
-                    onMouseDown={(event) => {
+                    onMouseDown={(event: React.MouseEvent) => {
                         event.preventDefault();
                     }}
                     tabIndex="-1"
@@ -182,7 +193,7 @@ class BaseCursorInput extends React.PureComponent {
 
         const overrideClear = rightIcon?.overrideClear;
 
-        let clearButton = null;
+        let clearButton: React.ReactNode = null;
 
         if (!disabled && !isNil(value) && !hideClearButton && !overrideClear) {
             clearButton = (
@@ -223,16 +234,3 @@ class BaseCursorInput extends React.PureComponent {
 }
 
 export default BaseCursorInput;
-
-const {
-    children,
-    hideClearButton,
-    valueType,
-    willChange,
-    ...exportPropTypes
-    // eslint-disable-next-line react/forbid-foreign-prop-types
-} = BaseCursorInput.propTypes;
-
-const exportDefaultProps = BaseCursorInput.defaultProps;
-
-export { exportPropTypes as propTypes, exportDefaultProps as defaultProps };

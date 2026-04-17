@@ -1,15 +1,20 @@
 const { program } = require('commander');
 const initialize = require('../initialize/index.js').default;
 
+interface CliOptions {
+    harness?: string;
+    props?: string;
+}
+
 program
     .option('-h, --harness <string>')
     .option('-p, --props <string>');
 
 program.parse();
 
-const options = program.opts();
+const options: CliOptions = program.opts();
 
-async function run() {
+async function run(): Promise<void> {
     const { start } = await initialize();
 
     const harnessControl = await start();

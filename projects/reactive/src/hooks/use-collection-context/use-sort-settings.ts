@@ -1,7 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { isNil, orderBy, isEmpty, forEach, isString, isArray } from 'lodash-es';
+import CollectionItem from './collection-item.js';
 
-function sortCheck(left, right) {
+type SortAccessor = (item: CollectionItem) => any;
+
+function sortCheck(left: any, right: any): number {
     if (left > right) {
         return 1;
     }
@@ -13,7 +16,7 @@ function sortCheck(left, right) {
     return 0;
 }
 
-function sorter(by, order, left, right) {
+function sorter(by: SortAccessor[], order: ('asc' | 'desc')[], left: CollectionItem, right: CollectionItem): number {
     let result = 0;
 
     forEach(by, (target, index) => {
@@ -32,7 +35,7 @@ function sorter(by, order, left, right) {
     return result;
 }
 
-function insertSort(currentList, newList, by, order) {
+function insertSort(currentList: CollectionItem[], newList: CollectionItem[], by: SortAccessor[], order: ('asc' | 'desc')[]): CollectionItem[] {
     if (isEmpty(currentList)) {
         return newList;
     }
@@ -63,7 +66,7 @@ function insertSort(currentList, newList, by, order) {
     return currentList;
 }
 
-function getPropToLower(prop, listItem) {
+function getPropToLower(prop: string, listItem: CollectionItem): string | null {
     const value = listItem.getValue(prop);
 
     if (!isNil(value)) {
@@ -73,21 +76,21 @@ function getPropToLower(prop, listItem) {
     return value;
 }
 
-function getProp(prop, listItem) {
+function getProp(prop: string, listItem: CollectionItem): any {
     return listItem.getValue(prop);
 }
 
-function getFilterPriority(listItem) {
+function getFilterPriority(listItem: CollectionItem): number | null {
     return listItem.getFilterPriority();
 }
 
-function getIndex(listItem) {
+function getIndex(listItem: CollectionItem): number {
     return listItem.getOriginalIndex();
 }
 
-function processSortRules(sortRules) {
-    const by = [];
-    const order = [];
+function processSortRules(sortRules: any): { by: SortAccessor[]; order: ('asc' | 'desc')[]; filterPriorityUsed: boolean } {
+    const by: SortAccessor[] = [];
+    const order: ('asc' | 'desc')[] = [];
     let filterPriorityUsed = false;
 
     let preRules = sortRules;
@@ -98,7 +101,7 @@ function processSortRules(sortRules) {
 
     forEach(
         preRules,
-        (sortRule) => {
+        (sortRule: any) => {
             if (isNil(sortRule)) {
                 return;
             }
@@ -131,7 +134,6 @@ function processSortRules(sortRules) {
                 }
             }
         },
-        [],
     );
 
     by.push(getIndex);
@@ -144,7 +146,17 @@ function processSortRules(sortRules) {
     };
 }
 
-function useSortSettings(settings) {
+export interface SortSettings {
+    rules?: any;
+}
+
+export interface SortState {
+    rules: any;
+    insert: (items: CollectionItem[], newItems: CollectionItem[]) => CollectionItem[];
+    filterPriorityUsed: boolean;
+}
+
+function useSortSettings(settings?: SortSettings | null): SortState {
     const rules = settings?.rules ?? null;
 
     const {
@@ -153,7 +165,7 @@ function useSortSettings(settings) {
         filterPriorityUsed,
     } = useMemo(() => processSortRules(rules), [rules]);
 
-    const insert = useCallback((items, newItems) => {
+    const insert = useCallback((items: CollectionItem[], newItems: CollectionItem[]) => {
         const sortedItems = orderBy(newItems, by, order);
 
         if (items.length <= 0) {

@@ -6,51 +6,35 @@ import ListItemContent from '../drop-down/list-item-content.js';
 import IconButton from '../../display/icon-button/index.js';
 import MenuItem from './menu-item.js';
 import Icon from '../../display/icon/index.js';
-import PropTypes from '../../../common/prop-types.js';
 
-class MenuRemovable extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.string,
-        onRemove: PropTypes.func,
-        // eslint-disable-next-line react/forbid-prop-types
-        onRemoveMeta: PropTypes.any,
-        selected: PropTypes.bool,
-        targeted: PropTypes.bool,
-        disabled: PropTypes.bool,
-        borderBottom: PropTypes.bool,
-        borderTop: PropTypes.bool,
-        icon: PropTypes.icon,
-    };
+interface MenuRemovableProps {
+    id?: string | null;
+    className?: string | null;
+    children?: string | null;
+    onRemove?: ((payload: unknown) => void) | null;
+    onRemoveMeta?: unknown | null;
+    selected?: boolean;
+    targeted?: boolean;
+    disabled?: boolean;
+    borderBottom?: boolean;
+    borderTop?: boolean;
+    icon?: unknown | null;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        onRemove: null,
-        onRemoveMeta: null,
-        selected: false,
-        targeted: false,
-        disabled: false,
-        children: null,
-        borderBottom: false,
-        borderTop: false,
-        icon: null,
-    };
-
-    render() {
+class MenuRemovable extends PureComponent<MenuRemovableProps> {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            children,
-            selected,
-            targeted,
-            disabled,
-            onRemove,
-            onRemoveMeta,
-            borderBottom,
-            borderTop,
-            icon,
+            id = null,
+            className = null,
+            children = null,
+            selected = false,
+            targeted = false,
+            disabled = false,
+            onRemove = null,
+            onRemoveMeta = null,
+            borderBottom = false,
+            borderTop = false,
+            icon = null,
         } = this.props;
 
         return (

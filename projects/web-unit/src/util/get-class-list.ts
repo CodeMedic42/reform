@@ -1,5 +1,7 @@
-async function getClassList(elementHandle) {
-    return elementHandle.evaluate((el) => [...el.classList]);
+import type { ElementHandle } from 'puppeteer';
+
+async function getClassList(elementHandle: ElementHandle): Promise<string[]> {
+    return elementHandle.evaluate((el: Element) => [...el.classList]);
 }
 
 export default getClassList;

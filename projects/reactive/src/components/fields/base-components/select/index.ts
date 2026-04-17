@@ -1,5 +1,3 @@
-import Select, { propTypes, defaultProps } from './select.jsx';
+import Select from './select.js';
 
 export default Select;
-
-export { propTypes, defaultProps };

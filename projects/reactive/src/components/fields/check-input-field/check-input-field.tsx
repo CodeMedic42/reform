@@ -1,46 +1,50 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { PureComponent, createRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil, isEmpty } from 'lodash-es';
-import { schemeColorPropType } from '../../../common/color-list.js';
+import { Color } from '../../../common/color-list.js';
 import InputMessages from '../input-field-messages/index.js';
 import buildLabeledControlProps from '../../../common/build-labeled-control-props.js';
 
-class CheckInput extends PureComponent {
-    static propTypes = {
-        // eslint-disable-next-line react/no-unused-prop-types
-        id: PropTypes.string,
-        className: PropTypes.string,
-        label: PropTypes.string,
-        messages: PropTypes.shape({
-            general: PropTypes.arrayOf(PropTypes.string),
-            success: PropTypes.arrayOf(PropTypes.string),
-            failure: PropTypes.arrayOf(PropTypes.string),
-        }),
-        // eslint-disable-next-line react/no-unused-prop-types
-        'aria-label': PropTypes.string,
-        // eslint-disable-next-line react/no-unused-prop-types
-        'aria-labelledby': PropTypes.string,
-        // eslint-disable-next-line react/no-unused-prop-types
-        'aria-describedby': PropTypes.string,
-        title: PropTypes.string,
-        color: schemeColorPropType,
-        variant: PropTypes.oneOf(['check', 'indeterminate']),
-        value: PropTypes.bool,
-        size: PropTypes.oneOf(['sm', 'md', 'lg']),
-        onChange: PropTypes.func,
-        // eslint-disable-next-line react/forbid-prop-types
-        onChangeMeta: PropTypes.any,
-        onClick: PropTypes.func,
-        // eslint-disable-next-line react/forbid-prop-types
-        onClickMeta: PropTypes.any,
-        disabled: PropTypes.bool,
-        hidden: PropTypes.bool,
-        ignoreHalo: PropTypes.bool,
-        constrictField: PropTypes.bool,
-    };
+interface InputMessagesData {
+    general?: string[];
+    success?: string[];
+    failure?: string[];
+}
 
+interface CheckInputProps {
+    id?: string | null;
+    className?: string | null;
+    label?: string | null;
+    messages?: InputMessagesData | null;
+    'aria-label'?: string | null;
+    'aria-labelledby'?: string | null;
+    'aria-describedby'?: string | null;
+    title?: string | null;
+    color?: Color;
+    variant?: 'check' | 'indeterminate';
+    value?: boolean;
+    size?: 'sm' | 'md' | 'lg';
+    onChange?: ((checked: boolean, meta: { event: React.ChangeEvent<HTMLInputElement>; meta: unknown }) => void) | null;
+    onChangeMeta?: unknown;
+    onClick?: ((meta: { event: React.MouseEvent; meta: unknown }) => void) | null;
+    onClickMeta?: unknown;
+    disabled?: boolean;
+    hidden?: boolean;
+    ignoreHalo?: boolean;
+    constrictField?: boolean;
+}
+
+interface CheckInputState {
+    inputId: string;
+    labelId: string;
+    descriptionId: string | null;
+    labelledBy: string | null;
+    describedBy: string | null;
+    ariaLabel: string | null;
+}
+
+class CheckInput extends PureComponent<CheckInputProps, CheckInputState> {
     static defaultProps = {
         id: null,
         className: null,
@@ -64,18 +68,20 @@ class CheckInput extends PureComponent {
         constrictField: false,
     };
 
-    constructor(props) {
+    inputRef: React.RefObject<HTMLInputElement>;
+
+    constructor(props: CheckInputProps) {
         super(props);
 
-        this.inputRef = createRef();
+        this.inputRef = createRef<HTMLInputElement>();
 
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
 
-        this.state = {};
+        this.state = {} as CheckInputState;
     }
 
-    static getDerivedStateFromProps(nextProps) {
+    static getDerivedStateFromProps(nextProps: CheckInputProps) {
         return buildLabeledControlProps(nextProps);
     }
 
@@ -87,7 +93,7 @@ class CheckInput extends PureComponent {
         this.setCheckedAttribute();
     }
 
-    handleChange(event) {
+    handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { onChange, onChangeMeta } = this.props;
 
         if (isNil(onChange)) {
@@ -100,7 +106,7 @@ class CheckInput extends PureComponent {
         });
     }
 
-    handleClick(event) {
+    handleClick(event: React.MouseEvent) {
         const { onClick, onClickMeta } = this.props;
 
         if (isNil(onClick)) {
@@ -172,8 +178,8 @@ class CheckInput extends PureComponent {
             ariaLabel,
         } = this.state;
 
-        let labelContentElement = null;
-        let LabelElement = 'span';
+        let labelContentElement: React.ReactNode = null;
+        let LabelElement: React.ElementType = 'span';
 
         if (!isEmpty(label)) {
             labelContentElement = (
@@ -213,10 +219,10 @@ class CheckInput extends PureComponent {
                         disabled={disabled}
                         onChange={this.handleChange}
                         onClick={this.handleClick}
-                        aria-describedby={describedBy}
-                        title={title}
-                        aria-labelledby={labelledBy}
-                        aria-label={ariaLabel}
+                        aria-describedby={describedBy ?? undefined}
+                        title={title ?? undefined}
+                        aria-labelledby={labelledBy ?? undefined}
+                        aria-label={ariaLabel ?? undefined}
                     />
                     <span className="check-content">
                         <span className="check" />

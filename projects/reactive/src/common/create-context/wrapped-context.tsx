@@ -2,17 +2,16 @@
 import { isNil } from 'lodash-es';
 import React from 'react';
 
-export default (Context, Component, contextName) => {
+export default (Context: React.Context<any>, Component: React.ComponentType<any>, contextName?: string) => {
 	const propName =
 		!isNil(contextName) && contextName.length > 0 ? contextName : 'context';
 
-	const wrapped = React.forwardRef((props, ref) => {
-		// eslint-disable-next-line react/prop-types
+	const wrapped = React.forwardRef((props: any, ref) => {
 		const { children, ...rest } = props;
 
 		return (
 			<Context.Consumer>
-				{(contextValue) => {
+				{(contextValue: any) => {
 					const contextProp = {
 						[propName]: contextValue,
 					};

@@ -1,37 +1,48 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import {
-    schemeColorPropType,
     getSchemeColorClasses,
 } from '../../../common/color-list.js';
 
+interface DropDownListItemProps {
+    id?: string | null;
+    color?: string | null;
+    className?: string | null;
+    selected?: boolean;
+    targeted?: boolean;
+    children?: React.ReactNode;
+    'aria-label'?: string | null;
+    borderBottom?: boolean;
+    borderTop?: boolean;
+    onClick?: ((event: React.MouseEvent) => void) | null;
+    preventCloseOnClick?: boolean;
+    [key: string]: unknown;
+}
+
 /**
  * This component is used the base definition of an item being rendered inside the DropDownList component.
- * @param {*} props
- * @returns
  */
-function DropDownListItem(props) {
+function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
     const {
-        id,
-        color,
-        className,
-        selected,
-        targeted,
-        children,
-        'aria-label': ariaLabel,
-        borderBottom,
-        borderTop,
-        onClick,
-        preventCloseOnClick,
+        id = null,
+        color = null,
+        className = null,
+        selected = false,
+        targeted = false,
+        children = null,
+        'aria-label': ariaLabel = null,
+        borderBottom = false,
+        borderTop = false,
+        onClick = null,
+        preventCloseOnClick = false,
         ...rest
     } = props;
 
-    const itemRef = useRef();
+    const itemRef = useRef<HTMLLIElement>(null);
 
-    const handleClick = useCallback((event) => {
+    const handleClick = useCallback((event: React.MouseEvent) => {
         if (preventCloseOnClick) {
             event.preventDefault();
         }
@@ -82,36 +93,5 @@ function DropDownListItem(props) {
         </li>
     );
 }
-
-DropDownListItem.propTypes = {
-    id: PropTypes.string,
-    color: schemeColorPropType,
-    className: PropTypes.string,
-    selected: PropTypes.bool,
-    targeted: PropTypes.bool,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    'aria-label': PropTypes.string,
-    borderBottom: PropTypes.bool,
-    borderTop: PropTypes.bool,
-    onClick: PropTypes.func,
-    preventCloseOnClick: PropTypes.bool,
-};
-
-DropDownListItem.defaultProps = {
-    id: null,
-    className: null,
-    color: null,
-    children: null,
-    'aria-label': null,
-    selected: false,
-    targeted: false,
-    borderBottom: false,
-    borderTop: false,
-    onClick: null,
-    preventCloseOnClick: false,
-};
 
 export default DropDownListItem;

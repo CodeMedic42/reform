@@ -5,27 +5,33 @@ import parse from 'date-fns/parse';
 import startOfToday from 'date-fns/startOfToday';
 /* eslint-enable import/no-duplicates */
 import { toUpper, isNil, reduce, includes } from 'lodash-es';
-import PropTypes from '../../../../common/prop-types.js';
-import InputValueBuffer from '../input-field-value-buffer.jsx';
-import DateInput from './date-input.jsx';
+import InputValueBuffer from '../input-field-value-buffer.js';
+import DateInput from './date-input.js';
 import isInvalidDate from '../../../../common/is-invalid-date.js';
 
 const INVALID_DATE = new Date(NaN);
 
-function DateInputBase(props) {
+interface DateInputBaseProps {
+	format?: string;
+	value?: Date | null;
+	onChange?: ((value: Date | null) => void) | null;
+	[key: string]: unknown;
+}
+
+function DateInputBase(props: DateInputBaseProps): React.ReactElement {
 	const {
-		value,
-		onChange,
-		format,
+		value = null,
+		onChange = null,
+		format = 'MM / dd / yyyy',
 		...rest
 	} = props;
 
-	const handleChange = useCallback((newValue) => {
-		let finalValue = null;
+	const handleChange = useCallback((newValue: string | number | null) => {
+		let finalValue: Date | null = null;
 
-		if (!isNil(newValue) && newValue.length > 0) {
-			if (!includes(newValue, '_')) {
-				finalValue = parse(newValue, format, startOfToday());
+		if (!isNil(newValue) && (newValue as string).length > 0) {
+			if (!includes(newValue as string, '_')) {
+				finalValue = parse(newValue as string, format, startOfToday());
 
 				if (isInvalidDate(finalValue)) {
 					finalValue = INVALID_DATE;
@@ -35,7 +41,9 @@ function DateInputBase(props) {
 			}
 		}
 
-		onChange(finalValue);
+		if (onChange) {
+			onChange(finalValue);
+		}
 	}, [onChange, format]);
 
 	const date = useMemo(() => {
@@ -43,13 +51,13 @@ function DateInputBase(props) {
 			return null;
 		}
 
-		return formatFnc(value, format);
+		return formatFnc(value!, format);
 	}, [value, format]);
 
 	const placeholder = useMemo(() => toUpper(format), [format]);
 
 	const dateMask = useMemo(
-		() => reduce(format, (acc, char) => {
+		() => reduce(format as unknown as string[], (acc: Array<string | RegExp>, char: string) => {
 			if (!isNil(char.match(/[a-zA-Z]/))) {
 				acc.push(/\d/);
 			} else {
@@ -66,11 +74,11 @@ function DateInputBase(props) {
 			value={date}
 			onChange={handleChange}
 		>
-			{({ value: baseValue, onChange: baseOnChange }) => (
+			{({ value: baseValue, onChange: baseOnChange }: { value: string | number | null; onChange: (value: string | number | null) => void }) => (
 				<DateInput
 					{...rest}
-					value={baseValue}
-					onChange={baseOnChange}
+					value={baseValue as string | null}
+					onChange={baseOnChange as unknown as (value: string | null) => void}
 					type="text"
 					mask={dateMask}
 					placeholder={placeholder}
@@ -83,17 +91,5 @@ function DateInputBase(props) {
 		</InputValueBuffer>
 	);
 }
-
-DateInputBase.propTypes = {
-	format: PropTypes.string,
-	value: PropTypes.instanceOf(Date),
-	onChange: PropTypes.func,
-};
-
-DateInputBase.defaultProps = {
-	format: 'MM / dd / yyyy',
-	value: null,
-	onChange: null,
-};
 
 export default memo(DateInputBase);

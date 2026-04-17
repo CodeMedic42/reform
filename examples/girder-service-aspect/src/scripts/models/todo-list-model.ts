@@ -1,20 +1,20 @@
-import { types, getSnapshot } from 'mobx-state-tree';
+import { types, getSnapshot, Instance, SnapshotIn } from 'mobx-state-tree';
 import TodoModel from './todo-model';
 
 const TodoListModel = types.model('TodoList', {
     todos: types.array(TodoModel),
 })
 .actions((self) => ({
-    setTodos(todos) {
-        self.todos = todos;
+    setTodos(todos: SnapshotIn<typeof TodoModel>[]): void {
+        self.todos.replace(todos as Instance<typeof TodoModel>[]);
     },
-    appendTodos(todos) {
+    appendTodos(todos: SnapshotIn<typeof TodoModel>[]): void {
         const current = getSnapshot(self.todos);
 
-        self.todos = [...current, ...todos];
+        self.todos.replace([...current, ...todos] as Instance<typeof TodoModel>[]);
     },
-    addTodo(todo) {
-        self.todos.push(todo);
+    addTodo(todo: SnapshotIn<typeof TodoModel>): void {
+        self.todos.push(todo as Instance<typeof TodoModel>);
     },
 }));
 

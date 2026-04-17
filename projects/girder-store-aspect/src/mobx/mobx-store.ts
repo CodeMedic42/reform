@@ -1,5 +1,9 @@
 import isNil from 'lodash/isNil';
 
+interface MobxModel {
+    create(initialValue?: unknown): unknown;
+}
+
 const FIELDS = {
     id: Symbol('id'),
     Model: Symbol('Model'),
@@ -8,7 +12,9 @@ const FIELDS = {
 };
 
 class MobxStore {
-    constructor(id, Model, initialValue) {
+    [key: symbol]: unknown;
+
+    constructor(id: string, Model: MobxModel, initialValue?: unknown) {
         if (isNil(id)) {
             throw new Error('A store requires an id');
         }
@@ -22,12 +28,12 @@ class MobxStore {
         this[FIELDS.initialValue] = initialValue;
     }
 
-    get id() {
-        return this[FIELDS.id];
+    get id(): string {
+        return this[FIELDS.id] as string;
     }
 
-    create() {
-        const StoreModel = this[FIELDS.Model];
+    create(): unknown {
+        const StoreModel = this[FIELDS.Model] as MobxModel;
 
         return StoreModel.create(this[FIELDS.initialValue]);
     }

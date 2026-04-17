@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 /* eslint-disable import/no-duplicates */
@@ -10,47 +9,76 @@ import startOfToday from 'date-fns/startOfToday';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons/faCalendar';
 import DatePicker from '../../../controls/date-picker/index.js';
 import DropDown from '../../../controls/drop-down/index.js';
-import InputLabel, {
-	propTypes as inputLabelPropTypes,
-	defaultProps as inputLabelDefaultProps,
-} from '../base-input/input-field-label.jsx';
+import InputLabel from '../base-input/input-field-label.js';
 
-function DateBase(props) {
+interface InputMessagesData {
+	general?: string[];
+	success?: string[];
+	failure?: string[];
+}
+
+interface DateBaseProps {
+	id?: string | null;
+	className?: string | null;
+	label?: string | null;
+	messages?: InputMessagesData | null;
+	title?: string | null;
+	failure?: boolean;
+	required?: boolean | null;
+	hidden?: boolean;
+	disabled?: boolean | null;
+	name?: string | null;
+	onFocus?: (() => void) | null;
+	onBlur?: (() => void) | null;
+	'aria-label'?: string | null;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg';
+	fromDate?: Date | null;
+	toDate?: Date | null;
+	onSelect?: ((date: Date) => void) | null;
+	Anchor: React.ElementType;
+	anchorProps?: Record<string, unknown> | null;
+}
+
+function DateBase(props: DateBaseProps): React.ReactElement {
 	const {
-		id,
-		className,
-		label,
-		messages,
-		title,
-		failure,
-		required,
-		hidden,
-		disabled,
-		name,
-		onFocus,
-		onBlur,
-		'aria-label': ariaLabel,
-		'aria-labelledby': ariaLabelledby,
-		'aria-describedby': ariaDescribedby,
+		id = null,
+		className = null,
+		label = null,
+		messages = null,
+		title = null,
+		failure = false,
+		required = null,
+		hidden = false,
+		disabled = null,
+		name = null,
+		onFocus = null,
+		onBlur = null,
+		'aria-label': ariaLabel = null,
+		'aria-labelledby': ariaLabelledby = null,
+		'aria-describedby': ariaDescribedby = null,
 		size,
-		fromDate,
-		toDate,
-		onSelect,
+		fromDate = null,
+		toDate = null,
+		onSelect = null,
 		Anchor,
 		anchorProps = {},
 	} = props;
 
-    const dropDownRef = useRef();
-	const datePickerRef = useRef();
+    const dropDownRef = useRef<any>();
+	const datePickerRef = useRef<any>();
 
 	const [targetDate, setTargetDate] = useState(!isNil(fromDate) ? fromDate : startOfToday);
 
-	const handleSelect = useCallback((date) => {
+	const handleSelect = useCallback((date: Date) => {
 		setTargetDate(date);
-		onSelect(date);
+		if (onSelect) {
+			onSelect(date);
+		}
 	}, [onSelect]);
 
-	const handleKeyDown = useCallback((event) => {
+	const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
 		const open = dropDownRef.current.isOpen();
 
 		if (!open) {
@@ -67,7 +95,9 @@ function DateBase(props) {
 			// Enter
 			// Select the current target item
 			if (!isNil(targetDate)) {
-				onSelect(targetDate);
+				if (onSelect) {
+					onSelect(targetDate as Date);
+				}
 			}
 
 			if (isNil(targetDate)) {
@@ -77,16 +107,16 @@ function DateBase(props) {
 			}
 		}
 
-		let newTargetDate = null;
+		let newTargetDate: Date | null = null;
 
 		if (event.which === 37) { // left arrow
-			newTargetDate = addDays(targetDate, -1);
+			newTargetDate = addDays(targetDate as Date, -1);
 		} else if (event.which === 38) { // up arrow
-			newTargetDate = addDays(targetDate, -7);
+			newTargetDate = addDays(targetDate as Date, -7);
 		} else if (event.which === 39) { // right arrow
-			newTargetDate = addDays(targetDate, 1);
+			newTargetDate = addDays(targetDate as Date, 1);
 		} else if (event.which === 40) { // down arrow
-			newTargetDate = addDays(targetDate, 7);
+			newTargetDate = addDays(targetDate as Date, 7);
 		}
 
 		if (!isNil(newTargetDate)) {
@@ -118,10 +148,10 @@ function DateBase(props) {
 			aria-labelledby={ariaLabelledby}
 			aria-describedby={ariaDescribedby}
 			hidden={hidden}
-			disabled={disabled}
+			disabled={!!disabled}
 			size={size}
 		>
-			{({ describedBy, labelledBy, inputId, finalId }) => (
+			{({ describedBy, labelledBy, inputId, finalId }: { describedBy: string | null; labelledBy: string; inputId: string; finalId: string }) => (
 				<DropDown
 					ref={dropDownRef}
 					id={`${finalId}-dropdown`}
@@ -164,37 +194,5 @@ function DateBase(props) {
 		</InputLabel>
 	);
 }
-
-DateBase.propTypes = {
-	...inputLabelPropTypes,
-	onSelect: PropTypes.func,
-	onBlur: PropTypes.func,
-	onFocus: PropTypes.func,
-	title: PropTypes.string,
-	'aria-label': PropTypes.string,
-	required: PropTypes.bool,
-	disabled: PropTypes.bool,
-	name: PropTypes.string,
-	fromDate: PropTypes.instanceOf(Date),
-	toDate: PropTypes.instanceOf(Date),
-	Anchor: PropTypes.elementType.isRequired,
-	// eslint-disable-next-line react/forbid-prop-types
-    anchorProps: PropTypes.object,
-};
-
-DateBase.defaultProps = {
-	...inputLabelDefaultProps,
-	fromDate: null,
-	toDate: null,
-	onSelect: null,
-	onBlur: null,
-	onFocus: null,
-	title: null,
-	'aria-label': null,
-	required: null,
-	disabled: null,
-	name: null,
-	anchorProps: null,
-};
 
 export default DateBase;

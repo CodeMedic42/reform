@@ -1,7 +1,7 @@
 const { makeRe } = require('picomatch');
 
-module.exports = (glob) => {
-    const regex = makeRe(glob, {
+const globToRegexp = (glob: string): RegExp => {
+    const regex: RegExp = makeRe(glob, {
         fastpaths: false,
         noglobstar: false,
         bash: false,
@@ -25,3 +25,5 @@ module.exports = (glob) => {
         ['^\\.', glob.startsWith('./**') ? '' : '[\\\\/]', regex.source.substring(1)].join(''),
     );
 };
+
+export default globToRegexp;

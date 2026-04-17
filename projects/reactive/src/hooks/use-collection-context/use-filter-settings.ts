@@ -1,13 +1,15 @@
 import { useCallback, useMemo } from 'react';
 import { isNil, toPath, reduce, isEmpty, isString, startsWith, endsWith, isArray, isFinite, isBoolean, forEach, toLower, keys } from 'lodash-es';
 
-let doesMatch = null;
+type MatchMethod = (values: any[], target: any) => number;
 
-function arrayDoesMatch(targets, value, targetPath, matchMethod) {
+let doesMatch: ((item: any, values: any[], targetPath: string[], matchMethod: MatchMethod) => number | boolean) | null = null;
+
+function arrayDoesMatch(targets: any[], value: any[], targetPath: string[], matchMethod: MatchMethod): boolean {
     let match = false;
 
     forEach(targets, (target) => {
-        match = doesMatch(target, value, targetPath, matchMethod);
+        match = doesMatch!(target, value, targetPath, matchMethod) as boolean;
 
         return !match;
     });
@@ -15,7 +17,7 @@ function arrayDoesMatch(targets, value, targetPath, matchMethod) {
     return match;
 }
 
-doesMatch = function doesMatchMethod(item, values, targetPath, matchMethod) {
+doesMatch = function doesMatchMethod(item: any, values: any[], targetPath: string[], matchMethod: MatchMethod): number | boolean {
     let target = item;
 
     for (
@@ -40,10 +42,10 @@ doesMatch = function doesMatchMethod(item, values, targetPath, matchMethod) {
     return matchMethod(values, target);
 };
 
-function processStringValue(rawValues) {
+function processStringValue(rawValues: any[]): string[] {
     return reduce(
         rawValues,
-        (acc, rawValue) => {
+        (acc: string[], rawValue) => {
             if (!isNil(rawValue) && rawValue.length >= 1) {
                 acc.push(rawValue.toLowerCase());
             }
@@ -54,7 +56,13 @@ function processStringValue(rawValues) {
     );
 }
 
-function processRawValue(rawValue, rule) {
+interface ProcessedRule {
+    matchMethod: MatchMethod;
+    as: string;
+    paths: string[][];
+}
+
+function processRawValue(rawValue: any, rule: ProcessedRule): any[] | null {
     let values = !isArray(rawValue) ? [rawValue] : rawValue;
 
     if (rule.as === 'string') {
@@ -82,8 +90,8 @@ function processRawValue(rawValue, rule) {
     return values;
 }
 
-function processRawValues(rules, values) {
-    const remaining = {};
+function processRawValues(rules: Record<string, ProcessedRule>, values: any): { enabled: boolean; valueItemsList: Record<string, any[]> } {
+    const remaining: Record<string, any[]> = {};
 
     if (!isNil(values)) {
         let cleanedValues = values;
@@ -100,7 +108,7 @@ function processRawValues(rules, values) {
 
         forEach(
             cleanedValues,
-            (value, key) => {
+            (value: any, key: string) => {
                 const rule = rules[key];
 
                 if (isNil(rule)) {
@@ -128,7 +136,7 @@ function processRawValues(rules, values) {
     };
 }
 
-function exactMatch(values, target) {
+function exactMatch(values: any[], target: any): number {
     let found = false;
 
     forEach(values, (value) => {
@@ -142,7 +150,7 @@ function exactMatch(values, target) {
     return found ? 1 : 0;
 }
 
-function startsWithMatch(values, target) {
+function startsWithMatch(values: any[], target: any): number {
     let found = false;
 
     forEach(values, (value) => {
@@ -156,7 +164,7 @@ function startsWithMatch(values, target) {
     return found ? 1 : 0;
 }
 
-function endsWithMatch(values, target) {
+function endsWithMatch(values: any[], target: any): number {
     let found = false;
 
     forEach(values, (value) => {
@@ -170,7 +178,7 @@ function endsWithMatch(values, target) {
     return found ? 1 : 0;
 }
 
-function containsMatch(values, target) {
+function containsMatch(values: any[], target: any): number {
     if (isNil(target) || target.length <= 0) {
         return 0;
     }
@@ -180,7 +188,7 @@ function containsMatch(values, target) {
 
     const finalIndex = reduce(
         values,
-        (acc, valueItem) => {
+        (acc: number, valueItem: string) => {
             const index = lowerTarget.indexOf(valueItem);
 
             if (index >= 0 && index < acc) {
@@ -195,7 +203,7 @@ function containsMatch(values, target) {
     return (targetLength - finalIndex) / targetLength;
 }
 
-function processRule(rawRule) {
+function processRule(rawRule: any): ProcessedRule | null {
     let rule = rawRule;
 
     if (isString(rule)) {
@@ -210,7 +218,7 @@ function processRule(rawRule) {
 
     const paths = reduce(
         rule.paths,
-        (acc, targetPath) => {
+        (acc: string[][], targetPath: string) => {
             acc.push(toPath(targetPath));
 
             return acc;
@@ -224,7 +232,7 @@ function processRule(rawRule) {
 
     const { match } = rule;
     let { as: asValue } = rule;
-    let matchMethod = null;
+    let matchMethod: MatchMethod;
 
     if (asValue === 'number' || asValue === 'boolean') {
         matchMethod = exactMatch;
@@ -249,7 +257,7 @@ function processRule(rawRule) {
     };
 }
 
-function processRules(rules) {
+function processRules(rules: any): Record<string, ProcessedRule> {
     if (isNil(rules)) {
         return {};
     }
@@ -264,7 +272,7 @@ function processRules(rules) {
 
     return reduce(
         cleanedRules,
-        (acc, rule, key) => {
+        (acc: Record<string, ProcessedRule>, rule: any, key: string) => {
             const processedRule = processRule(rule);
 
             if (!isNil(processedRule)) {
@@ -277,7 +285,18 @@ function processRules(rules) {
     );
 }
 
-function useFilterSettings(settings) {
+export interface FilterSettings {
+    rules?: any;
+    values?: any;
+}
+
+export interface FilterState {
+    rules: any;
+    values: any;
+    processValue: (item: any) => number;
+}
+
+function useFilterSettings(settings?: FilterSettings | null): FilterState {
     const rules = settings?.rules ?? null;
     const values = settings?.values ?? null;
 
@@ -291,7 +310,7 @@ function useFilterSettings(settings) {
         [processedRules, values],
     );
 
-    const processValue = useCallback((item) => {
+    const processValue = useCallback((item: any) => {
         if (!enabled) {
             return 1;
         }
@@ -308,13 +327,13 @@ function useFilterSettings(settings) {
 
             let resultCount = reduce(
                 rule.paths,
-                (acc, path) => {
-                    let ret = doesMatch(
+                (acc: number, path: string[]) => {
+                    let ret = doesMatch!(
                         item,
                         processedValue,
                         path,
                         rule.matchMethod,
-                    );
+                    ) as number;
 
                     ret /= pathCount;
 

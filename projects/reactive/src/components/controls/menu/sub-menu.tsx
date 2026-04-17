@@ -7,21 +7,53 @@ import Tray from '../../arrangement/tray/index.js';
 import MenuList from './menu-list.js';
 import Icon from '../../display/icon/index.js';
 import Provider, { ApplyConsumer } from '../drop-down/drop-down-context.js';
-import PropTypes from '../../../common/prop-types.js';
 import MenuItem from './menu-item.js';
 import CheckInput from '../../fields/check-input-field/index.js';
 import buildId from '../../../common/build-id.js';
 
-function preventDefault({ event }) {
+interface CheckboxConfig {
+    onChange: (value: boolean) => void;
+    value?: boolean;
+    disabled?: boolean;
+    variant?: 'check' | 'indeterminate';
+}
+
+interface SubMenuProps {
+    id?: string | null;
+    className?: string | null;
+    icon?: unknown | null;
+    content?: React.ReactNode;
+    children?: React.ReactNode;
+    onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
+    'aria-label'?: string | null;
+    onClickMeta?: unknown | null;
+    selected?: boolean;
+    targeted?: boolean;
+    disabled?: boolean;
+    dropDownContext: {
+        open: boolean;
+        size: string;
+        dark: boolean;
+    };
+    borderBottom?: boolean;
+    borderTop?: boolean;
+    checkbox?: CheckboxConfig | null;
+}
+
+interface SubMenuState {
+    open: boolean;
+}
+
+function preventDefault({ event }: { event: React.MouseEvent }): void {
     event.preventDefault();
 }
 
-function getString(content) {
+function getString(content: unknown): string {
     if (isString(content)) {
         return content;
     }
 
-    const { children } = content.props;
+    const { children } = (content as React.ReactElement).props;
 
     if (!isArray(children)) {
         return getString(children);
@@ -32,59 +64,10 @@ function getString(content) {
     return join(text, ' ');
 }
 
-class SubMenu extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        icon: PropTypes.icon,
-        content: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        onClick: PropTypes.func,
-        'aria-label': PropTypes.string,
-        // eslint-disable-next-line react/forbid-prop-types
-        onClickMeta: PropTypes.any,
-        selected: PropTypes.bool,
-        targeted: PropTypes.bool,
-        disabled: PropTypes.bool,
-        dropDownContext: PropTypes.shape({
-            open: PropTypes.bool.isRequired,
-            size: PropTypes.string.isRequired,
-            dark: PropTypes.bool.isRequired,
-        }).isRequired,
-        borderBottom: PropTypes.bool,
-        borderTop: PropTypes.bool,
-        checkbox: PropTypes.shape({
-            onChange: PropTypes.func.isRequired,
-            value: PropTypes.bool,
-            disabled: PropTypes.bool,
-            variant: PropTypes.oneOf(['check', 'indeterminate']),
-        }),
-    };
+class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
+    private itemRef: React.RefObject<unknown>;
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-        onClick: null,
-        onClickMeta: null,
-        selected: false,
-        targeted: false,
-        disabled: false,
-        icon: null,
-        content: null,
-        borderBottom: false,
-        borderTop: false,
-        checkbox: null,
-        'aria-label': null,
-    };
-
-    constructor(props) {
+    constructor(props: SubMenuProps) {
         super(props);
 
         this.itemRef = createRef();
@@ -99,7 +82,7 @@ class SubMenu extends PureComponent {
     }
 
     // This will close the menu if it's parent is closed
-    static getDerivedStateFromProps(nextProps) {
+    static getDerivedStateFromProps(nextProps: SubMenuProps): Partial<SubMenuState> | null {
         const {
             dropDownContext: { open },
         } = nextProps;
@@ -113,15 +96,15 @@ class SubMenu extends PureComponent {
         return null;
     }
 
-    handleMouseEnter() {
+    handleMouseEnter(): void {
         this.setOpen(true);
     }
 
-    handleMouseLeave() {
+    handleMouseLeave(): void {
         this.setOpen(false);
     }
 
-    handleClick({ event }) {
+    handleClick({ event }: { event: React.MouseEvent }): void {
         const { children, onClick, onClickMeta } = this.props;
 
         const { open } = this.state;
@@ -144,7 +127,7 @@ class SubMenu extends PureComponent {
         }
     }
 
-    setOpen(to) {
+    setOpen(to: boolean): void {
         const { children } = this.props;
 
         const { open } = this.state;
@@ -158,15 +141,15 @@ class SubMenu extends PureComponent {
         });
     }
 
-    isOpen() {
+    isOpen(): boolean {
         const { open } = this.state;
 
         return open;
     }
 
-    renderCheckBox() {
+    renderCheckBox(): React.ReactNode {
         const {
-            id, checkbox, 'aria-label': ariaLabel, content,
+            id = null, checkbox = null, 'aria-label': ariaLabel = null, content = null,
         } = this.props;
 
         if (isNil(checkbox)) {
@@ -192,21 +175,21 @@ class SubMenu extends PureComponent {
         );
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            children,
-            selected,
-            targeted,
-            disabled,
+            id = null,
+            className = null,
+            children = null,
+            selected = false,
+            targeted = false,
+            disabled = false,
             dropDownContext: { size, dark },
-            borderBottom,
-            borderTop,
-            checkbox,
-            content,
-            icon,
-            'aria-label': ariaLabel,
+            borderBottom = false,
+            borderTop = false,
+            checkbox = null,
+            content = null,
+            icon = null,
+            'aria-label': ariaLabel = null,
         } = this.props;
 
         const { open } = this.state;
@@ -243,7 +226,7 @@ class SubMenu extends PureComponent {
                     <Tray
                         id={!isNil(id) && id.length > 0 ? `${id}-drawer` : null}
                         open={open}
-                        getAnchorElement={() => this.itemRef.current.getRootNode()}
+                        getAnchorElement={() => (this.itemRef.current as { getRootNode: () => HTMLElement }).getRootNode()}
                         dropPositions={['right', 'left', 'bottom', 'top']}
                         offset={{
                             top: -8,

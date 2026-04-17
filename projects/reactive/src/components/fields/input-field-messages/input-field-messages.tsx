@@ -1,13 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { reduce, isNil, isEmpty } from 'lodash-es';
 import buildId from '../../../common/build-id.js';
 
-function buildMessageList(id, list, className) {
+interface InputMessagesData {
+    general?: string[];
+    success?: string[];
+    failure?: string[];
+}
+
+interface InputMessagesProps {
+    id?: string | null;
+    className?: string | null;
+    messages?: InputMessagesData | null;
+}
+
+function buildMessageList(id: string | null | undefined, list: string[] | undefined, className: string): React.ReactNode {
     const elements = reduce(
         list,
-        (acc, generalMessage, index) => {
+        (acc: React.ReactElement[], generalMessage: string, index: number) => {
             if (!isNil(generalMessage)) {
                 acc.push(<li key={index}>{generalMessage}</li>);
             }
@@ -22,14 +33,14 @@ function buildMessageList(id, list, className) {
     }
 
     return (
-        <ul id={id} className={className}>
+        <ul id={id ?? undefined} className={className}>
             {elements}
         </ul>
     );
 }
 
-function InputMessages(props) {
-    const { id, className, messages } = props;
+function InputMessages(props: InputMessagesProps): React.ReactElement | null {
+    const { id = null, className = null, messages = null } = props;
 
     if (isNil(messages)) {
         return null;
@@ -44,7 +55,7 @@ function InputMessages(props) {
     }
 
     return (
-        <div id={id} className={classnames('ra-input-description', className)}>
+        <div id={id ?? undefined} className={classnames('ra-input-description', className)}>
             {buildMessageList(
                 buildId(id, 'general'),
                 general,
@@ -63,21 +74,5 @@ function InputMessages(props) {
         </div>
     );
 }
-
-InputMessages.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    messages: PropTypes.shape({
-        general: PropTypes.arrayOf(PropTypes.string),
-        success: PropTypes.arrayOf(PropTypes.string),
-        failure: PropTypes.arrayOf(PropTypes.string),
-    }),
-};
-
-InputMessages.defaultProps = {
-    id: null,
-    className: null,
-    messages: null,
-};
 
 export default InputMessages;

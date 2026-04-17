@@ -1,6 +1,10 @@
 import React from 'react';
 import SelectInput from '../../fields/select-input-field/index.js';
-import PropTypes from '../../../common/prop-types.js';
+
+interface MonthSelectorProps {
+    month: number;
+    onChange: (value: number) => void;
+}
 
 const options = [
     {
@@ -53,7 +57,7 @@ const options = [
     },
 ];
 
-function MonthSelector(props) {
+function MonthSelector(props: MonthSelectorProps): React.ReactNode {
     const {
         month,
         onChange,
@@ -69,12 +73,5 @@ function MonthSelector(props) {
         />
     );
 }
-
-MonthSelector.propTypes = {
-    month: PropTypes.number.isRequired,
-    onChange: PropTypes.func.isRequired,
-};
-
-MonthSelector.defaultProps = {};
 
 export default MonthSelector;

@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
     provideContext,
 } from 'fluxible-addons-react';
 import FluxibleAspect from './fluxible-aspect.js';
 
-const BaseComponent = provideContext(({children}) => children);
+interface AspectSettings {
+    react: Array<{
+        Component: React.ComponentType<{ children: ReactNode }>;
+    }>;
+}
+
+const BaseComponent = provideContext(({ children }: { children: ReactNode }) => children);
 
 class FluxibleReactAspect extends FluxibleAspect {
-    settings() {
+    settings(): AspectSettings {
         return {
             react: [{
-                // eslint-disable-next-line react/prop-types
-                Component: ({ children }) => (
+                Component: ({ children }: { children: ReactNode }) => (
                     <BaseComponent context={this.context}>
                         {children}
                     </BaseComponent>

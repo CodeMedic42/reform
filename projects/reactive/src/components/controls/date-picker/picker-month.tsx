@@ -1,9 +1,21 @@
 import React from 'react';
 import classnames from 'classnames';
 import MonthDays from './month-days.js';
-import PropTypes from '../../../common/prop-types.js';
 
-function getMonthName(month) {
+interface PickerMonthProps {
+    id?: string | null;
+    className?: string | null;
+    fromDate?: Date | null;
+    toDate?: Date | null;
+    onSelect?: ((date: Date) => void) | null;
+    month: number;
+    year: number;
+    targetDate?: Date | null;
+    firstDate?: number[] | null;
+    lastDate?: number[] | null;
+}
+
+function getMonthName(month: number): string {
     switch (month) {
         case 1:
             return 'January';
@@ -34,18 +46,18 @@ function getMonthName(month) {
     }
   }
 
-function PickerMonth(props) {
+function PickerMonth(props: PickerMonthProps): React.ReactNode {
     const {
-        id,
-        className,
-        fromDate,
-        toDate,
-        targetDate,
-        onSelect,
+        id = null,
+        className = null,
+        fromDate = null,
+        toDate = null,
+        targetDate = null,
+        onSelect = null,
         month,
         year,
-        firstDate,
-        lastDate,
+        firstDate = null,
+        lastDate = null,
     } = props;
 
     return (
@@ -66,29 +78,5 @@ function PickerMonth(props) {
         </div>
     );
 }
-
-PickerMonth.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    fromDate: PropTypes.instanceOf(Date),
-    toDate: PropTypes.instanceOf(Date),
-    onSelect: PropTypes.func,
-    month: PropTypes.number.isRequired,
-    year: PropTypes.number.isRequired,
-    targetDate: PropTypes.instanceOf(Date),
-    firstDate: PropTypes.arrayOf(PropTypes.number),
-    lastDate: PropTypes.arrayOf(PropTypes.number),
-};
-
-PickerMonth.defaultProps = {
-    id: null,
-    className: null,
-    onSelect: null,
-    fromDate: null,
-    toDate: null,
-    targetDate: null,
-    firstDate: null,
-    lastDate: null,
-};
 
 export default PickerMonth;

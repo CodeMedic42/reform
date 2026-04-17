@@ -1,43 +1,71 @@
 import React, { useCallback } from 'react';
 import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
-import DateInputBase from '../new-base/date/date-input-base.jsx';
-import PropTypes from '../../../common/prop-types.js';
+import DateInputBase from '../new-base/date/date-input-base.js';
 import buildId from '../../../common/build-id.js';
-import InputContainer from '../new-base/input-field-container.jsx';
+import InputContainer from '../new-base/input-field-container.js';
 
-function DateRangeInputAnchor(props) {
+interface DateRangeValue {
+	from: Date | null;
+	to: Date | null;
+}
+
+interface DateRangeInputAnchorProps {
+	id?: string | null;
+	title?: string | null;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	required?: boolean;
+	disabled?: boolean;
+	name?: string | null;
+	size?: string | null;
+	'aria-label'?: string | null;
+	fromDate?: Date | null;
+	toDate?: Date | null;
+	onChange?: ((value: DateRangeValue) => void) | null;
+	onFromFocus: () => void;
+	onToFocus: () => void;
+	leftAnnotation?: React.ReactNode;
+	rightAnnotation?: React.ReactNode;
+	[key: string]: unknown;
+}
+
+function DateRangeInputAnchor(props: DateRangeInputAnchorProps): React.ReactElement {
 	const {
-		id,
-		title,
+		id = null,
+		title = null,
 		// 'aria-labelledby': ariaLabeledBy,
 		// 'aria-describedby': ariaDescribedBy,
 		// required,
 		// disabled,
-		name,
+		name = null,
 		// size,
-		'aria-label': ariaLabel,
-		fromDate,
-		toDate,
-		onChange,
+		'aria-label': ariaLabel = null,
+		fromDate = null,
+		toDate = null,
+		onChange = null,
 		onFromFocus,
 		onToFocus,
-		leftAnnotation,
-		rightAnnotation,
+		leftAnnotation = null,
+		rightAnnotation = null,
 		...rest
 	} = props;
 
-	const handleFromChange = useCallback((newFrom) => {
-		onChange({
-			from: newFrom,
-			to: toDate,
-		});
+	const handleFromChange = useCallback((newFrom: Date | null) => {
+		if (onChange) {
+			onChange({
+				from: newFrom,
+				to: toDate!,
+			});
+		}
 	}, [onChange, toDate]);
 
-	const handleToChange = useCallback((newTo) => {
-		onChange({
-			from: fromDate,
-			to: newTo,
-		});
+	const handleToChange = useCallback((newTo: Date | null) => {
+		if (onChange) {
+			onChange({
+				from: fromDate!,
+				to: newTo,
+			});
+		}
 	}, [onChange, fromDate]);
 
 	return (
@@ -82,42 +110,6 @@ function DateRangeInputAnchor(props) {
 		</InputContainer>
 	);
 }
-
-DateRangeInputAnchor.propTypes = {
-	id: PropTypes.string,
-	title: PropTypes.string,
-	'aria-labelledby': PropTypes.string,
-	'aria-describedby': PropTypes.string,
-	required: PropTypes.bool,
-	disabled: PropTypes.bool,
-	name: PropTypes.string,
-	size: PropTypes.string,
-	'aria-label': PropTypes.string,
-	fromDate: PropTypes.instanceOf(Date),
-	toDate: PropTypes.instanceOf(Date),
-	onChange: PropTypes.func,
-	onFromFocus: PropTypes.func.isRequired,
-	onToFocus: PropTypes.func.isRequired,
-	leftAnnotation: PropTypes.children,
-	rightAnnotation: PropTypes.children,
-};
-
-DateRangeInputAnchor.defaultProps = {
-	id: null,
-	title: null,
-	'aria-labelledby': null,
-	'aria-describedby': null,
-	'aria-label': null,
-	required: false,
-	disabled: false,
-	name: null,
-	size: null,
-	fromDate: null,
-	toDate: null,
-	onChange: null,
-	leftAnnotation: null,
-	rightAnnotation: null,
-};
 
 export default applyAnchorBinding(DateRangeInputAnchor, {
 	focusSelector: '.input-container input',

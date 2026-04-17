@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent, createRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil, join, map } from 'lodash-es';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons/faAngleUp';
@@ -14,29 +13,38 @@ import Chip from '../../display/chip/index.js';
 import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
 import changeSize from '../../../util/change-size.js';
 
-class MultiSelectAnchor extends PureComponent {
-	static propTypes = {
-		id: PropTypes.string,
-		size: PropTypes.oneOf(['sm', 'md', 'lg']),
-		value: PropTypes.arrayOf(PropTypes.string),
-		nullable: PropTypes.bool,
-		onClear: PropTypes.func,
-		// eslint-disable-next-line react/forbid-prop-types
-		onClearMeta: PropTypes.object,
-		onClearIndex: PropTypes.func,
-		// eslint-disable-next-line react/forbid-prop-types
-		onClearIndexMeta: PropTypes.object,
-		disabled: PropTypes.bool,
-		open: PropTypes.bool,
-		'aria-labelledby': PropTypes.string,
-		'aria-describedby': PropTypes.string,
-		'aria-label': PropTypes.string,
-		title: PropTypes.string,
-		placeholder: PropTypes.string,
-		expandable: PropTypes.bool,
-		listBoxId: PropTypes.string.isRequired,
-	};
+interface ClearEvent {
+	event: React.MouseEvent;
+	meta: unknown;
+}
 
+interface ClearIndexEvent {
+	event: React.MouseEvent;
+	meta: unknown;
+	index: number;
+}
+
+interface MultiSelectAnchorProps {
+	id?: string | null;
+	size?: 'sm' | 'md' | 'lg' | null;
+	value?: string[] | null;
+	nullable?: boolean;
+	onClear?: ((event: ClearEvent) => void) | null;
+	onClearMeta?: Record<string, unknown> | null;
+	onClearIndex?: ((event: ClearIndexEvent) => void) | null;
+	onClearIndexMeta?: Record<string, unknown> | null;
+	disabled?: boolean;
+	open?: boolean;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	'aria-label'?: string | null;
+	title?: string | null;
+	placeholder?: string | null;
+	expandable?: boolean;
+	listBoxId: string;
+}
+
+class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 	static defaultProps = {
 		id: null,
 		size: null,
@@ -56,10 +64,12 @@ class MultiSelectAnchor extends PureComponent {
 		expandable: false,
 	};
 
-	constructor(props) {
+	buttonRef: React.RefObject<HTMLButtonElement>;
+
+	constructor(props: MultiSelectAnchorProps) {
 		super(props);
 
-		this.buttonRef = createRef();
+		this.buttonRef = createRef<HTMLButtonElement>();
 
 		this.handleClear = this.handleClear.bind(this);
 		this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -68,7 +78,7 @@ class MultiSelectAnchor extends PureComponent {
 
 	}
 
-	handleClear({ event, meta }) {
+	handleClear({ event, meta }: { event: React.MouseEvent; meta: unknown }) {
 		const { onClear } = this.props;
 
 		event.preventDefault();
@@ -84,17 +94,17 @@ class MultiSelectAnchor extends PureComponent {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	handleMouseDown(event) {
+	handleMouseDown(event: React.MouseEvent) {
 		event.preventDefault();
 	}
 
-	handleClearItem({ event, meta: index }) {
+	handleClearItem({ event, meta: index }: { event: React.MouseEvent; meta: number }) {
 		const { onClearIndex, onClearIndexMeta } = this.props;
 
 		event.preventDefault();
 
 		if (!isNil(onClearIndex)) {
-			this.buttonRef.current.focus();
+			this.buttonRef.current?.focus();
 
 			onClearIndex({
 				event,
@@ -104,14 +114,16 @@ class MultiSelectAnchor extends PureComponent {
 		}
 	}
 
-    handleKeyDown(event) {
+    handleKeyDown(event: React.KeyboardEvent) {
 		const { onClear } = this.props;
 
         if (
             event.which === 8 // backspace
             || event.which === 46 // delete
         ) {
-            onClear();
+            if (onClear) {
+                onClear({ event: event as unknown as React.MouseEvent, meta: null });
+            }
         };
     };
 
@@ -190,7 +202,7 @@ class MultiSelectAnchor extends PureComponent {
 					})}
 				>
 					<button
-						id={id}
+						id={id ?? undefined}
 						ref={this.buttonRef}
 						className={classnames(
 							'anchor-control',
@@ -206,15 +218,15 @@ class MultiSelectAnchor extends PureComponent {
 						aria-expanded={open}
 						aria-haspopup="listbox"
 						type="button"
-						aria-describedby={describedBy}
-						aria-labelledby={labelledBy}
-						aria-label={ariaLabel}
-						title={title}
+						aria-describedby={describedBy ?? undefined}
+						aria-labelledby={labelledBy ?? undefined}
+						aria-label={ariaLabel ?? undefined}
+						title={title ?? undefined}
 						disabled={disabled}
 						value={
 							!isNil(value) && value.length > 0
 								? join(value, ' ')
-								: null
+								: undefined
 						}
 						onKeyDown={this.handleKeyDown}
 					/>

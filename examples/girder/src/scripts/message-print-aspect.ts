@@ -1,24 +1,25 @@
-import { Aspect } from '@reformjs/girder';
+import { Aspect, AspectInitContext } from '@reformjs/girder';
 
-class ControlAspect extends Aspect {
+interface MessagePrintControls {
+    print: () => void;
+}
+
+class MessagePrintAspect extends Aspect {
     constructor() {
         super('messagePrint');
     }
 
-    // TODO: Check if static function will work here.
-    // eslint-disable-next-line class-methods-use-this
-    onInitialize(config) {
+    onInitialize(config: AspectInitContext): Promise<MessagePrintControls> {
         const { getSettings } = config;
 
-        const controls = {
-            print: () => {
-                getSettings('messagePrint').forEach((messages) => {
+        const controls: MessagePrintControls = {
+            print: (): void => {
+                (getSettings('messagePrint') as (string[] | null)[]).forEach((messages: string[] | null) => {
                     if (messages == null) {
                         return;
                     }
 
-                    messages.forEach((message) => {
-                        // eslint-disable-next-line no-console
+                    messages.forEach((message: string) => {
                         console.log(message);
                     });
                 });
@@ -29,4 +30,4 @@ class ControlAspect extends Aspect {
     }
 }
 
-export default ControlAspect;
+export default MessagePrintAspect;

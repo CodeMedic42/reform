@@ -1,16 +1,30 @@
-const harnessContext = '__WEB_UNIT_HARNESS_RESOLUTION__';
+import React from 'react';
 
-const harnessCache = {};
+interface HarnessModule {
+    default: {
+        id: string;
+        Harness: React.ComponentType<Record<string, unknown>>;
+    };
+}
 
-harnessContext.keys().forEach((fileKey) => {
-    const module = harnessContext(fileKey);
+interface RequireContext {
+    keys(): string[];
+    (key: string): HarnessModule;
+}
 
-    const harness = module.default;
-    
+const harnessContext: RequireContext = '__WEB_UNIT_HARNESS_RESOLUTION__' as unknown as RequireContext;
+
+const harnessCache: Record<string, React.ComponentType<Record<string, unknown>>> = {};
+
+harnessContext.keys().forEach((fileKey: string) => {
+    const mod: HarnessModule = harnessContext(fileKey);
+
+    const harness = mod.default;
+
 
     harnessCache[harness.id] = harness.Harness;
 });
 
-export default function getHarness(harnessId) {
+export default function getHarness(harnessId: string): React.ComponentType<Record<string, unknown>> | undefined {
     return harnessCache[harnessId];
 }

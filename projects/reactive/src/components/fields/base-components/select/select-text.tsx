@@ -1,13 +1,17 @@
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
 import DropDownListItem from '../../../controls/drop-down/drop-down-list-item.jsx';
 import ListItemContent from '../../../controls/drop-down/list-item-content.jsx';
 import buildId from '../../../../common/build-id.js';
 
-function SelectText(props) {
+interface SelectTextProps {
+    id?: string | null;
+    children?: React.ReactNode;
+}
+
+function SelectText(props: SelectTextProps): React.ReactElement {
     const {
-        id,
-        children,
+        id = null,
+        children = null,
     } = props;
 
     return (
@@ -18,15 +22,5 @@ function SelectText(props) {
         </DropDownListItem>
     );
 }
-
-SelectText.propTypes = {
-    id: PropTypes.string,
-    children: PropTypes.string,
-};
-
-SelectText.defaultProps = {
-    id: null,
-    children: null,
-};
 
 export default memo(SelectText);

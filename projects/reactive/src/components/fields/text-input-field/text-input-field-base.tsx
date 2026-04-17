@@ -1,26 +1,36 @@
 import React, { forwardRef, useEffect } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import InputValue from '../new-base/input-field-value.jsx';
-import InputContainer from '../new-base/input-field-container.jsx';
-import StringInput from '../new-base/string-input-field.jsx';
-import PropTypes from '../../../common/prop-types.js';
+import InputValue from '../new-base/input-field-value.js';
+import InputContainer from '../new-base/input-field-container.js';
+import StringInput from '../new-base/string-input-field.js';
 
-const TextInputBase = forwardRef((props, ref) => {
+interface TextInputBaseProps {
+	id?: string | null;
+	className?: string | null;
+	focusOnMount?: boolean;
+	onChange?: ((value: string | null) => void) | null;
+	value?: string | null;
+	leftAnnotation?: React.ReactNode;
+	rightAnnotation?: React.ReactNode;
+	[key: string]: unknown;
+}
+
+const TextInputBase = forwardRef<any, TextInputBaseProps>((props, ref) => {
 	const {
-		id,
-		className,
-		value,
-		focusOnMount,
-		leftAnnotation,
-		rightAnnotation,
-		onChange,
+		id = null,
+		className = null,
+		value = null,
+		focusOnMount = false,
+		leftAnnotation = null,
+		rightAnnotation = null,
+		onChange = null,
 		...rest
 	} = props;
 
 	useEffect(() => {
 		if (focusOnMount) {
-			ref.current.focus();
+			(ref as React.MutableRefObject<any>).current.focus();
 		}
 	}, []);
 
@@ -32,16 +42,16 @@ const TextInputBase = forwardRef((props, ref) => {
 		>
 			<InputValue
 				value={value}
-				onChange={onChange}
+				onChange={onChange as ((value: string | number | null) => void) | undefined}
 			>
-				{({ value: baseValue, onChange: baseOnChange }) => (
+				{({ value: baseValue, onChange: baseOnChange }: { value: string | number | null; onChange: (value: string | number | null) => void }) => (
 					<StringInput
 						{...rest}
 						Component="input"
 						ref={ref}
 						id={id}
-						value={baseValue}
-						onChange={baseOnChange}
+						value={baseValue as string | null}
+						onChange={baseOnChange as unknown as (value: string | null) => void}
 						type="text"
 						className={classnames({
 							'has-value': !isNil(baseValue),
@@ -53,25 +63,5 @@ const TextInputBase = forwardRef((props, ref) => {
 		</InputContainer>
 	);
 });
-
-TextInputBase.propTypes = {
-	id: PropTypes.string,
-	className: PropTypes.string,
-	focusOnMount: PropTypes.bool,
-	onChange: PropTypes.func,
-	value: PropTypes.string,
-	leftAnnotation: PropTypes.children,
-	rightAnnotation: PropTypes.children,
-};
-
-TextInputBase.defaultProps = {
-	id: null,
-	className: null,
-	focusOnMount: false,
-	onChange: null,
-	value: null,
-	leftAnnotation: null,
-	rightAnnotation: null,
-};
 
 export default TextInputBase;

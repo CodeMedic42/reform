@@ -1,21 +1,30 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Select, { propTypes as selectPropTypes } from '../base-components/select/index.js';
-import SelectAnchor from './select-field-anchor.jsx';
+import Select from '../base-components/select/index.js';
+import SelectAnchor from './select-field-anchor.js';
 
-const SelectInput = forwardRef((props, ref) => {
+interface SelectInputProps {
+    className?: string | null;
+    onChange?: ((value: string | number | null) => void) | null;
+    nullable?: boolean;
+    value?: string | number | null;
+    [key: string]: unknown;
+}
+
+const SelectInput = forwardRef<unknown, SelectInputProps>((props, ref) => {
     const {
-        className,
-        onChange,
-        nullable,
+        className = null,
+        onChange = null,
+        nullable = false,
         ...rest
     } = props;
 
     const handleClear = useCallback(() => {
-        onChange(null);
+        if (onChange) {
+            onChange(null);
+        }
     }, [ onChange ]);
 
     return (
@@ -33,18 +42,5 @@ const SelectInput = forwardRef((props, ref) => {
         />
     );
 });
-
-SelectInput.propTypes = {
-    ...selectPropTypes,
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    onChange: PropTypes.func,
-    nullable: PropTypes.bool,
-};
-
-SelectInput.defaultProps = {
-    value: null,
-    onChange: null,
-    nullable: false,
-};
 
 export default SelectInput;

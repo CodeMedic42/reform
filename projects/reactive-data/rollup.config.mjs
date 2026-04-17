@@ -1,3 +1,3 @@
-import buildConfig from '@config/rollup';
+import buildConfig from '@config/rollup-config';
 
 export default buildConfig();

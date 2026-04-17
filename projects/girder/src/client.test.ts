@@ -4,6 +4,13 @@ import isFunction from 'lodash/isFunction';
 import Client from './client.js';
 import Aspect from './aspect.js';
 
+interface MockInitContext {
+    getSettings: (id: string) => unknown[];
+    getContext: () => Record<string, unknown>;
+    stopClient: () => Promise<void>;
+    [key: string]: unknown;
+}
+
 describe('Client', () => {
     describe('Constructor', () => {
         test('Create', () => {
@@ -67,7 +74,7 @@ describe('Client', () => {
     test('Start and start', async () => {
         const client = new Client();
 
-        const proms = [];
+        const proms: Promise<void>[] = [];
 
         const promiseA = client.start().then(() => {
             expect(client.isRunning()).toBe(true);
@@ -146,7 +153,7 @@ describe('Client', () => {
 
         const promise = client.registerAspect(foo1);
 
-        const toThrow = () => client.registerAspect(foo2);
+        const toThrow = (): void => { client.registerAspect(foo2); };
 
         expect(toThrow).toThrow('An aspect with the id "foo" already exists.');
 
@@ -158,7 +165,7 @@ describe('Client', () => {
 
         client.start();
 
-        const toThrow = () => client.registerAspect(new Aspect('foo'));
+        const toThrow = (): void => { client.registerAspect(new Aspect('foo')); };
 
         expect(toThrow).toThrow('Cannot register an aspect when the system has already been started.');
     });
@@ -207,7 +214,7 @@ describe('Client', () => {
             const barAspect = new Aspect('bar');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ getSettings, getContext, stopClient }) => {
+                .mockImplementation(({ getSettings, getContext, stopClient }: MockInitContext) => {
                     expect(isFunction(getSettings)).toBeTruthy();
                     expect(isFunction(getContext)).toBeTruthy();
                     expect(isFunction(stopClient)).toBeTruthy();
@@ -230,7 +237,7 @@ describe('Client', () => {
             const barSettingSpy = jest.spyOn(barAspect, 'settings').mockReturnValue({ foo: 42 });
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ getSettings, getContext, stopClient }) => {
+                .mockImplementation(({ getSettings, getContext, stopClient }: MockInitContext) => {
                     const r = getSettings('foo');
                     expect(r?.[0]).toBe(42);
                     expect(isFunction(getContext)).toBeTruthy();
@@ -252,12 +259,12 @@ describe('Client', () => {
             const fooAspect = new Aspect('foo');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ stopClient }) => ({
+                .mockImplementation(({ stopClient }: MockInitContext) => ({
                     stopOnStart: stopClient
                 }));
 
             const fooOnStart = jest.spyOn(fooAspect, 'onStart')
-                .mockImplementation((context) => {
+                .mockImplementation((context: Record<string, Record<string, () => Promise<void>>>) => {
                     context.foo.stopOnStart()
                         .then(() => {
                             expect(client.isRunning()).toBe(false);
@@ -294,17 +301,17 @@ describe('Client', () => {
             const fooAspect = new Aspect('foo');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ getContext }) => ({
+                .mockImplementation(({ getContext }: MockInitContext) => ({
                     answer: 42,
                     callForAnswer: () => {
-                        expect(getContext().foo.answer).toBe(42);
+                        expect((getContext() as Record<string, Record<string, number>>).foo.answer).toBe(42);
                     }
                 }));
 
             const fooOnStart = jest.spyOn(fooAspect, 'onStart')
-                .mockImplementation((context) => {
+                .mockImplementation((context: Record<string, Record<string, unknown>>) => {
                     expect(context.foo.answer).toBe(42);
-                    context.foo.callForAnswer();
+                    (context.foo.callForAnswer as () => void)();
                 });
 
             client.registerAspect(fooAspect);

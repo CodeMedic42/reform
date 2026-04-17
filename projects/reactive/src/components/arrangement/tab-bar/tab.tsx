@@ -1,14 +1,23 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-function Tab(props) {
+export interface TabProps {
+    id: string;
+    className?: string | null;
+    tabId: string;
+    children?: React.ReactNode;
+    onClick: (tabId: string) => void;
+    active?: boolean;
+    disabled?: boolean;
+}
+
+function Tab(props: TabProps): React.ReactElement {
     const {
         id,
         className,
         tabId,
-        active,
-        disabled,
+        active = false,
+        disabled = false,
         children,
         onClick,
     } = props;
@@ -40,25 +49,5 @@ function Tab(props) {
         </div>
     );
 }
-
-Tab.propTypes = {
-    id: PropTypes.string.isRequired,
-    className: PropTypes.string,
-    tabId: PropTypes.string.isRequired,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    onClick: PropTypes.func.isRequired,
-    active: PropTypes.bool,
-    disabled: PropTypes.bool,
-};
-
-Tab.defaultProps = {
-    className: null,
-    children: null,
-    disabled: false,
-    active: false,
-};
 
 export default Tab;

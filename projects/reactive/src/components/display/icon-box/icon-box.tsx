@@ -1,52 +1,39 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../icon/index.js';
-import PropTypes from '../../../common/prop-types.js';
 import {
-    schemeColorPropType,
+    SchemeColor,
     getSchemeColorClasses,
 } from '../../../common/color-list.js';
 
-class IconBox extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        // eslint-disable-next-line react/forbid-prop-types
-        style: PropTypes.object,
-        'aria-label': PropTypes.string,
-        title: PropTypes.string,
-        icon: PropTypes.icon.isRequired,
-        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
-        color: schemeColorPropType,
-        hidden: PropTypes.bool,
-        alignToIcon: PropTypes.bool,
-    };
+interface IconBoxProps {
+    id?: string;
+    className?: string;
+    style?: React.CSSProperties | null;
+    'aria-label'?: string | null;
+    title?: string | null;
+    icon: IconProp;
+    size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+    color?: SchemeColor | null;
+    hidden?: boolean;
+    alignToIcon?: boolean;
+}
 
-    static defaultProps = {
-        id: '',
-        className: '',
-        style: null,
-        'aria-label': null,
-        title: null,
-        size: 'md',
-        color: null,
-        hidden: false,
-        alignToIcon: false,
-    };
-
-    render() {
+class IconBox extends PureComponent<IconBoxProps> {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            style,
-            'aria-label': ariaLabel,
-            title,
+            id = '',
+            className = '',
+            style = null,
+            'aria-label': ariaLabel = null,
+            title = null,
             icon,
-            size,
-            color,
-            hidden,
-            alignToIcon,
+            size = 'md',
+            color = null,
+            hidden = false,
+            alignToIcon = false,
         } = this.props;
 
         const sizeClass = !isNil(size) ? `size-${size}` : 'size-md';
@@ -56,7 +43,7 @@ class IconBox extends PureComponent {
         return (
             <span
                 id={id}
-                style={style}
+                style={style ?? undefined}
                 className={classnames(
                     className,
                     'ra-icon-box',
@@ -67,8 +54,8 @@ class IconBox extends PureComponent {
                         'align-to-icon': alignToIcon,
                     },
                 )}
-                aria-label={ariaLabel}
-                title={title}
+                aria-label={ariaLabel ?? undefined}
+                title={title ?? undefined}
             >
                 <Icon icon={icon} color={color} />
             </span>

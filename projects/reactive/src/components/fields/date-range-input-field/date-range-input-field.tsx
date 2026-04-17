@@ -1,31 +1,53 @@
 import React, { forwardRef, useCallback, useMemo, useState, useImperativeHandle } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import DateRangeInputAnchor from './date-range-input-field-anchor.jsx';
-import DateBase from '../new-base/date/date-base.jsx';
-import PropTypes from '../../../common/prop-types.js';
+import DateRangeInputAnchor from './date-range-input-field-anchor.js';
+import DateBase from '../new-base/date/date-base.js';
 
-const DateRangeInput = forwardRef((props, ref) => {
+interface DateRangeValue {
+	from: Date | null;
+	to: Date | null;
+}
+
+interface DateRangeInputProps {
+	className?: string | null;
+	onChange?: ((value: DateRangeValue) => void) | null;
+	onBlur?: (() => void) | null;
+	onFocus?: (() => void) | null;
+	title?: string | null;
+	'aria-label'?: string | null;
+	required?: boolean | null;
+	disabled?: boolean | null;
+	name?: string | null;
+	value?: DateRangeValue | null;
+	minDate?: Date;
+	maxDate?: Date | null;
+	leftAnnotation?: React.ReactNode;
+	rightAnnotation?: React.ReactNode;
+	[key: string]: unknown;
+}
+
+const DateRangeInput = forwardRef<unknown, DateRangeInputProps>((props, ref) => {
 	// } = props;
 
 	const {
-		value,
-		className,
-		onChange,
-		leftAnnotation,
-		rightAnnotation,
-		minDate,
-		maxDate,
+		value = null,
+		className = null,
+		onChange = null,
+		leftAnnotation = null,
+		rightAnnotation = null,
+		minDate = new Date(1900, 0, 1),
+		maxDate = null,
 		...rest
 	} = props;
 
 	const fromDate = value?.from ?? null;
 	const toDate = value?.to ?? null;
 
-	const [focus, setFocus] = useState('from');
+	const [focus, setFocus] = useState<'from' | 'to'>('from');
 
-	const handleSelect = useCallback((date) => {
-		const dates = {
+	const handleSelect = useCallback((date: Date) => {
+		const dates: DateRangeValue = {
 			from: fromDate,
 			to: toDate,
 		};
@@ -45,7 +67,9 @@ const DateRangeInput = forwardRef((props, ref) => {
 			setFocus(focus === 'from' ? 'to' : 'from');
 		}
 
-		onChange(dates);
+		if (onChange) {
+			onChange(dates);
+		}
 	}, [onChange, fromDate, toDate, focus]);
 
 	const handleFromFocus = useCallback(() => {
@@ -67,7 +91,7 @@ const DateRangeInput = forwardRef((props, ref) => {
 	}), [fromDate, toDate, onChange, handleFromFocus, handleToFocus, leftAnnotation, rightAnnotation]);
 
 	useImperativeHandle(ref, () => ({
-        isValid: () => fromDate <= toDate,
+        isValid: () => fromDate! <= toDate!,
     }));
 
 	return (
@@ -86,42 +110,5 @@ const DateRangeInput = forwardRef((props, ref) => {
 });
 
 DateRangeInput.displayName = 'DateRangeInput';
-
-DateRangeInput.propTypes = {
-	className: PropTypes.string,
-	onChange: PropTypes.func,
-	onBlur: PropTypes.func,
-	onFocus: PropTypes.func,
-	title: PropTypes.string,
-	'aria-label': PropTypes.string,
-	required: PropTypes.bool,
-	disabled: PropTypes.bool,
-	name: PropTypes.string,
-	value: PropTypes.shape({
-		from: PropTypes.instanceOf(Date),
-		to: PropTypes.instanceOf(Date),
-	}),
-	minDate: PropTypes.instanceOf(Date),
-	maxDate: PropTypes.instanceOf(Date),
-	leftAnnotation: PropTypes.children,
-	rightAnnotation: PropTypes.children,
-};
-
-DateRangeInput.defaultProps = {
-	className: null,
-	value: null,
-	minDate: new Date(1900, 0, 1),
-	maxDate: null,
-	onChange: null,
-	onBlur: null,
-	onFocus: null,
-	title: null,
-	'aria-label': null,
-	required: null,
-	disabled: null,
-	name: null,
-	leftAnnotation: null,
-	rightAnnotation: null,
-};
 
 export default DateRangeInput;

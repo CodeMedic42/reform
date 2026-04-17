@@ -1,8 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
-import PropTypes from '../../../common/prop-types.js';
 
-function ScalingContainer(props) {
+export interface ScalingContainerProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+}
+
+function ScalingContainer(props: ScalingContainerProps): React.ReactElement {
     const {
         id,
         className,
@@ -11,7 +16,7 @@ function ScalingContainer(props) {
 
     return (
         <div
-            id={id}
+            id={id ?? undefined}
             className={classnames('ra-scaling-container', className)}
         >
             <div className="ra-scaling-content">
@@ -20,17 +25,5 @@ function ScalingContainer(props) {
         </div>
     );
 }
-
-ScalingContainer.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.children,
-};
-
-ScalingContainer.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-};
 
 export default ScalingContainer;

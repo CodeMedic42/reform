@@ -2,29 +2,24 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from '../../../common/prop-types.js';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import {
-    schemeColorPropType,
+    SchemeColor,
     getSchemeColorClasses,
 } from '../../../common/color-list.js';
 
-class Icon extends PureComponent {
-    static propTypes = {
-        className: PropTypes.string,
-        icon: PropTypes.icon.isRequired,
-        color: schemeColorPropType,
-        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']),
-    };
+interface IconProps {
+    className?: string;
+    icon: IconProp;
+    color?: SchemeColor | null;
+    size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | null;
+    [key: string]: unknown;
+}
 
-    static defaultProps = {
-        className: '',
-        size: null,
-        color: null,
-    };
-
-    render() {
+class Icon extends PureComponent<IconProps> {
+    render(): React.ReactNode {
         const {
-            className, color, size, icon, ...rest
+            className = '', color = null, size = null, icon, ...rest
         } = this.props;
 
         if (isNil(icon)) {

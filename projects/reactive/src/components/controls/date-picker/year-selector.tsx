@@ -1,19 +1,26 @@
 import React, { useMemo } from 'react';
 import SelectInput from '../../fields/select-input-field/index.js';
-import PropTypes from '../../../common/prop-types.js';
 import buildId from '../../../common/build-id.js';
 
-function YearSelector(props) {
+interface YearSelectorProps {
+    id?: string | null;
+    year: number;
+    onChange: (value: number) => void;
+    startingYear?: number;
+    endingYear?: number;
+}
+
+function YearSelector(props: YearSelectorProps): React.ReactNode {
     const {
-        id,
+        id = null,
         year,
         onChange,
-        startingYear,
-        endingYear,
+        startingYear = 1970,
+        endingYear = 2100,
     } = props;
 
     const options = useMemo(() => {
-        const memoOptions = [];
+        const memoOptions: Array<{ label: string; value: number }> = [];
 
         for (let yearCounter = endingYear; yearCounter >= startingYear; yearCounter -= 1) {
             memoOptions.push({
@@ -36,19 +43,5 @@ function YearSelector(props) {
         />
     );
 }
-
-YearSelector.propTypes = {
-    id: PropTypes.string,
-    year: PropTypes.number.isRequired,
-    onChange: PropTypes.func.isRequired,
-    startingYear: PropTypes.number,
-    endingYear: PropTypes.number,
-};
-
-YearSelector.defaultProps = {
-    id: null,
-    startingYear: 1970,
-    endingYear: 2100,
-};
 
 export default YearSelector;

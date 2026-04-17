@@ -1,17 +1,23 @@
-const puppeteer = require('puppeteer');
+import puppeteer, { Browser, Page } from 'puppeteer';
+import type RunContext from '../run-context.js';
 
-async function startPuppeteer(runContext, port) {
+interface PuppeteerResult {
+    browser: Browser;
+    page: Page;
+}
+
+async function startPuppeteer(runContext: RunContext, port: number | string): Promise<PuppeteerResult> {
     const {
         headless = true,
         verbose = false,
     } = runContext.getConfig();
 
-    const browser = await puppeteer.launch({
+    const browser: Browser = await puppeteer.launch({
         headless,
         defaultViewport: null,
     });
 
-    const page = await browser.newPage();
+    const page: Page = await browser.newPage();
 
     if (verbose) {
         // eslint-disable-next-line no-console
@@ -28,4 +34,4 @@ async function startPuppeteer(runContext, port) {
     return { browser, page };
 }
 
-module.exports = startPuppeteer;
+export default startPuppeteer;

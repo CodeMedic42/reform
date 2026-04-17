@@ -6,8 +6,8 @@ import TextInputField from '../../../../../../reactive/dist/components/fields/te
 // import { faFaceLaughBeam } from '@audacious/icons/regular/faFaceLaughBeam';
 
 
-function generateMessages(count = 0) {
-	const messages = [];
+function generateMessages(count: number = 0): string[] {
+	const messages: string[] = [];
 
 	for (let counter = 0; counter < count; counter += 1) {
 		messages.push(`Message Number ${counter + 1}`);
@@ -16,7 +16,16 @@ function generateMessages(count = 0) {
 	return messages;
 }
 
-function example(props) {
+interface ExampleProps {
+	successMessageCount: number;
+	failureMessageCount: number;
+	generalMessageCount: number;
+	useLeftIcon: boolean;
+	useRightIcon: boolean;
+	[key: string]: unknown;
+}
+
+function example(props: ExampleProps) {
 	const [value, setValue] = useState(null);
 
 	const {
@@ -49,7 +58,7 @@ function example(props) {
 			return null;
 		}
 
-		const mess = {};
+		const mess: Record<string, string[]> = {};
 
 		if (successMessages.length > 0) {
 			mess.success = successMessages;
@@ -74,7 +83,7 @@ function example(props) {
 			<TextInputField
 				{...reduce(
 					rest,
-					(acc, prop, key) => {
+					(acc: Record<string, unknown>, prop: unknown, key: string) => {
 						if (prop === 'true') {
 							acc[key] = true;
 						} else if (prop === 'false') {

@@ -1,10 +1,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import PropTypes from 'prop-types';
 import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
-import TextInputBase from '../text-input-field/text-input-field-base.jsx';
+import TextInputBase from '../text-input-field/text-input-field-base.js';
 
-function SelectTextAnchor(props) {
+interface SelectTextAnchorProps {
+    open: boolean;
+    listBoxId: string;
+    [key: string]: unknown;
+}
+
+function SelectTextAnchor(props: SelectTextAnchorProps): React.ReactElement {
     const {
         open,
         listBoxId,
@@ -19,13 +24,6 @@ function SelectTextAnchor(props) {
         />
     );
 }
-
-SelectTextAnchor.propTypes = {
-    open: PropTypes.bool.isRequired,
-    listBoxId: PropTypes.string.isRequired,
-};
-
-SelectTextAnchor.defaultProps = {};
 
 export default applyAnchorBinding(SelectTextAnchor, {
     focusSelector: '.button-anchor',

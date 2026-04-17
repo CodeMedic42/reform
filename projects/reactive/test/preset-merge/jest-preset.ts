@@ -1,12 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const tsPreset = require('ts-jest/jest-preset');
-const webUnitPreset = require('@reformjs/web-unit-jest/jest-preset');
+const tsPreset: Record<string, unknown> = require('ts-jest/jest-preset');
+const webUnitPreset: Record<string, unknown> = require('@reformjs/web-unit-jest/jest-preset');
 // const pupPreset = require('jest-puppeteer/jest-preset');
-const forEach = require('lodash/forEach');
-const isNil = require('lodash/isNil');
-const get = require('lodash/get');
+const forEach: typeof import('lodash/forEach') = require('lodash/forEach');
+const isNil: typeof import('lodash/isNil') = require('lodash/isNil');
+const get: typeof import('lodash/get') = require('lodash/get');
 
-const typeLookup = {
+type MergeType = 'value' | 'array' | 'shallowObject' | 'nim';
+
+const typeLookup: Record<string, MergeType | MergeType[]> = {
     automock: 'value',
     bail: 'value',
     cacheDirectory: 'value',
@@ -78,11 +80,11 @@ const typeLookup = {
     '//': 'value',
 };
 
-function presetMerge(presets) {
-    const config = {};
+function presetMerge(presets: Record<string, unknown>[]): Record<string, unknown> {
+    const config: Record<string, unknown> = {};
 
-    forEach(presets, (preset) => {
-        forEach(preset, (value, key) => {
+    forEach(presets, (preset: Record<string, unknown>) => {
+        forEach(preset, (value: unknown, key: string) => {
             const type = typeLookup[key];
 
             if (isNil(type)) {
@@ -96,17 +98,17 @@ function presetMerge(presets) {
             if (type === 'value') {
                 config[key] = value;
             } else if (type === 'array') {
-                const current = get(config, key, []);
+                const current: unknown[] = (config[key] as unknown[] | undefined) ?? [];
 
-                current.push(...value);
+                current.push(...(value as unknown[]));
 
                 config[key] = current;
             } else if (type === 'shallowObject') {
-                let current = get(config, key, {});
+                let current: Record<string, unknown> = (config[key] as Record<string, unknown> | undefined) ?? {};
 
                 current = {
                     ...current,
-                    ...value,
+                    ...(value as Record<string, unknown>),
                 };
 
                 config[key] = current;

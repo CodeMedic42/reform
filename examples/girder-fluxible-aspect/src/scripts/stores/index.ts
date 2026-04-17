@@ -1,5 +1,7 @@
 import TodoStore from './todo-store';
 
-export default [
+const stores: unknown[] = [
     TodoStore
 ];
+
+export default stores;

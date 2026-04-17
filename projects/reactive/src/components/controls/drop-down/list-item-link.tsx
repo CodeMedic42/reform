@@ -1,42 +1,29 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 import React, { PureComponent, createRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { ApplyConsumer } from './drop-down-context.js';
 import buildId from '../../../common/build-id.js';
 import ListItemContent from './list-item-content.js';
 
-class ListItemLink extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        onClick: PropTypes.func,
-        'aria-label': PropTypes.string,
-        tabIndex: PropTypes.string,
-        disabled: PropTypes.bool,
-        dropDownContext: PropTypes.shape({
-            open: PropTypes.bool.isRequired,
-        }).isRequired,
-        href: PropTypes.string,
+interface ListItemLinkProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+    onClick?: ((event: React.MouseEvent) => void) | null;
+    'aria-label'?: string | null;
+    tabIndex?: string | null;
+    disabled?: boolean;
+    dropDownContext: {
+        open: boolean;
     };
+    href?: string | null;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-        onClick: null,
-        'aria-label': null,
-        tabIndex: null,
-        disabled: false,
-        href: null,
-    };
+class ListItemLink extends PureComponent<ListItemLinkProps> {
+    private ref: React.RefObject<HTMLAnchorElement>;
 
-    constructor(props) {
+    constructor(props: ListItemLinkProps) {
         super(props);
 
         this.ref = createRef();
@@ -45,7 +32,7 @@ class ListItemLink extends PureComponent {
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    handleClick(event) {
+    handleClick(event: React.MouseEvent): void {
         const { onClick } = this.props;
 
         if (isNil(onClick)) {
@@ -55,27 +42,27 @@ class ListItemLink extends PureComponent {
         onClick(event);
     }
 
-    handleKeyDown(event) {
+    handleKeyDown(event: React.KeyboardEvent): void {
         // Treat enter key presses as clicks
         if (event.which === 13) {
-            this.handleClick(event);
+            this.handleClick(event as unknown as React.MouseEvent);
         }
     }
 
-    getRootNode() {
+    getRootNode(): HTMLAnchorElement | null {
         return this.ref.current;
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            'aria-label': ariaLabel,
-            tabIndex,
-            children,
-            disabled,
+            id = null,
+            className = null,
+            'aria-label': ariaLabel = null,
+            tabIndex = null,
+            children = null,
+            disabled = false,
             dropDownContext: { open },
-            href,
+            href = null,
         } = this.props;
 
         const textId = buildId(id, 'text');
@@ -93,7 +80,7 @@ class ListItemLink extends PureComponent {
                     onClick={this.handleClick}
                     onKeyDown={this.handleKeyDown}
                     aria-label={ariaLabel}
-                    tabIndex={open ? tabIndex : -1}
+                    tabIndex={open ? (tabIndex as unknown as number) : -1}
                     disabled={disabled}
                     href={href}
                     aria-labelledby={textId}

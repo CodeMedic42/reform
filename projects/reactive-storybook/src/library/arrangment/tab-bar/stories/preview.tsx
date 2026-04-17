@@ -14,7 +14,14 @@ const exampleTabs = [
     },
 ];
 
-function preview(props) {
+interface PreviewProps {
+    exampleTabHeading: string;
+    exampleTabDisabled: boolean;
+    withBottom: boolean;
+    [key: string]: unknown;
+}
+
+function preview(props: PreviewProps) {
     const {
         exampleTabHeading,
         exampleTabDisabled,

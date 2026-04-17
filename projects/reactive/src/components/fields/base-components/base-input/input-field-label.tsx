@@ -1,32 +1,50 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { createRef, PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import shortId from 'shortid';
 import { isNil, isEmpty } from 'lodash-es';
 import InputMessages from '../../input-field-messages/index.js';
 import { Text } from '../../../display/typography/index.js';
 
-class InputLabel extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        label: PropTypes.string,
-        messages: PropTypes.shape({
-            general: PropTypes.arrayOf(PropTypes.string),
-            success: PropTypes.arrayOf(PropTypes.string),
-            failure: PropTypes.arrayOf(PropTypes.string),
-        }),
-        failure: PropTypes.bool,
-        'aria-labelledby': PropTypes.string,
-        'aria-describedby': PropTypes.string,
-        hidden: PropTypes.bool,
-        disabled: PropTypes.bool,
-        size: PropTypes.oneOf(['2xs', 'xs', 'sm', 'md', 'lg']),
-        children: PropTypes.func.isRequired,
-    };
+interface InputMessagesData {
+    general?: string[];
+    success?: string[];
+    failure?: string[];
+}
 
+interface ChildArgs {
+    finalId: string;
+    describedBy: string | null;
+    labelledBy: string;
+    inputId: string;
+}
+
+interface InputLabelProps {
+    id?: string | null;
+    className?: string | null;
+    label?: string | null;
+    messages?: InputMessagesData | null;
+    failure?: boolean;
+    'aria-labelledby'?: string | null;
+    'aria-describedby'?: string | null;
+    hidden?: boolean;
+    disabled?: boolean;
+    size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg';
+    children: (args: ChildArgs) => React.ReactNode;
+}
+
+interface InputLabelState {
+    finalId: string;
+    labelId: string;
+    inputId: string;
+    descriptionId: string | null;
+    labelledBy: string;
+    describedBy: string | null;
+    baseId: string;
+}
+
+class InputLabel extends PureComponent<InputLabelProps, InputLabelState> {
     static defaultProps = {
         id: null,
         messages: null,
@@ -40,7 +58,10 @@ class InputLabel extends PureComponent {
         size: 'md',
     };
 
-    constructor(props) {
+    labelRef: React.RefObject<unknown>;
+    inputContainerRef: React.RefObject<any>;
+
+    constructor(props: InputLabelProps) {
         super(props);
 
         this.labelRef = createRef();
@@ -49,15 +70,17 @@ class InputLabel extends PureComponent {
         this.labelPreventDefault = this.labelPreventDefault.bind(this);
 
         this.state = {
-            labelId: null,
-            inputId: null,
+            labelId: '',
+            inputId: '',
             descriptionId: null,
-            labelledBy: null,
+            labelledBy: '',
+            describedBy: null,
+            finalId: '',
             baseId: shortId.generate(),
         };
     }
 
-    static getDerivedStateFromProps(nextProps, currentState) {
+    static getDerivedStateFromProps(nextProps: InputLabelProps, currentState: InputLabelState) {
         const {
             id,
             messages,
@@ -65,7 +88,7 @@ class InputLabel extends PureComponent {
             'aria-describedby': ariaDescribedBy,
         } = nextProps;
 
-        const finalId = !isEmpty(id) ? id : currentState.baseId;
+        const finalId = !isEmpty(id) ? id! : currentState.baseId;
 
         const labelId = `${finalId}-label`;
         const inputId = `${finalId}-input`;
@@ -100,14 +123,14 @@ class InputLabel extends PureComponent {
         this.inputContainerRef.current.focus();
     }
 
-    labelPreventDefault(event) {
+    labelPreventDefault(event: React.MouseEvent) {
         const { disabled } = this.props;
 
         if (disabled) {
             return;
         }
 
-        if (event.target === this.labelRef.current) {
+        if (event.target === (this.labelRef as React.RefObject<Element>).current) {
             event.preventDefault();
         }
     }
@@ -126,7 +149,7 @@ class InputLabel extends PureComponent {
             labelledBy,
         } = this.state;
 
-        let labelText = null;
+        let labelText: React.ReactNode = null;
 
         const LabelElement = !isNil(label) && label.length > 0 ? 'label' : 'div';
 
@@ -173,13 +196,3 @@ class InputLabel extends PureComponent {
 }
 
 export default InputLabel;
-
-const {
-    children,
-    ...exportPropTypes
-    // eslint-disable-next-line react/forbid-foreign-prop-types
-} = InputLabel.propTypes;
-
-const exportDefaultProps = InputLabel.defaultProps;
-
-export { exportPropTypes as propTypes, exportDefaultProps as defaultProps };

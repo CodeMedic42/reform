@@ -2,20 +2,51 @@ import React, { useLayoutEffect, forwardRef, useImperativeHandle, useCallback, u
 import classnames from 'classnames';
 import { isNil, isNumber, isFinite } from 'lodash-es';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import PropTypes from '../../../common/prop-types.js';
 import useThrottleCallback from '../../../hooks/use-throttle-callback.js';
-import InfiniteListContext from './infinite-list-context.js';
+import InfiniteListContext, { InfiniteListContextValue } from './infinite-list-context.js';
 
-function getNumberChildrenBefore(parent, itemsContainer, topOffset, getTopIndex) {
+type CountingType = number | number[];
+
+export interface InfiniteListProps {
+    id?: string | null;
+    className?: string | null;
+    Component?: React.ElementType;
+    children?: React.ReactNode;
+    firstIndex?: CountingType | null;
+    lastIndex?: CountingType | null;
+    minIndex?: CountingType | null;
+    maxIndex?: CountingType | null;
+    startingIndex?: CountingType | null;
+    onLoad?: ((loadStart: number[], loadEnd: number[]) => void) | null;
+    loadCount: number;
+    bufferCount: number;
+    items?: unknown[] | null;
+    hold?: boolean;
+    keepLoaded?: boolean;
+    onTopIndexChange?: ((index: number) => void) | null;
+    topOffset?: number | boolean;
+    [key: string]: unknown;
+}
+
+export interface InfiniteListHandle {
+    gotoIndex: (gotoIndex: number | number[] | null) => void;
+}
+
+function getNumberChildrenBefore(
+    parent: HTMLElement,
+    itemsContainer: HTMLElement,
+    topOffset: number,
+    getTopIndex: boolean,
+): { count: number; visibleIndex: number | null } {
     let count = 0;
-    let visibleIndex = null;
+    let visibleIndex: number | null = null;
 
     if (itemsContainer.childNodes.length > 0) {
         const parentRect = parent.getBoundingClientRect();
 
         // eslint-disable-next-line no-constant-condition
         while (true) {
-            const child = itemsContainer.childNodes[count];
+            const child = itemsContainer.childNodes[count] as HTMLElement;
             const childRect = child.getBoundingClientRect();
 
             if (childRect.bottom < (parentRect.top + topOffset)) {
@@ -27,7 +58,7 @@ function getNumberChildrenBefore(parent, itemsContainer, topOffset, getTopIndex)
 
         if (getTopIndex) {
             const firstVisible = count;
-            const visible = itemsContainer.childNodes[firstVisible];
+            const visible = itemsContainer.childNodes[firstVisible] as HTMLElement;
 
             if (!isNil(visible)) {
                 const visibleRect = visible.getBoundingClientRect();
@@ -51,7 +82,7 @@ function getNumberChildrenBefore(parent, itemsContainer, topOffset, getTopIndex)
     };
 }
 
-function getNumberChildrenAfter(parent, itemsContainer) {
+function getNumberChildrenAfter(parent: HTMLElement, itemsContainer: HTMLElement): number {
     if (itemsContainer.childNodes.length <= 0) {
         return 0;
     }
@@ -62,7 +93,7 @@ function getNumberChildrenAfter(parent, itemsContainer) {
 
     // eslint-disable-next-line no-constant-condition
     while (count > 0) {
-        const child = itemsContainer.childNodes[count - 1];
+        const child = itemsContainer.childNodes[count - 1] as HTMLElement;
         const childRect = child.getBoundingClientRect();
 
         if (childRect.top > parentRect.bottom) {
@@ -75,62 +106,76 @@ function getNumberChildrenAfter(parent, itemsContainer) {
     return itemsContainer.childNodes.length - count;
 }
 
-function getIndexCount(count, value, multiplier) {
+function getIndexCount(count: number | null, value: number | null, multiplier: number): number | null {
     if (isNil(count) || isNil(value)) {
         return null;
     }
 
     return (value * multiplier) + count;
-};
+}
 
-function validateIndexes(minIndex, maxIndex,
-    firstIndex,
-    lastIndex, startingIndex) {
-    let minIndexes = null;
-    let maxIndexes = null;
-    let firstIndexes = null;
-    let lastIndexes = null;
-    let startingIndexes = null;
+interface ValidatedIndexes {
+    minIndexes: number[];
+    maxIndexes: (number | null)[];
+    startingIndexes: number[];
+    multipliers: number[];
+    firstCount: number;
+    startingCount: number;
+    lastCount: number | null;
+}
+
+function validateIndexes(
+    minIndex: CountingType | null | undefined,
+    maxIndex: CountingType | null | undefined,
+    firstIndex: CountingType | null | undefined,
+    lastIndex: CountingType | null | undefined,
+    startingIndex: CountingType | null | undefined,
+): ValidatedIndexes {
+    let minIndexes: (number | null)[];
+    let maxIndexes: (number | null)[];
+    let firstIndexes: (number | null)[];
+    let lastIndexes: (number | null)[];
+    let startingIndexes: (number | null)[];
 
     if (isNil(minIndex)) {
         minIndexes = [0];
     } else if (isFinite(minIndex)) {
-        minIndexes = [minIndex];
+        minIndexes = [minIndex as number];
     } else {
-        minIndexes = [...minIndex];
-    };
+        minIndexes = [...(minIndex as number[])];
+    }
 
     if (isNil(maxIndex)) {
         maxIndexes = [null];
     } else if (isFinite(maxIndex)) {
-        maxIndexes = [maxIndex];
+        maxIndexes = [maxIndex as number];
     } else {
-        maxIndexes = [...maxIndex];
-    };
+        maxIndexes = [...(maxIndex as number[])];
+    }
 
     if (isNil(firstIndex)) {
         firstIndexes = [...minIndexes];
     } else if (isFinite(firstIndex)) {
-        firstIndexes = [firstIndex];
+        firstIndexes = [firstIndex as number];
     } else {
-        firstIndexes = [...firstIndex];
-    };
+        firstIndexes = [...(firstIndex as number[])];
+    }
 
     if (isNil(lastIndex)) {
         lastIndexes = [...maxIndexes];
     } else if (isFinite(lastIndex)) {
-        lastIndexes = [lastIndex];
+        lastIndexes = [lastIndex as number];
     } else {
-        lastIndexes = [...lastIndex];
-    };
+        lastIndexes = [...(lastIndex as number[])];
+    }
 
     if (isNil(startingIndex)) {
         startingIndexes = [...firstIndexes];
     } else if (isFinite(startingIndex)) {
-        startingIndexes = [startingIndex];
+        startingIndexes = [startingIndex as number];
     } else {
-        startingIndexes = [...startingIndex];
-    };
+        startingIndexes = [...(startingIndex as number[])];
+    }
 
     if (minIndexes.length < maxIndexes.length) {
         for (let counter = minIndexes.length; counter < maxIndexes.length; counter += 1) {
@@ -155,11 +200,11 @@ function validateIndexes(minIndex, maxIndex,
     }
 
     const { length } = minIndexes;
-    const adjMinIndexes = [];
-    const adjFirstIndexes = [];
-    const adjStartingIndexes = [];
-    const adjLastIndexes = [];
-    const adjMaxIndexes = [];
+    const adjMinIndexes: number[] = [];
+    const adjFirstIndexes: number[] = [];
+    const adjStartingIndexes: number[] = [];
+    const adjLastIndexes: (number | null)[] = [];
+    const adjMaxIndexes: (number | null)[] = [];
 
     for (let counter = 0; counter < length; counter += 1) {
         let minIndexValue = minIndexes[counter];
@@ -195,23 +240,23 @@ function validateIndexes(minIndex, maxIndex,
         }
 
         adjMinIndexes[counter] = 0;
-        adjMaxIndexes[counter] = !isNil(maxIndexValue) ? maxIndexValue - minIndexValue : null;
-        adjFirstIndexes[counter] = firstIndexValue - minIndexValue;
-        adjLastIndexes[counter] = !isNil(lastIndexValue) ? lastIndexValue - minIndexValue : null;
-        adjStartingIndexes[counter] = startingValue - minIndexValue;
+        adjMaxIndexes[counter] = !isNil(maxIndexValue) ? (maxIndexValue as number) - (minIndexValue as number) : null;
+        adjFirstIndexes[counter] = (firstIndexValue as number) - (minIndexValue as number);
+        adjLastIndexes[counter] = !isNil(lastIndexValue) ? (lastIndexValue as number) - (minIndexValue as number) : null;
+        adjStartingIndexes[counter] = (startingValue as number) - (minIndexValue as number);
     }
 
     // TODO: Look to moving this logic into the loop above
     let multiplier = 1;
     const multipliers = [1];
-    let minCount = adjMinIndexes[length - 1];
-    let firstCount = adjFirstIndexes[length - 1];
-    let startingCount = adjStartingIndexes[length - 1];
-    let lastCount = adjLastIndexes[length - 1];
-    let maxCount = adjMaxIndexes[length - 1];
+    let minCount: number | null = adjMinIndexes[length - 1];
+    let firstCount: number | null = adjFirstIndexes[length - 1];
+    let startingCount: number | null = adjStartingIndexes[length - 1];
+    let lastCount: number | null = adjLastIndexes[length - 1];
+    let maxCount: number | null = adjMaxIndexes[length - 1];
 
     for (let counter = length - 2; counter >= 0; counter -= 1) {
-        const maxLengthMultiplierValue = adjMaxIndexes[counter + 1] + 1;
+        const maxLengthMultiplierValue = (adjMaxIndexes[counter + 1] as number) + 1;
 
         multiplier *= (maxLengthMultiplierValue);
 
@@ -224,16 +269,16 @@ function validateIndexes(minIndex, maxIndex,
         maxCount = getIndexCount(maxCount, adjMaxIndexes[counter], multiplier);
     }
 
-    if (minCount > firstCount) {
+    if ((minCount as number) > (firstCount as number)) {
         throw new Error('minIndex must be less than or equal to firstIndex');
     }
 
-    if (firstCount > startingCount) {
+    if ((firstCount as number) > (startingCount as number)) {
         throw new Error('firstIndex must be less than or equal to startingIndex');
     }
 
     if (!isNil(lastCount)) {
-        if (startingCount > lastCount) {
+        if ((startingCount as number) > lastCount) {
             throw new Error('startingIndex must be less than or equal to lastIndex');
         }
 
@@ -241,31 +286,31 @@ function validateIndexes(minIndex, maxIndex,
             throw new Error('lastIndex must be less than or equal to maxIndex');
         }
     } else if (!isNil(maxCount)) {
-        if (startingCount > maxCount) {
+        if ((startingCount as number) > maxCount) {
             throw new Error('startingIndex must be less than or equal to maxIndex');
         }
     }
 
     return {
-        minIndexes,
+        minIndexes: minIndexes as number[],
         maxIndexes,
-        startingIndexes,
+        startingIndexes: startingIndexes as number[],
         multipliers,
-        firstCount,
-        startingCount,
+        firstCount: firstCount as number,
+        startingCount: startingCount as number,
         lastCount,
     };
 }
 
-function calculateIndexes(count, multipliers, minIndexes) {
+function calculateIndexes(count: number, multipliers: number[], minIndexes: number[]): number[] {
     let currentCount = count;
-    const indexes = [];
+    const indexes: number[] = [];
 
     for (let counter = 0; counter < multipliers.length; counter += 1) {
-        const multiplier = multipliers[counter];
+        const mult = multipliers[counter];
 
-        const remainder = currentCount % multiplier;
-        indexes[counter] = (currentCount - remainder) / multiplier;
+        const remainder = currentCount % mult;
+        indexes[counter] = (currentCount - remainder) / mult;
 
         currentCount = remainder;
 
@@ -276,25 +321,29 @@ function calculateIndexes(count, multipliers, minIndexes) {
     return indexes;
 }
 
-function getTopOffset(topOffset, listRef, itemsRef) {
+function getTopOffset(
+    topOffset: number | boolean | undefined,
+    listRef: React.RefObject<HTMLElement | null>,
+    itemsRef: React.RefObject<HTMLElement | null>,
+): number {
     if (isNumber(topOffset)) {
         return topOffset;
     }
 
     if (topOffset) {
-        const itemsRect = itemsRef.current.getBoundingClientRect();
+        const itemsRect = itemsRef.current!.getBoundingClientRect();
 
-        return Math.round(listRef.current.scrollHeight - itemsRect.height);
+        return Math.round(listRef.current!.scrollHeight - itemsRect.height);
     }
 
     return 0;
 }
 
-const InfiniteList = forwardRef((props, ref) => {
+const InfiniteList = forwardRef<InfiniteListHandle, InfiniteListProps>((props, ref) => {
     const {
         id,
         className,
-        Component,
+        Component = 'div',
         children,
         minIndex,
         maxIndex,
@@ -305,10 +354,10 @@ const InfiniteList = forwardRef((props, ref) => {
         loadCount,
         bufferCount,
         items,
-        hold,
-        keepLoaded,
+        hold = false,
+        keepLoaded = false,
         onTopIndexChange,
-        topOffset,
+        topOffset = 0,
         ...rest
     } = props;
 
@@ -337,16 +386,16 @@ const InfiniteList = forwardRef((props, ref) => {
             lastIndex, startingIndex]
     );
 
-    const scrollToRef = useRef(null);
+    const scrollToRef = useRef<number | null>(null);
     const loading = useRef(false);
-    const listRef = useRef();
-    const itemsRef = useRef();
+    const listRef = useRef<HTMLElement | null>(null);
+    const itemsRef = useRef<HTMLElement | null>(null);
     const topOffsetRef = useRef(0);
-    const shiftInfoRef = useRef(null);
+    const shiftInfoRef = useRef<{ previousPosition: number; targetIndex: number } | null>(null);
 
     loading.current = false;
 
-    const [data, setData] = useState({
+    const [data, setData] = useState<InfiniteListContextValue>({
         itemsRef,
         fromCount: startingCount,
         toCount: startingCount,
@@ -363,21 +412,17 @@ const InfiniteList = forwardRef((props, ref) => {
 
         const { previousPosition, targetIndex } = shiftInfoRef.current;
 
-        const item = itemsRef.current.childNodes[targetIndex];
+        const item = itemsRef.current.childNodes[targetIndex] as HTMLElement;
 
         if (isNil(item)) {
             throw new Error('Cannot find child to shift to.');
         }
 
-        // const listRect = listRef.current.getBoundingClientRect();
-
         const itemRect = item.getBoundingClientRect();
 
-        // const difference = listRect.top - itemRect.top;
+        const scrollTop = listRef.current!.scrollTop - (previousPosition - itemRect.top);
 
-        const scrollTop = listRef.current.scrollTop - (previousPosition - itemRect.top);
-
-        listRef.current.scrollTop = scrollTop;
+        listRef.current!.scrollTop = scrollTop;
 
         shiftInfoRef.current = null;
     });
@@ -389,16 +434,16 @@ const InfiniteList = forwardRef((props, ref) => {
             return;
         }
 
-        const targetChild = itemsRef.current.childNodes[scrollToRef.current - data.fromCount];
+        const targetChild = itemsRef.current.childNodes[scrollToRef.current - data.fromCount] as HTMLElement;
 
         scrollIntoView(targetChild, {
             scrollMode: 'always',
             block: 'start',
             inline: 'start',
-            boundary: listRef.current,
+            boundary: listRef.current!,
         });
 
-        listRef.current.scrollTop -= topOffsetRef.current;
+        listRef.current!.scrollTop -= topOffsetRef.current;
 
         scrollToRef.current = null;
     });
@@ -418,8 +463,8 @@ const InfiniteList = forwardRef((props, ref) => {
 
         const {
             count: beforeCount,
-        } = getNumberChildrenBefore(listRef.current, itemsRef.current, topOffsetRef.current, !isNil(onTopIndexChange));
-        const afterCount = getNumberChildrenAfter(listRef.current, itemsRef.current);
+        } = getNumberChildrenBefore(listRef.current!, itemsRef.current!, topOffsetRef.current, !isNil(onTopIndexChange));
+        const afterCount = getNumberChildrenAfter(listRef.current!, itemsRef.current!);
 
         let loadStart = fromIndexes;
         let loadEnd = toIndexes;
@@ -476,33 +521,14 @@ const InfiniteList = forwardRef((props, ref) => {
 
                 loadStart = fromIndexes;
 
-                // There is a weird behavior of all browsers on all OS's.
-                // When adding items to the top of an element which is or is inside of a scroll container,
-                // the scroll container will behave differently from when its scrollTop value is 0 versus
-                // when that value is not 0.
-                //   When it is not zero, the scroll container will shift the scroll bar to keep the position
-                // of all elements currently rendered. This has the affect to the user that nothing is
-                // shifting and the only visible sign something is happening is the scroll bar is shrinking
-                // due to there being more items in the scroll container.
-                // and it will move down as well.
-                //   When it is zero, the scroll bar will stay at zero and the user will see all the new
-                // items being added and all the existing items shifting down. This is NOT the effect we
-                // want and there does not seem to be any easy way to adjust the functionality. The only
-                // thing we can do is revert the scroll position ourselves.
-                //   Lame
-                if (listRef.current.scrollTop < 1) {
-                    // We are adding items in this case so we want
-                    // to know the current position of the first child.
-                    const item = itemsRef.current.childNodes[0];
+                if (listRef.current!.scrollTop < 1) {
+                    const item = itemsRef.current!.childNodes[0] as HTMLElement;
 
                     if (!isNil(item)) {
                         const itemRect = item.getBoundingClientRect();
 
                         shiftInfoRef.current = {
-                            // We will use the current top position and later the new one after the render.
                             previousPosition: itemRect.top,
-                            // This will be its new position in the list of rendered children.
-                            // We could assume this later when we use it but for now I'll leave this here.
                             targetIndex: loadCount,
                         };
                     }
@@ -582,26 +608,26 @@ const InfiniteList = forwardRef((props, ref) => {
     useImperativeHandle(
         ref,
         () => ({
-            gotoIndex: (gotoIndex) => {
+            gotoIndex: (gotoIndex: number | number[] | null) => {
                 let targetCount = 0;
                 let targetIndexes = gotoIndex;
 
                 if (isNil(targetIndexes)) {
                     targetIndexes = [0];
                 } else if (isFinite(targetIndexes)) {
-                    targetIndexes = [targetIndexes];
+                    targetIndexes = [targetIndexes as number];
                 } else {
-                    targetIndexes = [...targetIndexes];
+                    targetIndexes = [...(targetIndexes as number[])];
                 }
 
-                if (targetIndexes.length !== maxIndexes.length) {
+                if ((targetIndexes as number[]).length !== maxIndexes.length) {
                     throw new Error('gotoIndex must have same length as maxIndex');
                 }
 
-                for (let counter = 0; counter < targetIndexes.length; counter += 1) {
-                    const multiplier = multipliers[counter];
+                for (let counter = 0; counter < (targetIndexes as number[]).length; counter += 1) {
+                    const mult = multipliers[counter];
                     const minIndexValue = minIndexes[counter];
-                    const targetIndexValue = targetIndexes[counter];
+                    const targetIndexValue = (targetIndexes as number[])[counter];
 
                     if (isNil(targetIndexValue)) {
                         throw new Error('gotoIndex values cannot be nil.');
@@ -609,9 +635,9 @@ const InfiniteList = forwardRef((props, ref) => {
 
                     const adjustedTargetIndexValue = targetIndexValue - minIndexValue;
 
-                    const countPart = getIndexCount(targetCount, adjustedTargetIndexValue, multiplier);
+                    const countPart = getIndexCount(targetCount, adjustedTargetIndexValue, mult);
 
-                    targetCount += (countPart * multiplier);
+                    targetCount += (countPart as number) * mult;
                 }
 
                 if (targetCount < firstCount) {
@@ -623,8 +649,8 @@ const InfiniteList = forwardRef((props, ref) => {
                 }
 
                 setData({
-                    fromIndexes: targetIndexes,
-                    toIndexes: targetIndexes,
+                    fromIndexes: targetIndexes as number[],
+                    toIndexes: targetIndexes as number[],
                     fromCount: targetCount,
                     toCount: targetCount,
                     itemsRef,
@@ -658,50 +684,5 @@ const InfiniteList = forwardRef((props, ref) => {
 });
 
 InfiniteList.displayName = 'InfiniteList';
-
-const countingPropType = PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.arrayOf(
-        PropTypes.number,
-    ),
-]);
-
-InfiniteList.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    Component: PropTypes.Component,
-    children: PropTypes.children,
-    firstIndex: countingPropType,
-    lastIndex: countingPropType,
-    minIndex: countingPropType,
-    maxIndex: countingPropType,
-    startingIndex: countingPropType,
-    onLoad: PropTypes.func,
-    loadCount: PropTypes.number.isRequired,
-    bufferCount: PropTypes.number.isRequired,
-    items: PropTypes.arrayOf(PropTypes.any),
-    hold: PropTypes.bool,
-    keepLoaded: PropTypes.bool,
-    onTopIndexChange: PropTypes.func,
-    topOffset: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-};
-
-InfiniteList.defaultProps = {
-    id: null,
-    className: null,
-    Component: 'div',
-    children: null,
-    firstIndex: null,
-    lastIndex: null,
-    minIndex: null,
-    maxIndex: null,
-    startingIndex: null,
-    items: null,
-    hold: false,
-    keepLoaded: false,
-    onLoad: null,
-    onTopIndexChange: null,
-    topOffset: 0,
-};
 
 export default InfiniteList;

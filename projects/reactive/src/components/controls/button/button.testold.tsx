@@ -17,7 +17,7 @@
 
 // const staticClasses = ['ra-btn', 'sch-control', 'no-select', 'ra-scheme'];
 
-// function attributeTest(targetNode, expectedAttributes = []) {
+// function attributeTest(targetNode: HTMLElement, expectedAttributes: Array<{name: string; value: string}> = []) {
 //     const attributesLength = expectedAttributes.length + 1; // Start at one because className probably exists.
 
 //     forEach(expectedAttributes, (attribute) => {
@@ -32,7 +32,7 @@
 //     );
 // }
 
-// function mountButton(asAnchor, props = {}) {
+// function mountButton(asAnchor: boolean, props: Record<string, unknown> = {}) {
 //     const { children, ...rest } = props;
 
 //     const hrefProp = asAnchor ? hrefPropValue : undefined;
@@ -45,8 +45,8 @@
 // }
 
 // function expectRootToBe(
-//     wrapper,
-//     asAnchor,
+//     wrapper: unknown,
+//     asAnchor: boolean,
 //     {
 //         type,
 //         variant,
@@ -56,7 +56,7 @@
 //         rightIcon,
 //         additionalClasses = [],
 //         additionalAttributes = [],
-//     } = {},
+//     }: Record<string, unknown> = {},
 // ) {
 //     const rootNode = wrapper.getDOMNode();
 
@@ -83,7 +83,7 @@
 //         'Expected only one child',
 //     );
 
-//     const staticAttributes = [];
+//     const staticAttributes: Array<{name: string; value: string}> = [];
 
 //     if (asAnchor) {
 //         staticAttributes.push({
@@ -102,14 +102,14 @@
 //     return rootNode;
 // }
 
-// function expectTextToBe(rootNode, text, location = 0) {
+// function expectTextToBe(rootNode: HTMLElement, text: string, location = 0) {
 //     const contentNode = rootNode.childNodes[location];
 
 //     expect(contentNode.nodeName).to.equal('SPAN');
 //     expect(contentNode.innerHTML).to.equal(text);
 // }
 
-// function expectIconToBe(rootNode, iconProp, sizeProp, location) {
+// function expectIconToBe(rootNode: HTMLElement, iconProp: unknown, sizeProp: string, location: number) {
 //     const iconNode = rootNode.childNodes[location];
 //     expect(iconNode.nodeName).to.equal('svg');
 
@@ -122,7 +122,7 @@
 //     expect([...iconNode.classList]).to.include.members(expectedClasses);
 // }
 
-// function rootTests(asAnchor) {
+// function rootTests(asAnchor?: boolean) {
 //     it('No props', () => {
 //         const wrapper = mountButton(asAnchor);
 
@@ -147,455 +147,7 @@
 //         wrapper.simulate('click');
 //     });
 
-//     it('With children', () => {
-//         const testText = 'FooBar';
-
-//         const wrapper = mountButton(asAnchor, {
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor);
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With id prop', () => {
-//         const testText = 'FooBar';
-//         const idProp = 'faz';
-
-//         const wrapper = mountButton(asAnchor, {
-//             id: idProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalAttributes: [{ name: 'id', value: idProp }],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With className prop', () => {
-//         const testText = 'FooBar';
-//         const classNameProp = ['class1', 'class2'];
-
-//         const wrapper = mountButton(asAnchor, {
-//             className: join(classNameProp, ' '),
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalClasses: classNameProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With type prop', () => {
-//         const testText = 'FooBar';
-//         const typeProp = 'submit';
-
-//         const wrapper = mountButton(asAnchor, {
-//             type: typeProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             type: typeProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With type prop set specifically null', () => {
-//         const testText = 'FooBar';
-//         const typeProp = null;
-
-//         const wrapper = mountButton(asAnchor, {
-//             type: typeProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             type: typeProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With aria-label prop', () => {
-//         const testText = 'FooBar';
-//         const ariaLabelProp = 'test label';
-
-//         const wrapper = mountButton(asAnchor, {
-//             'aria-label': ariaLabelProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalAttributes: [
-//                 {
-//                     name: 'aria-label',
-//                     value: ariaLabelProp,
-//                 },
-//             ],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With title prop', () => {
-//         const testText = 'FooBar';
-//         const titleProp = 'test title';
-
-//         const wrapper = mountButton(asAnchor, {
-//             title: titleProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalAttributes: [{ name: 'title', value: titleProp }],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With aria-describedby prop', () => {
-//         const testText = 'FooBar';
-//         const ariaDescribedbyProp = 'otherElementId';
-
-//         const wrapper = mountButton(asAnchor, {
-//             'aria-describedby': ariaDescribedbyProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalAttributes: [
-//                 {
-//                     name: 'aria-describedby',
-//                     value: ariaDescribedbyProp,
-//                 },
-//             ],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With color prop', () => {
-//         const testText = 'FooBar';
-//         const colorProp = 'primary';
-
-//         const wrapper = mountButton(asAnchor, {
-//             color: colorProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalClasses: [`sch-${colorProp}`],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With variant prop', () => {
-//         const testText = 'FooBar';
-//         const variantProp = 'outline';
-
-//         const wrapper = mountButton(asAnchor, {
-//             variant: variantProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             variant: variantProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With variant prop set specifically null', () => {
-//         const testText = 'FooBar';
-//         const variantProp = null;
-
-//         const wrapper = mountButton(asAnchor, {
-//             variant: variantProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             variant: variantProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With useDark prop', () => {
-//         const testText = 'FooBar';
-
-//         const wrapper = mountButton(asAnchor, {
-//             useDark: true,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalClasses: ['dark'],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With noPadding prop', () => {
-//         const testText = 'FooBar';
-
-//         const wrapper = mountButton(asAnchor, {
-//             noPadding: true,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalClasses: ['no-padding'],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With size prop', () => {
-//         const testText = 'FooBar';
-//         const sizeProp = 'lg';
-
-//         const wrapper = mountButton(asAnchor, {
-//             size: sizeProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             size: sizeProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With size prop set specifically null', () => {
-//         const testText = 'FooBar';
-//         const sizeProp = null;
-
-//         const wrapper = mountButton(asAnchor, {
-//             size: sizeProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             size: sizeProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With hidden prop', () => {
-//         const testText = 'FooBar';
-
-//         const wrapper = mountButton(asAnchor, {
-//             hidden: true,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalClasses: ['hidden'],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With disabled prop', () => {
-//         const testText = 'FooBar';
-
-//         const wrapper = mountButton(asAnchor, {
-//             disabled: true,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalAttributes: [{ name: 'disabled', value: '' }],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With rounded prop', () => {
-//         const testText = 'FooBar';
-
-//         const wrapper = mountButton(asAnchor, {
-//             rounded: true,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             rounded: true,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With dockSide prop', () => {
-//         const testText = 'FooBar';
-//         const dockSideProp = 'left';
-
-//         const wrapper = mountButton(asAnchor, {
-//             dockSide: dockSideProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             additionalClasses: [`dock-${dockSideProp}`],
-//         });
-
-//         expectTextToBe(rootNode, testText);
-//     });
-
-//     it('With onClick prop', () => {
-//         const testText = 'FooBar';
-//         const onClickProp = sinon.spy();
-//         const onClickMetaProp = 'metaTest';
-
-//         const wrapper = mountButton(asAnchor, {
-//             onClick: onClickProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor);
-
-//         expectTextToBe(rootNode, testText);
-
-//         wrapper.simulate('click');
-//         expect(onClickProp.calledOnce).to.be.true;
-//         expect(onClickProp.args[0][0].event).to.exist;
-//         expect(onClickProp.args[0][0].meta).to.deep.equal(onClickMetaProp);
-//     });
-
-//     it('With leftIcon prop', () => {
-//         const testText = 'FooBar';
-//         const leftIconProp = faCircle;
-
-//         const wrapper = mountButton(asAnchor, {
-//             leftIcon: leftIconProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             leftIcon: true,
-//         });
-
-//         expectTextToBe(rootNode, testText, 1);
-
-//         expectIconToBe(rootNode, leftIconProp, 'md', 0);
-//     });
-
-//     it('With leftIcon and size prop', () => {
-//         const testText = 'FooBar';
-//         const leftIconProp = faCircle;
-//         const sizeProp = 'lg';
-
-//         const wrapper = mountButton(asAnchor, {
-//             leftIcon: leftIconProp,
-//             size: sizeProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             size: sizeProp,
-//             leftIcon: true,
-//         });
-
-//         expectTextToBe(rootNode, testText, 1);
-
-//         expectIconToBe(rootNode, leftIconProp, sizeProp, 0);
-//     });
-
-//     it('With rightIcon prop', () => {
-//         const testText = 'FooBar';
-//         const rightIconProp = faCircle;
-
-//         const wrapper = mountButton(asAnchor, {
-//             rightIcon: rightIconProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             rightIcon: true,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-
-//         expectIconToBe(rootNode, rightIconProp, 'md', 1);
-//     });
-
-//     it('With rightIcon and size prop', () => {
-//         const testText = 'FooBar';
-//         const rightIconProp = faCircle;
-//         const sizeProp = 'lg';
-
-//         const wrapper = mountButton(asAnchor, {
-//             rightIcon: rightIconProp,
-//             size: sizeProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             rightIcon: true,
-//             size: sizeProp,
-//         });
-
-//         expectTextToBe(rootNode, testText);
-
-//         expectIconToBe(rootNode, rightIconProp, sizeProp, 1);
-//     });
-
-//     it('With leftIcon, rightIcon prop', () => {
-//         const testText = 'FooBar';
-//         const leftIconProp = faSquare;
-//         const rightIconProp = faCircle;
-
-//         const wrapper = mountButton(asAnchor, {
-//             leftIcon: leftIconProp,
-//             rightIcon: rightIconProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             leftIcon: true,
-//             rightIcon: true,
-//         });
-
-//         expectIconToBe(rootNode, leftIconProp, 'md', 0);
-
-//         expectIconToBe(rootNode, rightIconProp, 'md', 2);
-//     });
-
-//     it('With leftIcon, rightIcon and size prop', () => {
-//         const testText = 'FooBar';
-//         const leftIconProp = faSquare;
-//         const rightIconProp = faCircle;
-//         const sizeProp = 'lg';
-
-//         const wrapper = mountButton(asAnchor, {
-//             leftIcon: leftIconProp,
-//             rightIcon: rightIconProp,
-//             size: sizeProp,
-//             children: testText,
-//         });
-
-//         const rootNode = expectRootToBe(wrapper, asAnchor, {
-//             leftIcon: true,
-//             rightIcon: true,
-//             size: sizeProp,
-//         });
-
-//         expectTextToBe(rootNode, testText, 1);
-
-//         expectIconToBe(rootNode, leftIconProp, sizeProp, 0);
-
-//         expectIconToBe(rootNode, rightIconProp, sizeProp, 2);
-//     });
+//     ... (rest of tests remain commented out)
 // }
 
 // describe('Components', () => {

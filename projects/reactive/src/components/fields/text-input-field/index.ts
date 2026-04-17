@@ -1,3 +1,3 @@
-import TextInputField from './text-input-field.jsx';
+import TextInputField from './text-input-field.js';
 
 export default TextInputField;

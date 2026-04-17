@@ -1,18 +1,35 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
-import DateBase from '../new-base/date/date-base.jsx';
-import DateInputAnchor from './date-input-field-anchor.jsx';
-import PropTypes from '../../../common/prop-types.js';
+import DateBase from '../new-base/date/date-base.js';
+import DateInputAnchor from './date-input-field-anchor.js';
 
-function DateInput(props) {
+interface DateInputProps {
+	className?: string | null;
+	onChange?: ((value: Date | null) => void) | null;
+	onBlur?: (() => void) | null;
+	onFocus?: (() => void) | null;
+	title?: string | null;
+	'aria-label'?: string | null;
+	required?: boolean | null;
+	disabled?: boolean | null;
+	name?: string | null;
+	value?: Date | null;
+	minDate?: Date;
+	maxDate?: Date | null;
+	leftAnnotation?: React.ReactNode;
+	rightAnnotation?: React.ReactNode;
+	[key: string]: unknown;
+}
+
+function DateInput(props: DateInputProps): React.ReactElement {
 	const {
-		value,
-		className,
-		onChange,
-		leftAnnotation,
-		rightAnnotation,
-		minDate,
-		maxDate,
+		value = null,
+		className = null,
+		onChange = null,
+		leftAnnotation = null,
+		rightAnnotation = null,
+		minDate = new Date(1900, 0, 1),
+		maxDate = null,
 		...rest
 	} = props;
 
@@ -28,7 +45,7 @@ function DateInput(props) {
 			{...rest}
 			className={classnames('ra-date-input', className)}
 			fromDate={value}
-			onSelect={onChange}
+			onSelect={onChange as ((date: Date) => void) | null}
 			Anchor={DateInputAnchor}
 			anchorProps={anchorProps}
 			minDate={minDate}
@@ -36,39 +53,5 @@ function DateInput(props) {
 		/>
 	);
 }
-
-DateInput.propTypes = {
-	className: PropTypes.string,
-	onChange: PropTypes.func,
-	onBlur: PropTypes.func,
-	onFocus: PropTypes.func,
-	title: PropTypes.string,
-	'aria-label': PropTypes.string,
-	required: PropTypes.bool,
-	disabled: PropTypes.bool,
-	name: PropTypes.string,
-	value: PropTypes.instanceOf(Date),
-	minDate: PropTypes.instanceOf(Date),
-	maxDate: PropTypes.instanceOf(Date),
-	leftAnnotation: PropTypes.children,
-	rightAnnotation: PropTypes.children,
-};
-
-DateInput.defaultProps = {
-	className: null,
-	value: null,
-	minDate: new Date(1900, 0, 1),
-	maxDate: null,
-	onChange: null,
-	onBlur: null,
-	onFocus: null,
-	title: null,
-	'aria-label': null,
-	required: null,
-	disabled: null,
-	name: null,
-	leftAnnotation: null,
-	rightAnnotation: null,
-};
 
 export default DateInput;

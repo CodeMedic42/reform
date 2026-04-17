@@ -1,20 +1,24 @@
 import React from 'react';
 import { noop } from 'lodash-es';
-import PropTypes from '../../../common/prop-types.js';
 
-class InputValueBuffer extends React.PureComponent {
-    static propTypes = {
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        onChange: PropTypes.func,
-        children: PropTypes.func.isRequired,
-    };
+interface InputValueBufferProps {
+    value?: string | number | null;
+    onChange?: (value: string | number | null) => void;
+    children: (args: { value: string | number | null; onChange: (value: string | number | null) => void }) => React.ReactNode;
+}
 
+interface InputValueBufferState {
+    value: string | number | null;
+    previousValue: string | number | null;
+}
+
+class InputValueBuffer extends React.PureComponent<InputValueBufferProps, InputValueBufferState> {
     static defaultProps = {
         value: null,
         onChange: noop,
     };
 
-    constructor(props) {
+    constructor(props: InputValueBufferProps) {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
@@ -22,12 +26,12 @@ class InputValueBuffer extends React.PureComponent {
         const { value } = props;
 
         this.state = {
-            value,
-            previousValue: value,
+            value: value ?? null,
+            previousValue: value ?? null,
         };
     }
 
-    static getDerivedStateFromProps(nextProps, currentState) {
+    static getDerivedStateFromProps(nextProps: InputValueBufferProps, currentState: InputValueBufferState) {
         const { value: nextValue } = nextProps;
 
         if (nextValue === currentState.previousValue) {
@@ -40,8 +44,8 @@ class InputValueBuffer extends React.PureComponent {
         };
     }
 
-    handleChange(newValue) {
-        const { onChange } = this.props;
+    handleChange(newValue: string | number | null) {
+        const { onChange = noop } = this.props;
 
         const { value: currentValue } = this.state;
 

@@ -5,10 +5,15 @@ import isEmpty from 'lodash/isEmpty';
 import Todo from './todo';
 import { toggleAll } from '../actions/todo-actions';
 
-function Page() {
+interface TodoItem {
+    text: string;
+    completed: boolean;
+}
+
+function Page(): React.ReactElement {
     const todoStore = useAspect('mobx').getStore('TodoListStore');
 
-    const [tempValue, setTempValue] = useState('');
+    const [tempValue, setTempValue] = useState<string>('');
 
     const handleClick = useCallback(() => {
         todoStore.addTodo({
@@ -25,7 +30,7 @@ function Page() {
         <div>
             <input
                 value={tempValue}
-                onChange={(event) => setTempValue(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setTempValue(event.target.value)}
             />
             <button
                 onClick={handleClick}
@@ -39,7 +44,7 @@ function Page() {
                 Mark All Completed
             </button>
             {
-                todoStore.todos.map((todo, index) => {
+                todoStore.todos.map((todo: TodoItem, index: number) => {
                     return (
                         <Todo key={index} todo={todo}/>
                     );

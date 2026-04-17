@@ -1,63 +1,47 @@
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
 import DropDownListItem from '../drop-down/drop-down-list-item.js';
-import PropTypes from '../../../common/prop-types.js';
 
-class MenuItem extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        selected: PropTypes.bool,
-        targeted: PropTypes.bool,
-        onMouseEnter: PropTypes.func,
-        onMouseLeave: PropTypes.func,
-        borderBottom: PropTypes.bool,
-        borderTop: PropTypes.bool,
-        onClick: PropTypes.func,
-        preventCloseOnClick: PropTypes.bool,
-    };
+interface MenuItemProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+    selected?: boolean;
+    targeted?: boolean;
+    onMouseEnter?: ((event: React.MouseEvent) => void) | null;
+    onMouseLeave?: ((event: React.MouseEvent) => void) | null;
+    borderBottom?: boolean;
+    borderTop?: boolean;
+    onClick?: ((event: React.MouseEvent) => void) | null;
+    preventCloseOnClick?: boolean;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-        selected: false,
-        targeted: false,
-        onMouseEnter: null,
-        onMouseLeave: null,
-        borderBottom: false,
-        borderTop: false,
-        onClick: null,
-        preventCloseOnClick: false,
-    };
+class MenuItem extends PureComponent<MenuItemProps> {
+    private itemRef: React.RefObject<unknown>;
 
-    constructor(props) {
+    constructor(props: MenuItemProps) {
         super(props);
 
         this.itemRef = createRef();
     }
 
-    getRootNode() {
-        return this.itemRef.current.getRootNode();
+    getRootNode(): HTMLElement | null {
+        return (this.itemRef.current as { getRootNode: () => HTMLElement } | null)?.getRootNode() ?? null;
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            children,
-            selected,
-            targeted,
-            onMouseEnter,
-            onMouseLeave,
-            borderBottom,
-            borderTop,
-            onClick,
-            preventCloseOnClick,
+            id = null,
+            className = null,
+            children = null,
+            selected = false,
+            targeted = false,
+            onMouseEnter = null,
+            onMouseLeave = null,
+            borderBottom = false,
+            borderTop = false,
+            onClick = null,
+            preventCloseOnClick = false,
         } = this.props;
 
         return (

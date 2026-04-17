@@ -1,10 +1,21 @@
 import React, { Fragment, useContext } from 'react';
 import classnames from 'classnames';
 import { get, isNil } from 'lodash-es';
-import InfiniteListContext from './infinite-list-context.js';
-import PropTypes from '../../../common/prop-types.js';
+import InfiniteListContext, { InfiniteListContextValue } from './infinite-list-context.js';
 
-function load(collection, context, cb) {
+export interface InfiniteListItemsProps {
+    className?: string | null;
+    Component?: React.ElementType;
+    items?: unknown[] | null;
+    render: (item: unknown, index: number[]) => React.ReactNode;
+    [key: string]: unknown;
+}
+
+function load(
+    collection: unknown[] | null | undefined,
+    context: InfiniteListContextValue,
+    cb: (item: unknown, index: number[], count: number) => React.ReactNode,
+): React.ReactNode[] {
     const {
         minIndexes,
         maxIndexes,
@@ -13,7 +24,7 @@ function load(collection, context, cb) {
         toCount,
     } = context;
 
-    const arr = [];
+    const arr: React.ReactNode[] = [];
     const currentIndexes = [...fromIndexes];
 
     for (let counter = fromCount; counter < toCount; counter += 1) {
@@ -35,7 +46,7 @@ function load(collection, context, cb) {
             } else {
                 currentIndexes[index] += 1;
 
-                if (!isNil(maxIndexes[index]) && currentIndexes[index] > maxIndexes[index]) {
+                if (!isNil(maxIndexes[index]) && currentIndexes[index] > (maxIndexes[index] as number)) {
                     currentIndexes[index] = minIndexes[index];
 
                     index -= 1;
@@ -49,22 +60,22 @@ function load(collection, context, cb) {
     return arr;
 }
 
-function InfiniteListItems(props) {
+function InfiniteListItems(props: InfiniteListItemsProps): React.ReactElement {
     const {
         className,
         items,
         render,
-        Component,
+        Component = 'div',
         ...rest
     } = props;
 
     const context = useContext(InfiniteListContext);
 
-    const { itemsRef } = context;
+    const { itemsRef } = context!;
 
     return (
         <Component ref={itemsRef} className={classnames('ra-infinite-list-items', className)} {...rest}>
-            {load(items, context, (item, index, count) => (
+            {load(items, context!, (item, index, count) => (
                 <Fragment key={count}>
                     {render(item, index)}
                 </Fragment>
@@ -72,18 +83,5 @@ function InfiniteListItems(props) {
         </Component>
     );
 }
-
-InfiniteListItems.propTypes = {
-    className: PropTypes.string,
-    Component: PropTypes.Component,
-    items: PropTypes.arrayOf(PropTypes.any),
-    render: PropTypes.func.isRequired,
-};
-
-InfiniteListItems.defaultProps = {
-    className: null,
-    items: null,
-    Component: 'div',
-};
 
 export default InfiniteListItems;

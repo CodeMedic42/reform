@@ -1,16 +1,30 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { map, isEmpty } from 'lodash-es';
 import Tab from './tab.js';
 
-function TabBar(props) {
+export interface TabItem {
+    id: string;
+    heading?: React.ReactNode;
+    disabled?: boolean;
+}
+
+export interface TabBarProps {
+    id?: string | null;
+    className?: string | null;
+    tabs?: TabItem[] | null;
+    value?: string | null;
+    disabled?: boolean;
+    onChange?: ((tabId: string) => void) | null;
+}
+
+function TabBar(props: TabBarProps): React.ReactElement | null {
     const {
         id: tabBarId,
         className,
         tabs,
         value,
-        disabled: fullDisabled,
+        disabled: fullDisabled = false,
         onChange,
     } = props;
 
@@ -20,7 +34,7 @@ function TabBar(props) {
 
     return (
         <div
-            id={tabBarId}
+            id={tabBarId ?? undefined}
             className={classnames(
                 'ra-tab-bar',
                 className,
@@ -37,7 +51,7 @@ function TabBar(props) {
                             key={tabId}
                             disabled={fullDisabled || disabled}
                             active={value === tabId}
-                            onClick={onChange}
+                            onClick={onChange!}
                         >
                             {heading}
                         </Tab>
@@ -47,29 +61,5 @@ function TabBar(props) {
         </div>
     );
 }
-
-TabBar.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    tabs: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string,
-            heading: PropTypes.node,
-            disabled: PropTypes.bool,
-        }),
-    ),
-    value: PropTypes.string,
-    disabled: PropTypes.bool,
-    onChange: PropTypes.func,
-};
-
-TabBar.defaultProps = {
-    id: null,
-    className: null,
-    value: null,
-    tabs: null,
-    disabled: false,
-    onChange: null,
-};
 
 export default TabBar;

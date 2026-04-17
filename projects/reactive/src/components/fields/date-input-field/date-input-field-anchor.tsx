@@ -1,25 +1,40 @@
 import React from 'react';
 import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
-import DateInputBase from '../new-base/date/date-input-base.jsx';
-import PropTypes from '../../../common/prop-types.js';
+import DateInputBase from '../new-base/date/date-input-base.js';
 import buildId from '../../../common/build-id.js';
-import InputContainer from '../new-base/input-field-container.jsx';
+import InputContainer from '../new-base/input-field-container.js';
 
-function DateInputAnchor(props) {
+interface DateInputAnchorProps {
+	id?: string | null;
+	title?: string | null;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	required?: boolean;
+	disabled?: boolean;
+	name?: string | null;
+	size?: string | null;
+	'aria-label'?: string | null;
+	value?: Date | null;
+	onChange?: ((value: Date | null) => void) | null;
+	leftAnnotation?: React.ReactNode;
+	rightAnnotation?: React.ReactNode;
+}
+
+function DateInputAnchor(props: DateInputAnchorProps): React.ReactElement {
 	const {
-		id,
-		title,
-		'aria-labelledby': ariaLabeledBy,
-		'aria-describedby': ariaDescribedBy,
-		required,
-		disabled,
-		name,
-		size,
-		'aria-label': ariaLabel,
-		value,
-		onChange,
-		leftAnnotation,
-		rightAnnotation,
+		id = null,
+		title = null,
+		'aria-labelledby': ariaLabeledBy = null,
+		'aria-describedby': ariaDescribedBy = null,
+		required = false,
+		disabled = false,
+		name = null,
+		size = null,
+		'aria-label': ariaLabel = null,
+		value = null,
+		onChange = null,
+		leftAnnotation = null,
+		rightAnnotation = null,
 		// ...rest
 	} = props;
 
@@ -47,38 +62,6 @@ function DateInputAnchor(props) {
 		</InputContainer>
 	);
 }
-
-DateInputAnchor.propTypes = {
-	id: PropTypes.string,
-	title: PropTypes.string,
-	'aria-labelledby': PropTypes.string,
-	'aria-describedby': PropTypes.string,
-	required: PropTypes.bool,
-	disabled: PropTypes.bool,
-	name: PropTypes.string,
-	size: PropTypes.string,
-	'aria-label': PropTypes.string,
-	value: PropTypes.instanceOf(Date),
-	onChange: PropTypes.func,
-	leftAnnotation: PropTypes.children,
-	rightAnnotation: PropTypes.children,
-};
-
-DateInputAnchor.defaultProps = {
-	id: null,
-	title: null,
-	'aria-labelledby': null,
-	'aria-describedby': null,
-	'aria-label': null,
-	required: false,
-	disabled: false,
-	name: null,
-	size: null,
-	value: null,
-	onChange: null,
-	leftAnnotation: null,
-	rightAnnotation: null,
-};
 
 export default applyAnchorBinding(DateInputAnchor, {
 	focusSelector: '.input-container input',

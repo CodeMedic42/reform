@@ -1,29 +1,19 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-class ListItemContent extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-    };
+interface ListItemContentProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-    };
-
-    getRootNode() {
-        return this.buttonRef.current;
+class ListItemContent extends PureComponent<ListItemContentProps> {
+    getRootNode(): HTMLElement | null {
+        return (this as unknown as { buttonRef: React.RefObject<HTMLElement> }).buttonRef.current;
     }
 
-    render() {
-        const { id, className, children } = this.props;
+    render(): React.ReactNode {
+        const { id = null, className = null, children = null } = this.props;
 
         return (
             <span

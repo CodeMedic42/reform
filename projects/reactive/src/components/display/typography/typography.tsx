@@ -1,41 +1,28 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { colorPropType, getColorInfo } from '../../../common/color-list.js';
+import { Color, getColorInfo } from '../../../common/color-list.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-class Typography extends PureComponent {
+interface TypographyProps {
+    className?: string | null;
+    children?: React.ReactNode;
+    color?: Color | null;
+    Component?: React.ElementType;
+    forwardRef?: React.Ref<unknown> | null;
+    inline?: boolean;
+    [key: string]: unknown;
+}
 
-    static propTypes = {
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        color: colorPropType,
-        Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-        forwardRef: PropTypes.instanceOf(Object),
-        inline: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        className: null,
-        children: null,
-        color: null,
-        Component: 'span',
-        forwardRef: null,
-        inline: false,
-    };
-
-    render() {
+class Typography extends PureComponent<TypographyProps> {
+    render(): React.ReactNode {
         const {
-            className,
-            inline,
-            color,
-            children,
-            Component,
-            forwardRef,
+            className = null,
+            inline = false,
+            color = null,
+            children = null,
+            Component = 'span',
+            forwardRef = null,
             ...rest
         } = this.props;
 

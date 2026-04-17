@@ -1,11 +1,23 @@
-const globToRegexp = require('./glob-to-regexp.js');
+import globToRegexp from './glob-to-regexp.js';
+import type RunContext from '../../run-context.js';
 
-const toRequireContext = (runContext, specifier) => {
+interface StorySpecifier {
+    directory: string;
+    files: string;
+}
+
+interface RequireContextResult {
+    path: string;
+    recursive: boolean;
+    match: RegExp;
+}
+
+const toRequireContext = (runContext: RunContext, specifier: StorySpecifier): RequireContextResult => {
     const { directory, files } = specifier;
 
     // The importPathMatcher is a `./`-prefixed matcher that includes the directory
     // For `require.context()` we want the same thing, relative to directory
-    const match = globToRegexp(`./${files}`);
+    const match: RegExp = globToRegexp(`./${files}`);
 
     return {
         path: runContext.fromWorkingDir(directory),
@@ -14,11 +26,11 @@ const toRequireContext = (runContext, specifier) => {
     };
 };
 
-module.exports.toRequireContext = toRequireContext;
+export { toRequireContext };
 
-module.exports.toRequireContextString = (runContext, specifier) => {
+export const toRequireContextString = (runContext: RunContext, specifier: StorySpecifier): string => {
     const { path: p, recursive: r, match: m } = toRequireContext(runContext, specifier);
 
-    const result = `require.context('${p}', ${r}, ${m})`;
+    const result: string = `require.context('${p}', ${r}, ${m})`;
     return result;
 };

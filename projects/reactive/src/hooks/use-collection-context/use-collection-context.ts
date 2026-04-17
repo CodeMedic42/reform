@@ -1,18 +1,32 @@
 /* eslint-disable max-len */
 import { useCallback, useMemo } from 'react';
 import { isFunction, forEach, isEmpty, map, isNil } from 'lodash-es';
-import useFilterSettings from './use-filter-settings.js';
-import useSortSettings from './use-sort-settings.js';
+import useFilterSettings, { FilterSettings, FilterState } from './use-filter-settings.js';
+import useSortSettings, { SortSettings, SortState } from './use-sort-settings.js';
 import CollectionItem from './collection-item.js';
 
-function echo(val) {
+function echo<T>(val: T): T {
     return val;
 }
 
 const ACCESS_SYMBOL = Symbol('AccessSymbol');
 
-function appendItems(items, newItems, getId, beforeInsert, filterState, sortState) {
-    const ids = {};
+export interface CollectionOptions {
+    filterSettings?: FilterSettings;
+    sortSettings?: SortSettings;
+    getId?: (item: any) => string;
+    beforeInsert?: (item: any) => any;
+}
+
+function appendItems(
+    items: CollectionItem[],
+    newItems: any[],
+    getId: ((item: any) => string) | null,
+    beforeInsert: (item: any) => any,
+    filterState: FilterState,
+    sortState: SortState,
+): { ids: Record<string, CollectionItem>; items: CollectionItem[] } {
+    const ids: Record<string, CollectionItem> = {};
 
     if (isEmpty(newItems)) {
         return {
@@ -24,7 +38,7 @@ function appendItems(items, newItems, getId, beforeInsert, filterState, sortStat
     const count = items.length;
 
     const listItems = map(newItems, (newItem, index) => {
-        let id = null;
+        let id: string | null = null;
 
         if (!isNil(getId)) {
             id = getId(newItem);
@@ -59,7 +73,7 @@ function appendItems(items, newItems, getId, beforeInsert, filterState, sortStat
     };
 }
 
-function useCollectionContext(rawItems, options) {
+function useCollectionContext(rawItems: any[], options?: CollectionOptions | (() => CollectionOptions)): [CollectionItem[], { getById: (id: string) => CollectionItem }] {
     // const idsRef = useRef({ ids: {} });
 
     const op = isFunction(options) ? options() : options;
@@ -68,8 +82,8 @@ function useCollectionContext(rawItems, options) {
 
     const sortState = useSortSettings(op?.sortSettings);
 
-    const getId = useMemo(() => (isFunction(options?.getId) ? options.getId : null));
-    const beforeInsert = useMemo(() => (isFunction(options?.beforeInsert) ? options.beforeInsert : echo));
+    const getId = useMemo(() => (isFunction((options as CollectionOptions)?.getId) ? (options as CollectionOptions).getId! : null));
+    const beforeInsert = useMemo(() => (isFunction((options as CollectionOptions)?.beforeInsert) ? (options as CollectionOptions).beforeInsert! : echo));
 
     let processed = false;
 
@@ -113,7 +127,7 @@ function useCollectionContext(rawItems, options) {
         return sortState.insert([], filteredItems);
     }, [sortState]);
 
-    const getById = useCallback((id) => ids[id], [ids]);
+    const getById = useCallback((id: string) => ids[id], [ids]);
 
     return [sortedItems,
         useMemo(

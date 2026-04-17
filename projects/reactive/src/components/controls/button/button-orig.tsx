@@ -4,55 +4,34 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import {
-    schemeColorPropType,
     getSchemeColorClasses,
 } from '../../../common/color-list.js';
 // import Icon from '../icon';
-import PropTypes from '../../../common/prop-types.js';
 
-class Button extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        type: PropTypes.string,
-        color: schemeColorPropType,
-        variant: PropTypes.oneOf(['none', 'fill', 'outline', 'opaque']),
-        useDark: PropTypes.bool,
-        size: PropTypes.oneOf(['xl', 'lg', 'md', 'sm', 'xs', '2xs']),
-        onClick: PropTypes.func,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        rounded: PropTypes.bool,
-        noPadding: PropTypes.bool,
-        dockSide: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-        asAnchor: PropTypes.bool,
-        href: PropTypes.string,
-        target: PropTypes.string,
-        focusOnMount: PropTypes.bool,
-    };
+interface ButtonOrigProps {
+    id?: string | null;
+    className?: string | null;
+    type?: string | null;
+    color?: string | null;
+    variant?: 'none' | 'fill' | 'outline' | 'opaque' | null;
+    useDark?: boolean;
+    size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs' | '2xs' | null;
+    onClick?: ((event: React.MouseEvent) => void) | null;
+    children?: React.ReactNode;
+    rounded?: boolean;
+    noPadding?: boolean;
+    dockSide?: 'left' | 'right' | 'top' | 'bottom' | null;
+    asAnchor?: boolean;
+    href?: string | null;
+    target?: string | null;
+    focusOnMount?: boolean;
+    [key: string]: unknown;
+}
 
-    static defaultProps = {
-        id: null,
-        type: 'button',
-        className: null,
-        variant: 'fill',
-        color: null,
-        onClick: null,
-        children: null,
-        rounded: false,
-        size: 'md',
-        noPadding: false,
-        dockSide: null,
-        asAnchor: false,
-        href: null,
-        target: null,
-        useDark: false,
-        focusOnMount: false,
-    };
+class Button extends PureComponent<ButtonOrigProps> {
+    private buttonRef: React.RefObject<HTMLElement>;
 
-    constructor(props) {
+    constructor(props: ButtonOrigProps) {
         super(props);
 
         this.buttonRef = React.createRef();
@@ -61,7 +40,7 @@ class Button extends PureComponent {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         const { focusOnMount } = this.props;
 
         if (focusOnMount) {
@@ -69,7 +48,7 @@ class Button extends PureComponent {
         }
     }
 
-    handleClick(event) {
+    handleClick(event: React.MouseEvent): void {
         const { onClick } = this.props;
 
         if (isNil(onClick)) {
@@ -79,11 +58,11 @@ class Button extends PureComponent {
         onClick(event);
     }
 
-    getRootNode() {
+    getRootNode(): HTMLElement | null {
         return this.buttonRef.current;
     }
 
-    focus() {
+    focus(): void {
         const { current } = this.buttonRef;
 
         if (isNil(current)) {
@@ -116,27 +95,27 @@ class Button extends PureComponent {
     //     return <Icon icon={rightIcon} />;
     // }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            variant,
-            color,
-            children,
-            rounded,
-            size,
-            type,
-            noPadding,
-            dockSide,
-            asAnchor,
-            href,
-            target,
-            useDark,
+            id = null,
+            className = null,
+            variant = 'fill',
+            color = null,
+            children = null,
+            rounded = false,
+            size = 'md',
+            type = 'button',
+            noPadding = false,
+            dockSide = null,
+            asAnchor = false,
+            href = null,
+            target = null,
+            useDark = false,
             // leftIcon,
             // rightIcon,
             // onClick,
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            focusOnMount,
+            focusOnMount = false,
             ...rest
         } = this.props;
 

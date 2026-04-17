@@ -1,8 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-function TabBottom(props) {
+export interface TabBottomProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+}
+
+function TabBottom(props: TabBottomProps): React.ReactElement {
     const {
         id,
         className,
@@ -10,25 +15,10 @@ function TabBottom(props) {
     } = props;
 
     return (
-        <div id={id} className={classnames('ra-tab-bottom', className)}>
+        <div id={id ?? undefined} className={classnames('ra-tab-bottom', className)}>
             {children}
         </div>
     );
 }
-
-TabBottom.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-};
-
-TabBottom.defaultProps = {
-    id: null,
-    className: null,
-    children: null,
-};
 
 export default TabBottom;

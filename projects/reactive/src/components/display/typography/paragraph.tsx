@@ -1,14 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-function Paragraph(props) {
+interface ParagraphProps {
+    className?: string | null;
+    children?: React.ReactNode;
+    size?: 'sm' | 'md' | 'lg' | null;
+    weight?: 'bold' | 'semi-bold' | 'normal' | null;
+    forwardRef?: React.Ref<unknown> | null;
+    [key: string]: unknown;
+}
+
+function Paragraph(props: ParagraphProps): React.ReactNode {
     const {
-        className, size, weight, forwardRef, children, ...rest
+        className = null, size = null, weight = null, forwardRef = null, children = null, ...rest
     } = props;
 
     const weightClass = !isNil(weight) ? `weight-${weight}` : null;
@@ -30,24 +38,5 @@ function Paragraph(props) {
         </Typography>
     );
 }
-
-Paragraph.propTypes = {
-    className: PropTypes.string,
-    children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node),
-    ]),
-    size: PropTypes.oneOf(['sm', 'md', 'lg']),
-    weight: PropTypes.oneOf(['bold', 'semi-bold', 'normal']),
-    forwardRef: PropTypes.instanceOf(Object),
-};
-
-Paragraph.defaultProps = {
-    className: null,
-    children: null,
-    weight: null,
-    forwardRef: null,
-    size: null,
-};
 
 export default applyForwardRef(memo(Paragraph));

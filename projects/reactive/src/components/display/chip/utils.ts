@@ -1,10 +1,12 @@
 import { isNil } from 'lodash-es';
 
-export function getDefaultSize(size) {
+type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+export function getDefaultSize(size: ChipSize | null | undefined): ChipSize {
 	return !isNil(size) ? size : 'md';
 }
 
-export function selectChipIconSize(isCircle, size) {
+export function selectChipIconSize(isCircle: boolean, size: ChipSize | null | undefined): { size: ChipSize } {
 	const finalSize = getDefaultSize(size);
 
 	if (isCircle) {

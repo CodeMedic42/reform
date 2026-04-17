@@ -34,5 +34,3 @@ class ArrayModel extends BaseModel {
 _ArrayModel_items = new WeakMap();
 // Register this model type
 registerModel('array', ArrayModel);
-
-export { ArrayModel as default };

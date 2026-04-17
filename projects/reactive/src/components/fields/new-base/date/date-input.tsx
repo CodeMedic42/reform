@@ -7,19 +7,27 @@ import { isNil } from 'lodash-es';
 // import parse from 'date-fns/parse';
 import MaskedInput from 'react-text-mask';
 import classnames from 'classnames';
-import PropTypes from '../../../../common/prop-types.js';
 
-const DateInput = forwardRef((props, ref) => {
+interface DateInputProps {
+	className?: string | null;
+	placeholder?: string;
+	onChange: (value: string | null) => void;
+	value?: string | null;
+	fitTo?: string | null;
+	[key: string]: unknown;
+}
+
+const DateInput = forwardRef<unknown, DateInputProps>((props, ref) => {
 	const {
 		onChange,
-		value,
-		placeholder,
-		className,
-		fitTo,
+		value = null,
+		placeholder = 'MM / DD / YYYY',
+		className = null,
+		fitTo = null,
 		...rest
 	} = props;
 
-	const handleChange = useCallback((event) => {
+	const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		const {
 			target: { value: newValue },
 		} = event;
@@ -52,21 +60,6 @@ const DateInput = forwardRef((props, ref) => {
 		</span>
 	);
 });
-
-DateInput.propTypes = {
-	className: PropTypes.string,
-	placeholder: PropTypes.string,
-	onChange: PropTypes.func.isRequired,
-	value: PropTypes.string,
-	fitTo: PropTypes.string,
-};
-
-DateInput.defaultProps = {
-	value: null,
-	className: null,
-	placeholder: 'MM / DD / YYYY',
-	fitTo: null,
-};
 
 DateInput.displayName = 'StringInput';
 

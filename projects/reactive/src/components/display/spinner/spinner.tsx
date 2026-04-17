@@ -1,19 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import { paletteColorOrder } from '../../../common/color-list.js';
+import { PaletteColor } from '../../../common/color-list.js';
 
-function Spinner(props) {
+interface SpinnerProps {
+    id?: string | null;
+    className?: string | null;
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    color?: PaletteColor | null;
+}
+
+function Spinner(props: SpinnerProps): React.ReactNode {
     const {
-        id, className, size, color,
+        id = null, className = null, size = 'md', color = 'blue',
     } = props;
 
     const sizeClass = !isNil(size) ? `size-${size}` : 'size-md';
 
     return (
         <span
-            id={id}
+            id={id ?? undefined}
             className={classnames(
                 'ra-spinner',
                 `color-${color === null ? 'blue' : color}`,
@@ -23,19 +29,5 @@ function Spinner(props) {
         />
     );
 }
-
-Spinner.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
-    color: PropTypes.oneOf(paletteColorOrder),
-};
-
-Spinner.defaultProps = {
-    id: null,
-    className: null,
-    size: 'md',
-    color: 'blue',
-};
 
 export default Spinner;

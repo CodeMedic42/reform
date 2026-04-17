@@ -42,5 +42,3 @@ class ObjectModel extends BaseModel {
 _ObjectModel_keys = new WeakMap();
 // Register this model type
 registerModel('object', ObjectModel);
-
-export { ObjectModel as default };

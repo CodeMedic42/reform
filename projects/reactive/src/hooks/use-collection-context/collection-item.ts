@@ -8,36 +8,38 @@ const FIELDS = {
 };
 
 class CollectionItem {
-    constructor(id, value, index, accessSymbol) {
+    [key: symbol]: any;
+
+    constructor(id: string | null, value: any, index: number, accessSymbol: symbol) {
         this[FIELDS.id] = id;
         this[FIELDS.value] = value;
         this[FIELDS.originalIndex] = index;
         this[FIELDS.filterPriority] = null;
 
         this[accessSymbol] = {
-            setFilterPriority: (filterPriority) => {
+            setFilterPriority: (filterPriority: number) => {
                 this[FIELDS.filterPriority] = filterPriority;
             },
         };
     }
 
-    getValue(path, defaultValue) {
+    getValue(path?: string, defaultValue?: any): any {
         if (isEmpty(path)) {
             return this[FIELDS.value];
         }
 
-        return get(this[FIELDS.value], path, defaultValue);
+        return get(this[FIELDS.value], path!, defaultValue);
     }
 
-    getId() {
+    getId(): string | null {
         return this[FIELDS.id];
     }
 
-    getOriginalIndex() {
+    getOriginalIndex(): number {
         return this[FIELDS.originalIndex];
     }
 
-    getFilterPriority() {
+    getFilterPriority(): number | null {
         return this[FIELDS.filterPriority];
     }
 }

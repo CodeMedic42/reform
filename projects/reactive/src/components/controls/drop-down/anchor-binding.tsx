@@ -5,80 +5,45 @@
 import React, {
     Component,
     createRef,
-    // MouseEvent,
-    // FocusEvent,
-    // KeyboardEvent,
-    // ComponentType,
-    // RefObject,
 } from 'react';
-// import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil, isFunction } from 'lodash-es';
-import PropTypes from '../../../common/prop-types.js';
 
-// interface BindingInterfaceInt {
-//     onClick?: (event: MouseEvent<HTMLElement>) => void,
-//     onFocus?: (event: FocusEvent<HTMLElement>) => void,
-//     onKeyPress?: (event: KeyboardEvent<HTMLElement>) => void,
-//     onKeyDown?: (event: KeyboardEvent<HTMLElement>) => void,
-//     onPointerEnter?: () => void,
-//     onPointerLeave?: () => void,
-//     onPointerCancel?: () => void,
-// }
+interface BindingInterface {
+    onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+    onFocus?: (event: React.FocusEvent<HTMLElement>) => void;
+    onKeyPress?: (event: React.KeyboardEvent<HTMLElement>) => void;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
+    onPointerEnter?: () => void;
+    onPointerLeave?: () => void;
+    onPointerCancel?: () => void;
+}
 
-// type AnchorProps<TAnchorProps> = TAnchorProps & { open: boolean };
+interface AnchorWrapperProps {
+    boundingTargetSelector: string | null;
+    focusTargetSelector: string | null;
+    AnchorComponent: React.ElementType;
+    bindingInterface: BindingInterface;
+    anchorProps?: Record<string, unknown> | null;
+    open: boolean;
+}
 
-// export interface SharedBindingPropsInt<TAnchorProps> {
-//     bindingInterface: BindingInterfaceInt,
-//     anchorProps?: TAnchorProps,
-//     open: boolean,
-// }
-
-// export interface AnchorWrapperPropsInt<TAnchorProps> extends
-//     SharedBindingPropsInt<TAnchorProps>{
-//     AnchorComponent: ComponentType<AnchorProps<TAnchorProps>>,
-//     // new () => Component<AnchorProps<TAnchorProps>>,
-//     // boundingSelectorLookup: (anchorProps: TAnchorProps) => string,
-//     // focusSelectorLookup: (anchorProps: TAnchorProps) => string,
-//     boundingTargetSelector: string,
-//     focusTargetSelector: string,
-// }
-
-function getTarget(rootElement, selector) {
+function getTarget(rootElement: HTMLElement | null, selector: string | null): HTMLElement | null {
     if (isNil(rootElement)) {
         return null;
     }
 
     return !isNil(selector)
         ? rootElement.querySelector(selector)
-        : rootElement.firstElementChild;
+        : rootElement.firstElementChild as HTMLElement;
 }
 
 
 
-export class AnchorWrapper extends Component {
-    static propTypes = {
-        boundingTargetSelector: PropTypes.any.isRequired,
-        focusTargetSelector: PropTypes.any.isRequired,
-        AnchorComponent: PropTypes.any.isRequired,
-        bindingInterface: PropTypes.shape({
-            onClick: PropTypes.func,
-            onFocus: PropTypes.func,
-            onKeyPress: PropTypes.func,
-            onKeyDown: PropTypes.func,
-            onPointerEnter: PropTypes.func,
-            onPointerLeave: PropTypes.func,
-            onPointerCancel: PropTypes.func,
-        }).isRequired,
-        anchorProps: PropTypes.object,
-        open: PropTypes.isRequired,
-    };
+export class AnchorWrapper extends Component<AnchorWrapperProps> {
+    private anchorRef: React.RefObject<HTMLDivElement>;
 
-    static defaultProps = {
-        anchorProps: null,
-    };
-
-    constructor(props) {
+    constructor(props: AnchorWrapperProps) {
         super(props);
 
         this.anchorRef = createRef();
@@ -91,7 +56,7 @@ export class AnchorWrapper extends Component {
     /**
      * @returns {null|HTMLNode}
      */
-    getBoundingElement() {
+    getBoundingElement(): HTMLElement | null {
         const { boundingTargetSelector } = this.props;
 
         return getTarget(this.anchorRef.current, boundingTargetSelector);
@@ -101,7 +66,7 @@ export class AnchorWrapper extends Component {
      * @param {null|HTMLElement} element
      * @returns {boolean}
      */
-    contains(element) {
+    contains(element: HTMLElement | null): boolean {
         const anchorElement = this.anchorRef.current;
 
         if (isNil(anchorElement)) {
@@ -114,7 +79,7 @@ export class AnchorWrapper extends Component {
     /**
      * Focus the proper element
      */
-    focus() {
+    focus(): void {
         const { focusTargetSelector } = this.props;
 
         const focusTarget = getTarget(
@@ -127,7 +92,7 @@ export class AnchorWrapper extends Component {
         }
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
             AnchorComponent,
             bindingInterface: {
@@ -162,14 +127,16 @@ export class AnchorWrapper extends Component {
     }
 }
 
-const AnchorBindingPropTypes = {
-    anchorProps: PropTypes.object,
-    bindingRef: PropTypes.string.isRequired,
-};
+export interface AnchorBindingProps {
+    anchorProps?: Record<string, unknown> | null;
+    bindingRef: React.Ref<AnchorWrapper>;
+    [key: string]: unknown;
+}
 
-const AnchorBindingDefaultProps = {
-    anchorProps: null,
-};
+interface AnchorBindingOptions {
+    focusSelector?: string | ((anchorProps?: Record<string, unknown> | null) => string | null);
+    boundingSelector?: string | ((anchorProps?: Record<string, unknown> | null) => string | null);
+}
 
 /**
  * @callback selectorCallback
@@ -184,26 +151,26 @@ const AnchorBindingDefaultProps = {
  * @param {string|selectorCallback} options.boundingSelector Selector to use to determine binding the element.
  */
 function applyAnchorBinding(
-    AnchorComponent,
-    options = {},
-) {
+    AnchorComponent: React.ElementType,
+    options: AnchorBindingOptions = {},
+): React.FC<AnchorBindingProps> {
     const {
         focusSelector,
         boundingSelector,
     } = options;
 
-    let focusSelectorLookup = focusSelector;
-    let boundingSelectorLookup = boundingSelector;
+    let focusSelectorLookup = focusSelector as (anchorProps?: Record<string, unknown> | null) => string | null;
+    let boundingSelectorLookup = boundingSelector as (anchorProps?: Record<string, unknown> | null) => string | null;
 
     if (!isFunction(focusSelector)) {
-        focusSelectorLookup = () => focusSelector;
+        focusSelectorLookup = () => focusSelector as string | null;
     }
 
     if (!isFunction(boundingSelector)) {
-        boundingSelectorLookup = () => boundingSelector;
+        boundingSelectorLookup = () => boundingSelector as string | null;
     }
 
-    const AnchorBinding = (props) => {
+    const AnchorBinding: React.FC<AnchorBindingProps> = (props) => {
         const { anchorProps, bindingRef } = props;
 
         return (
@@ -216,9 +183,6 @@ function applyAnchorBinding(
             />
         );
     };
-
-    AnchorBinding.propTypes = AnchorBindingPropTypes;
-    AnchorBinding.defaultProps = AnchorBindingDefaultProps;
 
     return AnchorBinding;
 }

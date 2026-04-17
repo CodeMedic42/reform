@@ -1,28 +1,20 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Button from '../../button/index.js';
 import applyAnchorBinding from '../anchor-binding.js';
 
-class AnchorButton extends PureComponent {
-    static propTypes = {
-        className: PropTypes.string,
-        open: PropTypes.bool.isRequired,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-    };
+interface AnchorButtonProps {
+    className?: string | null;
+    open: boolean;
+    children?: React.ReactNode;
+    [key: string]: unknown;
+}
 
-    static defaultProps = {
-        className: null,
-        children: null,
-    };
-
-    render() {
+class AnchorButton extends PureComponent<AnchorButtonProps> {
+    render(): React.ReactNode {
         const {
-            className, open, children, ...rest
+            className = null, open, children = null, ...rest
         } = this.props;
 
         return (

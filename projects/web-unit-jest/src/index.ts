@@ -1,11 +1,22 @@
+interface LibControl {
+    start: () => Promise<HarnessControl>;
+    stop: () => Promise<unknown>;
+}
+
+interface HarnessControl {
+    clearHarness: () => Promise<void>;
+}
+
+declare const global: Record<string, unknown>;
+
 const initialize = require('@reformjs/web-unit/initialize');
 
-let libControl = null;
-let harnessControl = null;
+let libControl: LibControl | null = null;
+let harnessControl: HarnessControl | null = null;
 
 beforeAll(async () => {
     libControl = await initialize();
-    harnessControl = await libControl.start();
+    harnessControl = await libControl!.start();
 });
 
 beforeEach(async () => {
@@ -13,12 +24,12 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-    await harnessControl.clearHarness();
+    await harnessControl!.clearHarness();
 });
 
 afterAll(async () => {
     harnessControl = null;
 
     // eslint-disable-next-line no-unused-vars
-    const coverage = await libControl.stop();
+    const coverage: unknown = await libControl!.stop();
 });

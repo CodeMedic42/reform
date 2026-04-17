@@ -2,7 +2,9 @@ import React from 'react';
 import { Row, Column } from '@reformjs/reactive/arrangement/layout';
 import Content from '../common/content';
 
-export default function renderForGutter(gutter) {
+type GutterValue = string | (string | null)[] | null;
+
+export default function renderForGutter(gutter: GutterValue) {
     return (
         <>
             <Row gutter={gutter}>

@@ -1,39 +1,29 @@
 import React, { PureComponent, createRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { ApplyConsumer } from './drop-down-context.js';
 import ListItemContent from './list-item-content.js';
 
+interface ListItemButtonProps {
+    id?: string | null;
+    className?: string | null;
+    children?: React.ReactNode;
+    'aria-label'?: string | null;
+    tabIndex?: string | null;
+    disabled?: boolean;
+    dropDownContext: {
+        open: boolean;
+    };
+    [key: string]: unknown;
+}
+
 /**
  * A Button component to be used inside a DropDownListItem component.
  */
-class ListItemButton extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        'aria-label': PropTypes.string,
-        tabIndex: PropTypes.string,
-        disabled: PropTypes.bool,
-        dropDownContext: PropTypes.shape({
-            open: PropTypes.bool.isRequired,
-        }).isRequired,
-    };
+class ListItemButton extends PureComponent<ListItemButtonProps> {
+    private buttonRef: React.RefObject<HTMLButtonElement>;
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-        'aria-label': null,
-        tabIndex: null,
-        disabled: false,
-    };
-
-    constructor(props) {
+    constructor(props: ListItemButtonProps) {
         super(props);
 
         this.buttonRef = createRef();
@@ -41,25 +31,25 @@ class ListItemButton extends PureComponent {
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    handleKeyDown(event) {
+    handleKeyDown(event: React.KeyboardEvent): void {
         // Treat enter key presses as clicks
         if (event.which === 13) {
-            this.handleClick(event);
+            (this as unknown as { handleClick: (event: React.KeyboardEvent) => void }).handleClick(event);
         }
     }
 
-    getRootNode() {
+    getRootNode(): HTMLButtonElement | null {
         return this.buttonRef.current;
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            'aria-label': ariaLabel,
-            tabIndex,
-            children,
-            disabled,
+            id = null,
+            className = null,
+            'aria-label': ariaLabel = null,
+            tabIndex = null,
+            children = null,
+            disabled = false,
             dropDownContext: { open },
             ...rest
         } = this.props;
@@ -78,7 +68,7 @@ class ListItemButton extends PureComponent {
                     type="button"
                     onKeyDown={this.handleKeyDown}
                     aria-label={ariaLabel}
-                    tabIndex={open ? tabIndex : -1}
+                    tabIndex={open ? (tabIndex as unknown as number) : -1}
                     disabled={disabled}
                 >
                     {ariaLabel}

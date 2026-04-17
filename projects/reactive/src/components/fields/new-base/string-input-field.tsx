@@ -2,18 +2,25 @@
 import React, { forwardRef, useCallback } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import PropTypes from '../../../common/prop-types.js';
 
-const StringInput = forwardRef((props, ref) => {
+interface StringInputProps {
+	className?: string | null;
+	onChange: (value: string | null) => void;
+	value?: string | null;
+	Component: React.ElementType;
+	[key: string]: unknown;
+}
+
+const StringInput = forwardRef<unknown, StringInputProps>((props, ref) => {
 	const {
 		onChange,
-		value,
+		value = null,
 		Component,
-		className,
+		className = null,
 		...rest
 	} = props;
 
-	const handleChange = useCallback((event) => {
+	const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		const {
 			target: { value: newValue },
 		} = event;
@@ -31,20 +38,6 @@ const StringInput = forwardRef((props, ref) => {
 		/>
 	);
 });
-
-StringInput.propTypes = {
-	className: PropTypes.string,
-	onChange: PropTypes.func.isRequired,
-	value: PropTypes.string,
-	// eslint-disable-next-line react/forbid-prop-types
-	// eslint-disable-next-line react/forbid-prop-types
-	Component: PropTypes.Component.isRequired,
-};
-
-StringInput.defaultProps = {
-	value: null,
-	className: null,
-};
 
 StringInput.displayName = 'StringInput';
 

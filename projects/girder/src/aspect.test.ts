@@ -3,13 +3,13 @@ import Aspect from './aspect.js';
 describe('Aspect', () => {
     describe('Constructor', () => {
         test('No id provided', () => {
-            const toThrow = () => new Aspect();
+            const toThrow = (): Aspect => new (Aspect as unknown as new () => Aspect)();
 
             expect(toThrow).toThrow('An Aspect must have an id.');
         });
 
         test('Id provided', () => {
-            const aspectId = 'foo';
+            const aspectId: string = 'foo';
 
             const aspect = new Aspect(aspectId);
 

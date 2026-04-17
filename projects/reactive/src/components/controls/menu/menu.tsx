@@ -3,45 +3,29 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import DropDown from '../drop-down/index.js';
 import MenuList from './menu-list.js';
-import PropTypes from '../../../common/prop-types.js';
 import Provider, { Consumer } from '../drop-down/drop-down-context.js';
 
-class Menu extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        // eslint-disable-next-line react/forbid-prop-types
-        Anchor: PropTypes.any,
-        // eslint-disable-next-line react/forbid-prop-types
-        anchorProps: PropTypes.object,
-        size: PropTypes.oneOf(['sm', 'md', 'lg']),
-        dark: PropTypes.bool,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        disabled: PropTypes.bool,
-    };
+interface MenuProps {
+    id?: string | null;
+    className?: string | null;
+    Anchor?: React.ElementType | null;
+    anchorProps?: Record<string, unknown> | null;
+    size?: 'sm' | 'md' | 'lg';
+    dark?: boolean;
+    children?: React.ReactNode;
+    disabled?: boolean;
+    [key: string]: unknown;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        Anchor: null,
-        anchorProps: null,
-        children: null,
-        size: 'md',
-        dark: false,
-        disabled: false,
-    };
-
-    render() {
+class Menu extends PureComponent<MenuProps> {
+    render(): React.ReactNode {
         const {
-            className,
-            anchorProps,
-            size,
-            dark,
-            disabled,
-            children,
+            className = null,
+            anchorProps = null,
+            size = 'md',
+            dark = false,
+            disabled = false,
+            children = null,
             ...rest
         } = this.props;
 
@@ -59,7 +43,7 @@ class Menu extends PureComponent {
                 maxDrawerWidth={320}
             >
                 <Consumer>
-                    {({ open }) => (
+                    {({ open }: { open: boolean }) => (
                         <MenuList size={size} dark={dark}>
                             <Provider value={{ dark, size, open }}>
                                 {children}
@@ -71,16 +55,5 @@ class Menu extends PureComponent {
         );
     }
 }
-
-const menuItemShape = {
-    content: PropTypes.string,
-    icon: PropTypes.icon,
-    onClick: PropTypes.func,
-    onClickMeta: PropTypes.any,
-};
-
-const menuItemsType = PropTypes.arrayOf(PropTypes.shape(menuItemShape));
-
-menuItemShape.menuItems = menuItemsType;
 
 export default Menu;

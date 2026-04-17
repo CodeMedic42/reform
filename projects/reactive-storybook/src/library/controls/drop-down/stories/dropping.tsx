@@ -4,15 +4,15 @@ import findIndex from 'lodash/findIndex';
 import clone from 'lodash/clone';
 import DropDown, { AnchorButton } from '@reformjs/reactive/controls/drop-down';
 
-function renderDropSelect(dropPositions, setDropPositions, index) {
-    const handleDropChange = (event) => {
+function renderDropSelect(dropPositions: string[], setDropPositions: React.Dispatch<React.SetStateAction<string[]>>, index: number) {
+    const handleDropChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const dropCopy = clone(dropPositions);
 
         const { value } = event.target;
 
         const oldValue = dropCopy[index];
 
-        const replaceIndex = findIndex(dropCopy, (item) => item === value);
+        const replaceIndex = findIndex(dropCopy, (item: string) => item === value);
 
         dropCopy[index] = value;
         dropCopy[replaceIndex] = oldValue;

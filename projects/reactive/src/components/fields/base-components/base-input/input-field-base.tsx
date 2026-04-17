@@ -1,9 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { isNil, toString } from 'lodash-es';
 
-const InputBase = forwardRef((props, ref) => {
+interface InputBaseProps {
+	onChange: (value: string | null) => void;
+	value?: string | null;
+	forwardedRef?: React.Ref<unknown> | null;
+	Component: React.ElementType;
+	[key: string]: unknown;
+}
+
+const InputBase = forwardRef<unknown, InputBaseProps>((props, ref) => {
 	const {
 		onChange,
 		value,
@@ -12,7 +19,7 @@ const InputBase = forwardRef((props, ref) => {
 		...rest
 	} = props;
 
-	const handleChange = useCallback((event) => {
+	const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		const {
 			target: { value: newValue },
 		} = event;
@@ -29,20 +36,6 @@ const InputBase = forwardRef((props, ref) => {
 		/>
 	);
 });
-
-InputBase.propTypes = {
-	onChange: PropTypes.func.isRequired,
-	value: PropTypes.string,
-	// eslint-disable-next-line react/forbid-prop-types
-	forwardedRef: PropTypes.object,
-	// eslint-disable-next-line react/forbid-prop-types
-	Component: PropTypes.any.isRequired,
-};
-
-InputBase.defaultProps = {
-	forwardedRef: null,
-	value: null,
-};
 
 InputBase.displayName = 'InputBase';
 

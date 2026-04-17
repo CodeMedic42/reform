@@ -3,7 +3,50 @@ import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
 import isFunction from 'lodash/isFunction';
 
-function mergeSettings(settings = {}, additionalSettings = {}) {
+export interface ServiceSettings {
+    data?: unknown;
+    queryParams?: Record<string, string>;
+    routeParams?: Record<string, string>;
+    headers?: Record<string, string>;
+    url?: string;
+    method?: string;
+    timeout?: number;
+    [key: string]: unknown;
+}
+
+export type HookFunction = (contextAccess: unknown, value: unknown, settings?: ServiceSettings) => unknown;
+
+export interface HooksConfig {
+    onBeforeRequest?: HookFunction | HookFunction[];
+    onAfterRequest?: HookFunction | HookFunction[];
+    onSuccess?: HookFunction | HookFunction[];
+    onFailure?: HookFunction | HookFunction[];
+    [key: string]: HookFunction | HookFunction[] | undefined;
+}
+
+export interface ResolvedHooks {
+    onBeforeRequest: HookFunction[];
+    onAfterRequest: HookFunction[];
+    onSuccess: HookFunction[];
+    onFailure: HookFunction[];
+    [key: string]: HookFunction[];
+}
+
+export interface RetryConfig {
+    [key: string]: unknown;
+}
+
+export interface ServiceConfig extends ServiceSettings {
+    hooks?: HooksConfig;
+    retry?: RetryConfig;
+}
+
+export interface MergedConfig extends ServiceSettings {
+    retry: RetryConfig;
+    hooks: ResolvedHooks;
+}
+
+function mergeSettings(settings: ServiceSettings = {}, additionalSettings: ServiceSettings = {}): ServiceSettings {
     const {
         data,
         queryParams = {},
@@ -20,7 +63,7 @@ function mergeSettings(settings = {}, additionalSettings = {}) {
         ...mergableAdditionalSettings
     } = additionalSettings;
 
-    const mergedSettings = {
+    const mergedSettings: ServiceSettings = {
         ...mergableSettings,
         ...mergableAdditionalSettings,
         queryParams: {
@@ -41,8 +84,8 @@ function mergeSettings(settings = {}, additionalSettings = {}) {
     return mergedSettings;
 }
 
-function mergeHooks(hooks, additionalHooks) {
-    forEach(additionalHooks, (additionalHook, hookId) => {
+function mergeHooks(hooks: ResolvedHooks, additionalHooks: HooksConfig): void {
+    forEach(additionalHooks, (additionalHook: HookFunction | HookFunction[] | undefined, hookId: string) => {
         if (isNil(additionalHook)) {
             return;
         }
@@ -55,17 +98,17 @@ function mergeHooks(hooks, additionalHooks) {
     });
 }
 
-function mergeConfigs(...configs) {
-    let settings = {};
-    let retry = {};
-    const hooks = {
+function mergeConfigs(...configs: ServiceConfig[]): MergedConfig {
+    let settings: ServiceSettings = {};
+    let retry: RetryConfig = {};
+    const hooks: ResolvedHooks = {
         onBeforeRequest: [],
         onAfterRequest: [],
         onSuccess: [],
         onFailure: [],
     };
 
-    forEach(configs, (config) => {
+    forEach(configs, (config: ServiceConfig) => {
         const {
             hooks: additionalHooks = {},
             retry: additionalRetry = {},

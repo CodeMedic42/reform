@@ -1,16 +1,19 @@
 /* eslint-disable class-methods-use-this */
 // eslint-disable-next-line react/no-deprecated
 import ReactDom, { unmountComponentAtNode } from 'react-dom';
+import type { ReactNode, ComponentType } from 'react';
 import ReactAspectBase from './react-aspect-base.js';
 
 class ReactAspect17 extends ReactAspectBase {
-    constructor(aspectId, RootComponent) {
+    mounted: boolean;
+
+    constructor(aspectId: string, RootComponent: ComponentType) {
         super(aspectId, RootComponent);
 
         this.mounted = false;
     }
 
-    mount(container, appRoot) {
+    mount(container: HTMLDivElement, appRoot: ReactNode): void {
         if (!this.mounted) {
             ReactDom.render(appRoot, container);
         }
@@ -18,7 +21,7 @@ class ReactAspect17 extends ReactAspectBase {
         this.mounted = true;
     }
 
-    unmount(container) {
+    unmount(container: HTMLDivElement): void {
         if (this.mounted) {
             unmountComponentAtNode(container);
         }

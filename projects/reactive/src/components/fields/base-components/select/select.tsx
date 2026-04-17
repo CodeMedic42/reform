@@ -7,7 +7,6 @@ import React, {
     useImperativeHandle,
     forwardRef,
 } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { isNil, get, toLower, isString, isFunction, isNumber, reduce, map, findIndex, trim, forEach } from 'lodash-es';
 import useCollectionContext from '../../../../hooks/use-collection-context/index.js';
@@ -15,12 +14,60 @@ import DropDown from '../../../controls/drop-down/index.js';
 import DropDownList from '../../../controls/drop-down/drop-down-list.jsx';
 import Spinner from '../../../display/spinner/index.js';
 import buildId from '../../../../common/build-id.js';
-import InputLabel from '../../new-base/input-field-label.jsx';
+import InputLabel from '../../new-base/input-field-label.js';
 import preventDefault from '../../../../common/prevent-default.js';
-import SelectOption from './select-option.jsx';
-import SelectText from './select-text.jsx';
+import SelectOption from './select-option.js';
+import SelectText from './select-text.js';
 
-function getId(option, optionValuePath) {
+interface InputMessagesData {
+    general?: string[];
+    success?: string[];
+    failure?: string[];
+}
+
+interface SelectProps {
+    className?: string | null;
+    label?: string | null;
+    'aria-label'?: string | null;
+    messages?: InputMessagesData | null;
+    failure?: boolean;
+    hidden?: boolean;
+    title?: string | null;
+    disabled?: boolean;
+    dockRight?: boolean;
+    minDrawerWidth?: number | 'anchor';
+    placeholder?: string | null;
+    Anchor: React.ElementType;
+    enableMultiSelect?: boolean;
+    anchorProps?: Record<string, unknown>;
+    onFocus?: (() => void) | null;
+    onBlur?: (() => void) | null;
+    id?: string | null;
+    'aria-labelledby'?: string | null;
+    'aria-describedby'?: string | null;
+    size?: string;
+    enableFiltering?: boolean | 'internal' | 'external';
+    value?: string | number | Array<string | number> | null;
+    onSelect?: ((value: unknown) => void) | null;
+    enableCustomValues?: boolean | 'sensitive' | 'insensitive';
+    selectedLabelPath?: string | ((value: unknown) => string) | null;
+    options?: unknown[] | null;
+    onFilter?: ((value: string) => void) | null;
+    minFilterChar?: number;
+    onOpen?: (() => void) | null;
+    onClose?: (() => void) | null;
+    noOptionsMessage?: string;
+    optionSeparator?: boolean;
+    emptyFilterMessage?: string;
+    enableSorting?: boolean;
+    excludeValues?: unknown;
+    optionValuePath?: string | ((option: unknown) => string | number) | null;
+    optionLabelPath?: string | ((option: unknown) => string | number) | null;
+    isFiltering?: boolean;
+    isFilteringMessage?: string;
+}
+
+function getId(option: unknown, optionValuePath: string | ((option: unknown) => string | number) | null | undefined): string | number | null {
     if (isNil(option)) {
         return null;
     }
@@ -44,7 +91,7 @@ function getId(option, optionValuePath) {
 
         key = get(option, optionValuePath);
     } else {
-        key = optionValuePath(option);
+        key = (optionValuePath as (option: unknown) => string | number)(option);
     }
 
     if (isString(key) || isNumber(key)) {
@@ -54,8 +101,8 @@ function getId(option, optionValuePath) {
     throw new Error('Value must be a string or number');
 }
 
-function getOptionText(option, optionLabelPath) {
-    let text = option;
+function getOptionText(option: unknown, optionLabelPath: string | ((option: unknown) => string | number) | null | undefined): string | number {
+    let text: unknown = option;
 
     if (!isString(option) && !isNumber(option)) {
         if (isNil(optionLabelPath)) {
@@ -77,14 +124,14 @@ function getOptionText(option, optionLabelPath) {
         text = optionLabelPath(option);
     }
 
-    if ((isString(text) && text.length > 0) || isNumber(text)) {
-        return text;
+    if ((isString(text) && (text as string).length > 0) || isNumber(text)) {
+        return text as string | number;
     }
 
     throw new Error('Option label must be an non empty string or number');
 }
 
-function beforeInsertOption(option, optionLabelPath) {
+function beforeInsertOption(option: unknown, optionLabelPath: string | ((option: unknown) => string | number) | null | undefined) {
     return {
         value: option,
         label: getOptionText(option, optionLabelPath),
@@ -92,26 +139,26 @@ function beforeInsertOption(option, optionLabelPath) {
 }
 
 function buildFinalOptions(
-    items,
-    filterValue,
-    customValueSetting,
-    filterMatchesValue,
+    items: any[],
+    filterValue: string,
+    customValueSetting: string | null,
+    filterMatchesValue: boolean,
 ) {
     let filterMatched = false;
 
-    let checkValue = filterValue;
+    let checkValue: string = filterValue;
     // TODO: This could be resolved with the same one with buildValueMeta
-    let filterCheck = () => false;
+    let filterCheck = (_item: any) => false;
 
     if (customValueSetting === 'sensitive') {
-        filterCheck = (item) => item.getValue('label') === checkValue;
+        filterCheck = (item: any) => item.getValue('label') === checkValue;
     } else if (customValueSetting === 'insensitive') {
         checkValue = toLower(filterValue);
 
-        filterCheck = (item) => toLower(item.getValue('label')) === checkValue;
+        filterCheck = (item: any) => toLower(item.getValue('label')) === checkValue;
     }
 
-    const filteredOptions = reduce(items, (acc, item) => {
+    const filteredOptions = reduce(items, (acc: any[], item: any) => {
         const priority = item.getFilterPriority();
 
         filterMatched = filterMatched || filterCheck(item);
@@ -124,7 +171,7 @@ function buildFinalOptions(
         return acc;
     }, []);
 
-    let customOption = null;
+    let customOption: string | null = null;
 
     if (
         !isNil(customValueSetting)
@@ -142,8 +189,8 @@ function buildFinalOptions(
     };
 }
 
-function buildMultiValueByKey(existingValue, selectedId) {
-    let newValue = [];
+function buildMultiValueByKey(existingValue: Array<string | number> | null, selectedId: string | number) {
+    let newValue: Array<string | number> = [];
     let didRemove = false;
 
     forEach(existingValue, (item) => {
@@ -159,7 +206,7 @@ function buildMultiValueByKey(existingValue, selectedId) {
     }
 
     if (newValue.length <= 0) {
-        newValue = null;
+        return null;
     }
 
     return newValue;
@@ -178,9 +225,9 @@ function buildAnchorProps({
     placeholder,
     ariaLabel,
     listBoxId,
-}) {
-    const props = {
-        ...anchorProps,
+}: Record<string, unknown>) {
+    const props: Record<string, unknown> = {
+        ...anchorProps as Record<string, unknown>,
         id,
         value,
         title,
@@ -205,7 +252,7 @@ function buildAnchorProps({
  * NOTE: This function has a side effect of adding a 'selected' tag to the
  * selected option.
  */
-function getSelectedText(nextValue, selectedLabelPath, getOptionById) {
+function getSelectedText(nextValue: string | number, selectedLabelPath: string | ((value: unknown) => string) | null | undefined, getOptionById: (id: string | number) => any) {
     let selectedText = '';
 
     // Get the option for this item
@@ -221,7 +268,7 @@ function getSelectedText(nextValue, selectedLabelPath, getOptionById) {
 
     if (selectedText.length <= 0) {
         if (isFunction(selectedLabelPath)) {
-            selectedText = selectedLabelPath(nextValue);
+            selectedText = (selectedLabelPath as (value: unknown) => string)(nextValue);
 
             if (!isString(selectedText) || selectedText.length <= 0) {
                 throw new Error('selectedText must return a string.');
@@ -239,7 +286,7 @@ function getSelectedText(nextValue, selectedLabelPath, getOptionById) {
     };
 }
 
-function getCustomValueSetting(enableCustomValues) {
+function getCustomValueSetting(enableCustomValues: boolean | 'sensitive' | 'insensitive' | undefined): string | null {
     if (!isNil(enableCustomValues)) {
         if (enableCustomValues === true) {
             return 'sensitive';
@@ -256,32 +303,39 @@ function getCustomValueSetting(enableCustomValues) {
 /*
 * Returns a function which will compare the selected value to the filter.
 */
-function getValueFilterCheck(customValueSetting, filterTarget) {
+function getValueFilterCheck(customValueSetting: string | null, filterTarget: string) {
     if (customValueSetting === 'sensitive') {
-        return (value) => value === filterTarget;
+        return (value: unknown) => value === filterTarget;
     }
 
     if (customValueSetting === 'insensitive') {
         const lowerFilter = toLower(filterTarget);
 
-        return (value) => toLower(value) === lowerFilter;
+        return (value: unknown) => toLower(value as string) === lowerFilter;
     }
 
     return () => false;
 }
 
-function buildValueMeta(value, filterTarget, selectedLabelPath, getOptionById, enableMultiSelect, customValueSetting) {
+function buildValueMeta(
+    value: string | number | Array<string | number> | null,
+    filterTarget: string,
+    selectedLabelPath: string | ((value: unknown) => string) | null | undefined,
+    getOptionById: (id: string | number) => any,
+    enableMultiSelect: boolean | undefined,
+    customValueSetting: string | null,
+) {
     const filterCheck = getValueFilterCheck(customValueSetting, filterTarget);
 
     let filterMatchesValue = false;
-    let selectedText = null;
-    let selectedColor = null;
-    const selectedLookup = {};
+    let selectedText: string | string[] | null = null;
+    let selectedColor: string | null = null;
+    const selectedLookup: Record<string | number, boolean> = {};
 
     if (!isNil(value)) {
         if (enableMultiSelect) {
             // If multiselect loop over values
-            selectedText = map(value, (selectedValue) => {
+            selectedText = map(value as Array<string | number>, (selectedValue) => {
                 // Check to see if the typed filter value matches the value. If it does then
                 // The filter value will not be allowed to be a custom value if that is enabled.
                 filterMatchesValue = filterMatchesValue || filterCheck(selectedValue);
@@ -302,12 +356,12 @@ function buildValueMeta(value, filterTarget, selectedLabelPath, getOptionById, e
             filterMatchesValue = filterCheck(value);
 
             ({ selectedText, selectedColor } = getSelectedText(
-                value,
+                value as string | number,
                 selectedLabelPath,
                 getOptionById,
             ));
 
-            selectedLookup[value] = true;
+            selectedLookup[value as string | number] = true;
         }
     }
 
@@ -319,7 +373,7 @@ function buildValueMeta(value, filterTarget, selectedLabelPath, getOptionById, e
     };
 }
 
-function determineProperTargetIndex(currentTargetIndex, filteredOptions, customOption) {
+function determineProperTargetIndex(currentTargetIndex: number | null, filteredOptions: any[], customOption: string | null) {
     if (filteredOptions.length <= 0) {
         if (!isNil(customOption)) {
             return 0;
@@ -345,15 +399,15 @@ function determineProperTargetIndex(currentTargetIndex, filteredOptions, customO
 }
 
 function navHandler(
-    event,
-    dropDownRef,
-    targetIndex,
-    customOption,
-    selectValue,
-    items,
-    enableMultiSelect,
-    dropDownListRef,
-    setTargetIndex,
+    event: React.KeyboardEvent,
+    dropDownRef: React.RefObject<any>,
+    targetIndex: number | null,
+    customOption: string | null,
+    selectValue: (id: string | number | null) => void,
+    items: any[],
+    enableMultiSelect: boolean | undefined,
+    dropDownListRef: React.RefObject<any>,
+    setTargetIndex: (index: number | null) => void,
 ) {
     if (event.which === 27) {
         // Escape
@@ -437,7 +491,7 @@ function navHandler(
     return false;
 }
 
-function renderFiltering(isFilteringMessage) {
+function renderFiltering(isFilteringMessage: string): React.ReactElement {
     return (
         <SelectText>
             <Spinner size="xs" />
@@ -447,27 +501,27 @@ function renderFiltering(isFilteringMessage) {
 }
 
 function renderOptions(
-    finalId,
-    listBoxId,
-    labelledBy,
-    customOption,
-    items,
-    filterTarget,
-    noOptionsMessage,
-    emptyFilterMessage,
-    targetIndex,
-    optionSeparator,
-    size,
-    enableMultiSelect,
-    handleSelect,
-    dropDownListRef,
-    selectedLookup,
-    isFiltering,
-    isFilteringMessage,
+    finalId: string,
+    listBoxId: string,
+    labelledBy: string,
+    customOption: string | null,
+    items: any[],
+    filterTarget: string,
+    noOptionsMessage: string,
+    emptyFilterMessage: string,
+    targetIndex: number | null,
+    optionSeparator: boolean | undefined,
+    size: string | undefined,
+    enableMultiSelect: boolean | undefined,
+    handleSelect: (id: string | number | null) => void,
+    dropDownListRef: React.RefObject<any>,
+    selectedLookup: Record<string | number, boolean>,
+    isFiltering: boolean | undefined,
+    isFilteringMessage: string,
 ) {
-    let listItems = null;
+    let listItems: React.ReactNode = null;
 
-    let targetedElementId = null;
+    let targetedElementId: string | null = null;
 
     if (isFiltering) {
         listItems = renderFiltering(isFilteringMessage);
@@ -478,7 +532,7 @@ function renderOptions(
 
         listItems = <SelectText>{message}</SelectText>;
     } else {
-        let customValueElement = null;
+        let customValueElement: React.ReactNode = null;
 
         if (!isNil(customOption)) {
             const customId = buildId(finalId, '$__custom__$');
@@ -494,7 +548,7 @@ function renderOptions(
                     targeted={customIsTarget}
                     borderBottom={optionSeparator && items.length > 0}
                     onClick={handleSelect}
-                    optionValue={null}
+                    optionValue={null as any}
                 >
                     {customOption}
                 </SelectOption>
@@ -561,11 +615,18 @@ function renderOptions(
     };
 }
 
-function buildContextOptions(enableFiltering, enableSorting, excludeValues, filterTarget, optionValuePath, optionLabelPath) {
-    const sortSettings = {
+function buildContextOptions(
+    enableFiltering: boolean | 'internal' | 'external' | undefined,
+    enableSorting: boolean | undefined,
+    excludeValues: unknown,
+    filterTarget: string,
+    optionValuePath: string | ((option: unknown) => string | number) | null | undefined,
+    optionLabelPath: string | ((option: unknown) => string | number) | null | undefined,
+) {
+    const sortSettings: { rules: unknown[] } = {
         rules: [],
     };
-    const filterSettings = {
+    const filterSettings: { rules: Record<string, string>; values: Record<string, unknown> } = {
         rules: {},
         values: {},
     };
@@ -591,16 +652,16 @@ function buildContextOptions(enableFiltering, enableSorting, excludeValues, filt
     return {
         sortSettings,
         filterSettings,
-        getId: (item) => getId(item, optionValuePath),
-        beforeInsert: (option) => beforeInsertOption(option, optionLabelPath),
+        getId: (item: unknown) => getId(item, optionValuePath),
+        beforeInsert: (option: unknown) => beforeInsertOption(option, optionLabelPath),
     };
 }
 
-function useMemoDeps(cb, deps) {
+function useMemoDeps<T>(cb: (...args: any[]) => T, deps: unknown[]): T {
     return useMemo(() => cb(...deps), deps);
 }
 
-const Select = forwardRef((props, ref) => {
+const Select = forwardRef<unknown, SelectProps>((props, ref) => {
     const {
         className,
         label,
@@ -610,46 +671,46 @@ const Select = forwardRef((props, ref) => {
         hidden,
         title,
         disabled,
-        dockRight,
-        minDrawerWidth,
-        placeholder,
+        dockRight = false,
+        minDrawerWidth = 'anchor',
+        placeholder = null,
         Anchor,
-        enableMultiSelect,
-        anchorProps,
-        onFocus,
-        onBlur,
+        enableMultiSelect = false,
+        anchorProps = {},
+        onFocus = null,
+        onBlur = null,
         id,
         'aria-labelledby': ariaLabelledby,
         'aria-describedby': ariaDescribedby,
         size,
-        enableFiltering,
-        value,
-        onSelect,
-        enableCustomValues,
-        selectedLabelPath,
-        options,
-        onFilter,
-        minFilterChar,
-        onOpen,
-        onClose,
-        noOptionsMessage,
-        optionSeparator,
-        emptyFilterMessage,
-        enableSorting,
+        enableFiltering = false,
+        value = null,
+        onSelect = null,
+        enableCustomValues = false,
+        selectedLabelPath = null,
+        options = null,
+        onFilter = null,
+        minFilterChar = 1,
+        onOpen = null,
+        onClose = null,
+        noOptionsMessage = 'No results found',
+        optionSeparator = false,
+        emptyFilterMessage = 'Type a value',
+        enableSorting = false,
         excludeValues,
-        optionValuePath,
-        optionLabelPath,
-        isFiltering,
-        isFilteringMessage,
+        optionValuePath = 'value',
+        optionLabelPath = 'label',
+        isFiltering = false,
+        isFilteringMessage = 'Filtering...',
     } = props;
 
-    const dropDownRef = useRef();
-    const dropDownListRef = useRef();
-    const filterInputRef = useRef();
+    const dropDownRef = useRef<any>();
+    const dropDownListRef = useRef<any>();
+    const filterInputRef = useRef<HTMLInputElement>();
 
     const [filterValue, setFilterValue] = useState('');
     const [filterTarget, setFilterTarget] = useState('');
-    const [targetIndexState, setTargetIndex] = useState(null);
+    const [targetIndexState, setTargetIndex] = useState<number | null>(null);
 
     const contextOptions = useMemoDeps(
         buildContextOptions,
@@ -678,7 +739,7 @@ const Select = forwardRef((props, ref) => {
 
     const targetIndex = useMemoDeps(determineProperTargetIndex, [targetIndexState, filteredOptions, customOption]);
 
-    const selectValue = useCallback((idToSelect) => {
+    const selectValue = useCallback((idToSelect: string | number | null) => {
         if (isNil(onSelect)) {
             return;
         }
@@ -695,7 +756,7 @@ const Select = forwardRef((props, ref) => {
         }
 
         const newValue = enableMultiSelect
-            ? buildMultiValueByKey(value, selectedId)
+            ? buildMultiValueByKey(value as Array<string | number> | null, selectedId!)
             : selectedId;
 
         if (
@@ -715,7 +776,7 @@ const Select = forwardRef((props, ref) => {
     // Handle keyboard navigation and selection inside a dropdown list.
     // Return true if the keyboard event was handled.
     const dropdownNavHandler = useCallback(
-        (event) => navHandler(
+        (event: React.KeyboardEvent) => navHandler(
             event,
             dropDownRef,
             targetIndex,
@@ -729,7 +790,7 @@ const Select = forwardRef((props, ref) => {
         [targetIndex, customOption, selectValue, filteredOptions, enableMultiSelect],
     );
 
-    const handleDropDownKeyDown = useCallback((event) => {
+    const handleDropDownKeyDown = useCallback((event: React.KeyboardEvent) => {
         const isOpen = dropDownRef.current.isOpen();
 
         // If not using the filter handle item selection and up/down
@@ -794,7 +855,7 @@ const Select = forwardRef((props, ref) => {
         dropdownNavHandler
     ]);
 
-    const changeFilter = useCallback((newFilterValue) => {
+    const changeFilter = useCallback((newFilterValue: string | null) => {
         const nextFilterValue = !isNil(newFilterValue) ? trim(newFilterValue) : '';
 
         setFilterValue(nextFilterValue);
@@ -813,7 +874,7 @@ const Select = forwardRef((props, ref) => {
         }
     }, [minFilterChar, onFilter, filterTarget]);
 
-    const handleFilterChange = useCallback((event) => {
+    const handleFilterChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         changeFilter(event.target.value);
     }, [changeFilter]);
 
@@ -824,7 +885,7 @@ const Select = forwardRef((props, ref) => {
 
         const newTargetIndex = findIndex(
             filteredOptions,
-            (item) => selectedLookup[item.getId()],
+            (item: any) => selectedLookup[item.getId()],
         );
 
         setTargetIndex(newTargetIndex >= 0 ? newTargetIndex : 0);
@@ -875,7 +936,7 @@ const Select = forwardRef((props, ref) => {
         >
             {({
                 describedBy, labelledBy, inputId, finalId,
-            }) => {
+            }: { describedBy: string | null; labelledBy: string; inputId: string; finalId: string }) => {
                 const listBoxId = buildId(finalId, 'options-list');
 
                 const { options: renderedOptions, targetedElementId } = renderOptions(
@@ -935,16 +996,16 @@ const Select = forwardRef((props, ref) => {
                     >
                         {enableFiltering ? (
                             <input
-                                ref={filterInputRef}
-                                tabIndex="-1"
+                                ref={filterInputRef as React.RefObject<HTMLInputElement>}
+                                tabIndex={-1}
                                 className="ra-dd-list-filter"
                                 value={filterValue}
                                 onChange={handleFilterChange}
                                 onKeyDown={dropdownNavHandler}
                                 onClick={preventDefault}
-                                size="1"
+                                size={1}
                                 aria-label="List Filter"
-                                aria-activedescendant={targetedElementId}
+                                aria-activedescendant={targetedElementId ?? undefined}
                             />
                         ) : null}
                         {renderedOptions}
@@ -955,96 +1016,4 @@ const Select = forwardRef((props, ref) => {
     );
 });
 
-const valueType = PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.arrayOf(
-        PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    ),
-]);
-
-Select.propTypes = {
-    value: valueType,
-    Anchor: PropTypes.elementType.isRequired,
-    enableFiltering: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(['internal', 'external'])]),
-    enableMultiSelect: PropTypes.bool,
-    // eslint-disable-next-line react/forbid-prop-types
-    anchorProps: PropTypes.objectOf(PropTypes.any),
-    onOpen: PropTypes.func,
-    onClose: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    options: PropTypes.arrayOf(PropTypes.any),
-    placeholder: PropTypes.string,
-    title: PropTypes.string,
-    'aria-label': PropTypes.string,
-    minFilterChar: PropTypes.number,
-    disabled: PropTypes.bool,
-    optionSeparator: PropTypes.bool,
-    dockRight: PropTypes.bool,
-    minDrawerWidth: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.oneOf(['anchor']),
-    ]),
-    enableCustomValues: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.oneOf(['sensitive', 'insensitive']),
-    ]),
-    noOptionsMessage: PropTypes.string,
-    emptyFilterMessage: PropTypes.string,
-    enableSorting: PropTypes.bool,
-    selectedLabelPath: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    // eslint-disable-next-line react/no-unused-prop-types
-    optionValuePath: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    // eslint-disable-next-line react/no-unused-prop-types
-    optionLabelPath: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    onSelect: PropTypes.func,
-    onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
-    onFilter: PropTypes.func,
-    isFiltering: PropTypes.bool,
-    isFilteringMessage: PropTypes.string,
-};
-
-Select.defaultProps = {
-    value: null, //
-    enableFiltering: false, //
-    enableMultiSelect: false, //
-    anchorProps: {},
-    onOpen: null, //
-    onClose: null, //
-    placeholder: null, //
-    title: null,
-    'aria-label': null,
-    minFilterChar: 1, //
-    disabled: false, //
-    optionSeparator: false, //
-    dockRight: false,
-    minDrawerWidth: 'anchor',
-    enableCustomValues: false, //
-    options: null, //
-    noOptionsMessage: 'No results found', //
-    emptyFilterMessage: 'Type a value', //
-    enableSorting: false, //
-    selectedLabelPath: null, //
-    optionLabelPath: 'label', //
-    optionValuePath: 'value', //
-    onSelect: null, //
-    onFocus: null, //
-    onBlur: null, //
-    onFilter: null, //
-    isFiltering: false,
-    isFilteringMessage: 'Filtering...',
-};
-
 export default Select;
-
-const {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    Anchor,
-    ...exportPropTypes
-    // eslint-disable-next-line react/forbid-foreign-prop-types
-} = Select.propTypes;
-
-const exportDefaultProps = Select.defaultProps;
-
-export { exportPropTypes as propTypes, exportDefaultProps as defaultProps };

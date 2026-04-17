@@ -1,65 +1,52 @@
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import PropTypes from '../../../common/prop-types.js';
 import CheckInput from '../../fields/check-input-field/index.js';
 import MenuItem from './menu-item.js';
 import buildId from '../../../common/build-id.js';
 import ListItemContent from '../drop-down/list-item-content.js';
 import Icon from '../../display/icon/index.js';
 
-class MenuCheck extends PureComponent {
-    static propTypes = {
-        id: PropTypes.string,
-        className: PropTypes.string,
-        children: PropTypes.string,
-        borderBottom: PropTypes.bool,
-        borderTop: PropTypes.bool,
-        value: PropTypes.bool,
-        onChange: PropTypes.func,
-        disabled: PropTypes.bool,
-        variant: PropTypes.oneOf(['check', 'indeterminate']),
-        icon: PropTypes.icon,
-        'aria-label': PropTypes.string,
-    };
+interface MenuCheckProps {
+    id?: string | null;
+    className?: string | null;
+    children?: string | null;
+    borderBottom?: boolean;
+    borderTop?: boolean;
+    value?: boolean;
+    onChange?: ((value: boolean) => void) | null;
+    disabled?: boolean;
+    variant?: 'check' | 'indeterminate' | null;
+    icon?: unknown | null;
+    'aria-label'?: string | null;
+}
 
-    static defaultProps = {
-        id: null,
-        className: null,
-        children: null,
-        borderBottom: false,
-        borderTop: false,
-        value: false,
-        onChange: null,
-        disabled: false,
-        variant: null,
-        icon: null,
-        'aria-label': null,
-    };
+class MenuCheck extends PureComponent<MenuCheckProps> {
+    private itemRef: React.RefObject<unknown>;
 
-    constructor(props) {
+    constructor(props: MenuCheckProps) {
         super(props);
 
         this.itemRef = createRef();
     }
 
-    getRootNode() {
-        return this.itemRef.current.getRootNode();
+    getRootNode(): HTMLElement | null {
+        return (this.itemRef.current as { getRootNode: () => HTMLElement } | null)?.getRootNode() ?? null;
     }
 
-    render() {
+    render(): React.ReactNode {
         const {
-            id,
-            className,
-            children,
-            borderBottom,
-            borderTop,
-            value,
-            onChange,
-            disabled,
-            variant,
-            icon,
-            'aria-label': ariaLabel,
+            id = null,
+            className = null,
+            children = null,
+            borderBottom = false,
+            borderTop = false,
+            value = false,
+            onChange = null,
+            disabled = false,
+            variant = null,
+            icon = null,
+            'aria-label': ariaLabel = null,
         } = this.props;
 
         return (

@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import format from 'date-fns/format';
 import { isNil } from 'lodash-es';
 // import applyAnchorBinding from '../../controls/drop-down/anchor-binding';
-import BaseMaskInput from '../base-input/base-mask-input-field.jsx';
-import PropTypes from '../../../../common/prop-types.js';
+import BaseMaskInput from '../base-input/base-mask-input-field.js';
 
 const DATE_MASK = [
 	/\d/,
@@ -22,9 +21,14 @@ const DATE_MASK = [
 	/\d/,
 ];
 
-function DateInputBase(props) {
+interface DateInputBaseProps {
+	value?: Date | null;
+	[key: string]: unknown;
+}
+
+function DateInputBase(props: DateInputBaseProps): React.ReactElement {
 	const {
-		value,
+		value = null,
 		...rest
 	} = props;
 
@@ -48,13 +52,5 @@ function DateInputBase(props) {
 		/>
 	);
 }
-
-DateInputBase.propTypes = {
-	value: PropTypes.instanceOf(Date),
-};
-
-DateInputBase.defaultProps = {
-	value: null,
-};
 
 export default DateInputBase;

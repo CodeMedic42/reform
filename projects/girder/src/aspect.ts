@@ -1,8 +1,25 @@
 import isString from 'lodash/isString';
 
+export interface AspectSettings {
+    [settingId: string]: unknown;
+}
+
+export interface AspectInitContext {
+    getAspect: (aspectId: string) => unknown;
+    getSettings: (settingId: string) => unknown[];
+    stopClient: () => Promise<void>;
+}
+
+export interface AspectStartContext {
+    getAspect: (aspectId: string) => unknown;
+    [aspectId: string]: unknown;
+}
+
 /* eslint-disable class-methods-use-this */
 class Aspect {
-    constructor(aspectId) {
+    private aspectId: string;
+
+    constructor(aspectId: string) {
         if (!isString(aspectId)) {
             throw new Error('An Aspect must have an id.');
         }
@@ -10,21 +27,21 @@ class Aspect {
         this.aspectId = aspectId;
     }
 
-    get id() {
+    get id(): string {
         return this.aspectId;
     }
 
-    settings() {
+    settings(): AspectSettings | null {
         return null;
     }
 
-    onInitialize() {}
+    onInitialize(_context?: AspectInitContext): unknown | void {}
 
-    onStart() {}
+    onStart(_context?: AspectStartContext): void {}
 
-    onStop() {}
+    onStop(): void | Promise<void> {}
 
-    getControls() {
+    getControls(): unknown | null {
         return null;
     }
 }

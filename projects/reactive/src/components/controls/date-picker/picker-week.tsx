@@ -1,13 +1,17 @@
 import React from 'react';
 import classnames from 'classnames';
-import PropTypes from '../../../common/prop-types.js';
 
-function PickerWeek(props) {
+interface PickerWeekProps {
+    children?: React.ReactNode;
+    passive?: boolean;
+}
+
+function PickerWeek(props: PickerWeekProps): React.ReactNode {
     const {
         // beforeCount,
         // afterCount,
-        children,
-        passive,
+        children = null,
+        passive = false,
     } = props;
 
     // const classNames = ['ra-picker-week'];
@@ -31,15 +35,5 @@ function PickerWeek(props) {
         </div>
     );
 }
-
-PickerWeek.propTypes = {
-    children: PropTypes.children,
-    passive: PropTypes.bool,
-};
-
-PickerWeek.defaultProps = {
-    passive: false,
-    children: null,
-};
 
 export default PickerWeek;

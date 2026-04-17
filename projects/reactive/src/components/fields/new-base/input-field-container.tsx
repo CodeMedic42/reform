@@ -1,15 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import classnames from 'classnames';
-import InputAnnotation from './input-field-annotation.jsx';
-import PropTypes from '../../../common/prop-types.js';
+import InputAnnotation from './input-field-annotation.js';
 
-function InputContainer(props) {
+interface InputContainerProps {
+    className?: string | null;
+    leftAnnotation?: React.ReactNode;
+    rightAnnotation?: React.ReactNode;
+    children?: React.ReactNode;
+}
+
+function InputContainer(props: InputContainerProps): React.ReactElement {
     const {
-        className,
-        children,
-        leftAnnotation,
-        rightAnnotation,
+        className = null,
+        children = null,
+        leftAnnotation = null,
+        rightAnnotation = null,
     } = props;
 
     return (
@@ -24,19 +30,5 @@ function InputContainer(props) {
         </div>
     );
 }
-
-InputContainer.propTypes = {
-    className: PropTypes.string,
-    leftAnnotation: PropTypes.children,
-    rightAnnotation: PropTypes.children,
-    children: PropTypes.children,
-};
-
-InputContainer.defaultProps = {
-    className: null,
-    leftAnnotation: null,
-    rightAnnotation: null,
-    children: null,
-};
 
 export default InputContainer;

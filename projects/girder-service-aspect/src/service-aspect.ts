@@ -3,11 +3,30 @@ import isNil from 'lodash/isNil';
 import forEach from 'lodash/forEach';
 import { Aspect } from '@reformjs/girder';
 import mergeConfigs from './merge-configs.js';
+import type { ServiceConfig } from './merge-configs.js';
 
-const DEFAULT_CONFIG = {
+interface Buildable {
+    build: (configuration: ServiceConfig, context: GirderContextAccess) => unknown;
+}
+
+interface ServiceSetting {
+    configuration?: ServiceConfig;
+    definitions?: Record<string, Buildable>;
+}
+
+interface GirderContextAccess {
+    getAspect: (aspectId: string) => unknown;
+}
+
+interface InitConfig {
+    getAspect: (aspectId: string) => unknown;
+    getSettings: (key: string) => ServiceSetting[];
+}
+
+const DEFAULT_CONFIG: ServiceConfig = {
     method: 'get',
-    query: {},
-    params: {},
+    queryParams: {},
+    routeParams: {},
     headers: {},
     data: null,
     timeout: 1000,
@@ -19,15 +38,15 @@ class ServiceAspect extends Aspect {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    onInitialize(config) {
+    onInitialize(config: InitConfig): Record<string, unknown> {
         const{ getAspect, getSettings } = config;
 
-        const configurations = [DEFAULT_CONFIG];
-        const finalDefinitions = {};
+        const configurations: ServiceConfig[] = [DEFAULT_CONFIG];
+        const finalDefinitions: Record<string, Buildable> = {};
 
         const settings = getSettings('service');
 
-        forEach(settings, (setting) => {
+        forEach(settings, (setting: ServiceSetting) => {
             const {
                 configuration,
                 definitions,
@@ -38,8 +57,8 @@ class ServiceAspect extends Aspect {
             }
 
             forEach(definitions, (
-                definition,
-                definitionId,
+                definition: Buildable,
+                definitionId: string,
             ) => {
                 if (!isNil(finalDefinitions[definitionId])) {
                     throw new Error(`A service definition already exists with id "${definitionId}"`);
@@ -53,7 +72,7 @@ class ServiceAspect extends Aspect {
 
         const controls = mapValues(
             finalDefinitions,
-            (definition) => definition.build(finalConfiguration, {
+            (definition: Buildable) => definition.build(finalConfiguration, {
                 getAspect
             }),
         );

@@ -1,10 +1,9 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { Row, Column } from '@reformjs/reactive/arrangement/layout';
 // import Scope from '../../../components/scope/index';
 import './layout-stories.styles.scss';
 
-function renderColumn(key) {
+function renderColumn(key: number) {
     return <Column key={key} width="1" className="background-column" />;
 }
 
@@ -28,9 +27,13 @@ function ColumnBackground() {
     );
 }
 
-function LayoutScope(props) {
-    const { children, disableBackground } = props;
+interface LayoutScopeProps {
+    children?: React.ReactNode;
+    title?: string;
+    disableBackground?: boolean;
+}
 
+function LayoutScope({ children, disableBackground }: LayoutScopeProps) {
     return (
         <div className="layout-story">
             {!disableBackground ? <ColumnBackground /> : null}

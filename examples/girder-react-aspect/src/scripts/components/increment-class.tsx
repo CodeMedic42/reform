@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import { girderReactContext } from '@reformjs/girder-react-aspect';
+import { girderReactContext, GirderReactContextValue } from '@reformjs/girder-react-aspect';
 import consoleGreet from '../actions/console-greet';
 
-class IncrementClass extends Component {
-    constructor(props) {
+interface HelloAspect {
+    greet: (name: string) => string;
+}
+
+interface IncrementClassState {
+    count: number;
+}
+
+class IncrementClass extends Component<Record<string, never>, IncrementClassState> {
+    declare context: GirderReactContextValue;
+
+    constructor(props: Record<string, never>) {
         super(props);
 
         this.state = {
@@ -13,7 +23,7 @@ class IncrementClass extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick() {
+    handleClick(): void {
         const { count } = this.state;
 
         const { useAction } = this.context;
@@ -25,12 +35,12 @@ class IncrementClass extends Component {
         });
     }
 
-    render() {
+    render(): React.ReactNode {
         const { count } = this.state;
 
         const { useAspect } = this.context;
 
-        const aspect = useAspect('hello');
+        const aspect = useAspect('hello') as HelloAspect;
 
         return (
             <div>

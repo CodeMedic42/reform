@@ -1,10 +1,13 @@
 import React from 'react';
 import { isNil } from 'lodash-es';
-import PropTypes from '../../../common/prop-types.js';
 
-function InputAnnotation(props) {
+interface InputAnnotationProps {
+    annotation?: React.ReactNode;
+}
+
+function InputAnnotation(props: InputAnnotationProps): React.ReactElement | null {
     const {
-        annotation,
+        annotation = null,
     } = props;
 
     if (isNil(annotation)) {
@@ -13,13 +16,5 @@ function InputAnnotation(props) {
 
     return <div className="ra-input-annotation">{annotation}</div>;
 }
-
-InputAnnotation.propTypes = {
-    annotation: PropTypes.children,
-};
-
-InputAnnotation.defaultProps = {
-    annotation: null,
-};
 
 export default InputAnnotation;

@@ -1,35 +1,33 @@
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 import type { StorybookConfig } from '@storybook/react-webpack5';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.js*', '../src/**/*.stories.ts*'],
+
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
-    '@storybook/preset-scss',
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-docs"),
+    getAbsolutePath("@storybook/addon-webpack5-compiler-babel"),
   ],
+
   framework: {
-    name: "@storybook/react-webpack5",
+    name: getAbsolutePath("@storybook/react-webpack5"),
     options: {},
   },
-  docs: {
-    autodocs: "tag",
+
+  webpackFinal: async (config) => {
+    config.module?.rules?.push({
+      test: /\.scss$/,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+    });
+
+    return config;
   },
-  // webpackFinal: async (finalConfig, { configType }) => {
-  //   // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
-  //   // You can change the configuration based on that.
-  //   // 'PRODUCTION' is used when building the static version of storybook.
-
-  //   // Make whatever fine-grained changes you need
-  //   finalConfig.module.rules.push({
-  //     test: /\.scss$/,
-  //     use: ['style-loader', 'css-loader', 'sass-loader'],
-  //     include: path.resolve(__dirname, '../'),
-  //   });
-
-  //   // Return the altered config
-  //   return finalConfig;
-  // },
 };
 
 export default config;
+
+function getAbsolutePath(value: string): any {
+  return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+}

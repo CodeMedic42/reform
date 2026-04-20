@@ -5,20 +5,21 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import ListItemContent from '../drop-down/list-item-content.js';
 import IconButton from '../../display/icon-button/index.js';
 import MenuItem from './menu-item.js';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 
 interface MenuRemovableProps {
     id?: string | null;
     className?: string | null;
     children?: string | null;
-    onRemove?: ((payload: unknown) => void) | null;
-    onRemoveMeta?: unknown | null;
+    onRemove?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | null;
+    onRemoveMeta?: unknown;
     selected?: boolean;
     targeted?: boolean;
     disabled?: boolean;
     borderBottom?: boolean;
     borderTop?: boolean;
-    icon?: unknown | null;
+    icon?: IconProp | null;
 }
 
 class MenuRemovable extends PureComponent<MenuRemovableProps> {
@@ -57,8 +58,7 @@ class MenuRemovable extends PureComponent<MenuRemovableProps> {
                         icon={faXmark}
                         size="2xs"
                         disabled={disabled}
-                        onClick={onRemove}
-                        onClickMeta={onRemoveMeta}
+                        onClick={onRemove ?? undefined}
                     />
                 </ListItemContent>
             </MenuItem>

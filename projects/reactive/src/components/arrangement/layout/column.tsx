@@ -28,7 +28,7 @@ export interface ColumnProps {
     children?: JSX.Element | JSX.Element[],
 }
 
-interface classStates {
+interface ClassStates {
     classNames: string[],
     styles: {
       [index: string]: string;
@@ -63,7 +63,7 @@ function buildClass(prop: string | string[], prefix: string): null | string {
     return classnames(classNames);
 }
 
-function applySequenceOrderState(acc: classStates, value: string, suffix: string): void {
+function applySequenceOrderState(acc: ClassStates, value: string, suffix: string): void {
     if (isNil(value)) {
         return;
     }
@@ -72,7 +72,7 @@ function applySequenceOrderState(acc: classStates, value: string, suffix: string
     acc.styles[`--layout-col-order${suffix}`] = value;
 }
 
-function applyWidthState(acc: classStates, value: string, suffix: string): void {
+function applyWidthState(acc: ClassStates, value: string, suffix: string): void {
     if (isNil(value)) {
         return;
     }
@@ -88,7 +88,7 @@ function applyWidthState(acc: classStates, value: string, suffix: string): void 
 }
 
 function applyWidthLimitState(
-    acc: classStates,
+    acc: ClassStates,
     value: string,
     suffix: string,
     limitType: string,
@@ -109,7 +109,7 @@ function applyWidthLimitState(
     ] = `${value.slice(7)}px`;
 }
 
-function applyPaddingTopState(acc: classStates, value: string, suffix: string): void {
+function applyPaddingTopState(acc: ClassStates, value: string, suffix: string): void {
     if (isNil(value)) {
         return;
     }
@@ -126,13 +126,13 @@ function applyPaddingTopState(acc: classStates, value: string, suffix: string): 
     )}px`;
 }
 
-type classFunction = (acc: classStates, value: string, suffix: string, ...args: string[]) => void;
+type ClassFunction = (acc: ClassStates, value: string, suffix: string, ...args: string[]) => void;
 
 function buildClassState(
     value: string | string[],
-    cb: classFunction,
+    cb: ClassFunction,
     ...args: string[]
-): classStates {
+): ClassStates {
     const states = {
         classNames: [],
         styles: {},

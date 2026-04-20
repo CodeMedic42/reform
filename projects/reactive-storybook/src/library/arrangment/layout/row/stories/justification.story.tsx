@@ -41,7 +41,7 @@ export default function example() {
                         <Content>right</Content>
                     </Column>
                 </Row>
-                <Row gutter="16" justify={['right', 'center', null, 'left']}>
+                <Row gutter="16" justify={['right', 'center', null, 'left'] as string[]}>
                     <Column width="3">
                         <Content>
                             <div>base: right</div>

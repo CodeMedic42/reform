@@ -124,10 +124,10 @@ class DropDownList extends Component<DropDownListProps> {
         return (
             <ol
                 ref={this.listRef}
-                id={id}
+                id={id ?? undefined}
                 className={classnames('ra-dd-list', className, sizeClass)}
                 role="listbox"
-                aria-labelledby={ariaLabeledBy}
+                aria-labelledby={ariaLabeledBy ?? undefined}
             >
                 {children}
             </ol>

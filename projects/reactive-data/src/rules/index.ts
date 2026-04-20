@@ -1,5 +1,1 @@
-import buildRequiredRole from './required-rule';
-
-export {
-	buildRequiredRole
-};
+export { default as buildRequiredRole } from './required-rule';

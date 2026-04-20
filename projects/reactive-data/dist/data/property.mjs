@@ -49,14 +49,10 @@ class Property {
         return __classPrivateFieldGet(this, _Property_propertyAccess, "f").getLength();
     }
     forEach(cb) {
-        __classPrivateFieldGet(this, _Property_propertyAccess, "f").forEach((propertyAccess, keyDex) => {
-            return cb(propertyAccess.getInterface(), keyDex);
-        });
+        __classPrivateFieldGet(this, _Property_propertyAccess, "f").forEach((propertyAccess, keyDex) => cb(propertyAccess.getInterface(), keyDex));
     }
     map(cb) {
-        return __classPrivateFieldGet(this, _Property_propertyAccess, "f").map((propertyAccess, keyDex) => {
-            return cb(propertyAccess.getInterface(), keyDex);
-        });
+        return __classPrivateFieldGet(this, _Property_propertyAccess, "f").map((propertyAccess, keyDex) => cb(propertyAccess.getInterface(), keyDex));
     }
     isEqual(comparator) {
         return __classPrivateFieldGet(this, _Property_propertyAccess, "f").isEqual(comparator);

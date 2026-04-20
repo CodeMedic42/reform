@@ -8,7 +8,7 @@ export default function example() {
         <>
             <ResolutionHeader sticky />
             <LayoutScope title="Hide Overflow" disableBackground>
-                {renderForGutter(null, '16')}
+                {renderForGutter(null)}
             </LayoutScope>
         </>
     );

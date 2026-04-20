@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, useCallback } from 'react';
 import { isNil, toString } from 'lodash-es';
 
@@ -7,7 +6,13 @@ interface InputBaseProps {
 	value?: string | null;
 	forwardedRef?: React.Ref<unknown> | null;
 	Component: React.ElementType;
-	[key: string]: unknown;
+	id?: string | null;
+	type?: string;
+	className?: string;
+	mask?: ((value: string) => Array<string | RegExp>) | Array<string | RegExp>;
+	showMask?: boolean | null;
+	guide?: boolean;
+	keepCharPositions?: boolean;
 }
 
 const InputBase = forwardRef<unknown, InputBaseProps>((props, ref) => {

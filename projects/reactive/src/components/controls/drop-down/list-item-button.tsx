@@ -11,10 +11,10 @@ interface ListItemButtonProps {
     'aria-label'?: string | null;
     tabIndex?: string | null;
     disabled?: boolean;
+    onClick?: ((payload: { event: React.MouseEvent }) => void) | null;
     dropDownContext: {
         open: boolean;
     };
-    [key: string]: unknown;
 }
 
 /**
@@ -50,15 +50,14 @@ class ListItemButton extends PureComponent<ListItemButtonProps> {
             tabIndex = null,
             children = null,
             disabled = false,
+            onClick: _onClick,
             dropDownContext: { open },
-            ...rest
         } = this.props;
 
         return (
             <>
                 <button
-                    {...rest}
-                    id={!isNil(id) ? `${id}-button` : null}
+                    id={!isNil(id) ? `${id}-button` : undefined}
                     className={classnames(
                         'ra-dd-list-item-control',
                         'ra-dd-list-item-button',
@@ -67,7 +66,7 @@ class ListItemButton extends PureComponent<ListItemButtonProps> {
                     ref={this.buttonRef}
                     type="button"
                     onKeyDown={this.handleKeyDown}
-                    aria-label={ariaLabel}
+                    aria-label={ariaLabel ?? undefined}
                     tabIndex={open ? (tabIndex as unknown as number) : -1}
                     disabled={disabled}
                 >

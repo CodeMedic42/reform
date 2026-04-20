@@ -260,6 +260,7 @@ describe('Value Changes', () => {
 
 			const removeListenerAtObjectTest = data.onChangedAt('objectTest', handleOnTriggerAtObjectTest);
 			const removeListenerAtValueA = data.onChangedAt('objectTest.valueA', handleOnTriggerAtValueA);
+			// @typescript-eslint/no-unused-vars
 			const removeListenerAtValueB = data.onChangedAt('objectTest.valueB', handleOnTriggerAtValueB);
 			const removeListenerAtValueC = data.onChangedAt('objectTest.valueC', handleOnTriggerAtValueC);
 
@@ -307,8 +308,11 @@ describe('Value Changes', () => {
 			const data = await Data.build(configuration, testInstValues);
 
 			const objectTestProp = data.getPropertyAt('objectTest');
+			// @typescript-eslint/no-unused-vars
 			const valueAProp = data.getPropertyAt('objectTest.valueA');
+			// @typescript-eslint/no-unused-vars
 			const valueBProp = data.getPropertyAt('objectTest.valueB');
+			// @typescript-eslint/no-unused-vars
 			const valueCProp = data.getPropertyAt('objectTest.valueC');
 
 			const handleObjectOnChange = jest.fn();

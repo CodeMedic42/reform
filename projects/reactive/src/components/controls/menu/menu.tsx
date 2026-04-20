@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import DropDown from '../drop-down/index.js';
@@ -8,13 +7,12 @@ import Provider, { Consumer } from '../drop-down/drop-down-context.js';
 interface MenuProps {
     id?: string | null;
     className?: string | null;
-    Anchor?: React.ElementType | null;
+    Anchor: React.ElementType;
     anchorProps?: Record<string, unknown> | null;
     size?: 'sm' | 'md' | 'lg';
     dark?: boolean;
     children?: React.ReactNode;
     disabled?: boolean;
-    [key: string]: unknown;
 }
 
 class Menu extends PureComponent<MenuProps> {
@@ -39,17 +37,17 @@ class Menu extends PureComponent<MenuProps> {
                     disabled,
                     ...anchorProps,
                 }}
-                minDrawerWidth={112}
-                maxDrawerWidth={320}
+                minTrayWidth={112}
+                maxTrayWidth={320}
             >
                 <Consumer>
-                    {({ open }: { open: boolean }) => (
+                    {(({ open }: { open: boolean }) => (
                         <MenuList size={size} dark={dark}>
                             <Provider value={{ dark, size, open }}>
                                 {children}
                             </Provider>
                         </MenuList>
-                    )}
+                    )) as (value: unknown) => React.ReactNode}
                 </Consumer>
             </DropDown>
         );

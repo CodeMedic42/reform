@@ -13,24 +13,29 @@ type ListenersGroup = {
 	[key: string]: ListenersGroup;
 };
 
-type TriggerListenersGroup = {
-	[key: string]: ListenersGroup;
-};
-
 class DataControl {
 	#dataInterface?: Data;
+
 	#onChangedAtListeners: ListenersGroup = {};
+
 	#onChangeListeners: Listeners = {}
+
 	#onInternalChangeEndListeners: Listeners = {};
+
 	#lastUsedListenerId = 0;
+
 	#rootPropertyAccess: PropertyAccess;
+
 	#state: State = State.idle;
+
 	#onStateChangeListeners: { [key: string]: Function } = {};
+
 	#propertyStates: {
 		[key: string]: {
 			[key: string]: boolean
 		}
 	} = {};
+
 	#invalidProperties: {
 		[key: string]: PropertyAccess
 	} = {};

@@ -1,5 +1,5 @@
 import path from 'path';
-import isArray from 'lodash/isArray';
+import { isArray } from 'lodash-es';
 
 const serverPath: string = 'server-client';
 const clientPath: string = 'harness-client';
@@ -50,8 +50,11 @@ function normalizeConfig(config: RawConfig): WebUnitConfig {
 
 class RunContext {
     private workingDir: string;
+
     private configDir: string;
+
     private processDir: string;
+
     private config!: WebUnitConfig;
 
     constructor() {

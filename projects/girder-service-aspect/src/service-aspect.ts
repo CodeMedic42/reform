@@ -1,7 +1,5 @@
-import mapValues from 'lodash/mapValues';
-import isNil from 'lodash/isNil';
-import forEach from 'lodash/forEach';
-import { Aspect } from '@reformjs/girder';
+import { mapValues, isNil, forEach } from 'lodash-es';
+import { Aspect, type AspectInitContext } from '@reformjs/girder';
 import mergeConfigs from './merge-configs.js';
 import type { ServiceConfig } from './merge-configs.js';
 
@@ -18,11 +16,6 @@ interface GirderContextAccess {
     getAspect: (aspectId: string) => unknown;
 }
 
-interface InitConfig {
-    getAspect: (aspectId: string) => unknown;
-    getSettings: (key: string) => ServiceSetting[];
-}
-
 const DEFAULT_CONFIG: ServiceConfig = {
     method: 'get',
     queryParams: {},
@@ -37,14 +30,13 @@ class ServiceAspect extends Aspect {
         super('service');
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    onInitialize(config: InitConfig): Record<string, unknown> {
-        const{ getAspect, getSettings } = config;
+    onInitialize(config?: AspectInitContext): Record<string, unknown> {
+        const{ getAspect, getSettings } = config!;
 
         const configurations: ServiceConfig[] = [DEFAULT_CONFIG];
         const finalDefinitions: Record<string, Buildable> = {};
 
-        const settings = getSettings('service');
+        const settings = getSettings('service') as ServiceSetting[];
 
         forEach(settings, (setting: ServiceSetting) => {
             const {

@@ -75,14 +75,9 @@ class TabGroup extends PureComponent<TabGroupProps, TabGroupState> {
         return (
             <>
                 <TabBar
-                    size={size}
-                    justify={justify}
-                    color={color}
-                    background={background}
-                    border={border}
-                    onSelect={this.handleSelect}
+                    value={selectedTabId}
+                    onChange={this.handleSelect}
                     tabs={tabs}
-                    selectedTab={selectedTabId}
                 />
                 {map(tabs, (tab) => {
                     const hidden = selectedTabId !== tab.id;

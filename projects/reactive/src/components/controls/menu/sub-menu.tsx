@@ -1,6 +1,7 @@
 import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
 import { isNil, isString, map, isArray, join } from 'lodash-es';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
 import ListItemButton from '../drop-down/list-item-button.js';
 import Tray from '../../arrangement/tray/index.js';
@@ -21,7 +22,7 @@ interface CheckboxConfig {
 interface SubMenuProps {
     id?: string | null;
     className?: string | null;
-    icon?: unknown | null;
+    icon?: IconProp | null;
     content?: React.ReactNode;
     children?: React.ReactNode;
     onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
@@ -30,7 +31,7 @@ interface SubMenuProps {
     selected?: boolean;
     targeted?: boolean;
     disabled?: boolean;
-    dropDownContext: {
+    dropDownContext?: {
         open: boolean;
         size: string;
         dark: boolean;
@@ -84,8 +85,9 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
     // This will close the menu if it's parent is closed
     static getDerivedStateFromProps(nextProps: SubMenuProps): Partial<SubMenuState> | null {
         const {
-            dropDownContext: { open },
+            dropDownContext = { open: false, size: 'md', dark: false },
         } = nextProps;
+        const { open } = dropDownContext;
 
         if (!open) {
             return {
@@ -183,7 +185,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
             selected = false,
             targeted = false,
             disabled = false,
-            dropDownContext: { size, dark },
+            dropDownContext = { open: false, size: 'md' as string, dark: false },
             borderBottom = false,
             borderTop = false,
             checkbox = null,
@@ -192,6 +194,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
             'aria-label': ariaLabel = null,
         } = this.props;
 
+        const { size, dark } = dropDownContext;
         const { open } = this.state;
 
         return (
@@ -224,9 +227,9 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
                 </ListItemButton>
                 <Provider value={{ open, size, dark }}>
                     <Tray
-                        id={!isNil(id) && id.length > 0 ? `${id}-drawer` : null}
+                        id={!isNil(id) && id.length > 0 ? `${id}-drawer` : undefined}
                         open={open}
-                        getAnchorElement={() => (this.itemRef.current as { getRootNode: () => HTMLElement }).getRootNode()}
+                        getAnchor={() => (this.itemRef.current as { getRootNode: () => HTMLElement }).getRootNode()}
                         dropPositions={['right', 'left', 'bottom', 'top']}
                         offset={{
                             top: -8,

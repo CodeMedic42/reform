@@ -1,7 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useMemo } from 'react';
-import reduce from 'lodash/reduce';
-import TextInputField from '../../../../../../reactive/dist/components/fields/text-input-field';
+import { reduce } from 'lodash-es';
+import TextInputField from '@reformjs/reactive/fields/text-input-field';
 // import { faFaceLaughSquint } from '@audacious/icons/regular/faFaceLaughSquint';
 // import { faFaceLaughBeam } from '@audacious/icons/regular/faFaceLaughBeam';
 
@@ -26,7 +25,7 @@ interface ExampleProps {
 }
 
 function example(props: ExampleProps) {
-	const [value, setValue] = useState(null);
+	const [value, setValue] = useState<string | null>(null);
 
 	const {
 		successMessageCount,
@@ -78,31 +77,33 @@ function example(props: ExampleProps) {
 	// const leftIcon = useLeftIcon ? { icon: faFaceLaughBeam } : null;
 	// const rightIcon = useRightIcon ? { icon: faFaceLaughSquint } : null;
 
+	const extraProps = {
+		...reduce(
+			rest,
+			(acc: Record<string, unknown>, prop: unknown, key: string) => {
+				if (prop === 'true') {
+					acc[key] = true;
+				} else if (prop === 'false') {
+					acc[key] = false;
+				} else {
+					acc[key] = prop;
+				}
+
+				return acc;
+			},
+			{},
+		),
+		value,
+		onChange: setValue,
+		messages,
+		leftAnnotation: <span>Foo</span>,
+		rightAnnotation: <span>Bar</span>,
+	};
+
 	return (
 		// <Scope fillViewport>
 			<TextInputField
-				{...reduce(
-					rest,
-					(acc: Record<string, unknown>, prop: unknown, key: string) => {
-						if (prop === 'true') {
-							acc[key] = true;
-						} else if (prop === 'false') {
-							acc[key] = false;
-						} else {
-							acc[key] = prop;
-						}
-
-						return acc;
-					},
-					{},
-				)}
-				value={value}
-				onChange={setValue}
-				messages={messages}
-				leftAnnotation={<span>Foo</span>}
-				rightAnnotation={<span>Bar</span>}
-				// leftIcon={leftIcon}
-				// rightIcon={rightIcon}
+				{...(extraProps as any)}
 			/>
 		// </Scope>
 	);

@@ -9,24 +9,6 @@ export enum State {
 export const highestState = State.validating;
 export const lowestState = State.idle;
 
-export function getHighestState(states: State[]) {
-	let highest = lowestState;
-
-	forEach(states, (state) => {
-		if (state === highestState) {
-			highest = state;
-
-			return false;
-		}
-		
-		if (getStatePriority(state) > getStatePriority(highest)) {
-			highest = state;
-		}
-	});
-
-	return highest;
-}
-
 export function getStatePriority(state: State): number {
 	switch (state) {
 		case State.validating:
@@ -36,4 +18,24 @@ export function getStatePriority(state: State): number {
 		default:
 			return 0;
 	}
+}
+
+export function getHighestState(states: State[]) {
+	let highest = lowestState;
+
+	forEach(states, (state) => {
+		if (state === highestState) {
+			highest = state;
+
+			return false;
+		}
+
+		if (getStatePriority(state) > getStatePriority(highest)) {
+			highest = state;
+		}
+
+		return undefined;
+	});
+
+	return highest;
 }

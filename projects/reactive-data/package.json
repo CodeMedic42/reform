@@ -1,64 +1,65 @@
 {
-    "name": "@reformjs/reactive-data",
-    "version": "1.0.0",
-    "description": "",
-    "type": "module",
-    "scripts": {
-        "storybook": "storybook dev -p 6006",
-        "lint:eslint": "eslint src --ext ts,tsx",
-        "lint": "npm run lint:eslint",
-        "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js",
-        "clean": "rimraf dist",
-        "build:js": "pnpm rollup --config rollup.config.mjs",
-        "build": "npm run clean && npm run build:js"
+  "name": "@reformjs/reactive-data",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "lint:eslint": "eslint src --ext ts,tsx",
+    "lint": "npm run lint:eslint",
+    "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js",
+    "clean": "rimraf dist",
+    "build:js": "pnpm rollup --config rollup.config.mjs",
+    "build": "npm run clean && npm run build:js",
+    "typecheck": "tsc --noEmit"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     },
-    "exports": {
-        ".": {
-            "import": "./dist/index.mjs",
-            "types": "./dist/index.d.ts"
-        },
-        "./configuration": {
-            "import": "./dist/configuration/configuration.mjs",
-            "types": "./dist/configuration/configuration.d.ts"
-        },
-        "./data": {
-            "import": "./dist/data/data.mjs",
-            "types": "./dist/data/data.d.ts"
-        },
-        "./property": {
-            "import": "./dist/data/property.mjs",
-            "types": "./dist/data/property.d.ts"
-        },
-        "./rules": {
-            "import": "./dist/rules/index.mjs",
-            "types": "./dist/rules/index.d.ts"
-        }
+    "./configuration": {
+      "import": "./dist/configuration/configuration.mjs",
+      "types": "./dist/configuration/configuration.d.ts"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "bluebird": "^3.7.2",
-        "lodash-es": "^4.17.21",
-        "nanoid": "^5.1.5",
-        "tslib": "^2.8.1"
+    "./data": {
+      "import": "./dist/data/data.mjs",
+      "types": "./dist/data/data.d.ts"
     },
-    "devDependencies": {
-        "@config/eslint-config": "workspace:*",
-        "@config/jest-config": "workspace:*",
-        "@config/rollup-config": "workspace:*",
-        "@config/typescript-config": "workspace:*",
-        "@jest/globals": "^29.7.0",
-        "@types/bluebird": "^3.5.42",
-        "@types/lodash-es": "^4.17.12",
-        "eslint": "8.57.0",
-        "eslint-config-airbnb": "19.0.4",
-        "eslint-config-airbnb-typescript": "18.0.0",
-        "eslint-config-prettier": "9.1.0",
-        "eslint-plugin-jest": "28.6.0",
-        "jest": "29.7.0",
-        "jest-environment-jsdom": "29.7.0",
-        "ts-jest": "^29.1.5",
-        "typescript": "^5.4.5"
+    "./property": {
+      "import": "./dist/data/property.mjs",
+      "types": "./dist/data/property.d.ts"
+    },
+    "./rules": {
+      "import": "./dist/rules/index.mjs",
+      "types": "./dist/rules/index.d.ts"
     }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "lodash-es": "^4.17.21",
+    "nanoid": "^5.1.5",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@config/eslint-config": "workspace:*",
+    "@config/jest-config": "workspace:*",
+    "@config/rollup-config": "workspace:*",
+    "@config/typescript-config": "workspace:*",
+    "@jest/globals": "^29.7.0",
+    "@types/bluebird": "^3.5.42",
+    "@types/lodash-es": "^4.17.12",
+    "eslint": "8.57.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "18.0.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-jest": "28.6.0",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "ts-jest": "^29.1.5",
+    "typescript": "^5.4.5"
+  }
 }

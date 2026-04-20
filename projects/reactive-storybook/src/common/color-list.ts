@@ -1,6 +1,4 @@
-import reduce from 'lodash/reduce';
-import find from 'lodash/find';
-import isNil from 'lodash/isNil';
+import { reduce, find, isNil } from 'lodash-es';
 
 export const schemeColorOrder = [
     'primary',

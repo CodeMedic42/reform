@@ -51,6 +51,7 @@ class ObjectValue extends PropertyModelValue {
         changed = toProperty.setValue(fromValue, false) || changed;
         return changed;
     }
+    // @typescript-eslint/no-unused-vars
     insertValue(value, keydex, rootChange) {
         // If the property was defined in the model then it should be defined.
         if (isNil(__classPrivateFieldGet(this, _ObjectValue_value, "f")[keydex])) {
@@ -61,6 +62,7 @@ class ObjectValue extends PropertyModelValue {
         const changed = __classPrivateFieldGet(this, _ObjectValue_value, "f")[keydex].setValue(value, false);
         return changed;
     }
+    // @typescript-eslint/no-unused-vars
     removeValue(keydex, rootChange) {
         // If the property was defined in the model then it should be defined.
         if (isNil(__classPrivateFieldGet(this, _ObjectValue_value, "f")[keydex])) {
@@ -99,15 +101,11 @@ class ObjectValue extends PropertyModelValue {
         });
     }
     initialize() {
-        const childInitProms = this.map((item) => {
-            return item.initialize();
-        });
+        const childInitProms = this.map((item) => item.initialize());
         return Promise.all(childInitProms).then(noop);
     }
     validate() {
-        const childInitProms = this.map((item) => {
-            return item.validate();
-        });
+        const childInitProms = this.map((item) => item.validate());
         return Promise.all(childInitProms).then(noop);
     }
 }

@@ -1,6 +1,6 @@
 import Client from '@reformjs/girder';
-import ApplicationAspect from './application-aspect';
-import MessagePrintAspect from './message-print-aspect';
+import ApplicationAspect from './application-aspect.js';
+import MessagePrintAspect from './message-print-aspect.js';
 
 new Client()
     .registerAspect(new ApplicationAspect())

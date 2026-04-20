@@ -30,12 +30,10 @@ class PropertyRule {
         __classPrivateFieldSet(this, _PropertyRule_validationStale, true, "f");
         __classPrivateFieldSet(this, _PropertyRule_uuid, nanoid(), "f");
         // Listen for changes for the required values.
-        __classPrivateFieldSet(this, _PropertyRule_listeners, map(rule.getRequires(), (requirePath, index) => {
-            return propertyAccess.getDataControl().onChangedAt(requirePath, (requiredPropertyAccess) => {
-                __classPrivateFieldGet(this, _PropertyRule_required, "f")[index] = requiredPropertyAccess.getInterface();
-                __classPrivateFieldSet(this, _PropertyRule_newRequiredValues, true, "f");
-            });
-        }), "f");
+        __classPrivateFieldSet(this, _PropertyRule_listeners, map(rule.getRequires(), (requirePath, index) => propertyAccess.getDataControl().onChangedAt(requirePath, (requiredPropertyAccess) => {
+            __classPrivateFieldGet(this, _PropertyRule_required, "f")[index] = requiredPropertyAccess.getInterface();
+            __classPrivateFieldSet(this, _PropertyRule_newRequiredValues, true, "f");
+        })), "f");
         // Listen for when a round of changes has ended.
         propertyAccess.getDataControl().onChange(async () => {
             // Reevaluate the attribute status
@@ -64,7 +62,7 @@ class PropertyRule {
         });
     }
     async validate() {
-        return await __classPrivateFieldGet(this, _PropertyRule_instances, "m", _PropertyRule_performValidation).call(this);
+        return __classPrivateFieldGet(this, _PropertyRule_instances, "m", _PropertyRule_performValidation).call(this);
     }
     async initialize() {
         if (__classPrivateFieldGet(this, _PropertyRule_initialized, "f")) {

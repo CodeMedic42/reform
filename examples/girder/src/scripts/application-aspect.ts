@@ -5,7 +5,7 @@ class ApplicationAspect extends Aspect {
         super('application');
     }
 
-    settings(): AspectSettings {
+    settings(): AspectSettings | null {
         return {
             messagePrint: [
                 'Hello World.',
@@ -14,8 +14,8 @@ class ApplicationAspect extends Aspect {
         };
     }
 
-    onStart(context: AspectStartContext): void {
-        (context.getAspect('messagePrint') as { print: () => void }).print();
+    onStart(context?: AspectStartContext): void {
+        (context!.getAspect('messagePrint') as { print: () => void }).print();
     }
 
     onStop(): void {

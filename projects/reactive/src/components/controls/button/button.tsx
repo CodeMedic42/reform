@@ -1,5 +1,3 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil, isEmpty } from 'lodash-es';
@@ -35,7 +33,6 @@ class Button extends PureComponent<ButtonProps> {
         const { current } = this.buttonRef;
 
         if (isNil(current)) {
-            // eslint-disable-next-line no-console
             console.warn('Attempting to focus on an unmounted component');
 
             return;
@@ -51,7 +48,7 @@ class Button extends PureComponent<ButtonProps> {
             color,
             children,
             variant,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // @typescript-eslint/no-unused-vars
             focusOnMount,
             Component = 'button',
             ...rest
@@ -78,11 +75,7 @@ class Button extends PureComponent<ButtonProps> {
             ...rest,
         };
 
-        return (
-            <Component {...props}>
-                {children}
-            </Component>
-        );
+        return React.createElement(Component, props, children);
     }
 }
 

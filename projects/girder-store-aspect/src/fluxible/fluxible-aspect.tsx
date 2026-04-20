@@ -1,13 +1,9 @@
 import Fluxible from 'fluxible';
-import { Aspect } from '@reformjs/girder';
-import forEach from 'lodash/forEach';
+import { Aspect, type AspectInitContext } from '@reformjs/girder';
+import { forEach } from 'lodash-es';
 
 interface FluxibleSetting {
     stores: unknown[];
-}
-
-interface FluxibleConfig {
-    getSettings: (key: string) => FluxibleSetting[];
 }
 
 class FluxibleAspect extends Aspect {
@@ -17,12 +13,12 @@ class FluxibleAspect extends Aspect {
         super('fluxible');
     }
 
-    onInitialize(config: FluxibleConfig): void {
+    onInitialize(config?: AspectInitContext): void {
         const {
             getSettings,
-        } = config;
+        } = config!;
 
-        const settings: FluxibleSetting[] = getSettings('fluxible');
+        const settings = getSettings('fluxible') as FluxibleSetting[];
 
         const stores: unknown[] = [];
 

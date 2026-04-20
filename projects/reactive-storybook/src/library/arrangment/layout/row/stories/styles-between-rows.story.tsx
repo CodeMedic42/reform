@@ -11,7 +11,7 @@ export default function example() {
             <LayoutScope title="Styles between rows" disableBackground>
                 <Row
                     gutter="16"
-                    after={['on', null, 'off', null, 'on']}
+                    after={['on', null, 'off', null, 'on'] as unknown as string}
                     className="row-with-border-bottom"
                 >
                     <Column width="12">
@@ -20,7 +20,7 @@ export default function example() {
                 </Row>
                 <Row
                     gutter="16"
-                    before={['on', null, 'off', null, 'on']}
+                    before={['on', null, 'off', null, 'on'] as unknown as string}
                     className="row-with-border-top"
                 >
                     <Column width="12">

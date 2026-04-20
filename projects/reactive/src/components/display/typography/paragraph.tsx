@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { memo } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -11,7 +10,6 @@ interface ParagraphProps {
     size?: 'sm' | 'md' | 'lg' | null;
     weight?: 'bold' | 'semi-bold' | 'normal' | null;
     forwardRef?: React.Ref<unknown> | null;
-    [key: string]: unknown;
 }
 
 function Paragraph(props: ParagraphProps): React.ReactNode {

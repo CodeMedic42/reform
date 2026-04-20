@@ -4,16 +4,12 @@ import {
 } from 'fluxible-addons-react';
 import FluxibleAspect from './fluxible-aspect.js';
 
-interface AspectSettings {
-    react: Array<{
-        Component: React.ComponentType<{ children: ReactNode }>;
-    }>;
-}
+import type { AspectSettings } from '@reformjs/girder';
 
 const BaseComponent = provideContext(({ children }: { children: ReactNode }) => children);
 
 class FluxibleReactAspect extends FluxibleAspect {
-    settings(): AspectSettings {
+    settings(): AspectSettings | null {
         return {
             react: [{
                 Component: ({ children }: { children: ReactNode }) => (

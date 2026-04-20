@@ -1,4 +1,4 @@
-import SelectInputField from '../../../../../reactive/dist/components/fields/select-input-field';
+import SelectInputField from '@reformjs/reactive/fields/select-input-field';
 
 export default {
     title: 'Fields/Select Input Field',

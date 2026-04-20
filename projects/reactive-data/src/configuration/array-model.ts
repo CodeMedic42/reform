@@ -1,9 +1,9 @@
+import { isNil } from 'lodash-es';
 import { buildModel, registerModel } from './model-registry';
 import { ModelDefinition } from './configuration-types';
 import BaseModel, { BuildOptions } from './base-model';
 import PropertyAccess from '../data/property-access';
 import ArrayValue from '../data/array-value';
-import { isNil } from 'lodash-es';
 import TriggersModel from './triggers-model';
 
 class ArrayModel extends BaseModel {

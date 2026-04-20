@@ -1,8 +1,4 @@
-/* eslint-disable no-console */
-import isNil from 'lodash/isNil';
-import forEach from 'lodash/forEach';
-import get from 'lodash/get';
-import set from 'lodash/set';
+import { isNil, forEach, get, set } from 'lodash-es';
 import promiseForEach from '@reformjs/toolbox/promise-for-each';
 import Aspect, { AspectInitContext } from './aspect.js';
 
@@ -22,9 +18,13 @@ interface ClientContext {
 
 class Client {
     private aspects: AspectMap;
+
     private settings: SettingsMap;
+
     private status: ClientStatus;
+
     private startingPromise: Promise<void> | null;
+
     private stoppingPromise: Promise<void> | null;
 
     constructor() {
@@ -102,7 +102,7 @@ class Client {
                     return clientContext[aspectId];
                 };
 
-                return promiseForEach(this.aspects, (aspect: Aspect, aspectId: string) =>
+                return promiseForEach(this.aspects, (aspect: Aspect, aspectId: string | number) =>
                     Promise.resolve(aspect.onInitialize({
                         getAspect,
                         getSettings: (settingId: string): unknown[] => this.settings[settingId] || [],

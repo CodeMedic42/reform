@@ -1,10 +1,8 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef } from 'react';
 
-function applyForwardRef(Component: React.ComponentType<any>) {
-    const ForwardedComponent = forwardRef((props, ref) => (
-        <Component {...props} forwardRef={ref} />
+function applyForwardRef<P extends { forwardRef?: React.Ref<any> | null }>(Component: React.ComponentType<P>): React.ForwardRefExoticComponent<React.PropsWithoutRef<Omit<P, 'forwardRef'>> & React.RefAttributes<unknown>> {
+    const ForwardedComponent = forwardRef<unknown, Omit<P, 'forwardRef'>>((props, ref) => (
+        <Component {...props as any} forwardRef={ref} />
     ));
 
     const name = Component.displayName || Component.name;

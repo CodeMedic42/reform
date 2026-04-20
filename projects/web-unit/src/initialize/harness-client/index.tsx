@@ -9,7 +9,6 @@ declare global {
 }
 
 window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
-    // eslint-disable-next-line no-console
     console.warn(`UNHANDLED PROMISE REJECTION: ${event.reason}`);
 });
 
@@ -25,7 +24,6 @@ function docReady(fn: () => void): void {
 }
 
 docReady(() => {
-    // eslint-disable-next-line react/no-deprecated
     ReactDOM.render(
         (
             <ErrorBoundary>

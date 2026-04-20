@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import Typography from './typography.js';
@@ -11,7 +10,6 @@ interface SubHeadingProps {
     forwardRef?: React.Ref<unknown> | null;
     weightNormal?: boolean;
     responsive?: boolean;
-    [key: string]: unknown;
 }
 
 class SubHeading extends PureComponent<SubHeadingProps> {

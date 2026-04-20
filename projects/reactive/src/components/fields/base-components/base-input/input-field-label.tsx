@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* @typescript-eslint/no-unused-vars */
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
 import shortId from 'shortid';
@@ -59,6 +58,7 @@ class InputLabel extends PureComponent<InputLabelProps, InputLabelState> {
     };
 
     labelRef: React.RefObject<unknown>;
+
     inputContainerRef: React.RefObject<any>;
 
     constructor(props: InputLabelProps) {
@@ -178,7 +178,7 @@ class InputLabel extends PureComponent<InputLabelProps, InputLabelState> {
                     className="ra-input-label"
                     id={labelId}
                     htmlFor={inputId}
-                    tabIndex="-1"
+                    tabIndex={-1}
                     onMouseDown={this.labelPreventDefault}
                 >
                     {labelText}

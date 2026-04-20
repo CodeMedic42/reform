@@ -1,4 +1,4 @@
-import SelectInput from '../select-input.js';
+import SelectInput from '../select-input-field.js';
 
 const harness = {
     id: 'SelectInput',

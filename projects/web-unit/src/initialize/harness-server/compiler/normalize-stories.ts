@@ -30,7 +30,6 @@ interface DirectoryFromWorkingDirParams {
     directory: string;
 }
 
-// eslint-disable-next-line arrow-body-style
 const detectBadGlob = (val: string): string => {
     // const match = val.match(/\.(\([^)]+\))/);
 

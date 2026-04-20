@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { observer } from 'mobx-react';
 import { useAspect, useAction } from '@reformjs/girder-react-aspect';
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty } from 'lodash-es';
 import Todo from './todo';
 import { toggleAll } from '../actions/todo-actions';
 

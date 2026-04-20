@@ -11,6 +11,7 @@ import './simple-model';
 
 class Configuration {
 	#model: BaseModel;
+
 	#triggers: TriggersModel;
 
 	constructor(configuration: ConfigurationDefinition) {

@@ -59,7 +59,6 @@ class Chip extends PureComponent<ChipProps> {
 		const { current } = this.buttonRef;
 
 		if (isNil(current)) {
-			// eslint-disable-next-line no-console
 			console.warn('Attempting to focus on an unmounted component');
 
 			return;

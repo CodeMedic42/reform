@@ -46,7 +46,7 @@ class ArrayValue extends PropertyModelValue {
         let counter = 0;
         for (counter; counter < newValue.length; counter++) {
             const childValue = newValue[counter];
-            let childProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[counter];
+            const childProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[counter];
             if (!isNil(childProperty)) {
                 changed = childProperty.setValue(childValue, rootChange) || changed;
             }
@@ -62,9 +62,9 @@ class ArrayValue extends PropertyModelValue {
         }
         if (counter < __classPrivateFieldGet(this, _ArrayValue_value, "f").length) {
             const removed = __classPrivateFieldGet(this, _ArrayValue_value, "f").splice(counter, __classPrivateFieldGet(this, _ArrayValue_value, "f").length - counter);
-            forEach(removed, (removed) => {
-                removed.setValue(undefined, rootChange);
-                removed.dispose();
+            forEach(removed, (removedItem) => {
+                removedItem.setValue(undefined, rootChange);
+                removedItem.dispose();
             });
         }
         return changed;
@@ -122,12 +122,12 @@ class ArrayValue extends PropertyModelValue {
             forInc = (counter) => counter - 1;
             getFiller = (counter) => __classPrivateFieldGet(this, _ArrayValue_value, "f")[counter - 1];
         }
-        let fromProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[from];
-        let toProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[to];
+        const fromProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[from];
+        const toProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[to];
         const fromValue = fromProperty.getValue();
         for (let counter = from; forCompare(counter); counter = forInc(counter)) {
-            let emptyProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[counter];
-            let fillerProperty = getFiller(counter);
+            const emptyProperty = __classPrivateFieldGet(this, _ArrayValue_value, "f")[counter];
+            const fillerProperty = getFiller(counter);
             const fillerValue = fillerProperty.getValue();
             changed = emptyProperty.setValue(fillerValue, false) || changed;
         }
@@ -172,15 +172,11 @@ class ArrayValue extends PropertyModelValue {
         });
     }
     initialize() {
-        const childInitProms = this.map((item) => {
-            return item.initialize();
-        });
+        const childInitProms = this.map((item) => item.initialize());
         return Promise.all(childInitProms).then(noop);
     }
     validate() {
-        const childInitProms = this.map((item) => {
-            return item.validate();
-        });
+        const childInitProms = this.map((item) => item.validate());
         return Promise.all(childInitProms).then(noop);
     }
 }

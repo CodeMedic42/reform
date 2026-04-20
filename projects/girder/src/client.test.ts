@@ -1,15 +1,6 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable max-classes-per-file */
-import isFunction from 'lodash/isFunction';
+import { isFunction } from 'lodash-es';
 import Client from './client.js';
-import Aspect from './aspect.js';
-
-interface MockInitContext {
-    getSettings: (id: string) => unknown[];
-    getContext: () => Record<string, unknown>;
-    stopClient: () => Promise<void>;
-    [key: string]: unknown;
-}
+import Aspect, { type AspectInitContext, type AspectStartContext } from './aspect.js';
 
 describe('Client', () => {
     describe('Constructor', () => {
@@ -214,9 +205,9 @@ describe('Client', () => {
             const barAspect = new Aspect('bar');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ getSettings, getContext, stopClient }: MockInitContext) => {
+                .mockImplementation((context?: AspectInitContext) => {
+                    const { getSettings, stopClient } = context!;
                     expect(isFunction(getSettings)).toBeTruthy();
-                    expect(isFunction(getContext)).toBeTruthy();
                     expect(isFunction(stopClient)).toBeTruthy();
                 });
 
@@ -237,10 +228,10 @@ describe('Client', () => {
             const barSettingSpy = jest.spyOn(barAspect, 'settings').mockReturnValue({ foo: 42 });
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ getSettings, getContext, stopClient }: MockInitContext) => {
+                .mockImplementation((context?: AspectInitContext) => {
+                    const { getSettings, stopClient } = context!;
                     const r = getSettings('foo');
                     expect(r?.[0]).toBe(42);
-                    expect(isFunction(getContext)).toBeTruthy();
                     expect(isFunction(stopClient)).toBeTruthy();
                 });
 
@@ -259,13 +250,14 @@ describe('Client', () => {
             const fooAspect = new Aspect('foo');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ stopClient }: MockInitContext) => ({
-                    stopOnStart: stopClient
+                .mockImplementation((context?: AspectInitContext) => ({
+                    stopOnStart: context!.stopClient
                 }));
 
             const fooOnStart = jest.spyOn(fooAspect, 'onStart')
-                .mockImplementation((context: Record<string, Record<string, () => Promise<void>>>) => {
-                    context.foo.stopOnStart()
+                .mockImplementation((context?: AspectStartContext) => {
+                    const ctx = context as unknown as Record<string, Record<string, () => Promise<void>>>;
+                    ctx.foo.stopOnStart()
                         .then(() => {
                             expect(client.isRunning()).toBe(false);
                             expect(client.isStarted()).toBe(false);
@@ -301,17 +293,18 @@ describe('Client', () => {
             const fooAspect = new Aspect('foo');
 
             const fooOnInitializeSpy = jest.spyOn(fooAspect, 'onInitialize')
-                .mockImplementation(({ getContext }: MockInitContext) => ({
+                .mockImplementation((context?: AspectInitContext) => ({
                     answer: 42,
                     callForAnswer: () => {
-                        expect((getContext() as Record<string, Record<string, number>>).foo.answer).toBe(42);
+                        expect((context!.getAspect('foo') as Record<string, number>).answer).toBe(42);
                     }
                 }));
 
             const fooOnStart = jest.spyOn(fooAspect, 'onStart')
-                .mockImplementation((context: Record<string, Record<string, unknown>>) => {
-                    expect(context.foo.answer).toBe(42);
-                    (context.foo.callForAnswer as () => void)();
+                .mockImplementation((context?: AspectStartContext) => {
+                    const ctx = context as unknown as Record<string, Record<string, unknown>>;
+                    expect(ctx.foo.answer).toBe(42);
+                    (ctx.foo.callForAnswer as () => void)();
                 });
 
             client.registerAspect(fooAspect);

@@ -74,15 +74,11 @@ export default class Property {
 	}
 
 	forEach(cb: (item: any, keydex: any) => boolean | undefined | void) {
-		this.#propertyAccess.forEach((propertyAccess: PropertyAccess, keyDex: any) => {
-			return cb(propertyAccess.getInterface(), keyDex);
-		});
+		this.#propertyAccess.forEach((propertyAccess: PropertyAccess, keyDex: any) => cb(propertyAccess.getInterface(), keyDex));
 	}
 
 	map<T>(cb: (item: any, keydex: any) => T): T[] {
-		return this.#propertyAccess.map<T>((propertyAccess: PropertyAccess, keyDex: any) => {
-			return cb(propertyAccess.getInterface(), keyDex);
-		});
+		return this.#propertyAccess.map<T>((propertyAccess: PropertyAccess, keyDex: any) => cb(propertyAccess.getInterface(), keyDex));
 	}
 
 	isEqual(comparator: any) {

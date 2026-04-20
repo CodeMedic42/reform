@@ -24,22 +24,21 @@ class PropertyAccess {
         __classPrivateFieldSet(this, _PropertyAccess_uuid, nanoid(), "f");
         __classPrivateFieldSet(this, _PropertyAccess_value, value, "f");
         __classPrivateFieldSet(this, _PropertyAccess_interface, new Property(this), "f");
-        __classPrivateFieldGet(this, _PropertyAccess_lastListenerId, "f");
         __classPrivateFieldSet(this, _PropertyAccess_rules, mapValues(value.getModel().getRules().getRules(), (rule) => {
             const propertyRule = new PropertyRule(rule, this);
-            propertyRule.onStateChange((rule, previousRuleState) => {
-                const newState = rule.getState();
+            propertyRule.onStateChange((changedRule, previousRuleState) => {
+                const newState = changedRule.getState();
                 // Update overall validity
                 if (newState === State.idle) {
-                    if (rule.isValid()) {
-                        delete __classPrivateFieldGet(this, _PropertyAccess_invalidRules, "f")[rule.getUuid()];
+                    if (changedRule.isValid()) {
+                        delete __classPrivateFieldGet(this, _PropertyAccess_invalidRules, "f")[changedRule.getUuid()];
                     }
                     else {
-                        __classPrivateFieldGet(this, _PropertyAccess_invalidRules, "f")[rule.getUuid()] = rule;
+                        __classPrivateFieldGet(this, _PropertyAccess_invalidRules, "f")[changedRule.getUuid()] = changedRule;
                     }
                 }
                 if (!isNil(__classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[previousRuleState])) {
-                    delete __classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[previousRuleState][rule.getUuid()];
+                    delete __classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[previousRuleState][changedRule.getUuid()];
                     if (keys(__classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[previousRuleState]).length <= 0) {
                         delete __classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[previousRuleState];
                     }
@@ -47,7 +46,7 @@ class PropertyAccess {
                 if (isNil(__classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[newState])) {
                     __classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[newState] = {};
                 }
-                __classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[newState][rule.getUuid()] = true;
+                __classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")[newState][changedRule.getUuid()] = true;
                 // get highest overall state of all rules
                 const highest = getHighestState(keys(__classPrivateFieldGet(this, _PropertyAccess_ruleStates, "f")));
                 // The state for the property has changed if this is true.
@@ -158,9 +157,7 @@ class PropertyAccess {
         return __classPrivateFieldGet(this, _PropertyAccess_value, "f").isEqual(comparator);
     }
     getRulesStatus() {
-        return mapValues(__classPrivateFieldGet(this, _PropertyAccess_rules, "f"), (rule) => {
-            return rule.getStatus();
-        });
+        return mapValues(__classPrivateFieldGet(this, _PropertyAccess_rules, "f"), (rule) => rule.getStatus());
     }
     getState() {
         return __classPrivateFieldGet(this, _PropertyAccess_state, "f");

@@ -1,6 +1,4 @@
-import isFinite from 'lodash/isFinite';
-import isArray from 'lodash/isArray';
-import keys from 'lodash/keys';
+import { isFinite, isArray, keys } from 'lodash-es';
 
 interface PromiseContext<T, R> {
     cb: (item: T, index: string | number) => R | Promise<R>;

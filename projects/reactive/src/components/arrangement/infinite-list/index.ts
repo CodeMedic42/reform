@@ -6,3 +6,5 @@ export default InfiniteList;
 export {
     InfiniteListItems
 };
+
+export type { InfiniteListHandle } from './infinite-list.js';

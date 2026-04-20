@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import classNames from "classnames";
 import { isNil } from "lodash-es";
-import { useCallback } from "react";
 import Field from './support/field.js';
 
 interface InputNumericFieldProps {
@@ -28,7 +27,7 @@ function InputNumericField(props: InputNumericFieldProps) {
 				return;
 			}
 
-			let {
+			const {
 				target: {
 					value: changedValue,
 					valueAsNumber,

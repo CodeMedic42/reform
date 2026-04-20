@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo, useState } from 'react';
 import TabBar, { TabBottom } from '@reformjs/reactive/arrangement/tab-bar';
 

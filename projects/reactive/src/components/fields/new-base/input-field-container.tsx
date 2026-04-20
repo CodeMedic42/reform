@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* @typescript-eslint/no-unused-vars */
 import React from 'react';
 import classnames from 'classnames';
 import InputAnnotation from './input-field-annotation.js';

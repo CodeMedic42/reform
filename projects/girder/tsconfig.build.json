@@ -1,0 +1,14 @@
+{
+  "extends": "../../configurations/config-typescript/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/**/*.test.*"
+  ]
+}

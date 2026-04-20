@@ -1,15 +1,9 @@
 import BaseModel, { BuildOptions } from './base-model';
-import { ModelDefinition } from './configuration-types';
 import PropertyAccess from '../data/property-access';
 import SimpleValue from '../data/simple-value';
-import TriggersModel from './triggers-model';
 import { registerModel } from './model-registry';
 
 class SimpleModel extends BaseModel {
-	constructor(modelDef: ModelDefinition, triggersModel: TriggersModel) {
-		super(modelDef, triggersModel);
-	}
-	
 	build(options: BuildOptions): PropertyAccess {
 		const {
 			initial,

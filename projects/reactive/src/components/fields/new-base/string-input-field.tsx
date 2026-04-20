@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, useCallback } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -8,7 +7,12 @@ interface StringInputProps {
 	onChange: (value: string | null) => void;
 	value?: string | null;
 	Component: React.ElementType;
-	[key: string]: unknown;
+	id?: string | null;
+	type?: string;
+	size?: string;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	disabled?: boolean;
 }
 
 const StringInput = forwardRef<unknown, StringInputProps>((props, ref) => {

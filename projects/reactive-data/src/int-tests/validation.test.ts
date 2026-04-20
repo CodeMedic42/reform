@@ -1,8 +1,8 @@
 import { describe, expect, it, jest } from "@jest/globals";
+import { cloneDeep, forEach, isNil } from "lodash-es";
 import Configuration from "../configuration/configuration";
 import Data from "../data/data";
 import Property from "../data/property";
-import { cloneDeep, forEach, isNil } from "lodash-es";
 
 const testConfigurationDef = {
 	model: {
@@ -190,7 +190,7 @@ describe('Validation', () => {
 			function getTestConfigurationDefWithOnInitialize() {
 				const configurationDef = getTestConfigurationDef();
 
-				// @ts-ignore:
+				// @ts-expect-error:
 				configurationDef.model.keys.foo.rules.required.triggers = {
 					initialize: true
 				};
@@ -252,7 +252,7 @@ describe('Validation', () => {
 			function getTestConfigurationDefWithOnChange() {
 				const configurationDef = getTestConfigurationDef();
 
-				// @ts-ignore:
+				// @ts-expect-error:
 				configurationDef.model.keys.foo.rules.required.triggers = {
 					change: true
 				};
@@ -304,9 +304,9 @@ describe('Validation', () => {
 
 						fooProp?.setValue(null);
 					}).then((handleStateChange) => {
-						// @ts-ignore
+						// @ts-expect-error
 						expect(handleStateChange.mock.calls[0][0]).toBe('validating');
-						// @ts-ignore
+						// @ts-expect-error
 						expect(handleStateChange.mock.calls[1][0]).toBe('idle');
 						
 						const results = fooProp!.getRulesStatus();
@@ -346,9 +346,9 @@ describe('Validation', () => {
 
 						fooProp?.setValue('Hello2');
 					}).then((handleStateChange) => {
-						// @ts-ignore
+						// @ts-expect-error
 						expect(handleStateChange.mock.calls[0][0]).toBe('validating');
-						// @ts-ignore
+						// @ts-expect-error
 						expect(handleStateChange.mock.calls[1][0]).toBe('idle');
 						
 						const results = fooProp!.getRulesStatus();
@@ -386,9 +386,9 @@ describe('Validation', () => {
 
 						fooProp?.setValue(null);
 					}).then((handleStateChange) => {
-						// @ts-ignore
+						// @ts-expect-error
 						expect(handleStateChange.mock.calls[0][0]).toBe('validating');
-						// @ts-ignore
+						// @ts-expect-error
 						expect(handleStateChange.mock.calls[1][0]).toBe('idle');
 						
 						const results = fooProp!.getRulesStatus();
@@ -693,7 +693,7 @@ describe('Validation', () => {
 				function getTestConfigurationDefWithEnabled() {
 					const configurationDef = getTestConfigurationDef();
 
-					// @ts-ignore:
+					// @ts-expect-error:
 					configurationDef.model.keys.foo.rules.required.enabled = testData.enabledValue;
 
 					return configurationDef;
@@ -760,7 +760,7 @@ describe('Validation', () => {
 						function getTestConfigurationDefWithOnInitialize() {
 							const configurationDef = getTestConfigurationDefWithEnabled();
 
-							// @ts-ignore:
+							// @ts-expect-error:
 							configurationDef.model.keys.foo.rules.required.triggers = {
 								initialize: true
 							};
@@ -823,7 +823,7 @@ describe('Validation', () => {
 						function getTestConfigurationDefWithOnChange() {
 							const configurationDef = getTestConfigurationDefWithEnabled();
 
-							// @ts-ignore:
+							// @ts-expect-error:
 							configurationDef.model.keys.foo.rules.required.triggers = {
 								change: true
 							};
@@ -862,12 +862,12 @@ describe('Validation', () => {
 											fooProp?.setValue('Hello2');
 										}).then((handleStateChange) => {
 											if (expected!.validationToRun) {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[0][0]).toBe('validating');
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[1][0]).toBe('idle');
 											} else {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls.length).toBe(0);
 											}
 											
@@ -881,11 +881,11 @@ describe('Validation', () => {
 												}
 												} = results;
 
-											// @ts-ignore
+											// @ts-expect-error
 											expect(attribute).toBe(expected.attribute);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(enabled).toBe(expected.enabled);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(message).toBe(expected.message);
 										});
 									});
@@ -920,12 +920,12 @@ describe('Validation', () => {
 											fooProp?.setValue(null);
 										}).then((handleStateChange) => {
 											if (expected!.validationToRun) {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[0][0]).toBe('validating');
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[1][0]).toBe('idle');
 											} else {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls.length).toBe(0);
 											}
 											
@@ -939,11 +939,11 @@ describe('Validation', () => {
 												}
 												} = results;
 
-											// @ts-ignore
+											// @ts-expect-error
 											expect(attribute).toBe(expected.attribute);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(enabled).toBe(expected.enabled);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(message).toBe(expected.message);
 										});
 									});
@@ -982,12 +982,12 @@ describe('Validation', () => {
 											fooProp?.setValue('Hello2');
 										}).then((handleStateChange) => {
 											if (expected!.validationToRun) {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[0][0]).toBe('validating');
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[1][0]).toBe('idle');
 											} else {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls.length).toBe(0);
 											}
 											
@@ -1001,11 +1001,11 @@ describe('Validation', () => {
 												}
 											} = results;
 
-											// @ts-ignore
+											// @ts-expect-error
 											expect(attribute).toBe(expected.attribute);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(enabled).toBe(expected.enabled);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(message).toBe(expected.message);
 										});
 									});
@@ -1040,12 +1040,12 @@ describe('Validation', () => {
 											fooProp?.setValue(null);
 										}).then((handleStateChange) => {
 											if (expected!.validationToRun) {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[0][0]).toBe('validating');
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls[1][0]).toBe('idle');
 											} else {
-												// @ts-ignore
+												// @ts-expect-error
 												expect(handleStateChange.mock.calls.length).toBe(0);
 											}
 											
@@ -1059,11 +1059,11 @@ describe('Validation', () => {
 												}
 											} = results;
 
-											// @ts-ignore
+											// @ts-expect-error
 											expect(attribute).toBe(expected.attribute);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(enabled).toBe(expected.enabled);
-											// @ts-ignore
+											// @ts-expect-error
 											expect(message).toBe(expected.message);
 										});
 									});

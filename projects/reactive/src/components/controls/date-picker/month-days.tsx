@@ -1,5 +1,4 @@
 import React from 'react';
-/* eslint-disable import/no-duplicates */
 import format from 'date-fns/format';
 import lastDayOfMonth from 'date-fns/lastDayOfMonth';
 /* eslint-enable import/no-duplicates */
@@ -47,7 +46,7 @@ function MonthDays(props: MonthDaysProps): React.ReactNode {
 
         let disabled = false;
 
-        if (firstDate[0] === currentYear && firstDate[1] === currentMonth && dayCounter < firstDate[2]) {
+        if (!isNil(firstDate) && firstDate[0] === currentYear && firstDate[1] === currentMonth && dayCounter < firstDate[2]) {
             disabled = true;
         } else if (!isNil(lastDate) && lastDate[0] === currentYear && lastDate[1] === currentMonth && dayCounter > lastDate[2]) {
             disabled = true;

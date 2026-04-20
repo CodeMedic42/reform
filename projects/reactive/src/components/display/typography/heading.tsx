@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -11,7 +10,6 @@ interface HeadingProps {
     level: '1' | '2' | '3' | '4' | '5';
     forwardRef?: React.Ref<unknown> | null;
     responsive?: boolean;
-    [key: string]: unknown;
 }
 
 class Heading extends PureComponent<HeadingProps> {

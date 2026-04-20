@@ -1,6 +1,6 @@
 import DataControl from "../data/data-control";
 import PropertyAccess from "../data/property-access";
-import { RulesDefinition, MetaDefinition, TriggersDefinition, ModelDefinition } from "./configuration-types";
+import { ModelDefinition } from "./configuration-types";
 import ModelRules from './model-rules';
 import ModelMeta from "./model-meta";
 import TriggersModel from "./triggers-model";
@@ -13,8 +13,11 @@ export type BuildOptions = {
 
 abstract class BaseModel {
 	#type: string;
+
 	#meta: ModelMeta
+
 	#rules: ModelRules;
+
 	#triggers: TriggersModel;
 
 	constructor(modelDef: ModelDefinition, triggersModel: TriggersModel) {

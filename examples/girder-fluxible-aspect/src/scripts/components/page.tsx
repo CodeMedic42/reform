@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty } from 'lodash-es';
 import {
     connectToStores,
     useFluxible,

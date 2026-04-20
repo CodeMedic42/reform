@@ -5,6 +5,7 @@ import CheckInput from '../../fields/check-input-field/index.js';
 import MenuItem from './menu-item.js';
 import buildId from '../../../common/build-id.js';
 import ListItemContent from '../drop-down/list-item-content.js';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 
 interface MenuCheckProps {
@@ -16,8 +17,8 @@ interface MenuCheckProps {
     value?: boolean;
     onChange?: ((value: boolean) => void) | null;
     disabled?: boolean;
-    variant?: 'check' | 'indeterminate' | null;
-    icon?: unknown | null;
+    variant?: 'check' | 'indeterminate';
+    icon?: IconProp | null;
     'aria-label'?: string | null;
 }
 
@@ -44,7 +45,7 @@ class MenuCheck extends PureComponent<MenuCheckProps> {
             value = false,
             onChange = null,
             disabled = false,
-            variant = null,
+            variant,
             icon = null,
             'aria-label': ariaLabel = null,
         } = this.props;

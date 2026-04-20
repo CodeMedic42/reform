@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { isNil } from 'lodash-es';
 import React from 'react';
 
@@ -28,7 +27,6 @@ export default (Context: React.Context<any>, Component: React.ComponentType<any>
 
 	wrapped.displayName = Component.name;
 
-	// eslint-disable-next-line no-param-reassign
 	Component.displayName = `Wrapped${Component.name}`;
 
 	return wrapped;

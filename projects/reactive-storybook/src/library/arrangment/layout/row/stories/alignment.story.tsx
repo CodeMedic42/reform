@@ -41,7 +41,7 @@ export default function example() {
                         <Content>bottom</Content>
                     </Column>
                 </Row>
-                <Row gutter="16" align={['bottom', 'center', null, 'top']}>
+                <Row gutter="16" align={['bottom', 'center', null, 'top'] as string[]}>
                     <Column width="3">
                         <Content style={{ height: 100 }}>filler</Content>
                     </Column>

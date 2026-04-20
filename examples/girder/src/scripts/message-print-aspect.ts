@@ -9,8 +9,8 @@ class MessagePrintAspect extends Aspect {
         super('messagePrint');
     }
 
-    onInitialize(config: AspectInitContext): Promise<MessagePrintControls> {
-        const { getSettings } = config;
+    onInitialize(config?: AspectInitContext): Promise<MessagePrintControls> {
+        const { getSettings } = config!;
 
         const controls: MessagePrintControls = {
             print: (): void => {

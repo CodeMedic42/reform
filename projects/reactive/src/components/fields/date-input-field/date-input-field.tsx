@@ -18,7 +18,6 @@ interface DateInputProps {
 	maxDate?: Date | null;
 	leftAnnotation?: React.ReactNode;
 	rightAnnotation?: React.ReactNode;
-	[key: string]: unknown;
 }
 
 function DateInput(props: DateInputProps): React.ReactElement {

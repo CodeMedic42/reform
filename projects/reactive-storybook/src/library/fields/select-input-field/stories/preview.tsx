@@ -1,7 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useMemo } from 'react';
-import reduce from 'lodash/reduce';
-import SelectInputField from '../../../../../../reactive/dist/components/fields/select-input-field';
+import { reduce } from 'lodash-es';
+import SelectInputField from '@reformjs/reactive/fields/select-input-field';
 import { abbreviated } from '../../../../common/options-data';
 
 function generateMessages(count: number = 0): string[] {
@@ -22,7 +21,7 @@ interface PreviewProps {
 }
 
 function Preview(props: PreviewProps) {
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState<string | number | null>(null);
 
     const {
         successMessageCount,
@@ -69,27 +68,31 @@ function Preview(props: PreviewProps) {
         return mess;
     }, [successMessages, failureMessages, generalMessages]);
 
+    const extraProps = {
+        ...reduce(
+            rest,
+            (acc: Record<string, unknown>, prop: unknown, key: string) => {
+                if (prop === 'true') {
+                    acc[key] = true;
+                } else if (prop === 'false') {
+                    acc[key] = false;
+                } else {
+                    acc[key] = prop;
+                }
+
+                return acc;
+            },
+            {},
+        ),
+        options: abbreviated,
+        value: value || 'appleCrumb',
+        onChange: setValue,
+        messages,
+    };
+
     return (
         <SelectInputField
-            {...reduce(
-                rest,
-                (acc: Record<string, unknown>, prop: unknown, key: string) => {
-                    if (prop === 'true') {
-                        acc[key] = true;
-                    } else if (prop === 'false') {
-                        acc[key] = false;
-                    } else {
-                        acc[key] = prop;
-                    }
-
-                    return acc;
-                },
-                {},
-            )}
-            options={abbreviated}
-            value={value || 'appleCrumb'}
-            onChange={setValue}
-            messages={messages}
+            {...(extraProps as any)}
         />
     );
 }

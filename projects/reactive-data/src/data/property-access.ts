@@ -16,23 +16,33 @@ export interface RulesStatus {
 
 export default class PropertyAccess {
 	#value: PropertyValue;
+
 	#lastListenerId = 0;
+
 	#onChangeListeners: {
 		[key: string]: Function 
 	} = {};
+
 	#onStateChangeListeners: { [key: string]: Function } = {};
+
 	#rules: { [key: string]: PropertyRule; };
+
 	#interface: Property;
+
 	#ruleStates: {
 		[key: string]: {
 			[key: string]: boolean
 		}
 	} = {};
+
 	#invalidRules: {
 		[key: string]: PropertyRule
 	} = {};
+
 	#state = State.idle;
+
 	#lastUsedListenerId = 0;
+
 	#uuid: string;
 
 	constructor(options: PropertyOptions) {
@@ -45,25 +55,23 @@ export default class PropertyAccess {
 		this.#value = value;
 		this.#interface = new Property(this);
 
-		this.#lastListenerId;
-
 		this.#rules = mapValues(value.getModel().getRules().getRules(), (rule: ModelRule) => {
 			const propertyRule = new PropertyRule(rule, this);
 
-			propertyRule.onStateChange((rule: PropertyRule, previousRuleState: State) => {
-				const newState = rule.getState();
+			propertyRule.onStateChange((changedRule: PropertyRule, previousRuleState: State) => {
+				const newState = changedRule.getState();
 
 				// Update overall validity
 				if (newState === State.idle) {
-					if (rule.isValid()) {
-						delete this.#invalidRules[rule.getUuid()];
+					if (changedRule.isValid()) {
+						delete this.#invalidRules[changedRule.getUuid()];
 					} else {
-						this.#invalidRules[rule.getUuid()] = rule;
+						this.#invalidRules[changedRule.getUuid()] = changedRule;
 					}
 				}
 
 				if (!isNil(this.#ruleStates[previousRuleState])) {
-					delete this.#ruleStates[previousRuleState][rule.getUuid()];
+					delete this.#ruleStates[previousRuleState][changedRule.getUuid()];
 
 					if (keys(this.#ruleStates[previousRuleState]).length <= 0) {
 						delete this.#ruleStates[previousRuleState];
@@ -74,7 +82,7 @@ export default class PropertyAccess {
 					this.#ruleStates[newState] = {};
 				}
 
-				this.#ruleStates[newState][rule.getUuid()] = true;
+				this.#ruleStates[newState][changedRule.getUuid()] = true;
 
 				// get highest overall state of all rules
 				const highest = getHighestState(keys(this.#ruleStates) as State[]);
@@ -239,9 +247,7 @@ export default class PropertyAccess {
 	}
 
 	getRulesStatus(): RulesStatus {
-		return mapValues(this.#rules, (rule) => {
-			return rule.getStatus();
-		});
+		return mapValues(this.#rules, (rule) => rule.getStatus());
 	}
 
 	getState() {

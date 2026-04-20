@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
 import { isNil, join, map } from 'lodash-es';
@@ -93,12 +91,11 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 		});
 	}
 
-	// eslint-disable-next-line class-methods-use-this
 	handleMouseDown(event: React.MouseEvent) {
 		event.preventDefault();
 	}
 
-	handleClearItem({ event, meta: index }: { event: React.MouseEvent; meta: number }) {
+	handleClearItem({ event, meta: index }: { event: React.MouseEvent<HTMLButtonElement>; meta: unknown }) {
 		const { onClearIndex, onClearIndexMeta } = this.props;
 
 		event.preventDefault();
@@ -109,7 +106,7 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 			onClearIndex({
 				event,
 				meta: onClearIndexMeta,
-				index,
+				index: index as number,
 			});
 		}
 	}
@@ -141,20 +138,21 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 		const ItemComponent =
 			disabled || (!nullable && value.length <= 1) ? Chip : RemovableChip;
 
-		return map(value, (text, index) => (
-			<ItemComponent
-				color="blue"
-				onClear={this.handleClearItem}
-				onClearMeta={index}
-				onMouseDown={this.handleMouseDown}
-				size={size}
-				key={text}
-				tabIndex="-1"
-				disabled={disabled}
-			>
-				{text}
-			</ItemComponent>
-		));
+		return map(value, (text, index) => {
+			const itemProps: Record<string, unknown> = {
+				color: 'blue',
+				onClear: this.handleClearItem,
+				onClearMeta: index,
+				onMouseDown: this.handleMouseDown,
+				size,
+				key: text,
+				tabIndex: '-1',
+				disabled,
+				children: text,
+			};
+
+			return <ItemComponent {...itemProps as any} key={text}>{text}</ItemComponent>;
+		});
 	}
 
 	render() {
@@ -180,9 +178,8 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 					className="clear"
 					tabIndex="-1"
 					icon={faXmark}
-					onClick={this.handleClear}
-					onClearMeta={onClearMeta}
-					size={changeSize(size, 1)}
+					onClick={(event: React.MouseEvent<HTMLButtonElement>) => this.handleClear({ event, meta: onClearMeta })}
+					size={changeSize(size ?? 'md', 1) as '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'}
 					disabled={disabled}
 				/>
 			) : null;
@@ -240,7 +237,7 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 						<IconBox
 							className="arrow"
 							icon={open ? faAngleUp : faAngleDown}
-							size={changeSize(size, 1)}
+							size={changeSize(size ?? 'md', 1) as '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'}
 						/>
 						{clearButton}
 					</div>

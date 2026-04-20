@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const tsPreset: Record<string, unknown> = require('ts-jest/jest-preset');
 const webUnitPreset: Record<string, unknown> = require('@reformjs/web-unit-jest/jest-preset');
 // const pupPreset = require('jest-puppeteer/jest-preset');

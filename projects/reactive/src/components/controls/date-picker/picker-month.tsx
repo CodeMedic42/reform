@@ -61,7 +61,7 @@ function PickerMonth(props: PickerMonthProps): React.ReactNode {
     } = props;
 
     return (
-        <div id={id} className={classnames('ra-picker-month', className)} width="content">
+        <div id={id ?? undefined} className={classnames('ra-picker-month', className)} data-width="content">
             <div className="ra-picker-month-header">
                 <span className="ra-picker-month-name">{`${getMonthName(month)}, ${year}`}</span>
             </div>

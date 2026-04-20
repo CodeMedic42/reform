@@ -2,18 +2,20 @@ import BaseModel from "../configuration/base-model";
 import DataControl from "./data-control";
 import PropertyValue from "./property-value";
 
-export type PropertyModelValueOptions<sch> = {
+export type PropertyModelValueOptions<Sch> = {
 	dataControl: DataControl;
 	path: string[];
-	model: sch,
+	model: Sch,
 };
 
-export default abstract class PropertyModelValue<sch extends BaseModel> extends PropertyValue{
-	#model: sch;
+export default abstract class PropertyModelValue<Sch extends BaseModel> extends PropertyValue{
+	#model: Sch;
+
 	#dataControl: DataControl;
+
 	#path: string[];
 
-	constructor(options: PropertyModelValueOptions<sch>) {
+	constructor(options: PropertyModelValueOptions<Sch>) {
 		super();
 		
 		const {
@@ -27,7 +29,7 @@ export default abstract class PropertyModelValue<sch extends BaseModel> extends 
 		this.#path = path;
 	}
 
-	getModel(): sch {
+	getModel(): Sch {
 		return this.#model;
 	}
 

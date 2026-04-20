@@ -1,8 +1,4 @@
-/* eslint-disable max-len */
-// /* eslint-disable import/no-extraneous-dependencies */
-// /* eslint-disable max-len */
 // import React, { useState, useMemo } from 'react';
-// // eslint-disable-next-line import/no-extraneous-dependencies
 // import { render, act } from '@testing-library/react';
 // import '@testing-library/jest-dom';
 // import useCollectionContext from './use-collection-context';

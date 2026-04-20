@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import baseAttributeDefinitions from './base.step-definitions.js';
 import hasAttributeDefinitions from './has-attribute.step-definitions.js';
 

@@ -70,7 +70,7 @@ export default class ArrayValue extends PropertyModelValue<ArrayModel> {
 
 		for(counter; counter < newValue.length; counter++) {
 			const childValue = newValue[counter];
-			let childProperty = this.#value[counter];
+			const childProperty = this.#value[counter];
 
 			if (!isNil(childProperty)) {
 				changed = childProperty.setValue(childValue, rootChange) || changed;
@@ -90,10 +90,10 @@ export default class ArrayValue extends PropertyModelValue<ArrayModel> {
 		if (counter < this.#value.length) {
 			const removed = this.#value.splice(counter, this.#value.length - counter);
 
-			forEach(removed, (removed: PropertyAccess) => {
-				removed.setValue(undefined, rootChange);
+			forEach(removed, (removedItem: PropertyAccess) => {
+				removedItem.setValue(undefined, rootChange);
 
-				removed.dispose();
+				removedItem.dispose();
 			});
 		}
 
@@ -164,13 +164,13 @@ export default class ArrayValue extends PropertyModelValue<ArrayModel> {
 			getFiller = (counter: number) => this.#value[counter-1];
 		}
 
-		let fromProperty = this.#value[from];
-		let toProperty = this.#value[to];
+		const fromProperty = this.#value[from];
+		const toProperty = this.#value[to];
 		const fromValue = fromProperty.getValue();
 
 		for(let counter = from; forCompare(counter); counter = forInc(counter)) {
-			let emptyProperty = this.#value[counter];
-			let fillerProperty = getFiller(counter);
+			const emptyProperty = this.#value[counter];
+			const fillerProperty = getFiller(counter);
 
 			const fillerValue = fillerProperty.getValue();
 			changed = emptyProperty.setValue(fillerValue, false) || changed;
@@ -233,17 +233,13 @@ export default class ArrayValue extends PropertyModelValue<ArrayModel> {
 	}
 
 	initialize(): Promise<void> {
-		const childInitProms = this.map((item: PropertyAccess) => {
-			return item.initialize();
-		});
+		const childInitProms = this.map((item: PropertyAccess) => item.initialize());
 
 		return Promise.all(childInitProms).then(noop);
 	}
 
 	validate(): Promise<void> {
-		const childInitProms = this.map((item: PropertyAccess) => {
-			return item.validate();
-		});
+		const childInitProms = this.map((item: PropertyAccess) => item.validate());
 
 		return Promise.all(childInitProms).then(noop);
 	}

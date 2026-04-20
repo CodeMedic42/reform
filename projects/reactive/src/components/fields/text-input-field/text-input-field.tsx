@@ -20,7 +20,6 @@ interface TextInputFieldProps {
 	hidden?: boolean;
 	failure?: boolean;
 	messages?: InputMessagesData | null;
-	[key: string]: unknown;
 }
 
 const TextInputField = forwardRef<unknown, TextInputFieldProps>((props, ref) => {

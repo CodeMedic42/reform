@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef } from 'react';
 import classnames from 'classnames';
 import Select from '../base-components/select/index.js';
@@ -9,7 +7,6 @@ interface SelectTextInputProps {
     className?: string | null;
     onChange?: ((value: unknown) => void) | null;
     value?: string | number | null;
-    [key: string]: unknown;
 }
 
 const SelectTextInput = forwardRef<unknown, SelectTextInputProps>((props, ref) => {

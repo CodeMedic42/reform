@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import classnames from 'classnames';
-/* eslint-disable import/no-duplicates */
 import isToday from 'date-fns/isToday';
 import isEqual from 'date-fns/isEqual';
 import getDate from 'date-fns/getDate';
@@ -18,11 +17,11 @@ interface PickerDayProps {
 }
 
 function getDayType(dayDate: Date, fromDate: Date | null | undefined, toDate: Date | null | undefined): string | null {
-    if (isEqual(dayDate, fromDate)) {
+    if (!isNil(fromDate) && isEqual(dayDate, fromDate)) {
         return 'from';
     }
 
-    if (isEqual(dayDate, toDate)) {
+    if (!isNil(toDate) && isEqual(dayDate, toDate)) {
         return 'to';
     }
 
@@ -66,14 +65,14 @@ function PickerDay(props: PickerDayProps): React.ReactNode {
 
     return (
         <button
-            tabIndex="-1"
+            tabIndex={-1}
             className={classnames(
                 'ra-picker-day',
                 {
                     [`${dayType}-day`]: !isNil(dayType),
                     today: isToday(dayDate),
                     'in-range': inRange(dayDate, fromDate, toDate),
-                    'target': isEqual(targetDate, dayDate),
+                    'target': !isNil(targetDate) && isEqual(targetDate, dayDate),
                 }
             )}
             type="button"

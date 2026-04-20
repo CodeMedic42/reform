@@ -1,6 +1,5 @@
-import isNil from 'lodash/isNil';
-import forEach from 'lodash/forEach';
-import { Aspect } from '@reformjs/girder';
+import { isNil, forEach } from 'lodash-es';
+import { Aspect, type AspectInitContext } from '@reformjs/girder';
 
 interface MobxStoreInstance {
     id: string;
@@ -9,10 +8,6 @@ interface MobxStoreInstance {
 
 interface MobxSetting {
     stores: MobxStoreInstance[];
-}
-
-interface MobxConfig {
-    getSettings: (key: string) => MobxSetting[];
 }
 
 interface MobxAspectResult {
@@ -24,11 +19,10 @@ class MobxAspect extends Aspect {
         super('mobx');
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    onInitialize(config: MobxConfig): MobxAspectResult {
-        const { getSettings } = config;
+    onInitialize(config?: AspectInitContext): MobxAspectResult {
+        const { getSettings } = config!;
 
-        const settings: MobxSetting[] = getSettings('mobx');
+        const settings = getSettings('mobx') as MobxSetting[];
 
         const stores: Record<string, unknown> = {};
 

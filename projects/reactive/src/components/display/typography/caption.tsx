@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -10,7 +9,6 @@ interface CaptionProps {
     children?: React.ReactNode;
     label: string;
     forwardRef?: React.Ref<unknown> | null;
-    [key: string]: unknown;
 }
 
 class Caption extends PureComponent<CaptionProps> {

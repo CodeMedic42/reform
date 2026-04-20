@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
     useRef,
     useCallback,
@@ -65,6 +64,8 @@ interface SelectProps {
     optionLabelPath?: string | ((option: unknown) => string | number) | null;
     isFiltering?: boolean;
     isFilteringMessage?: string;
+    useFilter?: boolean;
+    isMultiSelect?: boolean;
 }
 
 function getId(option: unknown, optionValuePath: string | ((option: unknown) => string | number) | null | undefined): string | number | null {
@@ -148,6 +149,7 @@ function buildFinalOptions(
 
     let checkValue: string = filterValue;
     // TODO: This could be resolved with the same one with buildValueMeta
+    // @typescript-eslint/no-unused-vars
     let filterCheck = (_item: any) => false;
 
     if (customValueSetting === 'sensitive') {
@@ -190,7 +192,7 @@ function buildFinalOptions(
 }
 
 function buildMultiValueByKey(existingValue: Array<string | number> | null, selectedId: string | number) {
-    let newValue: Array<string | number> = [];
+    const newValue: Array<string | number> = [];
     let didRemove = false;
 
     forEach(existingValue, (item) => {
@@ -278,7 +280,7 @@ function getSelectedText(nextValue: string | number, selectedLabelPath: string |
         }
     }
 
-    const { color: selectedColor } = option ? option.getValue('value') : {};
+    const { color: selectedColor } = option ? option.getValue('value') : { color: undefined };
 
     return {
         selectedText,
@@ -717,7 +719,7 @@ const Select = forwardRef<unknown, SelectProps>((props, ref) => {
         [enableFiltering, enableSorting, excludeValues, filterTarget, optionValuePath, optionLabelPath],
     );
 
-    const [items, optionsControls] = useCollectionContext(options, contextOptions);
+    const [items, optionsControls] = useCollectionContext(options ?? [], contextOptions);
 
     const { getById: getOptionById } = optionsControls;
 
@@ -937,7 +939,7 @@ const Select = forwardRef<unknown, SelectProps>((props, ref) => {
             {({
                 describedBy, labelledBy, inputId, finalId,
             }: { describedBy: string | null; labelledBy: string; inputId: string; finalId: string }) => {
-                const listBoxId = buildId(finalId, 'options-list');
+                const listBoxId = buildId(finalId, 'options-list')!;
 
                 const { options: renderedOptions, targetedElementId } = renderOptions(
                     finalId,
@@ -969,9 +971,9 @@ const Select = forwardRef<unknown, SelectProps>((props, ref) => {
                             `size-${size}`,
                         )}
                         disabled={disabled}
-                        minDrawerWidth={minDrawerWidth}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
+                        minTrayWidth={minDrawerWidth}
+                        onFocus={onFocus ?? undefined}
+                        onBlur={onBlur ?? undefined}
                         maxTrayHeight={216}
                         onKeyDown={handleDropDownKeyDown}
                         onOpen={handleOpen}

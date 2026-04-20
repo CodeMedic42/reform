@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
+import { isNil } from "lodash-es";
 import Configuration from "../configuration/configuration";
 import BaseModel from "../configuration/base-model";
 import ObjectModel from "../configuration/object-model";
@@ -6,7 +7,6 @@ import SimpleModel from "../configuration/simple-model";
 import ArrayModel from "../configuration/array-model";
 import Data from "../data/data";
 import Property from "../data/property";
-import { isNil } from "lodash-es";
 
 const testConfigurationDef = {
 	model: {

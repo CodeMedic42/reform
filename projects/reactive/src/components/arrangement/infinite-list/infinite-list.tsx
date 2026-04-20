@@ -25,7 +25,6 @@ export interface InfiniteListProps {
     keepLoaded?: boolean;
     onTopIndexChange?: ((index: number) => void) | null;
     topOffset?: number | boolean;
-    [key: string]: unknown;
 }
 
 export interface InfiniteListHandle {
@@ -44,7 +43,6 @@ function getNumberChildrenBefore(
     if (itemsContainer.childNodes.length > 0) {
         const parentRect = parent.getBoundingClientRect();
 
-        // eslint-disable-next-line no-constant-condition
         while (true) {
             const child = itemsContainer.childNodes[count] as HTMLElement;
             const childRect = child.getBoundingClientRect();
@@ -91,7 +89,6 @@ function getNumberChildrenAfter(parent: HTMLElement, itemsContainer: HTMLElement
 
     const parentRect = parent.getBoundingClientRect();
 
-    // eslint-disable-next-line no-constant-condition
     while (count > 0) {
         const child = itemsContainer.childNodes[count - 1] as HTMLElement;
         const childRect = child.getBoundingClientRect();
@@ -541,7 +538,6 @@ const InfiniteList = forwardRef<InfiniteListHandle, InfiniteListProps>((props, r
         }
 
         if (!keepLoaded && beforeCount > offLoadCount) {
-            // eslint-disable-next-line operator-assignment
             const subtractFrom = beforeCount - loadCount;
 
             let newCount = fromCount + subtractFrom;

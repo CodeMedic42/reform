@@ -10,7 +10,6 @@ export default function DefaultStory() {
     const [target] = useState(new Date(2023, 5 - 1, 22));
 
     const handleSelect = useCallback((date: Date) => {
-        // eslint-disable-next-line no-console
         console.log(format(date, 'yyyy/MM/dd'));
     }, []);
 

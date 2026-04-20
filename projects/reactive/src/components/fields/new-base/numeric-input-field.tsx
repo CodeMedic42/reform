@@ -1,12 +1,17 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, useCallback } from 'react';
-import { isNil, isNaN } from 'lodash-es';
+import { isNil, isNaN, toString } from 'lodash-es';
 
 interface NumericInputProps {
 	onChange: (value: number | null) => void;
 	value?: string | null;
 	Component: React.ElementType;
-	[key: string]: unknown;
+	id?: string | null;
+	type?: string;
+	size?: string;
+	className?: string | null;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	disabled?: boolean;
 }
 
 function getNumericValue(value: string | null | undefined): string {

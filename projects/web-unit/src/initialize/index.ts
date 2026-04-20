@@ -1,10 +1,10 @@
 import pti from 'puppeteer-to-istanbul';
+import type { Browser, Page, CoverageEntry } from 'puppeteer';
+import type WebpackDevServer from 'webpack-dev-server';
 import RunContext from './run-context.js';
 import startServer from './harness-server/start-server.js';
 import startPuppeteer from './harness-server/start-puppeteer.js';
 import HarnessControl from './harness-control.js';
-import type { Browser, Page, CoverageEntry } from 'puppeteer';
-import type WebpackDevServer from 'webpack-dev-server';
 
 interface InitializeResult {
     start: () => Promise<HarnessControl>;

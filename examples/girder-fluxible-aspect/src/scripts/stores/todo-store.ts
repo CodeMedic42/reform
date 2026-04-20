@@ -1,6 +1,5 @@
 import {createStore} from 'fluxible/addons';
-import find from 'lodash/find';
-import isNil from 'lodash/isNil';
+import { find, isNil } from 'lodash-es';
 
 interface Todo {
     id: string;

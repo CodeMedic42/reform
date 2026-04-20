@@ -4,9 +4,6 @@ import SimpleValue from '../data/simple-value.mjs';
 import { registerModel } from './model-registry.mjs';
 
 class SimpleModel extends BaseModel {
-    constructor(modelDef, triggersModel) {
-        super(modelDef, triggersModel);
-    }
     build(options) {
         const { initial, dataControl, path, } = options;
         const propertyValue = new SimpleValue({

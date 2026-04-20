@@ -30,7 +30,8 @@ interface BaseMaskInputProps {
 	showMask?: boolean | null;
 	guide?: boolean;
 	keepCharPositions?: boolean;
-	[key: string]: unknown;
+	placeholder?: string;
+	autoComplete?: string;
 }
 
 const BaseMaskInput = forwardRef<unknown, BaseMaskInputProps>((props, ref) => {
@@ -78,20 +79,19 @@ const BaseMaskInput = forwardRef<unknown, BaseMaskInputProps>((props, ref) => {
 			id={id}
 			className={className}
 			value={value}
-			valueType="string"
 			disabled={disabled}
-			onChange={onChange}
+			onChange={onChange ?? undefined}
 			onClear={onClear}
 			size={size}
 			leftIcon={leftIcon}
 			rightIcon={rightIcon}
 		>
-			{({ value: baseValue, onChange: baseOnChange }: { value: string | null; onChange: (value: string | null) => void }) => (
+			{({ value: baseValue, onChange: baseOnChange }: { value: string | number | null; onChange: (value: string | null) => void }) => (
 				<InputBase
 					ref={inputRef}
 					Component={MaskedInput}
-					id={id}
-					value={baseValue}
+					id={id ?? undefined}
+					value={baseValue as string | null}
 					onChange={baseOnChange}
 					type="text"
 					className={classnames({
@@ -99,7 +99,7 @@ const BaseMaskInput = forwardRef<unknown, BaseMaskInputProps>((props, ref) => {
 						'has-value': !isNil(baseValue),
 					})}
 					mask={mask}
-					showMask={showMask}
+					showMask={showMask ?? undefined}
 					guide={guide}
 					keepCharPositions={keepCharPositions}
 					{...rest}

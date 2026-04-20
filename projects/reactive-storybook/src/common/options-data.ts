@@ -1,5 +1,4 @@
-import map from 'lodash/map';
-import reduce from 'lodash/reduce';
+import { map, reduce } from 'lodash-es';
 
 interface AbbreviatedOption {
     label: string;

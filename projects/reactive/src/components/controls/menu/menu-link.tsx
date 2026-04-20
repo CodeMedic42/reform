@@ -2,13 +2,14 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import ListItemLink from '../drop-down/list-item-link.js';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 import MenuItem from './menu-item.js';
 
 interface MenuLinkProps {
     id?: string | null;
     className?: string | null;
-    icon?: unknown | null;
+    icon?: IconProp | null;
     children?: string | null;
     onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
     'aria-label'?: string | null;

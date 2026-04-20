@@ -26,7 +26,6 @@ interface DateRangeInputAnchorProps {
 	onToFocus: () => void;
 	leftAnnotation?: React.ReactNode;
 	rightAnnotation?: React.ReactNode;
-	[key: string]: unknown;
 }
 
 function DateRangeInputAnchor(props: DateRangeInputAnchorProps): React.ReactElement {

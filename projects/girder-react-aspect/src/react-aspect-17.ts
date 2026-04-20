@@ -1,7 +1,5 @@
-/* eslint-disable class-methods-use-this */
-// eslint-disable-next-line react/no-deprecated
 import ReactDom, { unmountComponentAtNode } from 'react-dom';
-import type { ReactNode, ComponentType } from 'react';
+import type { ReactNode, ReactElement, ComponentType } from 'react';
 import ReactAspectBase from './react-aspect-base.js';
 
 class ReactAspect17 extends ReactAspectBase {
@@ -15,7 +13,7 @@ class ReactAspect17 extends ReactAspectBase {
 
     mount(container: HTMLDivElement, appRoot: ReactNode): void {
         if (!this.mounted) {
-            ReactDom.render(appRoot, container);
+            ReactDom.render(appRoot as ReactElement, container);
         }
 
         this.mounted = true;

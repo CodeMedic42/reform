@@ -8,7 +8,6 @@ export interface InfiniteListItemsProps {
     Component?: React.ElementType;
     items?: unknown[] | null;
     render: (item: unknown, index: number[]) => React.ReactNode;
-    [key: string]: unknown;
 }
 
 function load(

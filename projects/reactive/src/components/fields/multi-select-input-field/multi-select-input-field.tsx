@@ -10,7 +10,6 @@ interface MultiSelectInputProps {
 	onChange?: ((value: Array<string | number> | null) => void) | null;
 	value?: Array<string | number> | null;
 	nullable?: boolean;
-	[key: string]: unknown;
 }
 
 const MultiSelectInput = forwardRef<unknown, MultiSelectInputProps>((props, ref) => {
@@ -34,7 +33,7 @@ const MultiSelectInput = forwardRef<unknown, MultiSelectInputProps>((props, ref)
             return;
         }
 
-        let newValue = clone(value) as Array<string | number>;
+        const newValue = clone(value) as Array<string | number>;
 
         pullAt(newValue, [index]);
 

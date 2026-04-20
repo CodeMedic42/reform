@@ -14,9 +14,7 @@ class ObjectModel extends BaseModel {
 	constructor(modelDef: ModelDefinition, triggersModel: TriggersModel) {
 		super(modelDef, triggersModel);
 
-		this.#keys = mapValues(modelDef.keys, (childModel) => {
-			return buildModel(childModel, this.getTriggers());
-		});
+		this.#keys = mapValues(modelDef.keys, (childModel) => buildModel(childModel, this.getTriggers()));
 	}
 
 	getKey(key: string) {

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-undef */
 import { toNumber, map } from 'lodash-es';
 import { getInnerText, getClassList } from '@reformjs/web-unit/util';
 

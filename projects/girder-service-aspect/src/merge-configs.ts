@@ -1,7 +1,4 @@
-import forEach from 'lodash/forEach';
-import isNil from 'lodash/isNil';
-import isUndefined from 'lodash/isUndefined';
-import isFunction from 'lodash/isFunction';
+import { forEach, isNil, isUndefined, isFunction } from 'lodash-es';
 
 export interface ServiceSettings {
     data?: unknown;

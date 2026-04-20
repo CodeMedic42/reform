@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { useCallback, useMemo } from 'react';
 import { isFunction, forEach, isEmpty, map, isNil } from 'lodash-es';
 import useFilterSettings, { FilterSettings, FilterState } from './use-filter-settings.js';
@@ -14,14 +13,14 @@ const ACCESS_SYMBOL = Symbol('AccessSymbol');
 export interface CollectionOptions {
     filterSettings?: FilterSettings;
     sortSettings?: SortSettings;
-    getId?: (item: any) => string;
+    getId?: (item: any) => string | number | null;
     beforeInsert?: (item: any) => any;
 }
 
 function appendItems(
     items: CollectionItem[],
     newItems: any[],
-    getId: ((item: any) => string) | null,
+    getId: ((item: any) => string | number | null) | null,
     beforeInsert: (item: any) => any,
     filterState: FilterState,
     sortState: SortState,
@@ -41,9 +40,10 @@ function appendItems(
         let id: string | null = null;
 
         if (!isNil(getId)) {
-            id = getId(newItem);
+            const rawId = getId(newItem);
+            id = rawId != null ? String(rawId) : null;
 
-            if (!isNil(ids[id])) {
+            if (!isNil(id) && !isNil(ids[id])) {
                 throw new Error(`Invalid duplicate id: "${id}"`);
             }
         }
@@ -60,7 +60,6 @@ function appendItems(
         collectionItem[ACCESS_SYMBOL].setFilterPriority(filterState.processValue(finalItem));
 
         if (!isNil(id)) {
-            // eslint-disable-next-line no-param-reassign
             ids[id] = collectionItem;
         }
 
@@ -82,8 +81,8 @@ function useCollectionContext(rawItems: any[], options?: CollectionOptions | (()
 
     const sortState = useSortSettings(op?.sortSettings);
 
-    const getId = useMemo(() => (isFunction((options as CollectionOptions)?.getId) ? (options as CollectionOptions).getId! : null));
-    const beforeInsert = useMemo(() => (isFunction((options as CollectionOptions)?.beforeInsert) ? (options as CollectionOptions).beforeInsert! : echo));
+    const getId = useMemo(() => (isFunction((options as CollectionOptions)?.getId) ? (options as CollectionOptions).getId! : null), [options]);
+    const beforeInsert = useMemo(() => (isFunction((options as CollectionOptions)?.beforeInsert) ? (options as CollectionOptions).beforeInsert! : echo), [options]);
 
     let processed = false;
 
@@ -127,7 +126,7 @@ function useCollectionContext(rawItems: any[], options?: CollectionOptions | (()
         return sortState.insert([], filteredItems);
     }, [sortState]);
 
-    const getById = useCallback((id: string) => ids[id], [ids]);
+    const getById = useCallback((id: string | number) => ids[String(id)], [ids]);
 
     return [sortedItems,
         useMemo(

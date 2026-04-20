@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-// /* eslint-disable no-unused-expressions */
-// /* eslint-disable no-console */
-// /* eslint-disable react/jsx-props-no-spreading */
 // import React from 'react';
 // import { expect } from 'chai';
 // import sinon from 'sinon';

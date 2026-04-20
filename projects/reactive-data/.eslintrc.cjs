@@ -1,3 +1,3 @@
-const buildConfig = require('@config/eslint');
-
-module.exports = buildConfig(__dirname);
+module.exports = {
+    extends: '@config/eslint-config',
+};

@@ -1,4 +1,4 @@
-import isString from 'lodash/isString';
+import { isString } from 'lodash-es';
 
 export interface AspectSettings {
     [settingId: string]: unknown;
@@ -15,7 +15,6 @@ export interface AspectStartContext {
     [aspectId: string]: unknown;
 }
 
-/* eslint-disable class-methods-use-this */
 class Aspect {
     private aspectId: string;
 
@@ -35,8 +34,10 @@ class Aspect {
         return null;
     }
 
-    onInitialize(_context?: AspectInitContext): unknown | void {}
+    // @typescript-eslint/no-unused-vars
+    onInitialize(_context?: AspectInitContext): void {}
 
+    // @typescript-eslint/no-unused-vars
     onStart(_context?: AspectStartContext): void {}
 
     onStop(): void | Promise<void> {}

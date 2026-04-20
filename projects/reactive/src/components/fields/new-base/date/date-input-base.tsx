@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useMemo } from 'react';
-/* eslint-disable import/no-duplicates */
 import formatFnc from 'date-fns/format';
 import parse from 'date-fns/parse';
 import startOfToday from 'date-fns/startOfToday';
@@ -15,7 +14,18 @@ interface DateInputBaseProps {
 	format?: string;
 	value?: Date | null;
 	onChange?: ((value: Date | null) => void) | null;
-	[key: string]: unknown;
+	id?: string | null;
+	className?: string | null;
+	title?: string | null;
+	name?: string | null;
+	size?: string | null;
+	required?: boolean;
+	disabled?: boolean;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	'aria-label'?: string | null;
+	onFocus?: (() => void) | null;
+	fitTo?: string | null;
 }
 
 function DateInputBase(props: DateInputBaseProps): React.ReactElement {
@@ -85,7 +95,7 @@ function DateInputBase(props: DateInputBaseProps): React.ReactElement {
 					autoComplete="off"
 					guide
 					keepCharPositions
-					size="1"
+					size={1}
 				/>
 			)}
 		</InputValueBuffer>

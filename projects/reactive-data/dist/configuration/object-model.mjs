@@ -10,9 +10,7 @@ class ObjectModel extends BaseModel {
     constructor(modelDef, triggersModel) {
         super(modelDef, triggersModel);
         _ObjectModel_keys.set(this, void 0);
-        __classPrivateFieldSet(this, _ObjectModel_keys, mapValues(modelDef.keys, (childModel) => {
-            return buildModel(childModel, this.getTriggers());
-        }), "f");
+        __classPrivateFieldSet(this, _ObjectModel_keys, mapValues(modelDef.keys, (childModel) => buildModel(childModel, this.getTriggers())), "f");
     }
     getKey(key) {
         return __classPrivateFieldGet(this, _ObjectModel_keys, "f")[key];

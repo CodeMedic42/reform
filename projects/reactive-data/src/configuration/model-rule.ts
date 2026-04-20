@@ -5,9 +5,13 @@ import TriggersModel from "./triggers-model";
 
 class ModelRule {
 	#requires: string[][];
+
 	#attribute?: Function;
+
 	#enabled: Function;
+
 	#validator?: (property: Property, attributeValue: any) => string | null;
+
 	#triggers: TriggersModel;
 
 	constructor(rule: RuleDefinition, triggersModel: TriggersModel) {

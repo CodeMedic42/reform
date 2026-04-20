@@ -1,20 +1,16 @@
-import isNil from 'lodash/isNil';
-import forEach from 'lodash/forEach';
-import reduce from 'lodash/reduce';
-import get from 'lodash/get';
-import axios, { type AxiosResponse, type CreateAxiosDefaults } from 'axios';
+import { isNil, forEach, reduce, get } from 'lodash-es';
+import axios, { type AxiosResponse, type AxiosRequestConfig } from 'axios';
 import axiosRetry from 'axios-retry';
 import mergeConfigs from './merge-configs.js';
-import type { ServiceConfig, MergedConfig, HookFunction, ServiceSettings, RetryConfig, ResolvedHooks } from './merge-configs.js';
+import type { ServiceConfig, MergedConfig, HookFunction, ServiceSettings } from './merge-configs.js';
 
 interface GirderContext {
     getAspect: (aspectId: string) => unknown;
 }
 
-interface FinalConfig extends CreateAxiosDefaults {
+interface FinalConfig extends AxiosRequestConfig {
     params?: Record<string, string>;
     url?: string;
-    [key: string]: unknown;
 }
 
 export type CommandExecutor = (instanceConfiguration?: ServiceConfig) => Promise<[unknown, AxiosResponse | null]>;
@@ -31,7 +27,6 @@ function replaceRouteParams(url: string, params: Record<string, string> = {}): s
             throw new Error(`A param with key "${key}" was not found in the routeParams.`);
         }
 
-        // eslint-disable-next-line no-param-reassign
         acc = acc.replaceAll(placeholder, value);
 
         return acc;

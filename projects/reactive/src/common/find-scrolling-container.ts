@@ -42,6 +42,6 @@ function findScrollingContainer(node: Element, stop: Element) {
     return lastCalledForContainer;
 }
 
-const throttled = throttle(findScrollingContainer, 500, { leading: true });
+const throttled = throttle(findScrollingContainer, 500, { leading: true }) as unknown as (node: Element, stop?: Element) => Element | null;
 
 export default throttled;

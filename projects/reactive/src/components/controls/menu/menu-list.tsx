@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
 import DropDownList from '../drop-down/drop-down-list.js';
@@ -7,7 +6,8 @@ interface MenuListProps {
     id?: string | null;
     className?: string | null;
     children?: React.ReactNode;
-    [key: string]: unknown;
+    size?: string | null;
+    dark?: boolean;
 }
 
 class MenuList extends PureComponent<MenuListProps> {

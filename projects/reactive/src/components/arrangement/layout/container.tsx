@@ -1,14 +1,13 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import classnames from 'classnames';
 import { isNil, isString, isEmpty, forEach } from 'lodash-es';
 
 type GutterValueType = string;
-type gutterType = GutterValueType | GutterValueType[];
+type GutterType = GutterValueType | GutterValueType[];
 
 export interface ContainerProps {
     className?: string,
-    gutter?: gutterType,
+    gutter?: GutterType,
     hideOverflow?: boolean,
     children?: JSX.Element | JSX.Element[],
     style?: {
@@ -25,7 +24,7 @@ interface AccInt {
 
 function buildGutterClassName(
     acc: AccInt,
-    gutter?: gutterType,
+    gutter?: GutterType,
     additionalPrefix?: string,
     suffix?: string,
 ) {
@@ -43,7 +42,7 @@ function buildGutterClassName(
     }
 }
 
-function buildGutterClassGroup(acc: AccInt, gutter?: gutterType, additionalPrefix?: string) {
+function buildGutterClassGroup(acc: AccInt, gutter?: GutterType, additionalPrefix?: string) {
     if (isNil(gutter)) {
         return;
     }
@@ -63,7 +62,7 @@ function buildGutterClassGroup(acc: AccInt, gutter?: gutterType, additionalPrefi
     }
 }
 
-function buildGutterClasses(gutter?: gutterType) {
+function buildGutterClasses(gutter?: GutterType) {
     const states = {
         classNames: [],
         styles: {},

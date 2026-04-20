@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useCallback } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -75,7 +74,7 @@ function SelectAnchor(props: SelectAnchorProps): React.ReactElement {
             icon={faXmark}
             onClick={handleClear}
             onMouseDown={prevent}
-            size={changeSize(size, 1)}
+            size={changeSize(size ?? 'md', 1) as '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'}
             disabled={disabled}
         />
     ) : null;
@@ -140,7 +139,7 @@ function SelectAnchor(props: SelectAnchorProps): React.ReactElement {
                     <IconBox
                         className="arrow"
                         icon={open ? faAngleUp : faAngleDown}
-                        size={changeSize(size, 1)}
+                        size={changeSize(size ?? 'md', 1) as '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'}
                     />
                     {clearButton}
                 </div>

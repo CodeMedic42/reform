@@ -211,7 +211,7 @@ class ExternalBoundary extends Component<ExternalBoundaryPropsInt> {
     }
 
     render() {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // @typescript-eslint/no-unused-vars
         const { onExternalClick, cancelExternalScroll, ...rest } = this.props;
 
         return (

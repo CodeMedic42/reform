@@ -15,18 +15,31 @@ export interface RuleStatus {
 
 class PropertyRule {
 	#initialized: boolean = false;
+
 	#rule: ModelRule;
+
 	#propertyAccess: PropertyAccess;
+
 	#attribute?: any;
+
 	#enabled: boolean;
+
 	#required: (Property | undefined)[];
+
 	#newRequiredValues: boolean;
+
 	#validationStale: boolean;
+
 	#listeners: Function[];
+
 	#message: string | null = null;
+
 	#uuid: string;
+
 	#onStateChangeListeners: Listeners = {};
+
 	#lastUsedListenerId = 0;
+
 	#state: State = State.idle;
 
 	constructor(
@@ -43,13 +56,11 @@ class PropertyRule {
 		this.#uuid = nanoid();
 
 		// Listen for changes for the required values.
-		this.#listeners = map(rule.getRequires(), (requirePath, index) => {
-			return propertyAccess.getDataControl().onChangedAt(requirePath, (requiredPropertyAccess: PropertyAccess) => {
+		this.#listeners = map(rule.getRequires(), (requirePath, index) => propertyAccess.getDataControl().onChangedAt(requirePath, (requiredPropertyAccess: PropertyAccess) => {
 				this.#required[index] = requiredPropertyAccess.getInterface();
 
 				this.#newRequiredValues = true;
-			});
-		});
+			}));
 
 		// Listen for when a round of changes has ended.
 		propertyAccess.getDataControl().onChange( async () => {
@@ -88,7 +99,7 @@ class PropertyRule {
 	}
 
 	async validate() {
-		return await this.#performValidation();
+		return this.#performValidation();
 	}
 
 	async initialize() {

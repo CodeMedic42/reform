@@ -1,8 +1,7 @@
-/* eslint-disable react/no-unused-prop-types, react/jsx-props-no-spreading */
 import React from 'react';
 import wrappedContext from './wrapped-context.js';
 
-interface ContextWithConsumer<T> extends React.Context<T> {
+export interface ContextWithConsumer<T> extends React.Context<T> {
 	ApplyConsumer: (Component: React.ComponentType<any>) => React.ComponentType<any>;
 }
 

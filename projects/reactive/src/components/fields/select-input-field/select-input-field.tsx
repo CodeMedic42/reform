@@ -1,16 +1,16 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef, useCallback } from 'react';
 import classnames from 'classnames';
 import Select from '../base-components/select/index.js';
 import SelectAnchor from './select-field-anchor.js';
 
 interface SelectInputProps {
+    id?: string | null;
     className?: string | null;
     onChange?: ((value: string | number | null) => void) | null;
     nullable?: boolean;
     value?: string | number | null;
-    [key: string]: unknown;
+    options?: unknown[] | null;
+    size?: string;
 }
 
 const SelectInput = forwardRef<unknown, SelectInputProps>((props, ref) => {
@@ -38,7 +38,7 @@ const SelectInput = forwardRef<unknown, SelectInputProps>((props, ref) => {
                 nullable,
             }}
             Anchor={SelectAnchor}
-            onSelect={onChange}
+            onSelect={onChange as ((value: unknown) => void) | null}
         />
     );
 });

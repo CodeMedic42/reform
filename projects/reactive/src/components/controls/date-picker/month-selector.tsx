@@ -3,7 +3,7 @@ import SelectInput from '../../fields/select-input-field/index.js';
 
 interface MonthSelectorProps {
     month: number;
-    onChange: (value: number) => void;
+    onChange: (value: string | number | null) => void;
 }
 
 const options = [

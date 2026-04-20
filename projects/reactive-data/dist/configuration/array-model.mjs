@@ -1,9 +1,9 @@
 import { __classPrivateFieldSet, __classPrivateFieldGet } from 'tslib';
+import { isNil } from 'lodash-es';
 import { registerModel, buildModel } from './model-registry.mjs';
 import BaseModel from './base-model.mjs';
 import PropertyAccess from '../data/property-access.mjs';
 import ArrayValue from '../data/array-value.mjs';
-import { isNil } from 'lodash-es';
 
 var _ArrayModel_items;
 class ArrayModel extends BaseModel {

@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import Typography from './typography.js';
@@ -8,7 +7,6 @@ interface OverlineProps {
     className?: string | null;
     children?: React.ReactNode;
     forwardRef?: React.Ref<unknown> | null;
-    [key: string]: unknown;
 }
 
 class Overline extends PureComponent<OverlineProps> {

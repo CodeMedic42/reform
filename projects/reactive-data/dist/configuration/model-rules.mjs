@@ -6,9 +6,7 @@ var _ModelRules_rules;
 class ModelRules {
     constructor(modelRules, triggersModel) {
         _ModelRules_rules.set(this, void 0);
-        __classPrivateFieldSet(this, _ModelRules_rules, mapValues(modelRules, (modelRule) => {
-            return new ModelRule(modelRule, triggersModel);
-        }), "f");
+        __classPrivateFieldSet(this, _ModelRules_rules, mapValues(modelRules, (modelRule) => new ModelRule(modelRule, triggersModel)), "f");
     }
     getRules() {
         return __classPrivateFieldGet(this, _ModelRules_rules, "f");

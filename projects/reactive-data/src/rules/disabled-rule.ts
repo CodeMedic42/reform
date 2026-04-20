@@ -1,5 +1,3 @@
-import { isNil } from "lodash-es";
-import Property from "../data/property";
 import { RuleDefinition } from "../configuration/configuration-types";
 
 

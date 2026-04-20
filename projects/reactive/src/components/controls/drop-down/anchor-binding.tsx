@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/function-component-definition */
 import React, {
     Component,
     createRef,
@@ -130,7 +126,8 @@ export class AnchorWrapper extends Component<AnchorWrapperProps> {
 export interface AnchorBindingProps {
     anchorProps?: Record<string, unknown> | null;
     bindingRef: React.Ref<AnchorWrapper>;
-    [key: string]: unknown;
+    bindingInterface: BindingInterface;
+    open: boolean;
 }
 
 interface AnchorBindingOptions {
@@ -171,15 +168,17 @@ function applyAnchorBinding(
     }
 
     const AnchorBinding: React.FC<AnchorBindingProps> = (props) => {
-        const { anchorProps, bindingRef } = props;
+        const { anchorProps, bindingRef, bindingInterface, open } = props;
 
         return (
             <AnchorWrapper
-                {...props}
                 ref={bindingRef}
                 AnchorComponent={AnchorComponent}
                 boundingTargetSelector={boundingSelectorLookup(anchorProps)}
                 focusTargetSelector={focusSelectorLookup(anchorProps)}
+                bindingInterface={bindingInterface}
+                open={open}
+                anchorProps={anchorProps}
             />
         );
     };

@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, {
     Component,
     createContext,
@@ -67,11 +66,9 @@ const clearStylesMeta: StylesMeta = {
 
 function applyStyles(trayElement: HTMLElement, styles: Record<string, string | number | null | undefined>): void {
     forEach(styles, (styleValue, styleId) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const trayElementStyle = trayElement.style as any;
 
         if (trayElementStyle[styleId] !== styleValue) {
-            // eslint-disable-next-line no-param-reassign
             trayElementStyle[styleId] = styleValue;
         }
     });
@@ -954,7 +951,6 @@ function setTailStyles(
             setVerticalTailLocation(tailRenderingParameters),
         );
     } else {
-        // eslint-disable-next-line no-console
         console.warn('drop down arrow not built yet for this');
     }
 
@@ -988,13 +984,19 @@ interface TrayProps {
 
 class Tray extends Component<TrayProps> {
     static contextType = TrayContext;
+
     declare context: TrayContextValue;
 
     uuid: string;
-    trayRef: React.RefObject<HTMLDivElement | null>;
-    tailRef: React.RefObject<HTMLDivElement | null>;
+
+    trayRef: React.RefObject<HTMLDivElement>;
+
+    tailRef: React.RefObject<HTMLDivElement>;
+
     childTrays: Record<string, Tray>;
+
     cleanUp: () => void;
+
     pendingBlur: boolean;
 
     constructor(props: TrayProps) {
@@ -1238,7 +1240,6 @@ class Tray extends Component<TrayProps> {
 
         const tray = (
             <TrayContext.Provider
-                // eslint-disable-next-line react/jsx-no-constructed-context-values
                 value={{
                     renderIndex: renderIndex + 1,
                     onRegister: this.handleRegister,

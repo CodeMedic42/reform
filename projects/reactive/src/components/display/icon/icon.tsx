@@ -13,7 +13,6 @@ interface IconProps {
     icon: IconProp;
     color?: SchemeColor | null;
     size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | null;
-    [key: string]: unknown;
 }
 
 class Icon extends PureComponent<IconProps> {
@@ -41,7 +40,6 @@ class Icon extends PureComponent<IconProps> {
                     colorClasses,
                 )}
                 icon={icon}
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...rest}
             />
         );

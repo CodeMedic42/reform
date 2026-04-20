@@ -1,5 +1,4 @@
-/* eslint-disable import/no-anonymous-default-export */
-import TextInputField from '../../../../../reactive/dist/components/fields/text-input-field';
+import TextInputField from '@reformjs/reactive/fields/text-input-field';
 
 export default {
 	title: 'Fields/Text Input Field',

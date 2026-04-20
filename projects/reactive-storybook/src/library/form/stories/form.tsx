@@ -161,10 +161,10 @@ function LoadedComponent(props: LoadedComponentProps) {
 			>
 				{(access: FormAccessControl<any>) => {
 					const {
-						data
+						data: formData
 					} = access;
 
-					const valid = data.isValid();
+					const valid = formData.isValid();
 
 					return !valid ? <span>Form Not Valid</span> : null;
 				}}
@@ -221,9 +221,7 @@ function example() {
 	return (
 		<div>
 			<AsyncValue 
-				value={() => {
-					return Data.build(schema, testInstValues);
-				}}
+				value={() => Data.build(schema, testInstValues)}
 				LoadingComponent={() => <span>Loading</span>}
 				LoadedComponent={LoadedComponent}
 			/>

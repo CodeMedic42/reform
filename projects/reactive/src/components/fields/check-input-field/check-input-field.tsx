@@ -1,10 +1,9 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
 import { isNil, isEmpty } from 'lodash-es';
 import { Color } from '../../../common/color-list.js';
 import InputMessages from '../input-field-messages/index.js';
-import buildLabeledControlProps from '../../../common/build-labeled-control-props.js';
+import buildLabeledControlProps, { type BuildLabeledControlPropsOutput } from '../../../common/build-labeled-control-props.js';
 
 interface InputMessagesData {
     general?: string[];
@@ -81,7 +80,7 @@ class CheckInput extends PureComponent<CheckInputProps, CheckInputState> {
         this.state = {} as CheckInputState;
     }
 
-    static getDerivedStateFromProps(nextProps: CheckInputProps) {
+    static getDerivedStateFromProps(nextProps: CheckInputProps): BuildLabeledControlPropsOutput | null {
         return buildLabeledControlProps(nextProps);
     }
 

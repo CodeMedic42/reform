@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { memo, forwardRef, useCallback,
 	// useMemo
 } from 'react';
@@ -14,7 +13,12 @@ interface DateInputProps {
 	onChange: (value: string | null) => void;
 	value?: string | null;
 	fitTo?: string | null;
-	[key: string]: unknown;
+	type?: string;
+	mask: ((value: string) => Array<string | RegExp>) | Array<string | RegExp>;
+	autoComplete?: string;
+	guide?: boolean;
+	keepCharPositions?: boolean;
+	size?: number;
 }
 
 const DateInput = forwardRef<unknown, DateInputProps>((props, ref) => {
@@ -55,7 +59,7 @@ const DateInput = forwardRef<unknown, DateInputProps>((props, ref) => {
 				onChange={handleChange}
 				placeholder={placeholder}
 				{...rest}
-				size="1"
+				size={1}
 			/>
 		</span>
 	);

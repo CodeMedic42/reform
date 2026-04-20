@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { forwardRef } from 'react';
 import classnames from 'classnames';
 import { isNil, isString, isEmpty, forEach, isPlainObject } from 'lodash-es';
@@ -19,7 +18,6 @@ export interface RowProps {
     before?: string | null;
     after?: string | null;
     style?: Record<string, string | number | boolean | null | undefined>;
-    [key: string]: unknown;
 }
 
 interface ClassStates {

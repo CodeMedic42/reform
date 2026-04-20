@@ -1,8 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { isNil, throttle, ThrottleSettings } from 'lodash-es';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function useThrottleCallback(cb: (...args: any[]) => any, dep: React.DependencyList, wait?: number, options?: ThrottleSettings) {
+function useThrottleCallback(cb: (...args: any[]) => any, dep: React.DependencyList, wait?: number, options?: ThrottleSettings): ((...args: any[]) => any) {
     const old = useRef<ReturnType<typeof throttle> | undefined>();
 
     return useMemo(() => {

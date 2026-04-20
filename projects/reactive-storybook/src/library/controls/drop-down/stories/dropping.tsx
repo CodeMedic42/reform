@@ -1,10 +1,10 @@
-/* eslint-disable no-alert */
 import React, { useState } from 'react';
-import findIndex from 'lodash/findIndex';
-import clone from 'lodash/clone';
+import { findIndex, clone } from 'lodash-es';
 import DropDown, { AnchorButton } from '@reformjs/reactive/controls/drop-down';
 
-function renderDropSelect(dropPositions: string[], setDropPositions: React.Dispatch<React.SetStateAction<string[]>>, index: number) {
+type DropPosition = 'top' | 'bottom' | 'left' | 'right';
+
+function renderDropSelect(dropPositions: DropPosition[], setDropPositions: React.Dispatch<React.SetStateAction<DropPosition[]>>, index: number) {
     const handleDropChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const dropCopy = clone(dropPositions);
 
@@ -14,7 +14,7 @@ function renderDropSelect(dropPositions: string[], setDropPositions: React.Dispa
 
         const replaceIndex = findIndex(dropCopy, (item: string) => item === value);
 
-        dropCopy[index] = value;
+        dropCopy[index] = value as DropPosition;
         dropCopy[replaceIndex] = oldValue;
 
         setDropPositions(dropCopy);
@@ -38,7 +38,7 @@ function renderDropSelect(dropPositions: string[], setDropPositions: React.Dispa
 }
 
 function dropping() {
-    const [dropPositions, setDropPositions] = useState([
+    const [dropPositions, setDropPositions] = useState<DropPosition[]>([
         'bottom',
         'top',
         'right',

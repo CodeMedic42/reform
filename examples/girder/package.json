@@ -5,6 +5,7 @@
     "private": true,
     "scripts": {
         "start": "webpack serve --config ./webpack/webpack.config.cjs --stats verbose",
+        "build": "webpack --config ./webpack/webpack.config.cjs --mode production",
         "lint": "npx eslint ./src"
     },
     "browserslist": [

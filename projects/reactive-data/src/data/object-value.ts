@@ -79,6 +79,7 @@ export default class ObjectValue extends PropertyModelValue<ObjectModel> {
 		return changed;
 	}
 	
+	// @typescript-eslint/no-unused-vars
 	insertValue(value: any, keydex: any, rootChange: boolean) {
 		// If the property was defined in the model then it should be defined.
 		if (isNil(this.#value[keydex])) {
@@ -93,6 +94,7 @@ export default class ObjectValue extends PropertyModelValue<ObjectModel> {
 		return changed;
 	}
 
+	// @typescript-eslint/no-unused-vars
 	removeValue(keydex: any, rootChange: boolean) {
 		// If the property was defined in the model then it should be defined.
 		if (isNil(this.#value[keydex])) {
@@ -145,17 +147,13 @@ export default class ObjectValue extends PropertyModelValue<ObjectModel> {
 	}
 	
 	initialize(): Promise<void> {
-		const childInitProms = this.map((item: PropertyAccess) => {
-			return item.initialize();
-		});
+		const childInitProms = this.map((item: PropertyAccess) => item.initialize());
 
 		return Promise.all(childInitProms).then(noop);
 	}
 
 	validate(): Promise<void> {
-		const childInitProms = this.map((item: PropertyAccess) => {
-			return item.validate();
-		});
+		const childInitProms = this.map((item: PropertyAccess) => item.validate());
 
 		return Promise.all(childInitProms).then(noop);
 	}

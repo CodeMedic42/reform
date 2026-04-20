@@ -7,6 +7,7 @@ type ModelConstructor = new (modelDef: ModelDefinition, triggersModel: TriggersM
 
 class ModelRegistry {
 	static #instance: ModelRegistry;
+
 	#modelTypes = new Map<string, ModelConstructor>();
 
 	static getInstance(): ModelRegistry {

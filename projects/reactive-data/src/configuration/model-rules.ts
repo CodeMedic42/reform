@@ -9,9 +9,7 @@ class ModelRules {
 	};
 
 	constructor(modelRules: RulesDefinition | undefined, triggersModel: TriggersModel) {
-		this.#rules = mapValues(modelRules, (modelRule) => {
-			return new ModelRule(modelRule, triggersModel);
-		});
+		this.#rules = mapValues(modelRules, (modelRule) => new ModelRule(modelRule, triggersModel));
 	}
 
 	getRules() {

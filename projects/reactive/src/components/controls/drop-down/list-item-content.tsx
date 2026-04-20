@@ -17,7 +17,7 @@ class ListItemContent extends PureComponent<ListItemContentProps> {
 
         return (
             <span
-                id={id}
+                id={id ?? undefined}
                 className={classnames('ra-dd-list-item-content', className)}
             >
                 {children}

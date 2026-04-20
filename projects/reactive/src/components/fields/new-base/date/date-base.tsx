@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-/* eslint-disable import/no-duplicates */
 import addDays from 'date-fns/addDays';
 import startOfToday from 'date-fns/startOfToday';
 /* eslint-enable import/no-duplicates */
@@ -136,7 +135,7 @@ function DateBase(props: DateBaseProps): React.ReactElement {
 	const handleClosed = useCallback(() => {
 		const newTargetDate = !isInvalidDate ? fromDate : startOfToday();
 
-		setTargetDate(newTargetDate);
+		setTargetDate(newTargetDate ?? startOfToday());
 		// datePickerRef.current.gotoDate(newTargetDate);
 	}, [fromDate]);
 
@@ -165,10 +164,10 @@ function DateBase(props: DateBaseProps): React.ReactElement {
 					ref={dropDownRef}
 					id={`${finalId}-dropdown`}
 					trayClassName="ra-date-tray"
-					onFocus={onFocus}
-					onBlur={onBlur}
+					onFocus={onFocus ?? undefined}
+					onBlur={onBlur ?? undefined}
 					closeTrayOnClick={false}
-					disabled={disabled}
+					disabled={disabled ?? undefined}
 					Anchor={Anchor}
 					onKeyDown={handleKeyDown}
 					onClosed={handleClosed}

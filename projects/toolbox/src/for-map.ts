@@ -1,4 +1,4 @@
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 
 function forMap<T, R>(collection: T[] | null | undefined, cb: (item: T, index: number) => R, start: number = 0, end: number = 0): R[] {
     const items: R[] = [];

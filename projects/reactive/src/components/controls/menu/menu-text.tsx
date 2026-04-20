@@ -1,19 +1,20 @@
 import React, { PureComponent } from 'react';
 import { isNil } from 'lodash-es';
 import ListItemContent from '../drop-down/list-item-content.js';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 import MenuItem from './menu-item.js';
 
 interface MenuTextProps {
     id?: string | null;
     className?: string | null;
-    menuIcon?: unknown | null;
+    menuIcon?: IconProp | null;
     children?: string | null;
     selected?: boolean;
     targeted?: boolean;
     borderBottom?: boolean;
     borderTop?: boolean;
-    icon?: unknown | null;
+    icon?: IconProp | null;
 }
 
 class MenuText extends PureComponent<MenuTextProps> {

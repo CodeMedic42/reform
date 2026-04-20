@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import Button from '../../button/index.js';
@@ -8,7 +7,6 @@ interface AnchorButtonProps {
     className?: string | null;
     open: boolean;
     children?: React.ReactNode;
-    [key: string]: unknown;
 }
 
 class AnchorButton extends PureComponent<AnchorButtonProps> {

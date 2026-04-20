@@ -1,17 +1,6 @@
-/* eslint-disable no-console */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable no-plusplus */
-/* eslint-disable func-names */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable one-var */
-/* eslint-disable no-var */
 import { Aspect } from '@reformjs/girder';
 import type { AspectInitContext, AspectStartContext } from '@reformjs/girder';
-import isFunction from 'lodash/isFunction';
-import isNil from 'lodash/isNil';
+import { isFunction, isNil } from 'lodash-es';
 
 interface PendoInstance {
     initialize: (...args: unknown[]) => void;
@@ -42,7 +31,6 @@ class PendoAspect extends Aspect {
             : apiKey as ApiKeyResolver;
     }
 
-    // eslint-disable-next-line class-methods-use-this
     onInitialize(_context?: AspectInitContext): PendoControls {
         return {
             initialize: (...args: unknown[]): void => {

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useCallback, useRef } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -7,6 +6,7 @@ import {
 } from '../../../common/color-list.js';
 
 interface DropDownListItemProps {
+    ref?: React.Ref<unknown>;
     id?: string | null;
     color?: string | null;
     className?: string | null;
@@ -17,9 +17,13 @@ interface DropDownListItemProps {
     borderBottom?: boolean;
     borderTop?: boolean;
     onClick?: ((event: React.MouseEvent) => void) | null;
+    onMouseEnter?: ((event: React.MouseEvent) => void) | null;
+    onMouseLeave?: ((event: React.MouseEvent) => void) | null;
     preventCloseOnClick?: boolean;
-    [key: string]: unknown;
+    disabled?: boolean;
 }
+
+export type { DropDownListItemProps };
 
 /**
  * This component is used the base definition of an item being rendered inside the DropDownList component.
@@ -36,8 +40,9 @@ function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
         borderBottom = false,
         borderTop = false,
         onClick = null,
+        onMouseEnter = null,
+        onMouseLeave = null,
         preventCloseOnClick = false,
-        ...rest
     } = props;
 
     const itemRef = useRef<HTMLLIElement>(null);
@@ -69,9 +74,10 @@ function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
 
     return (
         <li
-            {...rest}
             ref={itemRef}
-            id={id}
+            id={id ?? undefined}
+            onMouseEnter={onMouseEnter ?? undefined}
+            onMouseLeave={onMouseLeave ?? undefined}
             className={classnames(
                 'ra-dd-list-item',
                 className,
@@ -85,8 +91,8 @@ function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
             )}
             role="option" // TODO: Review how this is not clickable anymore
             aria-selected={selected || false}
-            aria-current={ariaCurrent}
-            aria-label={accessibilityLabel}
+            aria-current={ariaCurrent ? 'true' : undefined}
+            aria-label={accessibilityLabel ?? undefined}
             onClick={handleClick}
         >
             {children}

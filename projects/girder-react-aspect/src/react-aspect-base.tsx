@@ -1,23 +1,13 @@
-/* eslint-disable class-methods-use-this */
 import React, { type ComponentType, type ReactNode } from 'react';
 import Promise from 'bluebird';
-import isNil from 'lodash/isNil';
-import isArray from 'lodash/isArray';
-import noop from 'lodash/noop';
-import forEach from 'lodash/forEach';
-import reduce from 'lodash/reduce';
-import isFunction from 'lodash/isFunction';
-import { Aspect } from '@reformjs/girder';
+import { isNil, isArray, noop, forEach, reduce, isFunction } from 'lodash-es';
+import { Aspect, type AspectInitContext, type AspectStartContext } from '@reformjs/girder';
 import girderReactContext from './girder-react-context.js';
 import type { GirderContext, GirderReactContextValue, ActionFunction } from './girder-react-context.js';
 
 interface ComponentDefinition {
     target?: string | RegExp | null;
     Component?: ComponentType<{ children?: ReactNode }>;
-}
-
-interface InitConfig {
-    getSettings: (key: string) => (ComponentDefinition | ComponentDefinition[])[];
 }
 
 function build(aspectComponents: ComponentType<{ children?: ReactNode }>[], root: ReactNode): ReactNode {
@@ -34,8 +24,11 @@ function build(aspectComponents: ComponentType<{ children?: ReactNode }>[], root
 
 class ReactAspectBase extends Aspect {
     RootComponent: ComponentType;
+
     container: HTMLDivElement | null;
+
     root: unknown;
+
     aspectComponents: ComponentType<{ children?: ReactNode }>[];
 
     constructor(aspectId: string, RootComponent: ComponentType) {
@@ -47,10 +40,10 @@ class ReactAspectBase extends Aspect {
         this.aspectComponents = [];
     }
 
-    onInitialize(config: InitConfig): void {
+    onInitialize(config?: AspectInitContext): void {
         this.aspectComponents = [];
 
-        const settings = config.getSettings('react');
+        const settings = config!.getSettings('react') as (ComponentDefinition | ComponentDefinition[])[];
 
         forEach(settings, (setting: ComponentDefinition | ComponentDefinition[]) => {
             let componentDefinitions: ComponentDefinition[];
@@ -88,16 +81,20 @@ class ReactAspectBase extends Aspect {
         });
     }
 
+    // @typescript-eslint/no-unused-vars
     mount(_container: HTMLDivElement, _appRoot: ReactNode): void {
         throw new Error('A React Aspect must have a mount method');
     }
 
+    // @typescript-eslint/no-unused-vars
     unmount(_container: HTMLDivElement): void {
         throw new Error('A React Aspect must have an unmount method');
     }
 
-    onStart(girderContext: GirderContext): void {
-        super.onStart(girderContext);
+    onStart(context?: AspectStartContext): void {
+        super.onStart(context);
+
+        const girderContext = context as GirderContext;
 
         const mountId = `${this.id}-container`;
 
@@ -128,7 +125,6 @@ class ReactAspectBase extends Aspect {
                 // The only thing they should know is the action finished.
                 .then(noop)
                 .catch((err: unknown) => {
-                    // eslint-disable-next-line no-console
                     console.error(err);
                 });
             };
@@ -150,7 +146,7 @@ class ReactAspectBase extends Aspect {
     }
 
     onStop(): void {
-        super.stop();
+        super.onStop();
 
         this.unmount(this.container!);
 

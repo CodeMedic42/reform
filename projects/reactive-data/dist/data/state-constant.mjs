@@ -8,6 +8,16 @@ var State;
 })(State || (State = {}));
 const highestState = State.validating;
 const lowestState = State.idle;
+function getStatePriority(state) {
+    switch (state) {
+        case State.validating:
+            return 2;
+        case State.updating:
+            return 1;
+        default:
+            return 0;
+    }
+}
 function getHighestState(states) {
     let highest = lowestState;
     forEach(states, (state) => {
@@ -18,18 +28,9 @@ function getHighestState(states) {
         if (getStatePriority(state) > getStatePriority(highest)) {
             highest = state;
         }
+        return undefined;
     });
     return highest;
-}
-function getStatePriority(state) {
-    switch (state) {
-        case State.validating:
-            return 2;
-        case State.updating:
-            return 1;
-        default:
-            return 0;
-    }
 }
 
 export { State, getHighestState, getStatePriority, highestState, lowestState };

@@ -1,5 +1,3 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -25,7 +23,6 @@ interface ButtonOrigProps {
     href?: string | null;
     target?: string | null;
     focusOnMount?: boolean;
-    [key: string]: unknown;
 }
 
 class Button extends PureComponent<ButtonOrigProps> {
@@ -66,7 +63,6 @@ class Button extends PureComponent<ButtonOrigProps> {
         const { current } = this.buttonRef;
 
         if (isNil(current)) {
-            // eslint-disable-next-line no-console
             console.warn('Attempting to focus on an unmounted component');
 
             return;
@@ -113,8 +109,9 @@ class Button extends PureComponent<ButtonOrigProps> {
             useDark = false,
             // leftIcon,
             // rightIcon,
-            // onClick,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // @typescript-eslint/no-unused-vars
+            onClick: _onClick,
+            // @typescript-eslint/no-unused-vars
             focusOnMount = false,
             ...rest
         } = this.props;
@@ -137,8 +134,8 @@ class Button extends PureComponent<ButtonOrigProps> {
         );
 
         const props = {
-            ref: this.buttonRef,
-            id,
+            ref: this.buttonRef as unknown as React.RefObject<HTMLAnchorElement> & React.RefObject<HTMLButtonElement>,
+            id: id ?? undefined,
             className: classnames(
                 'ra-button',
                 'no-select',
@@ -160,13 +157,13 @@ class Button extends PureComponent<ButtonOrigProps> {
 
         if (asAnchor) {
             return (
-                <a {...props} href={href} target={target}>
+                <a {...props} href={href ?? undefined} target={target ?? undefined}>
                     {content}
                 </a>
             );
         }
 
-        const typeProp = !isNil(type) ? type : 'button';
+        const typeProp = (!isNil(type) ? type : 'button') as "button" | "reset" | "submit";
 
         return (
             <button {...props} type={typeProp}>

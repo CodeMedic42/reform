@@ -1,4 +1,4 @@
-import mapValues from 'lodash/mapValues';
+import { mapValues } from 'lodash-es';
 import mergeConfigs from './merge-configs.js';
 import type { ServiceConfig } from './merge-configs.js';
 
@@ -13,6 +13,7 @@ interface GroupOptions {
 
 class Group {
     definitions: Record<string, Buildable>;
+
     configuration: ServiceConfig;
 
     constructor({ definitions = {}, configuration = {}}: GroupOptions) {

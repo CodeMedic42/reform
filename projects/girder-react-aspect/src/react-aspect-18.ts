@@ -4,6 +4,7 @@ import ReactAspectBase from './react-aspect-base.js';
 
 class ReactAspect18 extends ReactAspectBase {
     root: Root | null;
+
     mounted: boolean;
 
     constructor(aspectId: string, RootComponent: ComponentType) {

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-has-content */
 import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
@@ -70,7 +69,7 @@ class ListItemLink extends PureComponent<ListItemLinkProps> {
         return (
             <>
                 <a
-                    id={!isNil(id) ? `${id}-button` : null}
+                    id={!isNil(id) ? `${id}-button` : undefined}
                     className={classnames(
                         'ra-dd-list-item-control',
                         'ra-dd-list-item-link',
@@ -79,11 +78,11 @@ class ListItemLink extends PureComponent<ListItemLinkProps> {
                     ref={this.ref}
                     onClick={this.handleClick}
                     onKeyDown={this.handleKeyDown}
-                    aria-label={ariaLabel}
+                    aria-label={ariaLabel ?? undefined}
                     tabIndex={open ? (tabIndex as unknown as number) : -1}
-                    disabled={disabled}
-                    href={href}
-                    aria-labelledby={textId}
+                    aria-disabled={disabled || undefined}
+                    href={href ?? undefined}
+                    aria-labelledby={textId ?? undefined}
                 >
                     {ariaLabel}
                 </a>

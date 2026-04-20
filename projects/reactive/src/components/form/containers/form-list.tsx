@@ -1,9 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
+import { isNil } from 'lodash-es';
+import { Property } from '@reformjs/reactive-data';
 import FormAccess, { FormAccessControl } from '../support/form-access.js';
 import { FormContextProvider } from '../support/form-context.js';
-import { isNil, map } from 'lodash-es';
-import { Property } from '@reformjs/reactive-data';
 
 type FormListProps<C extends React.ElementType> = {
 	InnerComponent?: C;
@@ -36,8 +36,7 @@ function FormList<C extends React.ElementType = 'fieldset'>({
 				validateOnBlur: rootValidateOnBlur,
 			} = accessControl;
 
-			const buildItem = (itemProperty: Property, index: number) => {
-				return (
+			const buildItem = (itemProperty: Property) => (
 					<FormContextProvider
 						key={itemProperty.getUuid()}
 						ancestorProperty={itemProperty}
@@ -60,7 +59,6 @@ function FormList<C extends React.ElementType = 'fieldset'>({
 						}
 					</FormContextProvider>
 				);
-			};
 
 			let content: JSX.Element | JSX.Element[] = property.map(buildItem)
 			

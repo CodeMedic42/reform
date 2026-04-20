@@ -1,5 +1,3 @@
-/* eslint-disable import/order */
-/* eslint-disable import/no-extraneous-dependencies */
 import TabBar from '@reformjs/reactive/arrangement/tab-bar';
 
 export default {

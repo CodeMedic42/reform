@@ -20,7 +20,6 @@ interface NumericInputFieldProps {
 	hidden?: boolean;
 	failure?: boolean;
 	messages?: InputMessagesData | null;
-	[key: string]: unknown;
 }
 
 const NumericInputField = forwardRef<unknown, NumericInputFieldProps>((props, ref) => {

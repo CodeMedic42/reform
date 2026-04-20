@@ -1,6 +1,4 @@
-/* eslint-disable no-undef */
-/* eslint-disable class-methods-use-this */
-import isNil from 'lodash/isNil';
+import { isNil } from 'lodash-es';
 import type { Page, ElementHandle } from 'puppeteer';
 
 declare function renderHarness(harnessId: string): void;
@@ -28,7 +26,6 @@ class HarnessControl {
 
     async clearHarness(keepProps?: boolean): Promise<void> {
         await this.page.evaluate((serKeepProps?: boolean) => {
-            // eslint-disable-next-line no-console
             console.log(serKeepProps);
             clearHarness(serKeepProps);
         }, keepProps);
@@ -44,14 +41,12 @@ class HarnessControl {
 
     async pressKey(key: string, times: number): Promise<void> {
         for (let counter = 0; counter < times; counter += 1) {
-            // eslint-disable-next-line no-await-in-loop
             await this.page.keyboard.press(key as any);
         }
     }
 
     async clickMouse(element: ElementHandle, times: number): Promise<void> {
         for (let counter = 0; counter < times; counter += 1) {
-            // eslint-disable-next-line no-await-in-loop
             await element.click();
         }
     }

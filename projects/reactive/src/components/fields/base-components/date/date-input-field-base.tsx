@@ -23,7 +23,6 @@ const DATE_MASK = [
 
 interface DateInputBaseProps {
 	value?: Date | null;
-	[key: string]: unknown;
 }
 
 function DateInputBase(props: DateInputBaseProps): React.ReactElement {

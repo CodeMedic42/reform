@@ -24,7 +24,6 @@ interface DateRangeInputProps {
 	maxDate?: Date | null;
 	leftAnnotation?: React.ReactNode;
 	rightAnnotation?: React.ReactNode;
-	[key: string]: unknown;
 }
 
 const DateRangeInput = forwardRef<unknown, DateRangeInputProps>((props, ref) => {

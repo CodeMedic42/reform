@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* @typescript-eslint/no-unused-vars */
 import React from 'react';
 import classnames from 'classnames';
 import { isNil, noop } from 'lodash-es';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import IconBox from '../../../display/icon-box/index.jsx';
 import IconButton from '../../../display/icon-button/index.jsx';
 import changeSize from '../../../../util/change-size.js';
@@ -28,7 +29,6 @@ interface BaseCursorInputProps {
     rightIcon?: RightIconConfig | null;
     children: (args: { value: string | number | null; onChange: (value: string | null) => void }) => React.ReactNode;
     hideClearButton?: boolean;
-    [key: string]: unknown;
 }
 
 interface BaseCursorInputState {
@@ -118,24 +118,23 @@ class BaseCursorInput extends React.PureComponent<BaseCursorInputProps, BaseCurs
         }
     }
 
-    // eslint-disable-next-line class-methods-use-this
     handleMouseDown(event: React.MouseEvent) {
         event.preventDefault();
     }
 
     renderIcon(className: string, icon: unknown, onClick?: (() => void) | null) {
-        let { size } = this.props;
+        const { size } = this.props;
 
-        size = changeSize(size, 1);
+        const iconSize = changeSize(size ?? 'md', 1) as '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
         if (!isNil(onClick)) {
             return (
                 <IconButton
                     className={className}
-                    icon={icon}
+                    icon={icon as IconProp}
                     onClick={onClick}
-                    size={size}
-                    onMouseDown={(event: React.MouseEvent) => {
+                    size={iconSize}
+                    onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) => {
                         event.preventDefault();
                     }}
                     tabIndex="-1"
@@ -145,7 +144,7 @@ class BaseCursorInput extends React.PureComponent<BaseCursorInputProps, BaseCurs
 
         return (
             <span className={className}>
-                <IconBox icon={icon} size={size} />
+                <IconBox icon={icon as IconProp} size={iconSize} />
             </span>
         );
     }
@@ -200,7 +199,7 @@ class BaseCursorInput extends React.PureComponent<BaseCursorInputProps, BaseCurs
                 <IconButton
                     id={`${id}-clear`}
                     className="clear-button"
-                    size={changeSize(size, 1)}
+                    size={changeSize(size ?? 'md', 1) as '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'}
                     tabIndex="-1"
                     icon={faXmark}
                     onClick={this.handleClear}

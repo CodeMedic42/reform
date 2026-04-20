@@ -1,5 +1,5 @@
 import { useCallback, useContext } from 'react';
-import isFunction from 'lodash/isFunction';
+import { isFunction } from 'lodash-es';
 import reactContext from './girder-react-context.js';
 import type { ActionFunction } from './girder-react-context.js';
 

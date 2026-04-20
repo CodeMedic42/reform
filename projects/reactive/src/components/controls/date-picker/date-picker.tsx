@@ -1,6 +1,5 @@
 import React, { forwardRef, useRef, useImperativeHandle, useMemo } from 'react';
 import classnames from 'classnames';
-/* eslint-disable import/no-duplicates */
 import getDate from 'date-fns/getDate';
 import getMonth from 'date-fns/getMonth';
 import getYear from 'date-fns/getYear';
@@ -9,7 +8,7 @@ import isEqual from 'date-fns/isEqual';
 import { isNil } from 'lodash-es';
 import PickerMonth from './picker-month.js';
 import buildId from '../../../common/build-id.js';
-import InfiniteList, { InfiniteListItems } from '../../arrangement/infinite-list/index.js';
+import InfiniteList, { InfiniteListItems, InfiniteListHandle } from '../../arrangement/infinite-list/index.js';
 
 interface DatePickerProps {
     id?: string | null;
@@ -56,14 +55,13 @@ const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) =>
     }
 
     if (!isNil(fromDate) && !isNil(toDate) && toDate < fromDate) {
-        // eslint-disable-next-line no-console
         console.error('ToDate cannot be less than fromDate');
 
         fromDate = null;
         toDate = null;
     }
 
-    const infiniteListRef = useRef<{ gotoIndex: (index: [number, number]) => void }>(null);
+    const infiniteListRef = useRef<InfiniteListHandle>(null);
 
 
     const startDate = useMemo(
@@ -112,8 +110,8 @@ const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) =>
 
         return {
             lastIndex: !isNil(year) ? [year, month] as [number, number] : null,
-            maxIndex: [year, 12] as [number | null, number],
-            fullLastDate: !isNil(day) ? [year, month, day] as [number | null, number, number] : null,
+            maxIndex: !isNil(year) ? [year, 12] as [number, number] : null,
+            fullLastDate: (!isNil(day) && !isNil(year)) ? [year, month, day] as [number, number, number] : null,
         };
     }, [maxDate]);
 
@@ -143,7 +141,7 @@ const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) =>
 
     return (
         <InfiniteList
-            ref={infiniteListRef}
+            ref={infiniteListRef as React.RefObject<InfiniteListHandle>}
             id={id}
             className={classnames('ra-date-picker', className)}
             loadCount={10}
@@ -166,7 +164,9 @@ const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) =>
                 <span className="ra-picker-week-day">Sa</span>
             </div>
             <InfiniteListItems
-                render={(_: unknown, [year, month]: [number, number]) => (
+                render={(_: unknown, index: number[]) => {
+                    const [year, month] = index;
+                    return (
                     <PickerMonth
                         id={buildId(id, `${year}-${month}`)}
                         month={month}
@@ -174,11 +174,12 @@ const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) =>
                         firstDate={fullFirstDate}
                         lastDate={fullLastDate}
                         fromDate={fromDate}
-                        toDate={!isEqual(fromDate, toDate) ? toDate : null}
+                        toDate={(!isNil(fromDate) && !isNil(toDate) && !isEqual(fromDate, toDate)) ? toDate : null}
                         onSelect={onSelect}
                         targetDate={targetDate}
                     />
-                )}
+                    );
+                }}
             />
         </InfiniteList>
     );

@@ -73,7 +73,7 @@ function getPropToLower(prop: string, listItem: CollectionItem): string | null {
         return `${value}`.toLowerCase();
     }
 
-    return value;
+    return value ?? null;
 }
 
 function getProp(prop: string, listItem: CollectionItem): any {

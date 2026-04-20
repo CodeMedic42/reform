@@ -1,7 +1,7 @@
+import { forEach, isNil, map } from 'lodash-es';
 import SimpleModel from '../configuration/simple-model';
 import PropertyAccess from './property-access';
 import PropertyModelValue, { PropertyModelValueOptions } from "./property-model-value";
-import { forEach, isNil, map } from 'lodash-es';
 
 type SimpleValueOptions = PropertyModelValueOptions<SimpleModel> & {
 	initial: any;
@@ -49,6 +49,7 @@ export default class SimpleValue extends PropertyModelValue<SimpleModel> {
 		return this.setValue(value);
 	}
 	
+	// @typescript-eslint/no-unused-vars
 	removeValue(keydex: any) {
 		return this.setValue(undefined);
 	}

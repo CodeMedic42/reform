@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable max-len */
 import { getElementAttribute } from '@reformjs/web-unit/util';
 import { isString } from 'lodash-es';
 

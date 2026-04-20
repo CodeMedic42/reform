@@ -1,5 +1,5 @@
 import WebpackDevServer from 'webpack-dev-server';
-import Promise from 'bluebird';
+import Bluebird from 'bluebird';
 import getCompiler from './compiler/index.js';
 import type RunContext from '../run-context.js';
 
@@ -17,11 +17,11 @@ async function startServer(runContext: RunContext): Promise<WebpackDevServer> {
 
     const server = new WebpackDevServer(devServerOptions, compiler);
 
-    await Promise.fromCallback((cb: (err?: Error | null) => void) => {
+    await Bluebird.fromCallback((cb: (err?: Error | null) => void) => {
         server.startCallback(cb);
     });
 
-    await Promise.fromCallback((cb: (err?: Error | Error[] | null) => void) => {
+    await Bluebird.fromCallback((cb: (err?: Error | Error[] | null) => void) => {
         (server as any).middleware.waitUntilValid((stats: any) => {
             if (stats.hasErrors()) {
                 cb(stats.compilation.getErrors());

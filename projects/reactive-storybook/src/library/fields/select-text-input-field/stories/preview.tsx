@@ -1,7 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useMemo } from 'react';
-import reduce from 'lodash/reduce';
-import SelectTextInputField from '../../../../../../reactive/dist/components/fields/select-text-input-field';
+import { reduce } from 'lodash-es';
+import SelectTextInputField from '@reformjs/reactive/fields/select-text-input-field';
 import { abbreviated } from '../../../../common/options-data';
 
 function generateMessages(count: number = 0): string[] {
@@ -22,8 +21,8 @@ interface PreviewProps {
 }
 
 function Preview(props: PreviewProps) {
-    const [value, setValue] = useState(null);
-    const [selected, setSelected] = useState(null);
+    const [value, setValue] = useState<string | number | null>(null);
+    const [selected, setSelected] = useState<string | number | null>(null);
 
     const {
         successMessageCount,
@@ -72,35 +71,39 @@ function Preview(props: PreviewProps) {
 
     // const handleSelect = useCallback(setSelected, []);
 
+    const extraProps = {
+        ...reduce(
+            rest,
+            (acc: Record<string, unknown>, prop: unknown, key: string) => {
+                if (prop === 'true') {
+                    acc[key] = true;
+                } else if (prop === 'false') {
+                    acc[key] = false;
+                } else {
+                    acc[key] = prop;
+                }
+
+                return acc;
+            },
+            {},
+        ),
+        options: abbreviated,
+        value,
+        onChange: setValue,
+        messages,
+        onSelect: setSelected,
+    };
+
     return (
         <>
             <SelectTextInputField
-                {...reduce(
-                    rest,
-                    (acc: Record<string, unknown>, prop: unknown, key: string) => {
-                        if (prop === 'true') {
-                            acc[key] = true;
-                        } else if (prop === 'false') {
-                            acc[key] = false;
-                        } else {
-                            acc[key] = prop;
-                        }
-
-                        return acc;
-                    },
-                    {},
-                )}
-                options={abbreviated}
-                value={value}
-                onChange={setValue}
-                messages={messages}
-                onSelect={setSelected}
+                {...(extraProps as any)}
             />
             <div>
-                <span>Value: {value}</span>
+                <span>Value: {String(value ?? '')}</span>
             </div>
             <div>
-                <span>Selected: {selected}</span>
+                <span>Selected: {String(selected ?? '')}</span>
             </div>
         </>
     );

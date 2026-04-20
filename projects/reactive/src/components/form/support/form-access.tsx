@@ -1,7 +1,7 @@
 import { isNil } from 'lodash-es';
-import { ApplyFormPropertyConsumer, FormMeta } from '../support/form-context.js';
 import { useEffect, useState } from 'react';
 import { Data, Property, RulesStatus, State } from '@reformjs/reactive-data';
+import { ApplyFormPropertyConsumer } from '../support/form-context.js';
 
 export interface FormAccessControl<T> {
 	property: Property,
@@ -45,14 +45,14 @@ function FormAccess(props: FormAccessProps<any>): React.ReactElement | null {
 
 	useEffect(() => {
 		if (listenToProperty) {
-			property.onChange((property: Property) => {
-				const value = property.getValue();
+			property.onChange((prop: Property) => {
+				const val = prop.getValue();
 
-				setValue(value);
+				setValue(val);
 			});
 
-			property.onStateChange((property: Property, state: State) => {
-				if (property.getState() === State.idle) {
+			property.onStateChange((prop: Property) => {
+				if (prop.getState() === State.idle) {
 					setPropertyValid(property.isValid());
 				}
 			});

@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function useInterval(cb: () => any, mill: number, initialValue = undefined) {
 	const [value, setValue] = useState(initialValue);

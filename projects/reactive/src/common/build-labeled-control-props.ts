@@ -7,7 +7,7 @@ export interface InputMessages {
 }
 
 interface BuildLabeledControlPropsInput {
-    id: string | null | undefined;
+    id?: string | null | undefined;
     label?: string | null;
     'aria-label'?: string | null;
     'aria-labelledby'?: string | null;
@@ -15,7 +15,7 @@ interface BuildLabeledControlPropsInput {
     messages?: InputMessages | null;
 }
 
-interface BuildLabeledControlPropsOutput {
+export interface BuildLabeledControlPropsOutput {
     inputId: string;
     labelId: string | null;
     descriptionId: string;

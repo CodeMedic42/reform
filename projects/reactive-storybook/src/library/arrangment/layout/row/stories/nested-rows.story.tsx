@@ -19,7 +19,7 @@ export default function example() {
                                 <Content>3-5</Content>
                             </Column>
                         </Row>
-                        <Row gutter={[null, null, '8']}>
+                        <Row gutter={[null, null, '8'] as unknown as string[]}>
                             <Column width="2">
                                 <Content>3-2</Content>
                             </Column>

@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* @typescript-eslint/no-unused-vars */
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
 import shortId from 'shortid';
@@ -30,6 +29,7 @@ interface InputFieldLabelProps {
     hidden?: boolean;
     disabled?: boolean;
     variant?: string | null;
+    size?: string;
     children: (args: ChildArgs) => React.ReactNode;
 }
 
@@ -58,6 +58,7 @@ class InputFieldLabel extends PureComponent<InputFieldLabelProps, InputFieldLabe
     };
 
     labelRef: React.RefObject<unknown>;
+
     inputContainerRef: React.RefObject<any>;
 
     constructor(props: InputFieldLabelProps) {
@@ -180,7 +181,7 @@ class InputFieldLabel extends PureComponent<InputFieldLabelProps, InputFieldLabe
                     className="ra-input-label"
                     id={labelId}
                     htmlFor={inputId}
-                    tabIndex="-1"
+                    tabIndex={-1}
                     onMouseDown={this.labelPreventDefault}
                 >
                     {labelText}

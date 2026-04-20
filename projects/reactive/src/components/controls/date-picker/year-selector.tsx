@@ -5,7 +5,7 @@ import buildId from '../../../common/build-id.js';
 interface YearSelectorProps {
     id?: string | null;
     year: number;
-    onChange: (value: number) => void;
+    onChange: (value: string | number | null) => void;
     startingYear?: number;
     endingYear?: number;
 }
@@ -34,7 +34,7 @@ function YearSelector(props: YearSelectorProps): React.ReactNode {
 
     return (
         <SelectInput
-            id={buildId(id)}
+            id={buildId(id, 'year')}
             className="ra-year-selector"
             value={year}
             onChange={onChange}

@@ -1,6 +1,6 @@
 import { __classPrivateFieldSet, __classPrivateFieldGet } from 'tslib';
-import PropertyModelValue from './property-model-value.mjs';
 import { isNil, forEach, map } from 'lodash-es';
+import PropertyModelValue from './property-model-value.mjs';
 
 var _SimpleValue_value;
 class SimpleValue extends PropertyModelValue {
@@ -30,6 +30,7 @@ class SimpleValue extends PropertyModelValue {
     insertValue(value) {
         return this.setValue(value);
     }
+    // @typescript-eslint/no-unused-vars
     removeValue(keydex) {
         return this.setValue(undefined);
     }

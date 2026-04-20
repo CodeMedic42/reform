@@ -13,7 +13,10 @@ interface TextInputBaseProps {
 	value?: string | null;
 	leftAnnotation?: React.ReactNode;
 	rightAnnotation?: React.ReactNode;
-	[key: string]: unknown;
+	type?: string;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	disabled?: boolean;
 }
 
 const TextInputBase = forwardRef<any, TextInputBaseProps>((props, ref) => {

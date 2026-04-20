@@ -1,4 +1,4 @@
-import { forEach, isNil, merge } from "lodash-es";
+import { merge } from "lodash-es";
 import { TriggersDefinition } from "./configuration-types";
 
 class TriggersModel {

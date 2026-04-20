@@ -8,7 +8,8 @@
     "clean": "rimraf dist",
     "build:js": "pnpm rollup --config rollup.config.mjs",
     "build": "npm run clean && npm run build:js",
-    "lint": "npx eslint ./src"
+    "lint": "npx eslint ./src",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -27,11 +28,12 @@
   },
   "dependencies": {
     "@reformjs/girder": "workspace:*",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
     "@config/eslint-config": "workspace:*",
     "@config/rollup-config": "workspace:*",
+    "@types/lodash-es": "^4.17.12",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"
   },

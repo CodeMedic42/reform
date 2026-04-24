@@ -3,13 +3,13 @@ import classnames from 'classnames';
 import InputLabel from '../new-base/input-field-label.js';
 import TextInputFieldBase from './text-input-field-base.js';
 
-interface InputMessagesData {
+export interface InputMessagesData {
 	general?: string[];
 	success?: string[];
 	failure?: string[];
 }
 
-interface TextInputFieldProps {
+export interface TextInputFieldProps {
 	id?: string | null;
 	className?: string | null;
 	label?: string | null;

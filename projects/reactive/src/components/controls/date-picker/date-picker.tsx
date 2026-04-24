@@ -110,7 +110,7 @@ const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) =>
 
         return {
             lastIndex: !isNil(year) ? [year, month] as [number, number] : null,
-            maxIndex: !isNil(year) ? [year, 12] as [number, number] : null,
+            maxIndex: !isNil(year) ? [year, 12] as [number, number] : [null, 12] as [null, number],
             fullLastDate: (!isNil(day) && !isNil(year)) ? [year, month, day] as [number, number, number] : null,
         };
     }, [maxDate]);

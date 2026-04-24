@@ -1,5 +1,5 @@
 import Button from '@reformjs/reactive/controls/button';
-import defaultStory from './stories/default.story';
+import previewStory from './stories/preview.story';
 
 export default {
     title: 'Controls/Button',
@@ -13,13 +13,16 @@ export default {
             control: 'text',
         },
         design: {
-            control: 'text',
+            options: ['fill'],
+            control: 'select',
         },
         color: {
-            control: 'text',
+            options: ['primary', 'secondary', 'info', 'success', 'warn', 'danger'],
+            control: 'select',
         },
         variant: {
-            control: 'text',
+            options: ['sm', 'lg-long'],
+            control: 'select',
         },
         disabled: {
             control: 'boolean',
@@ -33,25 +36,11 @@ export default {
     },
 };
 
-export const Default = {
-    render: defaultStory,
+export const Preview = {
+    render: previewStory,
     args: {
         children: 'Text',
         disabled: false,
     },
 };
 
-export const Color = {
-    args: {
-        children: 'Button',
-        color: 'primary',
-    },
-};
-
-export const Design = {
-    args: {
-        children: 'Button',
-        color: 'primary',
-        design: 'fill',
-    },
-};

@@ -5,4 +5,4 @@ export default {
 	component: TextInputField,
 };
 
-export { default as preview } from './stories/preview';
+export { default as Preview } from './stories/preview';

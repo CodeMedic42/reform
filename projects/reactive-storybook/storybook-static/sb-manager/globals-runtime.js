@@ -70586,7 +70586,7 @@ var $23b9f4fcf0fe224b$export$d68d59712b04d9d1 = class {
     let node2 = new this.constructor(this.key);
     return node2.value = this.value, node2.level = this.level, node2.hasChildNodes = this.hasChildNodes, node2.rendered = this.rendered, node2.textValue = this.textValue, node2["aria-label"] = this["aria-label"], node2.index = this.index, node2.parentKey = this.parentKey, node2.prevKey = this.prevKey, node2.nextKey = this.nextKey, node2.firstChildKey = this.firstChildKey, node2.lastChildKey = this.lastChildKey, node2.props = this.props, node2.render = this.render, node2.colSpan = this.colSpan, node2.colIndex = this.colIndex, node2;
   }
-  // @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   filter(collection, newCollection, filterFn) {
     let clone3 = this.clone();
     return newCollection.addDescendants(clone3, collection), clone3;

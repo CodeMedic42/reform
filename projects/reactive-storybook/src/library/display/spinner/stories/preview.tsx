@@ -26,6 +26,11 @@ example.story = {
             control: { type: 'select' },
             defaultValue: 'md',
         },
+        color: {
+            options: ['blue', 'purple', 'green', 'yellow', 'orange', 'red'],
+            control: { type: 'select' },
+            defaultValue: 'blue',
+        },
     },
 };
 

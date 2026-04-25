@@ -27,7 +27,7 @@ example.story = {
             defaultValue: 'md',
         },
         color: {
-            options: ['blue', 'purple', 'green', 'yellow', 'orange', 'red'],
+            options: ['blue', 'purple', 'green', 'yellow', 'orange', 'red', 'indigo'],
             control: { type: 'select' },
             defaultValue: 'blue',
         },

@@ -17,7 +17,7 @@ export default {
             control: 'select',
         },
         color: {
-            options: ['primary', 'secondary', 'info', 'success', 'warn', 'danger'],
+            options: ['primary', 'secondary', 'tertiary', 'info', 'success', 'warn', 'danger'],
             control: 'select',
         },
         variant: {

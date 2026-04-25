@@ -29,11 +29,13 @@ $--clr-transparent: transparent;
 
 $--ra-config-interactive-designs: 'fill';
 
-$--ra-config-interactive-colors: (
+$--ra-config-interactive-colors-custom: () !default;
+
+$--ra-config-interactive-colors: map.merge((
     "primary": $--ra-config-interactive-color-primary,
     "secondary": $--ra-config-interactive-color-secondary,
     "info": $--ra-config-interactive-color-info,
     "success": $--ra-config-interactive-color-success,
     "warn": $--ra-config-interactive-color-warn,
     "danger": $--ra-config-interactive-color-danger,
-) !default;
+), $--ra-config-interactive-colors-custom);

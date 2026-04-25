@@ -18,72 +18,64 @@
 //     ),
 // );
 
-$--ra-config-palette-colors: (
-    "blue": (
-        100: #cfe2ff,
-        200: #9ec5fe,
-        300: #6ea8fe,
-        400: #3d8bfd,
-        500: #0d6efd,
-        600: #0a58ca,
-        700: #084298,
-        800: #052c65,
-        900: #031633,
+$--ra-config-palette-colors-custom: (
+    "indigo": (
+        100: #e0cffc,
+        200: #c29ffa,
+        300: #a370f7,
+        400: #8540f5,
+        500: #6610f2,
+        600: #520dc2,
+        700: #3d0a91,
+        800: #290a61,
+        900: #140530,
     ),
-    "purple": (
-        100: #e2d9f3,
-        200: #c5b3e6,
-        300: #a98eda,
-        400: #8c68cd,
-        500: #6f42c1,
-        600: #59359a,
-        700: #432874,
-        800: #2c1a4d,
-        900: #160d27,
-    ),
-    "green": (
-        100: #d1e7dd,
-        200: #a3cfbb,
-        300: #75b798,
-        400: #479f76,
-        500: #198754,
-        600: #146c43,
-        700: #0f5132,
-        800: #0a3622,
-        900: #051b11,
-    ),
-    "yellow": (
-        100: #fff3cd,
-        200: #ffe69c,
-        300: #ffda6a,
-        400: #ffcd39,
-        500: #ffc107,
-        600: #cc9a06,
-        700: #997404,
-        800: #664d03,
-        900: #332701,
-    ),
-    "orange": (
-        100: #ffe5d0,
-        200: #fecba1,
-        300: #feb272,
-        400: #fd9843,
-        500: #fd7e14,
-        600: #ca6510,
-        700: #984c0c,
-        800: #653208,
-        900: #331904,
-    ),
-    "red": (
-        100: #f8d7da,
-        200: #f1aeb5,
-        300: #ea868f,
-        400: #e35d6a,
-        500: #dc3545,
-        600: #b02a37,
-        700: #842029,
-        800: #58151c,
-        900: #2c0b0e,
+);
+
+$--ra-config-interactive-colors-custom: (
+    "tertiary": (
+        "": (
+            "clr": #0d6b3d,
+            "bg": transparent,
+            "br": transparent,
+            "out": transparent,
+
+            "hover-clr": #0b5a33,
+            "hover-bg": transparent,
+            "hover-br": transparent,
+            "hover-out": transparent,
+
+            "focus-clr": #0b5a33,
+            "focus-bg": transparent,
+            "focus-br": transparent,
+            "focus-out": transparent,
+
+            "active-clr": #094a2a,
+            "active-bg": transparent,
+            "active-br": transparent,
+            "active-out": transparent,
+        ),
+        "fill": (
+            "clr": #fff,
+            "bg": #0d6b3d,
+            "br": #0d6b3d,
+            "out": transparent,
+
+            "hover-clr": #fff,
+            "hover-bg": #0b5a33,
+            "hover-br": #0b5a33,
+            "hover-out": transparent,
+
+            "focus-clr": #fff,
+            "focus-bg": #0b5a33,
+            "focus-br": #0b5a33,
+            "focus-out": rgba(13, 107, 61, 0.5),
+
+            "active-clr": #fff,
+            "active-bg": #094a2a,
+            "active-br": #094a2a,
+            "active-out": transparent,
+        ),
     ),
 );
 

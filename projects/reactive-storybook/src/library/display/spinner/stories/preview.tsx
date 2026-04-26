@@ -1,5 +1,6 @@
 import React from 'react';
 import Spinner from '@reformjs/reactive/display/spinner';
+import { getPaletteColorOptions } from '../../../../common/config-colors';
 
 function example(props: Record<string, unknown>) {
     return (
@@ -27,7 +28,7 @@ example.story = {
             defaultValue: 'md',
         },
         color: {
-            options: ['blue', 'purple', 'green', 'yellow', 'orange', 'red', 'indigo'],
+            options: getPaletteColorOptions(),
             control: { type: 'select' },
             defaultValue: 'blue',
         },

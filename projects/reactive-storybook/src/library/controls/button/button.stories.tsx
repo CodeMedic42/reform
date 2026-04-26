@@ -1,4 +1,5 @@
 import Button from '@reformjs/reactive/controls/button';
+import { getInteractiveColorOptions, getButtonVariantOptions, getInteractiveDesignOptions } from '../../../common/config-colors';
 import previewStory from './stories/preview.story';
 
 export default {
@@ -13,15 +14,15 @@ export default {
             control: 'text',
         },
         design: {
-            options: ['fill'],
+            options: getInteractiveDesignOptions(),
             control: 'select',
         },
         color: {
-            options: ['primary', 'secondary', 'tertiary', 'info', 'success', 'warn', 'danger'],
+            options: getInteractiveColorOptions(),
             control: 'select',
         },
         variant: {
-            options: ['sm', 'lg-long'],
+            options: getButtonVariantOptions(),
             control: 'select',
         },
         disabled: {

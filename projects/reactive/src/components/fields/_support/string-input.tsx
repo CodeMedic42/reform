@@ -15,7 +15,7 @@ interface StringInputProps {
 	disabled?: boolean;
 }
 
-const FieldTextInput = forwardRef<unknown, StringInputProps>((props, ref) => {
+const StringInput = forwardRef<unknown, StringInputProps>((props, ref) => {
 	const {
 		onChange,
 		value = null,
@@ -36,13 +36,13 @@ const FieldTextInput = forwardRef<unknown, StringInputProps>((props, ref) => {
 		<Component
 			{...rest}
 			ref={ref}
-			className={classnames('ra-field-input', 'ra-field-text-input', className)}
+			className={classnames('ra-field-input', className)}
 			value={!isNil(value) ? value : ''}
 			onChange={handleChange}
 		/>
 	);
 });
 
-FieldTextInput.displayName = 'FieldTextInput';
+StringInput.displayName = 'StringInput';
 
-export default FieldTextInput;
+export default StringInput;

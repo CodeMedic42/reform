@@ -2,9 +2,9 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import classnames from 'classnames';
 import Field from '../_support/field.js';
 import type { FieldMessageData } from '../_support/field-messages.js';
-import TextareaInputFieldBase from './textarea-input-field-base.js';
+import TextareaFieldContainer from './textarea-field-container.js';
 
-interface TextareaInputFieldProps {
+interface TextareaFieldProps {
 	id?: string | null;
 	className?: string | null;
 	label?: string | null;
@@ -17,7 +17,7 @@ interface TextareaInputFieldProps {
 	messages?: FieldMessageData | null;
 }
 
-const TextareaInputField = forwardRef<unknown, TextareaInputFieldProps>((props, ref) => {
+const TextareaField = forwardRef<unknown, TextareaFieldProps>((props, ref) => {
 	const {
 		className = null,
 		id = null,
@@ -47,7 +47,7 @@ const TextareaInputField = forwardRef<unknown, TextareaInputFieldProps>((props, 
 
 	return (
 		<Field
-			className={classnames('ra-field-text-input', className)}
+			className={classnames('ra-textarea-field', className)}
 			id={id}
 			label={label}
 			messages={messages}
@@ -59,7 +59,7 @@ const TextareaInputField = forwardRef<unknown, TextareaInputFieldProps>((props, 
 			variant={variant}
 		>
 			{({ describedBy, labelledBy, inputId }: { describedBy: string | null; labelledBy: string; inputId: string }) => (
-				<TextareaInputFieldBase
+				<TextareaFieldContainer
 					{...rest}
 					type="text"
 					id={inputId}
@@ -72,4 +72,4 @@ const TextareaInputField = forwardRef<unknown, TextareaInputFieldProps>((props, 
 	);
 });
 
-export default TextareaInputField;
+export default TextareaField;

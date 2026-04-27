@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import FieldValue from '../_support/field-value.js';
 import FieldContainer from '../_support/field-container.js';
-import FieldTextInput from '../_support/field-text-input.js';
+import StringInput from '../_support/string-input.js';
 
 interface TextFieldContainerProps {
 	id?: string | null;
@@ -48,7 +48,7 @@ const TextFieldContainer = forwardRef<any, TextFieldContainerProps>((props, ref)
 				onChange={onChange as ((value: string | number | null) => void) | undefined}
 			>
 				{({ value: baseValue, onChange: baseOnChange }: { value: string | number | null; onChange: (value: string | number | null) => void }) => (
-					<FieldTextInput
+					<StringInput
 						{...rest}
 						Component="input"
 						ref={ref}
@@ -56,7 +56,7 @@ const TextFieldContainer = forwardRef<any, TextFieldContainerProps>((props, ref)
 						value={baseValue as string | null}
 						onChange={baseOnChange as unknown as (value: string | null) => void}
 						type="text"
-						className={classnames({
+						className={classnames('ra-field-text-input', {
 							'has-value': !isNil(baseValue),
 						})}
 						size="1"

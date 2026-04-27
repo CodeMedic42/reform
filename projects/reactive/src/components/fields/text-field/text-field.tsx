@@ -47,7 +47,7 @@ const TextField = forwardRef<unknown, TextFieldProps>((props, ref) => {
 
 	return (
 		<Field
-			className={classnames('ra-field-text-input', className)}
+			className={classnames('ra-text-field', className)}
 			id={id}
 			label={label}
 			messages={messages}

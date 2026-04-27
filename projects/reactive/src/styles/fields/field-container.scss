@@ -94,8 +94,8 @@ $--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--
 
 .ra-field-text-input,
 .ra-field-numeric-input,
-.ra-select-text-input
- {
+.ra-select-text-input,
+.ra-field-textarea-input {
     width: 100%;
 }
 
@@ -104,6 +104,10 @@ $--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--
     flex-shrink: 0;
     flex-basis: auto;
     overflow: hidden;
+}
+
+.ra-field-textarea-input {
+    resize: vertical;
 }
 
 .ra-field-content {

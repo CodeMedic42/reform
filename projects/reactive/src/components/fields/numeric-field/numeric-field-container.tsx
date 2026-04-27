@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import FieldValue from '../_support/field-value.js';
 import FieldContainer from '../_support/field-container.js';
-import FieldNumeric from '../_support/field-numeric-input.js';
+import NumberInput from '../_support/number-input.js';
 
 interface NumericFieldContainerProps {
 	id?: string | null;
@@ -48,7 +48,7 @@ const NumericFieldContainer = forwardRef<any, NumericFieldContainerProps>((props
 				onChange={onChange as ((value: string | number | null) => void) | undefined}
 			>
 				{({ value: baseValue, onChange: baseOnChange }: { value: string | number | null; onChange: (value: string | number | null) => void }) => (
-					<FieldNumeric
+					<NumberInput
 						{...rest}
 						Component="input"
 						ref={ref}
@@ -56,7 +56,7 @@ const NumericFieldContainer = forwardRef<any, NumericFieldContainerProps>((props
 						value={baseValue as string | null}
 						onChange={baseOnChange as unknown as (value: number | null) => void}
 						type="number"
-						className={classnames({
+						className={classnames('ra-field-numeric-input', {
 							'has-value': !isNil(baseValue),
 						})}
 						size="1"

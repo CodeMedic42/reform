@@ -1,16 +1,16 @@
 import React from 'react';
 import classNames from 'classnames';
 import FormField from './_support/form-field.js';
-import TextAreaField from '../../fields/textarea-input-field/index.js';
+import TextareaField from '../../fields/textarea-field/index.js';
 
-interface FormTextFieldProps {
+interface FormTextareaFieldProps {
 	className?: string,
 	path: string,
 	validation?: any,
 	validateOnBlur?: boolean,
 }
 
-function FormTextAreaField(props: FormTextFieldProps) {
+function FormTextareaField(props: FormTextareaFieldProps) {
 	const {
 		path,
 		className,
@@ -22,7 +22,7 @@ function FormTextAreaField(props: FormTextFieldProps) {
 		<FormField
 			{...rest}
 			path={path}
-			ControlComponent={TextAreaField}
+			ControlComponent={TextareaField}
 			className={classNames('re-form-text-area-field', className)}
 			validateOnBlur={validateOnBlur}
 			nativeAttributes={['required']}
@@ -30,4 +30,4 @@ function FormTextAreaField(props: FormTextFieldProps) {
 	);
 }
 
-export default FormTextAreaField;
+export default FormTextareaField;

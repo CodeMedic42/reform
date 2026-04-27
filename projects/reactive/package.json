@@ -90,6 +90,10 @@
       "import": "./dist/components/fields/text-field/index.mjs",
       "types": "./dist/components/fields/text-field/index.d.ts"
     },
+    "./fields/textarea-field": {
+      "import": "./dist/components/fields/textarea-field/index.mjs",
+      "types": "./dist/components/fields/textarea-field/index.d.ts"
+    },
     "./fields/numeric-field": {
       "import": "./dist/components/fields/numeric-field/index.mjs",
       "types": "./dist/components/fields/numeric-field/index.d.ts"

@@ -42,7 +42,7 @@ function DateSelectField(props: DateSelectFieldProps): React.ReactElement {
 	return (
 		<DateSelect
 			{...rest}
-			className={classnames('ra-date-input', className)}
+			className={classnames('ra-date-select-field', className)}
 			fromDate={value}
 			onSelect={onChange as ((date: Date) => void) | null}
 			Anchor={DateSelectFieldContainer}

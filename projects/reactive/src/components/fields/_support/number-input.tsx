@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback } from 'react';
 import classnames from 'classnames';
 import { isNil, isNaN, toString } from 'lodash-es';
 
-interface FieldNumericInputProps {
+interface NumberInputProps {
 	className?: string | null;
 	onChange: (value: number | null) => void;
 	value?: string | null;
@@ -27,7 +27,7 @@ function getNumericValue(value: string | null | undefined): string {
 	return toString(value);
 }
 
-const FieldNumericInput = forwardRef<unknown, FieldNumericInputProps>((props, ref) => {
+const NumberInput = forwardRef<unknown, NumberInputProps>((props, ref) => {
 	const {
 		className = null,
 		onChange,
@@ -47,7 +47,7 @@ const FieldNumericInput = forwardRef<unknown, FieldNumericInputProps>((props, re
 	return (
 		<Component
 			ref={ref}
-			className={classnames('ra-field-input', 'ra-field-numeric-input', className)}
+			className={classnames('ra-field-input', className)}
 			value={getNumericValue(value)}
 			onChange={handleChange}
 			{...rest}
@@ -55,6 +55,6 @@ const FieldNumericInput = forwardRef<unknown, FieldNumericInputProps>((props, re
 	);
 });
 
-FieldNumericInput.displayName = 'FieldNumericInput';
+NumberInput.displayName = 'NumberInput';
 
-export default FieldNumericInput;
+export default NumberInput;

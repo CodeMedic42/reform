@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import classnames from 'classnames';
 import { noop , isNil } from 'lodash-es';
 import { Data } from '@reformjs/reactive-data';
-import { FormContextProvider } from '../support/form-context.js';
+import { FormContextProvider } from '../_support/form-context.js';
 
 function perform(func: Function | undefined | null, ...params: any[]) {
 	return (func || noop)(...params);

@@ -2,9 +2,9 @@ import React, { useCallback, useState } from 'react';
 import { NumberInput } from '../components/NumberInput';
 import { ColorPicker } from '../components/ColorPicker';
 import { SectionHeader } from '../components/SectionHeader';
-import type { ConfigState, InputContainerVariant } from '../types';
+import type { ConfigState, FieldContainerVariant } from '../types';
 
-const CONTAINER_FIELDS: { key: keyof InputContainerVariant; label: string; type: 'text' | 'number' | 'color' }[] = [
+const CONTAINER_FIELDS: { key: keyof FieldContainerVariant; label: string; type: 'text' | 'number' | 'color' }[] = [
     { key: 'height', label: 'Height', type: 'text' },
     { key: 'padding-h', label: 'Padding Horizontal', type: 'text' },
     { key: 'padding-v', label: 'Padding Vertical', type: 'text' },
@@ -42,7 +42,7 @@ const addButtonStyle: React.CSSProperties = {
     color: '#fff',
 };
 
-const DEFAULT_CONTAINER_VARIANT: InputContainerVariant = {
+const DEFAULT_CONTAINER_VARIANT: FieldContainerVariant = {
     height: '40px',
     'padding-h': '12px',
     'padding-v': '0',
@@ -72,7 +72,7 @@ export function InputsSection({ config, onChange }: InputsSectionProps) {
         }));
     }, [onChange]);
 
-    const updateContainerDefault = useCallback((key: keyof InputContainerVariant, value: string | number) => {
+    const updateContainerDefault = useCallback((key: keyof FieldContainerVariant, value: string | number) => {
         onChange((prev) => ({
             ...prev,
             inputs: {
@@ -85,7 +85,7 @@ export function InputsSection({ config, onChange }: InputsSectionProps) {
         }));
     }, [onChange]);
 
-    const updateContainerVariant = useCallback((name: string, key: keyof InputContainerVariant, value: string | number) => {
+    const updateContainerVariant = useCallback((name: string, key: keyof FieldContainerVariant, value: string | number) => {
         onChange((prev) => ({
             ...prev,
             inputs: {
@@ -127,8 +127,8 @@ export function InputsSection({ config, onChange }: InputsSectionProps) {
     }, [onChange]);
 
     const renderContainerEditor = (
-        variant: InputContainerVariant,
-        onUpdate: (key: keyof InputContainerVariant, value: string | number) => void,
+        variant: FieldContainerVariant,
+        onUpdate: (key: keyof FieldContainerVariant, value: string | number) => void,
     ) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {CONTAINER_FIELDS.map(({ key, label, type }) => {

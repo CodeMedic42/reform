@@ -1,9 +1,6 @@
-const STORAGE_KEY = 'ra-config-panel-state';
+import { DEFAULT_CONFIG } from '@reformjs/reactive/config/defaults';
 
-const DEFAULT_PALETTE_COLORS = ['blue', 'purple', 'green', 'yellow', 'orange', 'red'];
-const DEFAULT_INTERACTIVE_COLORS = ['primary', 'secondary', 'info', 'success', 'warn', 'danger'];
-const DEFAULT_BUTTON_VARIANTS: string[] = [];
-const DEFAULT_INTERACTIVE_DESIGNS = ['fill'];
+const STORAGE_KEY = 'ra-config-panel-state';
 
 function loadConfigState(): any {
     try {
@@ -17,7 +14,7 @@ function loadConfigState(): any {
 
 export function getPaletteColorOptions(): string[] {
     const config = loadConfigState();
-    if (!config?.palette) return DEFAULT_PALETTE_COLORS;
+    if (!config?.palette) return Object.keys(DEFAULT_CONFIG.palette.colors);
 
     const defaultColors = Object.keys(config.palette.colors ?? {});
     const customColors = Object.keys(config.palette.custom ?? {});
@@ -26,7 +23,9 @@ export function getPaletteColorOptions(): string[] {
 
 export function getInteractiveColorOptions(): string[] {
     const config = loadConfigState();
-    if (!config?.interactiveDesigns) return DEFAULT_INTERACTIVE_COLORS;
+    if (!config?.interactiveDesigns) {
+        return Object.keys(DEFAULT_CONFIG.interactiveDesigns.schemes).filter((k) => k !== 'default');
+    }
 
     const defaultSchemes = Object.keys(config.interactiveDesigns.schemes ?? {}).filter((k) => k !== 'default');
     const customSchemes = Object.keys(config.interactiveDesigns.custom ?? {});
@@ -35,11 +34,11 @@ export function getInteractiveColorOptions(): string[] {
 
 export function getButtonVariantOptions(): string[] {
     const config = loadConfigState();
-    if (!config?.button) return DEFAULT_BUTTON_VARIANTS;
+    if (!config?.button) return [];
 
     return Object.keys(config.button.variants ?? {});
 }
 
 export function getInteractiveDesignOptions(): string[] {
-    return DEFAULT_INTERACTIVE_DESIGNS;
+    return ['fill'];
 }

@@ -1,0 +1,70 @@
+import React, { forwardRef, useEffect } from 'react';
+import classnames from 'classnames';
+import { isNil } from 'lodash-es';
+import FieldValue from '../_support/field-value.js';
+import FieldContainer from '../_support/field-container.js';
+import FieldNumeric from '../_support/field-numeric-input.js';
+
+interface NumericFieldContainerProps {
+	id?: string | null;
+	className?: string | null;
+	focusOnMount?: boolean;
+	onChange?: ((value: number | null) => void) | null;
+	value?: number | null;
+	leftAnnotation?: React.ReactNode;
+	rightAnnotation?: React.ReactNode;
+	type?: string;
+	'aria-labelledby'?: string | null;
+	'aria-describedby'?: string | null;
+	disabled?: boolean;
+}
+
+const NumericFieldContainer = forwardRef<any, NumericFieldContainerProps>((props, ref) => {
+	const {
+		id = null,
+		className = null,
+		value = null,
+		focusOnMount = false,
+		leftAnnotation = null,
+		rightAnnotation = null,
+		onChange = null,
+		...rest
+	} = props;
+
+	useEffect(() => {
+		if (focusOnMount) {
+			(ref as React.MutableRefObject<any>).current.focus();
+		}
+	}, []);
+
+	return (
+		<FieldContainer
+			className={className}
+			leftAnnotation={leftAnnotation}
+			rightAnnotation={rightAnnotation}
+		>
+			<FieldValue
+				value={value}
+				onChange={onChange as ((value: string | number | null) => void) | undefined}
+			>
+				{({ value: baseValue, onChange: baseOnChange }: { value: string | number | null; onChange: (value: string | number | null) => void }) => (
+					<FieldNumeric
+						{...rest}
+						Component="input"
+						ref={ref}
+						id={id}
+						value={baseValue as string | null}
+						onChange={baseOnChange as unknown as (value: number | null) => void}
+						type="number"
+						className={classnames({
+							'has-value': !isNil(baseValue),
+						})}
+						size="1"
+					/>
+				)}
+			</FieldValue>
+		</FieldContainer>
+	);
+});
+
+export default NumericFieldContainer;

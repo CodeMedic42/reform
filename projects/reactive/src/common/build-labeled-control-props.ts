@@ -1,10 +1,5 @@
 import { isNil, isEmpty, trim } from 'lodash-es';
-
-export interface InputMessages {
-    general?: string[];
-    success?: string[];
-    failure?: string[];
-}
+import type { FieldMessageData } from './prop-types.js';
 
 interface BuildLabeledControlPropsInput {
     id?: string | null | undefined;
@@ -12,7 +7,7 @@ interface BuildLabeledControlPropsInput {
     'aria-label'?: string | null;
     'aria-labelledby'?: string | null;
     'aria-describedby'?: string | null;
-    messages?: InputMessages | null;
+    messages?: FieldMessageData | null;
 }
 
 export interface BuildLabeledControlPropsOutput {

@@ -3,6 +3,8 @@
 // The ?raw query triggers webpack's asset/source rule to return raw text.
 
 // @ts-expect-error raw import
+import defaultsScss from 'reactive-scss-raw/defaults.scss?raw';
+// @ts-expect-error raw import
 import indexScss from 'reactive-scss-raw/index.scss?raw';
 // @ts-expect-error raw import
 import baseScss from 'reactive-scss-raw/base.scss?raw';
@@ -22,8 +24,7 @@ import hiddenScss from 'reactive-scss-raw/hidden.scss?raw';
 import iconScss from 'reactive-scss-raw/icon.scss?raw';
 // @ts-expect-error raw import
 import infiniteListScss from 'reactive-scss-raw/infinite-list.scss?raw';
-// @ts-expect-error raw import
-import inputsLegacyScss from 'reactive-scss-raw/inputs.scss?raw';
+// Legacy inputs.scss removed during field terminology cleanup
 // @ts-expect-error raw import
 import layoutScss from 'reactive-scss-raw/layout.scss?raw';
 // @ts-expect-error raw import
@@ -55,7 +56,7 @@ import configTabsScss from 'reactive-scss-raw/configuration/tabs.scss?raw';
 // @ts-expect-error raw import
 import configInputsIndexScss from 'reactive-scss-raw/configuration/inputs/index.scss?raw';
 // @ts-expect-error raw import
-import configInputContainerScss from 'reactive-scss-raw/configuration/inputs/input-container.scss?raw';
+import configFieldContainerScss from 'reactive-scss-raw/configuration/inputs/input-container.scss?raw';
 // @ts-expect-error raw import
 import configInteractiveIndexScss from 'reactive-scss-raw/configuration/interactive-designs/index.scss?raw';
 // @ts-expect-error raw import
@@ -105,21 +106,22 @@ import variablesInteractiveWarnScss from 'reactive-scss-raw/variables/color-vari
 // @ts-expect-error raw import
 import variablesInteractiveDangerScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/danger.scss?raw';
 
-// Inputs
+// Fields
 // @ts-expect-error raw import
-import inputsIndexScss from 'reactive-scss-raw/inputs/index.scss?raw';
+import fieldsIndexScss from 'reactive-scss-raw/fields/index.scss?raw';
 // @ts-expect-error raw import
-import inputContainerScss from 'reactive-scss-raw/inputs/input-container.scss?raw';
+import fieldContainerScss from 'reactive-scss-raw/fields/field-container.scss?raw';
 // @ts-expect-error raw import
-import inputScss from 'reactive-scss-raw/inputs/input.scss?raw';
+import fieldScss from 'reactive-scss-raw/fields/field.scss?raw';
 // @ts-expect-error raw import
-import selectInputScss from 'reactive-scss-raw/inputs/select-input.scss?raw';
+import selectInputScss from 'reactive-scss-raw/fields/select-input.scss?raw';
 // @ts-expect-error raw import
-import dropDownInputScss from 'reactive-scss-raw/inputs/drop-down-input.scss?raw';
+import dropDownInputScss from 'reactive-scss-raw/fields/drop-down-input.scss?raw';
 // @ts-expect-error raw import
-import dateRangeInputScss from 'reactive-scss-raw/inputs/date-range-input.scss?raw';
+import dateRangeInputScss from 'reactive-scss-raw/fields/date-range-input.scss?raw';
 
 export const scssSourceMap: Record<string, string> = {
+    'defaults.scss': defaultsScss,
     'index.scss': indexScss,
     'base.scss': baseScss,
     'box-shadow.scss': boxShadowScss,
@@ -130,7 +132,6 @@ export const scssSourceMap: Record<string, string> = {
     'hidden.scss': hiddenScss,
     'icon.scss': iconScss,
     'infinite-list.scss': infiniteListScss,
-    'inputs.scss': inputsLegacyScss,
     'layout.scss': layoutScss,
     'pdf-viewer.scss': pdfViewerScss,
     'scaling-container.scss': scalingContainerScss,
@@ -146,7 +147,7 @@ export const scssSourceMap: Record<string, string> = {
     'configuration/palette.scss': configPaletteScss,
     'configuration/tabs.scss': configTabsScss,
     'configuration/inputs/index.scss': configInputsIndexScss,
-    'configuration/inputs/input-container.scss': configInputContainerScss,
+    'configuration/inputs/input-container.scss': configFieldContainerScss,
     'configuration/interactive-designs/index.scss': configInteractiveIndexScss,
     'configuration/interactive-designs/default.scss': configInteractiveDefaultScss,
     'configuration/interactive-designs/primary.scss': configInteractivePrimaryScss,
@@ -172,10 +173,10 @@ export const scssSourceMap: Record<string, string> = {
     'variables/color-variables/interactive-group-variables/warn.scss': variablesInteractiveWarnScss,
     'variables/color-variables/interactive-group-variables/danger.scss': variablesInteractiveDangerScss,
 
-    'inputs/index.scss': inputsIndexScss,
-    'inputs/input-container.scss': inputContainerScss,
-    'inputs/input.scss': inputScss,
-    'inputs/select-input.scss': selectInputScss,
-    'inputs/drop-down-input.scss': dropDownInputScss,
-    'inputs/date-range-input.scss': dateRangeInputScss,
+    'fields/index.scss': fieldsIndexScss,
+    'fields/field-container.scss': fieldContainerScss,
+    'fields/field.scss': fieldScss,
+    'fields/select-input.scss': selectInputScss,
+    'fields/drop-down-input.scss': dropDownInputScss,
+    'fields/date-range-input.scss': dateRangeInputScss,
 };

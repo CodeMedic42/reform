@@ -14,7 +14,7 @@ import Form, {
 import { toNumber } from 'lodash-es';
 
 const { FormButton } = controls;
-const { FormInputTextField } = fields;
+const { FormTextField } = fields;
 
 const testConfigurationDef = {
 	triggers: {
@@ -169,13 +169,13 @@ function LoadedComponent(props: LoadedComponentProps) {
 					return !valid ? <span>Form Not Valid</span> : null;
 				}}
 			</FormAccess>
-			<FormInputTextField path="foo" />
+			<FormTextField path="foo" />
 			<FormGroup path="faz">
-				<FormInputTextField path="a" />
+				<FormTextField path="a" />
 			</FormGroup>
 			<FormList path='baz'>
 				<div>
-					<FormInputTextField path="a" />
+					<FormTextField path="a" />
 					<FormButton
 						color='primary'
 						design='fill'

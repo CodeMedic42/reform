@@ -6,7 +6,7 @@ export interface IconType {
     iconName: string;
 }
 
-export interface InputMessages {
+export interface FieldMessageData {
     general?: string[];
     success?: string[];
     failure?: string[];

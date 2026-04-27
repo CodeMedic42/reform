@@ -31,9 +31,31 @@ const addButtonStyle: React.CSSProperties = {
     color: '#fff',
 };
 
+const restoreButtonStyle: React.CSSProperties = {
+    padding: '4px 10px',
+    fontSize: '11px',
+    cursor: 'pointer',
+    borderRadius: '3px',
+    border: '1px solid #198754',
+    background: 'transparent',
+    color: '#198754',
+    marginRight: '4px',
+};
+
+const removedAreaStyle: React.CSSProperties = {
+    marginTop: '12px',
+    padding: '8px 12px',
+    background: '#f8f8f8',
+    borderRadius: '4px',
+    border: '1px solid #e6e6e6',
+};
+
 interface PaletteSectionProps {
     config: ConfigState;
     onChange: (updater: (prev: ConfigState) => ConfigState) => void;
+    removedDefaults: string[];
+    onRemoveDefault: (name: string) => void;
+    onRestoreDefault: (name: string) => void;
 }
 
 const DEFAULT_SHADES: PaletteShades = {
@@ -48,7 +70,7 @@ const DEFAULT_SHADES: PaletteShades = {
     900: '#202020',
 };
 
-export function PaletteSection({ config, onChange }: PaletteSectionProps) {
+export function PaletteSection({ config, onChange, removedDefaults, onRemoveDefault, onRestoreDefault }: PaletteSectionProps) {
     const [newColorName, setNewColorName] = useState('');
 
     const updateColor = useCallback((
@@ -89,7 +111,7 @@ export function PaletteSection({ config, onChange }: PaletteSectionProps) {
         setNewColorName('');
     }, [newColorName, config, onChange]);
 
-    const removeColor = useCallback((name: string) => {
+    const removeCustomColor = useCallback((name: string) => {
         onChange((prev) => {
             const custom = { ...prev.palette.custom };
             delete custom[name];
@@ -106,7 +128,11 @@ export function PaletteSection({ config, onChange }: PaletteSectionProps) {
             key={name}
             title={name}
             level={0}
-            onRemove={source === 'custom' ? () => removeColor(name) : undefined}
+            onRemove={
+                source === 'custom'
+                    ? () => removeCustomColor(name)
+                    : () => onRemoveDefault(name)
+            }
         >
             {SHADES.map((shade) => (
                 <ColorPicker
@@ -121,14 +147,33 @@ export function PaletteSection({ config, onChange }: PaletteSectionProps) {
 
     return (
         <div>
-            <h3 style={{ fontSize: '14px', margin: '0 0 8px 0' }}>Default Palette Colors</h3>
+            <h3 style={{ fontSize: '14px', margin: '0 0 8px 0' }}>Palette Colors</h3>
             {Object.entries(config.palette.colors).map(([name, shades]) =>
                 renderColorGroup(name, shades, 'colors'),
             )}
 
-            <h3 style={{ fontSize: '14px', margin: '16px 0 8px 0' }}>Custom Palette Colors</h3>
-            {Object.entries(config.palette.custom).map(([name, shades]) =>
-                renderColorGroup(name, shades, 'custom'),
+            {Object.keys(config.palette.custom).length > 0 && (
+                <>
+                    <h3 style={{ fontSize: '14px', margin: '16px 0 8px 0' }}>Custom Palette Colors</h3>
+                    {Object.entries(config.palette.custom).map(([name, shades]) =>
+                        renderColorGroup(name, shades, 'custom'),
+                    )}
+                </>
+            )}
+
+            {removedDefaults.length > 0 && (
+                <div style={removedAreaStyle}>
+                    <h4 style={{ fontSize: '12px', margin: '0 0 8px 0', color: '#666' }}>Removed Defaults</h4>
+                    {removedDefaults.map((name) => (
+                        <button
+                            key={name}
+                            style={restoreButtonStyle}
+                            onClick={() => onRestoreDefault(name)}
+                        >
+                            Restore {name}
+                        </button>
+                    ))}
+                </div>
             )}
 
             <div style={addBarStyle}>

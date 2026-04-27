@@ -20,7 +20,7 @@ function renderColumns() {
 function ColumnBackground() {
     return (
         <div className="background-div">
-            <Row className="background-row" gutter="16">
+            <Row className="background-row" gutter={{ h: '16' }}>
                 {renderColumns()}
             </Row>
         </div>

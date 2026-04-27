@@ -2,20 +2,15 @@ import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
 import { isNil, isEmpty } from 'lodash-es';
 import { Color } from '../../../common/color-list.js';
-import InputMessages from '../input-field-messages/index.js';
+import FieldMessages from '../_support/field-messages.js';
+import type { FieldMessageData } from '../_support/field-messages.js';
 import buildLabeledControlProps, { type BuildLabeledControlPropsOutput } from '../../../common/build-labeled-control-props.js';
-
-interface InputMessagesData {
-    general?: string[];
-    success?: string[];
-    failure?: string[];
-}
 
 interface CheckInputProps {
     id?: string | null;
     className?: string | null;
     label?: string | null;
-    messages?: InputMessagesData | null;
+    messages?: FieldMessageData | null;
     'aria-label'?: string | null;
     'aria-labelledby'?: string | null;
     'aria-describedby'?: string | null;
@@ -228,7 +223,7 @@ class CheckInput extends PureComponent<CheckInputProps, CheckInputState> {
                     </span>
                     {labelContentElement}
                 </LabelElement>
-                <InputMessages id={descriptionId} messages={messages} />
+                <FieldMessages id={descriptionId} messages={messages} />
             </span>
         );
     }

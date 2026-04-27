@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import FormAccess, { FormAccessControl } from '../support/form-access.js';
-import { FormContextProvider } from '../support/form-context.js';
+import FormAccess, { FormAccessControl } from '../_support/form-access.js';
+import { FormContextProvider } from '../_support/form-context.js';
 
 type FormGroupProps<C extends React.ElementType> = {
 	InnerComponent?: C;

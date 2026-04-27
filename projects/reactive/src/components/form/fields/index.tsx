@@ -1,9 +1,9 @@
-import FormInputNumericField from "./form-input-numeric-field.js";
+import FormNumericField from "./form-numeric-field.js";
 import FormTextAreaField from "./form-text-area-field.js"
-import FormInputTextField from "./form-input-text-field.js";
+import FormTextField from "./form-text-field.js";
 
 export default {
-    FormInputNumericField,
+    FormNumericField,
     FormTextAreaField,
-    FormInputTextField,
+    FormTextField,
 };

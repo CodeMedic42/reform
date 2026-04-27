@@ -1,6 +1,6 @@
 import React from 'react';
 import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
-import TextInputBase from '../text-input-field/text-input-field-base.js';
+import TextInputBase from '../text-field/text-field-container.js';
 
 interface SelectTextAnchorProps {
     open: boolean;

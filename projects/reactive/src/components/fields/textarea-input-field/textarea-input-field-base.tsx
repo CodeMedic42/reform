@@ -1,9 +1,9 @@
 import React, { forwardRef, useEffect } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import InputValue from '../new-base/input-field-value.js';
-import InputContainer from '../new-base/input-field-container.js';
-import StringInput from '../new-base/string-input-field.js';
+import FieldValue from '../_support/field-value.js';
+import FieldContainer from '../_support/field-container.js';
+import FieldTextInput from '../_support/field-text-input.js';
 
 interface TextareaInputBaseProps {
 	id?: string | null;
@@ -38,17 +38,17 @@ const TextareaInputBase = forwardRef<any, TextareaInputBaseProps>((props, ref) =
 	}, []);
 
 	return (
-		<InputContainer
+		<FieldContainer
 			className={className}
 			leftAnnotation={leftAnnotation}
 			rightAnnotation={rightAnnotation}
 		>
-			<InputValue
+			<FieldValue
 				value={value}
 				onChange={onChange as ((value: string | number | null) => void) | undefined}
 			>
 				{({ value: baseValue, onChange: baseOnChange }: { value: string | number | null; onChange: (value: string | number | null) => void }) => (
-					<StringInput
+					<FieldTextInput
 						{...rest}
 						Component="input"
 						ref={ref}
@@ -62,8 +62,8 @@ const TextareaInputBase = forwardRef<any, TextareaInputBaseProps>((props, ref) =
 						size="1"
 					/>
 				)}
-			</InputValue>
-		</InputContainer>
+			</FieldValue>
+		</FieldContainer>
 	);
 });
 

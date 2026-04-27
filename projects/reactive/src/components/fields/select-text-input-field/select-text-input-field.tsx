@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import classnames from 'classnames';
-import Select from '../base-components/select/index.js';
+import Select from '../_support/select/index.js';
 import SelectTextAnchor from './select-text-inout-field-anchor.js';
 
 interface SelectTextInputProps {

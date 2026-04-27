@@ -8,7 +8,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "build:js": "pnpm rollup --config rollup.config.mjs",
-    "build:styles": "make-dir ./dist/styles/scss && ncp ./src/styles ./dist/styles/scss && sass ./dist/styles/scss/index.scss:./dist/styles/css/index.css",
+    "build:config": "tsx scripts/generate-defaults-scss.ts",
+    "build:styles": "make-dir ./dist/styles/scss && ncp ./src/styles ./dist/styles/scss && pnpm run build:config && sass ./dist/styles/scss/index.scss:./dist/styles/css/index.css",
     "build:assets": "ncp ./src/assets ./dist/assets",
     "build": "pnpm run clean && pnpm run build:js && pnpm run build:styles && pnpm run build:assets",
     "lint": "npx eslint ./src",
@@ -65,13 +66,13 @@
       "import": "./dist/components/display/spinner/index.mjs",
       "types": "./dist/components/display/spinner/index.d.ts"
     },
-    "./fields/date-input-field": {
-      "import": "./dist/components/fields/date-input-field/index.mjs",
-      "types": "./dist/components/fields/date-input-field/index.d.ts"
+    "./fields/date-range-select-field": {
+      "import": "./dist/components/fields/date-range-select-field/index.mjs",
+      "types": "./dist/components/fields/date-range-select-field/index.d.ts"
     },
-    "./fields/date-range-input-field": {
-      "import": "./dist/components/fields/date-range-input-field/index.mjs",
-      "types": "./dist/components/fields/date-range-input-field/index.d.ts"
+    "./fields/date-select-field": { 
+      "import": "./dist/components/fields/date-select-field/index.mjs",
+      "types": "./dist/components/fields/date-select-field/index.d.ts"
     },
     "./fields/multi-select-input-field": {
       "import": "./dist/components/fields/multi-select-input-field/index.mjs",
@@ -85,9 +86,13 @@
       "import": "./dist/components/fields/select-text-input-field/index.mjs",
       "types": "./dist/components/fields/select-text-input-field/index.d.ts"
     },
-    "./fields/text-input-field": {
-      "import": "./dist/components/fields/text-input-field/index.mjs",
-      "types": "./dist/components/fields/text-input-field/index.d.ts"
+    "./fields/text-field": {
+      "import": "./dist/components/fields/text-field/index.mjs",
+      "types": "./dist/components/fields/text-field/index.d.ts"
+    },
+    "./fields/numeric-field": {
+      "import": "./dist/components/fields/numeric-field/index.mjs",
+      "types": "./dist/components/fields/numeric-field/index.d.ts"
     },
     "./form": {
       "import": "./dist/components/form/index.mjs",
@@ -100,6 +105,14 @@
     "./class-builders/hidden": {
       "import": "./dist/class-builders/hidden.mjs",
       "types": "./dist/class-builders/hidden.d.ts"
+    },
+    "./config/defaults": {
+      "import": "./dist/config/defaults.mjs",
+      "types": "./dist/config/defaults.d.ts"
+    },
+    "./config/types": {
+      "import": "./dist/config/types.mjs",
+      "types": "./dist/config/types.d.ts"
     },
     "./styles/": {
       "import": "./dist/styles/"
@@ -191,6 +204,7 @@
     "stylelint-config-standard": "^18.2.0",
     "stylelint-scss": "^3.5.3",
     "ts-jest": "^29.0.0",
+    "tsx": "^4.0.0",
     "typescript": "~5.3.3",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0",

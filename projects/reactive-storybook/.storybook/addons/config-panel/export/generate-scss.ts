@@ -1,4 +1,4 @@
-import type { ConfigState, PaletteShades, InteractiveScheme, InteractiveVariant, ButtonVariant, InputContainerVariant } from '../types';
+import type { ConfigState, PaletteShades, InteractiveScheme, InteractiveVariant, ButtonVariant, FieldContainerVariant } from '../types';
 import { DEFAULT_CONFIG } from '../defaults';
 
 function indent(str: string, level: number): string {
@@ -32,7 +32,7 @@ function formatButtonVariant(variant: ButtonVariant): string {
     return `(\n${entries.join('\n')}\n${indent(')', 1)}`;
 }
 
-function formatInputContainerVariant(variant: InputContainerVariant): string {
+function formatFieldContainerVariant(variant: FieldContainerVariant): string {
     const entries = Object.entries(variant)
         .map(([k, v]) => indent(`"${k}": ${typeof v === 'number' ? v : v},`, 2));
     return `(\n${entries.join('\n')}\n${indent(')', 1)}`;
@@ -56,12 +56,10 @@ export function generateScss(config: ConfigState): string {
         lines.push(`$--ra-config-default-font-weight: ${config.base.fontWeight};`);
     }
 
-    // Palette color overrides
+    // Palette colors - always emit all active colors since the library has no built-in defaults
     for (const [name, shades] of Object.entries(config.palette.colors)) {
-        if (DEFAULT_CONFIG.palette.colors[name] && !mapsEqual(shades, DEFAULT_CONFIG.palette.colors[name])) {
-            lines.push('');
-            lines.push(`$--ra-config-palette-color-${name}: ${formatPaletteMap(shades)};`);
-        }
+        lines.push('');
+        lines.push(`$--ra-config-palette-color-${name}: ${formatPaletteMap(shades)};`);
     }
 
     // Custom palette colors
@@ -72,19 +70,17 @@ export function generateScss(config: ConfigState): string {
         lines.push(`$--ra-config-palette-colors-custom: (\n${entries.join('\n')}\n);`);
     }
 
-    // Interactive design overrides
+    // Interactive design schemes - always emit all active schemes since the library has no built-in defaults
     for (const [name, scheme] of Object.entries(config.interactiveDesigns.schemes)) {
-        if (DEFAULT_CONFIG.interactiveDesigns.schemes[name] && !mapsEqual(scheme as unknown as Record<string, unknown>, DEFAULT_CONFIG.interactiveDesigns.schemes[name] as unknown as Record<string, unknown>)) {
-            lines.push('');
-            lines.push(`$--ra-config-interactive-color-${name}-base: ${formatInteractiveVariant(scheme.base, 2)};`);
-            lines.push('');
-            lines.push(`$--ra-config-interactive-color-${name}-fill: ${formatInteractiveVariant(scheme.fill, 2)};`);
-            lines.push('');
-            lines.push(`$--ra-config-interactive-color-${name}: (`);
-            lines.push(`${indent('"": $--ra-config-interactive-color-' + name + '-base,', 1)}`);
-            lines.push(`${indent('"fill": $--ra-config-interactive-color-' + name + '-fill,', 1)}`);
-            lines.push(');');
-        }
+        lines.push('');
+        lines.push(`$--ra-config-interactive-color-${name}-base: ${formatInteractiveVariant(scheme.base, 2)};`);
+        lines.push('');
+        lines.push(`$--ra-config-interactive-color-${name}-fill: ${formatInteractiveVariant(scheme.fill, 2)};`);
+        lines.push('');
+        lines.push(`$--ra-config-interactive-color-${name}: (`);
+        lines.push(`${indent('"": $--ra-config-interactive-color-' + name + '-base,', 1)}`);
+        lines.push(`${indent('"fill": $--ra-config-interactive-color-' + name + '-fill,', 1)}`);
+        lines.push(');');
     }
 
     // Custom interactive schemes
@@ -121,12 +117,12 @@ export function generateScss(config: ConfigState): string {
     }
     if (!mapsEqual(config.inputs.containerDefault as unknown as Record<string, unknown>, DEFAULT_CONFIG.inputs.containerDefault as unknown as Record<string, unknown>)) {
         lines.push('');
-        lines.push(`$--ra-config-input-container-default-variant: ${formatInputContainerVariant(config.inputs.containerDefault)};`);
+        lines.push(`$--ra-config-input-container-default-variant: ${formatFieldContainerVariant(config.inputs.containerDefault)};`);
     }
     if (Object.keys(config.inputs.containerVariants).length > 0) {
         lines.push('');
         const entries = Object.entries(config.inputs.containerVariants)
-            .map(([name, variant]) => `${indent(`"${name}": ${formatInputContainerVariant(variant)},`, 1)}`);
+            .map(([name, variant]) => `${indent(`"${name}": ${formatFieldContainerVariant(variant)},`, 1)}`);
         lines.push(`$--ra-config-input-container-variants: (\n${entries.join('\n')}\n);`);
     }
 

@@ -83,12 +83,34 @@ const DEFAULT_FILL_VARIANT: InteractiveVariant = {
     'active-out': 'transparent',
 };
 
+const restoreButtonStyle: React.CSSProperties = {
+    padding: '4px 10px',
+    fontSize: '11px',
+    cursor: 'pointer',
+    borderRadius: '3px',
+    border: '1px solid #198754',
+    background: 'transparent',
+    color: '#198754',
+    marginRight: '4px',
+};
+
+const removedAreaStyle: React.CSSProperties = {
+    marginTop: '12px',
+    padding: '8px 12px',
+    background: '#f8f8f8',
+    borderRadius: '4px',
+    border: '1px solid #e6e6e6',
+};
+
 interface InteractiveDesignsSectionProps {
     config: ConfigState;
     onChange: (updater: (prev: ConfigState) => ConfigState) => void;
+    removedDefaults: string[];
+    onRemoveDefault: (name: string) => void;
+    onRestoreDefault: (name: string) => void;
 }
 
-export function InteractiveDesignsSection({ config, onChange }: InteractiveDesignsSectionProps) {
+export function InteractiveDesignsSection({ config, onChange, removedDefaults, onRemoveDefault, onRestoreDefault }: InteractiveDesignsSectionProps) {
     const [newSchemeName, setNewSchemeName] = useState('');
 
     const updateVariantProp = useCallback((
@@ -175,7 +197,11 @@ export function InteractiveDesignsSection({ config, onChange }: InteractiveDesig
             key={name}
             title={name}
             level={0}
-            onRemove={source === 'custom' ? () => removeScheme(name) : undefined}
+            onRemove={
+                source === 'custom'
+                    ? () => removeScheme(name)
+                    : () => onRemoveDefault(name)
+            }
         >
             {renderVariant(name, 'base', scheme.base, source)}
             {renderVariant(name, 'fill', scheme.fill, source)}
@@ -184,14 +210,33 @@ export function InteractiveDesignsSection({ config, onChange }: InteractiveDesig
 
     return (
         <div>
-            <h3 style={{ fontSize: '14px', margin: '0 0 8px 0' }}>Default Interactive Schemes</h3>
+            <h3 style={{ fontSize: '14px', margin: '0 0 8px 0' }}>Interactive Schemes</h3>
             {Object.entries(config.interactiveDesigns.schemes).map(([name, scheme]) =>
                 renderScheme(name, scheme, 'schemes'),
             )}
 
-            <h3 style={{ fontSize: '14px', margin: '16px 0 8px 0' }}>Custom Interactive Schemes</h3>
-            {Object.entries(config.interactiveDesigns.custom).map(([name, scheme]) =>
-                renderScheme(name, scheme, 'custom'),
+            {Object.keys(config.interactiveDesigns.custom).length > 0 && (
+                <>
+                    <h3 style={{ fontSize: '14px', margin: '16px 0 8px 0' }}>Custom Interactive Schemes</h3>
+                    {Object.entries(config.interactiveDesigns.custom).map(([name, scheme]) =>
+                        renderScheme(name, scheme, 'custom'),
+                    )}
+                </>
+            )}
+
+            {removedDefaults.length > 0 && (
+                <div style={removedAreaStyle}>
+                    <h4 style={{ fontSize: '12px', margin: '0 0 8px 0', color: '#666' }}>Removed Defaults</h4>
+                    {removedDefaults.map((name) => (
+                        <button
+                            key={name}
+                            style={restoreButtonStyle}
+                            onClick={() => onRestoreDefault(name)}
+                        >
+                            Restore {name}
+                        </button>
+                    ))}
+                </div>
             )}
 
             <div style={addBarStyle}>

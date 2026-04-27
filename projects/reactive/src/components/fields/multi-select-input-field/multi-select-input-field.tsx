@@ -1,7 +1,7 @@
 import React, { useCallback, forwardRef } from 'react';
 import classnames from 'classnames';
 import { isNil, clone, pullAt } from 'lodash-es';
-import Select from '../base-components/select/index.js';
+import Select from '../_support/select/index.js';
 import MultiSelectAnchor from './multi-select-input-field-anchor.js';
 
 interface MultiSelectInputProps {

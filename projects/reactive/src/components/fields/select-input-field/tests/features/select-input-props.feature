@@ -4,7 +4,7 @@ Feature: SelectInput Component Props
 Scenario: Verify "id" prop
     Given the "id" property is set to "foo"
     Then the root element has attribute "id" which is "foo"
-    Then the ".ra-input-label" element has attribute "id" which is "foo-label"
+    Then the ".ra-field-label" element has attribute "id" which is "foo-label"
     Then the ".ra-tray" element from body has attribute "id" which is "foo-drop-down-tray"
 
 Scenario: Verify "id" prop when empty

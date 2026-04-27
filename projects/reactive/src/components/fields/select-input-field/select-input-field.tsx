@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback } from 'react';
 import classnames from 'classnames';
-import Select from '../base-components/select/index.js';
+import Select from '../_support/select/index.js';
 import SelectAnchor from './select-field-anchor.js';
 
 interface SelectInputProps {

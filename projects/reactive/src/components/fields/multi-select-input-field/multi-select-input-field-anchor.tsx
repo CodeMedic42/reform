@@ -4,11 +4,11 @@ import { isNil, join, map } from 'lodash-es';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons/faAngleUp';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import IconBox from '../../display/icon-box/index.jsx';
-import IconButton from '../../display/icon-button/index.jsx';
-import RemovableChip from '../../display/chip/removable-chip.jsx';
+import IconBox from '../../display/icon-box/index.js';
+import IconButton from '../../display/icon-button/index.js';
+import RemovableChip from '../../display/chip/removable-chip.js';
 import Chip from '../../display/chip/index.js';
-import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
+import applyAnchorBinding from '../../controls/drop-down/anchor-binding.js';
 import changeSize from '../../../util/change-size.js';
 
 interface ClearEvent {

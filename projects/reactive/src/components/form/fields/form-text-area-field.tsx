@@ -1,16 +1,16 @@
 import React from 'react';
 import classNames from 'classnames';
-import FormField from './support/form-field.js';
+import FormField from './_support/form-field.js';
 import TextAreaField from '../../fields/textarea-input-field/index.js';
 
-interface FormInputTextFieldProps {
+interface FormTextFieldProps {
 	className?: string,
 	path: string,
 	validation?: any,
 	validateOnBlur?: boolean,
 }
 
-function FormTextAreaField(props: FormInputTextFieldProps) {
+function FormTextAreaField(props: FormTextFieldProps) {
 	const {
 		path,
 		className,

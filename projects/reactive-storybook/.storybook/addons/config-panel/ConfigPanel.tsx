@@ -2,7 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useChannel } from 'storybook/manager-api';
 import { EVENTS } from './constants';
 import { DEFAULT_CONFIG } from './defaults';
-import { loadConfig, saveConfig, clearConfig } from './storage';
+import { loadPanelState, savePanelState } from './storage';
+import type { RemovedDefaults } from './storage';
 import { generateScss } from './export/generate-scss';
 import { downloadFile } from './export/download';
 import { PaletteSection } from './sections/PaletteSection';
@@ -81,7 +82,8 @@ interface ConfigPanelProps {
 }
 
 export function ConfigPanel({ active }: ConfigPanelProps) {
-    const [config, setConfig] = useState<ConfigState>(() => loadConfig());
+    const [config, setConfig] = useState<ConfigState>(() => loadPanelState().config);
+    const [removedDefaults, setRemovedDefaults] = useState<RemovedDefaults>(() => loadPanelState().removedDefaults);
     const [activeTab, setActiveTab] = useState<TabId>('palette');
 
     const emit = useChannel({
@@ -90,14 +92,26 @@ export function ConfigPanel({ active }: ConfigPanelProps) {
         },
     });
 
+    const persist = useCallback((nextConfig: ConfigState, nextRemoved: RemovedDefaults) => {
+        savePanelState({ config: nextConfig, removedDefaults: nextRemoved });
+        emit(EVENTS.CONFIG_CHANGED, nextConfig);
+    }, [emit]);
+
     const updateConfig = useCallback((updater: (prev: ConfigState) => ConfigState) => {
         setConfig((prev) => {
             const next = updater(prev);
-            saveConfig(next);
-            emit(EVENTS.CONFIG_CHANGED, next);
+            persist(next, removedDefaults);
             return next;
         });
-    }, [emit]);
+    }, [persist, removedDefaults]);
+
+    const updateRemoved = useCallback((updater: (prev: RemovedDefaults) => RemovedDefaults) => {
+        setRemovedDefaults((prev) => {
+            const next = updater(prev);
+            savePanelState({ config, removedDefaults: next });
+            return next;
+        });
+    }, [config]);
 
     // Send initial config on mount
     useEffect(() => {
@@ -106,10 +120,11 @@ export function ConfigPanel({ active }: ConfigPanelProps) {
 
     const handleReset = useCallback(() => {
         const fresh = structuredClone(DEFAULT_CONFIG);
+        const emptyRemoved: RemovedDefaults = { paletteColors: [], interactiveSchemes: [] };
         setConfig(fresh);
-        saveConfig(fresh);
-        emit(EVENTS.CONFIG_CHANGED, fresh);
-    }, [emit]);
+        setRemovedDefaults(emptyRemoved);
+        persist(fresh, emptyRemoved);
+    }, [persist]);
 
     const handleExport = useCallback(() => {
         const scss = generateScss(config);
@@ -136,10 +151,70 @@ export function ConfigPanel({ active }: ConfigPanelProps) {
 
             <div style={contentStyle}>
                 {activeTab === 'palette' && (
-                    <PaletteSection config={config} onChange={updateConfig} />
+                    <PaletteSection
+                        config={config}
+                        onChange={updateConfig}
+                        removedDefaults={removedDefaults.paletteColors}
+                        onRemoveDefault={(name) => {
+                            updateConfig((prev) => {
+                                const colors = { ...prev.palette.colors };
+                                delete colors[name];
+                                return { ...prev, palette: { ...prev.palette, colors } };
+                            });
+                            updateRemoved((prev) => ({
+                                ...prev,
+                                paletteColors: [...prev.paletteColors, name],
+                            }));
+                        }}
+                        onRestoreDefault={(name) => {
+                            const defaultShades = DEFAULT_CONFIG.palette.colors[name];
+                            if (!defaultShades) return;
+                            updateConfig((prev) => ({
+                                ...prev,
+                                palette: {
+                                    ...prev.palette,
+                                    colors: { ...prev.palette.colors, [name]: { ...defaultShades } },
+                                },
+                            }));
+                            updateRemoved((prev) => ({
+                                ...prev,
+                                paletteColors: prev.paletteColors.filter((n) => n !== name),
+                            }));
+                        }}
+                    />
                 )}
                 {activeTab === 'interactive' && (
-                    <InteractiveDesignsSection config={config} onChange={updateConfig} />
+                    <InteractiveDesignsSection
+                        config={config}
+                        onChange={updateConfig}
+                        removedDefaults={removedDefaults.interactiveSchemes}
+                        onRemoveDefault={(name) => {
+                            updateConfig((prev) => {
+                                const schemes = { ...prev.interactiveDesigns.schemes };
+                                delete schemes[name];
+                                return { ...prev, interactiveDesigns: { ...prev.interactiveDesigns, schemes } };
+                            });
+                            updateRemoved((prev) => ({
+                                ...prev,
+                                interactiveSchemes: [...prev.interactiveSchemes, name],
+                            }));
+                        }}
+                        onRestoreDefault={(name) => {
+                            const defaultScheme = DEFAULT_CONFIG.interactiveDesigns.schemes[name];
+                            if (!defaultScheme) return;
+                            updateConfig((prev) => ({
+                                ...prev,
+                                interactiveDesigns: {
+                                    ...prev.interactiveDesigns,
+                                    schemes: { ...prev.interactiveDesigns.schemes, [name]: structuredClone(defaultScheme) },
+                                },
+                            }));
+                            updateRemoved((prev) => ({
+                                ...prev,
+                                interactiveSchemes: prev.interactiveSchemes.filter((n) => n !== name),
+                            }));
+                        }}
+                    />
                 )}
                 {activeTab === 'grayscale' && (
                     <GrayscaleSection config={config} onChange={updateConfig} />
@@ -163,7 +238,7 @@ export function ConfigPanel({ active }: ConfigPanelProps) {
 
             <div style={footerStyle}>
                 <button style={buttonStyle} onClick={handleReset}>
-                    Reset to Defaults
+                    Restore All Defaults
                 </button>
                 <button style={{ ...buttonStyle, background: '#029cfd', color: '#fff', borderColor: '#029cfd' }} onClick={handleExport}>
                     Export SCSS

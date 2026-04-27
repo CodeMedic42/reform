@@ -1,13 +1,8 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import classnames from 'classnames';
-import InputLabel from '../new-base/input-field-label.js';
+import Field from '../_support/field.js';
+import type { FieldMessageData } from '../_support/field-messages.js';
 import TextareaInputFieldBase from './textarea-input-field-base.js';
-
-interface InputMessagesData {
-	general?: string[];
-	success?: string[];
-	failure?: string[];
-}
 
 interface TextareaInputFieldProps {
 	id?: string | null;
@@ -19,7 +14,7 @@ interface TextareaInputFieldProps {
 	'aria-describedby'?: string | null;
 	hidden?: boolean;
 	failure?: boolean;
-	messages?: InputMessagesData | null;
+	messages?: FieldMessageData | null;
 }
 
 const TextareaInputField = forwardRef<unknown, TextareaInputFieldProps>((props, ref) => {
@@ -51,8 +46,8 @@ const TextareaInputField = forwardRef<unknown, TextareaInputFieldProps>((props, 
     }), [disabled]);
 
 	return (
-		<InputLabel
-			className={classnames('ra-text-input', className)}
+		<Field
+			className={classnames('ra-field-text-input', className)}
 			id={id}
 			label={label}
 			messages={messages}
@@ -73,7 +68,7 @@ const TextareaInputField = forwardRef<unknown, TextareaInputFieldProps>((props, 
 					disabled={disabled}
 				/>
 			)}
-		</InputLabel>
+		</Field>
 	);
 });
 

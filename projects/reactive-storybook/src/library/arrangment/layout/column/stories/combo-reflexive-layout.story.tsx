@@ -18,11 +18,11 @@ export default function example() {
                     </Column>
                     <Column width={[null, 'fill', '3', 'content', '5']}>
                         <Content>
-                            <div>base: null</div>
-                            <div>md: fill</div>
-                            <div>lg: 3</div>
-                            <div>xl: content</div>
-                            <div>2xl: 5</div>
+                            <div>1: null</div>
+                            <div>2: fill</div>
+                            <div>3: 3</div>
+                            <div>4: content</div>
+                            <div>5: 5</div>
                         </Content>
                     </Column>
                 </Row>

@@ -131,6 +131,18 @@ function generate(): string {
 
     // Layout breakpoints
     lines.push(`$-ra-config-resp-breakpoints: ${config.layout.breakpoints.join(', ')};`);
+    if (config.layout.tabletBreakpoint !== null) {
+        const tabletValue = config.layout.breakpoints[config.layout.tabletBreakpoint];
+        if (tabletValue) {
+            lines.push(`$-ra-config-tablet-resp-breakpoint: ${tabletValue};`);
+        }
+    }
+    if (config.layout.desktopBreakpoint !== null) {
+        const desktopValue = config.layout.breakpoints[config.layout.desktopBreakpoint];
+        if (desktopValue) {
+            lines.push(`$-ra-config-desktop-resp-breakpoint: ${desktopValue};`);
+        }
+    }
     lines.push('');
 
     // Button settings

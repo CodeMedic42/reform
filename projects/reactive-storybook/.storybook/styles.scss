@@ -1,2 +1,2 @@
-@import '../node_modules/@reformjs/reactive/dist/styles/scss/defaults.scss';
-@import '../node_modules/@reformjs/reactive/dist/styles/scss/index.scss';
+// Library SCSS is compiled at runtime by the config panel's browser-side
+// Sass compiler (apply-structural.ts). No build-time import needed.

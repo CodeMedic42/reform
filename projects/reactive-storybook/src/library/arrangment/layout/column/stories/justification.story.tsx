@@ -35,10 +35,10 @@ export default function example() {
                         justify={['right', 'center', null, 'left']}
                     >
                         <Content shrink>
-                            <div>base: right</div>
-                            <div>md: center</div>
-                            <div>lg: null</div>
-                            <div>xl: left</div>
+                            <div>1: right</div>
+                            <div>2: center</div>
+                            <div>3: null</div>
+                            <div>4: left</div>
                         </Content>
                     </Column>
                 </Row>

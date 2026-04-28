@@ -42,7 +42,19 @@ const config: StorybookConfig = {
     config.module?.rules?.push({
       test: /\.scss$/,
       resourceQuery: { not: [/raw/] },
-      use: ['style-loader', 'css-loader', 'sass-loader'],
+      use: [
+        'style-loader',
+        'css-loader',
+        {
+          loader: 'sass-loader',
+          options: {
+            api: 'modern',
+            sassOptions: {
+              silenceDeprecations: ['import', 'global-builtin'],
+            },
+          },
+        },
+      ],
     });
 
     return config;

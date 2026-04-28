@@ -15,11 +15,11 @@ export default function example() {
                 <Row gutter="16">
                     <Column width={[null, '8', '6', '4', '2']}>
                         <Content>
-                            <div>base:null</div>
-                            <div>md:8</div>
-                            <div>lg:6</div>
-                            <div>xl:4</div>
-                            <div>2xl:2</div>
+                            <div>1:null</div>
+                            <div>2:8</div>
+                            <div>3:6</div>
+                            <div>4:4</div>
+                            <div>5:2</div>
                         </Content>
                     </Column>
                 </Row>

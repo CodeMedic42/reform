@@ -1,13 +1,43 @@
 import React, { useEffect, useRef } from 'react';
 import { useChannel } from 'storybook/preview-api';
-import { EVENTS, STORAGE_KEY } from './constants';
+import AsyncValue from '@reformjs/reactive/workflow/async-value';
+import { EVENTS } from './constants';
 import { applyColors } from './apply/apply-colors';
 import { applyStructural } from './apply/apply-structural';
+import { loadPanelState, savePanelState } from './storage';
 import type { ConfigState } from './types';
+
+const STRUCTURAL_STYLE_ID = 'ra-config-structural';
 
 function applyConfig(config: ConfigState) {
     applyColors(config);
     applyStructural(config);
+}
+
+function waitForStructuralCss(): Promise<boolean> {
+    return new Promise((resolve) => {
+        if (document.getElementById(STRUCTURAL_STYLE_ID)) {
+            resolve(true);
+            return;
+        }
+
+        const observer = new MutationObserver(() => {
+            if (document.getElementById(STRUCTURAL_STYLE_ID)) {
+                observer.disconnect();
+                resolve(true);
+            }
+        });
+
+        observer.observe(document.head, { childList: true });
+    });
+}
+
+function Loading() {
+    return (
+        <div style={{ padding: '24px', fontSize: '14px', color: '#666' }}>
+            Loading styles...
+        </div>
+    );
 }
 
 export function withConfigPanel(Story: React.ComponentType, context: unknown) {
@@ -22,21 +52,26 @@ export function withConfigPanel(Story: React.ComponentType, context: unknown) {
         },
     });
 
-    // Apply persisted config on initial load
+    // Apply persisted config on initial load, seeding localStorage with defaults if empty
     useEffect(() => {
         if (appliedRef.current) return;
         appliedRef.current = true;
 
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                const config = JSON.parse(stored) as ConfigState;
-                applyConfig(config);
-            }
-        } catch {
-            // ignore
-        }
+        const panelState = loadPanelState();
+        savePanelState(panelState);
+        applyConfig(panelState.config);
     }, []);
 
-    return <Story />;
+    const LoadedStory = React.useCallback(
+        ({ value }: { value: boolean }) => <Story />,
+        [Story],
+    );
+
+    return (
+        <AsyncValue
+            value={waitForStructuralCss}
+            LoadingComponent={Loading}
+            LoadedComponent={LoadedStory}
+        />
+    );
 }

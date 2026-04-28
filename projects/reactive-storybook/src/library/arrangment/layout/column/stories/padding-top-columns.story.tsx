@@ -14,11 +14,11 @@ export default function example() {
                         paddingTop={[null, 'static:10', 'static:20', 'static:30', 'static:40']}
                     >
                         <Content>
-                            <div>base:null</div>
-                            <div>md:10</div>
-                            <div>lg:20</div>
-                            <div>xl:30</div>
-                            <div>2xl:40</div>
+                            <div>1:null</div>
+                            <div>2:10</div>
+                            <div>3:20</div>
+                            <div>4:30</div>
+                            <div>5:40</div>
                         </Content>
                     </Column>
                     <Column width="12">

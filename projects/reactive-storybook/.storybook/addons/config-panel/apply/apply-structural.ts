@@ -73,6 +73,7 @@ async function compileScssToCss(config: ConfigState): Promise<string> {
 
     const result = await sass.compileStringAsync(fullScss, {
         url: new URL('file:///virtual/entry.scss'),
+        silenceDeprecations: ['import', 'global-builtin'],
         importers: [{
             canonicalize(url: string, context: { containingUrl?: URL | null }) {
                 // Handle built-in sass modules
@@ -132,16 +133,6 @@ export function applyStructural(config: ConfigState): void {
                 document.head.appendChild(styleEl);
             }
             styleEl.textContent = css;
-
-            // Disable the original library stylesheet to avoid conflicts
-            const originalStyles = document.querySelectorAll('style');
-            originalStyles.forEach((el) => {
-                if (el.id !== STRUCTURAL_STYLE_ID &&
-                    el.id !== 'ra-config-colors' &&
-                    el.textContent?.includes('.ra-spinner')) {
-                    (el as any).disabled = true;
-                }
-            });
         } catch (err) {
             console.error('[Config Panel] SCSS compilation error:', err);
         }

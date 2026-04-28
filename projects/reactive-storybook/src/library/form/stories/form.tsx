@@ -229,8 +229,6 @@ function example() {
 	);
 }
 
-example.story = {
-	name: 'General',
-};
+example.storyName = 'General';
 
 export default example;

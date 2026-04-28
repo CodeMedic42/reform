@@ -14,11 +14,11 @@ export default function example() {
                         maxWidth={[null, 'static:200', 'static:300', 'static:400', 'static:500']}
                     >
                         <Content>
-                            <div>base:null</div>
-                            <div>md:200</div>
-                            <div>lg:300</div>
-                            <div>xl:400</div>
-                            <div>2xl:500</div>
+                            <div>1:null</div>
+                            <div>2:200</div>
+                            <div>3:300</div>
+                            <div>4:400</div>
+                            <div>5:500</div>
                         </Content>
                     </Column>
                     <Column width="12">

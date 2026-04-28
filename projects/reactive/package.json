@@ -13,7 +13,8 @@
     "build:assets": "ncp ./src/assets ./dist/assets",
     "build": "pnpm run clean && pnpm run build:js && pnpm run build:styles && pnpm run build:assets",
     "lint": "npx eslint ./src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "watch": "npm-watch"
   },
   "keywords": [],
   "author": "",
@@ -123,7 +124,7 @@
     }
   },
   "watch": {
-    "watch:assets": {
+    "build:assets": {
       "patterns": [
         "src/assets"
       ],
@@ -132,19 +133,21 @@
       "quiet": false,
       "runOnChangeOnly": true
     },
-    "watch:styles": {
+    "build:styles": {
       "patterns": [
         "src/styles"
       ],
       "extensions": "scss,css",
+      "ignore": "dist/",
       "quiet": false,
       "runOnChangeOnly": true
     },
-    "watch:js": {
+    "build:js": {
       "patterns": [
         "src"
       ],
       "extensions": "js,jsx,json,ts,tsx",
+      "ignore": "dist/",
       "quiet": false,
       "runOnChangeOnly": true
     }

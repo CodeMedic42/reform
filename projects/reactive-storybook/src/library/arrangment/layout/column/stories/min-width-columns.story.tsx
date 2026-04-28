@@ -15,11 +15,11 @@ export default function example() {
                         minWidth={[null, 'static:250', 'static:340', 'static:400', 'static:650']}
                     >
                         <Content>
-                            <div>base:null</div>
-                            <div>md:250</div>
-                            <div>lg:340</div>
-                            <div>xl:400</div>
-                            <div>2xl:650</div>
+                            <div>1:null</div>
+                            <div>2:250</div>
+                            <div>3:340</div>
+                            <div>4:400</div>
+                            <div>5:650</div>
                         </Content>
                     </Column>
                     <Column width="8">

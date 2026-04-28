@@ -221,5 +221,7 @@ export const DEFAULT_CONFIG: ConfigState = {
     },
     layout: {
         breakpoints: ['600px', '992px', '1200px', '1800px'],
+        tabletBreakpoint: 1,
+        desktopBreakpoint: 2,
     },
 };

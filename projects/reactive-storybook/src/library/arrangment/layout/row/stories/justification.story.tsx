@@ -44,18 +44,18 @@ export default function example() {
                 <Row gutter="16" justify={['right', 'center', null, 'left'] as string[]}>
                     <Column width="3">
                         <Content>
-                            <div>base: right</div>
-                            <div>md: center</div>
-                            <div>lg: null</div>
-                            <div>xl: left</div>
+                            <div>1: right</div>
+                            <div>2: center</div>
+                            <div>3: null</div>
+                            <div>4: left</div>
                         </Content>
                     </Column>
                     <Column width="3">
                         <Content>
-                            <div>base: right</div>
-                            <div>md: center</div>
-                            <div>lg: null</div>
-                            <div>xl: left</div>
+                            <div>1: right</div>
+                            <div>2: center</div>
+                            <div>3: null</div>
+                            <div>4: left</div>
                         </Content>
                     </Column>
                 </Row>

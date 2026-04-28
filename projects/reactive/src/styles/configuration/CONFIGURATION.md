@@ -463,9 +463,9 @@ All default to `null` (inherits base value) unless noted.
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `$-ra-config-resp-breakpoints` | `600px, 992px, 1200px, 1800px` | Responsive breakpoint list |
-| `$-ra-config-tablet-resp-breakpoint` | 2nd breakpoint (`992px`) | Tablet breakpoint |
-| `$-ra-config-desktop-res-breakpoint` | 3rd breakpoint (`1200px`) | Desktop breakpoint |
+| `$-ra-config-resp-breakpoints` | `600px, 992px, 1200px, 1800px` | Responsive breakpoint list (any number of breakpoints supported) |
+| `$-ra-config-tablet-resp-breakpoint` | `null` | Tablet breakpoint value. Set to a breakpoint value (e.g. `992px`) to enable tablet-specific styles. |
+| `$-ra-config-desktop-resp-breakpoint` | `null` | Desktop breakpoint value. Set to a breakpoint value (e.g. `1200px`) to enable desktop-specific styles. |
 
 ---
 

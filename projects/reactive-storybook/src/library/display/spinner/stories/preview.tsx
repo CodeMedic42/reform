@@ -8,30 +8,28 @@ function example(props: Record<string, unknown>) {
     );
 }
 
-example.story = {
-    name: 'Preview',
-    parameters: {
-        options: {
-            showPanel: true,
-        },
+example.storyName = 'Preview';
+example.parameters = {
+    options: {
+        showPanel: true,
     },
-    argTypes: {
-        id: {
-            control: 'text',
-        },
-        className: {
-            control: 'text',
-        },
-        size: {
-            options: ['xl', 'lg', 'md', 'sm', 'xs'],
-            control: { type: 'select' },
-            defaultValue: 'md',
-        },
-        color: {
-            options: getPaletteColorOptions(),
-            control: { type: 'select' },
-            defaultValue: 'blue',
-        },
+};
+example.argTypes = {
+    id: {
+        control: 'text',
+    },
+    className: {
+        control: 'text',
+    },
+    size: {
+        options: ['xl', 'lg', 'md', 'sm', 'xs'],
+        control: { type: 'select' },
+        defaultValue: 'md',
+    },
+    color: {
+        options: getPaletteColorOptions(),
+        control: { type: 'select' },
+        defaultValue: 'blue',
     },
 };
 

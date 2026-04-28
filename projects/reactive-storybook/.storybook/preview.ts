@@ -13,6 +13,12 @@ const preview: Preview = {
       },
     },
   },
+  globalTypes: {
+    measureEnabled: {},
+    backgrounds: {},
+    outline: {},
+    viewport: {},
+  },
   decorators: [withConfigPanel],
 };
 

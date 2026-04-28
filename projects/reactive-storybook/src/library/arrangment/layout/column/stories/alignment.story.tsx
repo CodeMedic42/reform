@@ -97,10 +97,10 @@ export default function example() {
                     </Column>
                     <Column width="6" align={['bottom', 'center', null, 'top']}>
                         <Content>
-                            <div>base: bottom</div>
-                            <div>md: center</div>
-                            <div>lg: null</div>
-                            <div>xl: top</div>
+                            <div>1: bottom</div>
+                            <div>2: center</div>
+                            <div>3: null</div>
+                            <div>4: top</div>
                         </Content>
                     </Column>
                 </Row>

@@ -109,100 +109,98 @@ function example(props: ExampleProps) {
 	);
 }
 
-example.story = {
-	name: 'Preview',
-	parameters: {
-		options: {
-			showPanel: true,
-		},
+example.storyName = 'Preview';
+example.parameters = {
+	options: {
+		showPanel: true,
 	},
-	argTypes: {
-		id: {
-			control: 'text',
-		},
-		className: {
-			control: 'text',
-		},
-		placeholder: {
-			control: 'text',
-		},
-		label: {
-			control: 'text',
-		},
-		title: {
-			control: 'text',
-		},
-		'aria-label': {
-			control: 'text',
-		},
-		disabled: {
-			control: 'boolean',
-			defaultValue: false,
-		},
-		secure: {
-			control: 'boolean',
-			defaultValue: false,
-		},
-		failure: {
-			control: 'boolean',
-			defaultValue: false,
-		},
-		successMessageCount: {
-			control: 'number',
-		},
-		failureMessageCount: {
-			control: 'number',
-		},
-		generalMessageCount: {
-			control: 'number',
-		},
-		minLength: {
-			control: 'number',
-		},
-		maxLength: {
-			control: 'number',
-		},
-		required: {
-			control: 'boolean',
-			defaultValue: false,
-		},
-		hidden: {
-			control: 'boolean',
-			defaultValue: false,
-		},
-		pattern: {
-			control: 'text',
-		},
-		variant: {
-			control: 'text',
-		},
-		focusOnMount: {
-			control: 'boolean',
-			defaultValue: false,
-		},
-		onFocus: { table: { disable: true } },
-		onBlur: { table: { disable: true } },
-		onKeyPress: { table: { disable: true } },
-		onKeyDown: { table: { disable: true } },
-		onKeyUp: { table: { disable: true } },
-		autoComplete: {
-			control: 'select',
-			options: ['on', 'off'],
-			defaultValue: 'off',
-		},
-		showFocused: {
-			control: 'boolean',
-			defaultValue: false,
-		},
-		// useLeftIcon: {
-		// 	control: 'boolean',
-		// 	defaultValue: false,
-		// },
-		// useRightIcon: {
-		// 	control: 'boolean',
-		// 	defaultValue: false,
-		// },
+};
+example.argTypes = {
+	id: {
+		control: 'text',
 	},
+	className: {
+		control: 'text',
+	},
+	placeholder: {
+		control: 'text',
+	},
+	label: {
+		control: 'text',
+	},
+	title: {
+		control: 'text',
+	},
+	'aria-label': {
+		control: 'text',
+	},
+	disabled: {
+		control: 'boolean',
+		defaultValue: false,
+	},
+	secure: {
+		control: 'boolean',
+		defaultValue: false,
+	},
+	failure: {
+		control: 'boolean',
+		defaultValue: false,
+	},
+	successMessageCount: {
+		control: 'number',
+	},
+	failureMessageCount: {
+		control: 'number',
+	},
+	generalMessageCount: {
+		control: 'number',
+	},
+	minLength: {
+		control: 'number',
+	},
+	maxLength: {
+		control: 'number',
+	},
+	required: {
+		control: 'boolean',
+		defaultValue: false,
+	},
+	hidden: {
+		control: 'boolean',
+		defaultValue: false,
+	},
+	pattern: {
+		control: 'text',
+	},
+	variant: {
+		control: 'text',
+	},
+	focusOnMount: {
+		control: 'boolean',
+		defaultValue: false,
+	},
+	onFocus: { table: { disable: true } },
+	onBlur: { table: { disable: true } },
+	onKeyPress: { table: { disable: true } },
+	onKeyDown: { table: { disable: true } },
+	onKeyUp: { table: { disable: true } },
+	autoComplete: {
+		control: 'select',
+		options: ['on', 'off'],
+		defaultValue: 'off',
+	},
+	showFocused: {
+		control: 'boolean',
+		defaultValue: false,
+	},
+	// useLeftIcon: {
+	// 	control: 'boolean',
+	// 	defaultValue: false,
+	// },
+	// useRightIcon: {
+	// 	control: 'boolean',
+	// 	defaultValue: false,
+	// },
 };
 
 export default example;

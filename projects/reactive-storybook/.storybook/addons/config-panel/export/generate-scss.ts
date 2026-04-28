@@ -176,6 +176,18 @@ export function generateScss(config: ConfigState): string {
     if (JSON.stringify(config.layout.breakpoints) !== JSON.stringify(DEFAULT_CONFIG.layout.breakpoints)) {
         lines.push(`$-ra-config-resp-breakpoints: ${config.layout.breakpoints.join(', ')};`);
     }
+    if (config.layout.tabletBreakpoint !== null) {
+        const tabletValue = config.layout.breakpoints[config.layout.tabletBreakpoint];
+        if (tabletValue) {
+            lines.push(`$-ra-config-tablet-resp-breakpoint: ${tabletValue};`);
+        }
+    }
+    if (config.layout.desktopBreakpoint !== null) {
+        const desktopValue = config.layout.breakpoints[config.layout.desktopBreakpoint];
+        if (desktopValue) {
+            lines.push(`$-ra-config-desktop-resp-breakpoint: ${desktopValue};`);
+        }
+    }
 
     // Button settings
     if (!mapsEqual(config.button.defaultVariant as unknown as Record<string, unknown>, DEFAULT_CONFIG.button.defaultVariant as unknown as Record<string, unknown>)) {

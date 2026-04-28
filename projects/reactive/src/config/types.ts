@@ -123,5 +123,7 @@ export interface ConfigState {
     };
     layout: {
         breakpoints: string[];
+        tabletBreakpoint: number | null;
+        desktopBreakpoint: number | null;
     };
 }

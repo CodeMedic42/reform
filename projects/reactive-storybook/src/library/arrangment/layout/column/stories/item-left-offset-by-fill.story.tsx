@@ -14,16 +14,16 @@ export default function example() {
                         width="1"
                         leftOffset={[null, null, null, null, 'fill']}
                     >
-                        <Content>2xl:fill</Content>
+                        <Content>5:fill</Content>
                     </Column>
                     <Column width="1" leftOffset={[null, null, null, 'fill']}>
-                        <Content>xl: fill</Content>
+                        <Content>4: fill</Content>
                     </Column>
                     <Column width="1" leftOffset={[null, null, 'fill']}>
-                        <Content>lg: fill</Content>
+                        <Content>3: fill</Content>
                     </Column>
                     <Column width="1" leftOffset={[null, 'fill']}>
-                        <Content>md: fill</Content>
+                        <Content>2: fill</Content>
                     </Column>
                     <Column width="1" leftOffset="fill">
                         <Content>fill</Content>

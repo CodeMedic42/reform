@@ -14,16 +14,16 @@ export default function example() {
                         <Content>content</Content>
                     </Column>
                     <Column width={[null, 'content']}>
-                        <Content>md:content</Content>
+                        <Content>2:content</Content>
                     </Column>
                     <Column width={[null, null, 'content']}>
-                        <Content>lg:content</Content>
+                        <Content>3:content</Content>
                     </Column>
                     <Column width={[null, null, null, 'content']}>
-                        <Content>xl:content</Content>
+                        <Content>4:content</Content>
                     </Column>
                     <Column width={[null, null, null, null, 'content']}>
-                        <Content>2xl:content</Content>
+                        <Content>5:content</Content>
                     </Column>
                 </Row>
             </LayoutScope>

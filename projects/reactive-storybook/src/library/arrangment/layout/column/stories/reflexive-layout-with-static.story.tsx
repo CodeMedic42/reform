@@ -14,16 +14,16 @@ export default function example() {
                         <Content>static:150</Content>
                     </Column>
                     <Column width={[null, 'static:200']}>
-                        <Content>md:static:200</Content>
+                        <Content>2:static:200</Content>
                     </Column>
                     <Column width={[null, null, 'static:250']}>
-                        <Content>lg:static:250</Content>
+                        <Content>3:static:250</Content>
                     </Column>
                     <Column width={[null, null, null, 'static:300']}>
-                        <Content>xl:static:300</Content>
+                        <Content>4:static:300</Content>
                     </Column>
                     <Column width={[null, null, null, null, 'static:350']}>
-                        <Content>2xl:static:350</Content>
+                        <Content>5:static:350</Content>
                     </Column>
                 </Row>
             </LayoutScope>

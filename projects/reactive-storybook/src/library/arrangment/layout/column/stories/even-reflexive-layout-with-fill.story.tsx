@@ -17,16 +17,16 @@ export default function example() {
                         <Content>fill</Content>
                     </Column>
                     <Column width={[null, 'fill']}>
-                        <Content>md:fill</Content>
+                        <Content>2:fill</Content>
                     </Column>
                     <Column width={[null, null, 'fill']}>
-                        <Content>lg:fill</Content>
+                        <Content>3:fill</Content>
                     </Column>
                     <Column width={[null, null, null, 'fill']}>
-                        <Content>xl:fill</Content>
+                        <Content>4:fill</Content>
                     </Column>
                     <Column width={[null, null, null, null, 'fill']}>
-                        <Content>2xl:fill</Content>
+                        <Content>5:fill</Content>
                     </Column>
                 </Row>
             </LayoutScope>

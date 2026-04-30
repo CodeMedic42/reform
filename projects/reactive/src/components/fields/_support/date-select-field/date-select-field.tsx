@@ -10,7 +10,7 @@ import Field from '../field.js';
 import isInvalidDate from '../../../../common/is-invalid-date.js';
 import type { FieldMessageData } from '../field-messages.js';
 
-interface DateSelectProps {
+interface DateSelectFieldProps {
 	id?: string | null;
 	className?: string | null;
 	label?: string | null;
@@ -37,7 +37,7 @@ interface DateSelectProps {
 	fitTo?: string | null;
 }
 
-function DateSelect(props: DateSelectProps): React.ReactElement {
+function DateSelectField(props: DateSelectFieldProps): React.ReactElement {
 	const {
 		id = null,
 		className = null,
@@ -137,8 +137,8 @@ function DateSelect(props: DateSelectProps): React.ReactElement {
 	return (
 		<Field
 			className={classnames(
-				'ra-drop-down-input',
-				'ra-date-select',
+				'ra-drop-down-field',
+				'ra-date-select-field',
 				className,
 				{
 					'fit-to': !isNil(fitTo)
@@ -194,4 +194,4 @@ function DateSelect(props: DateSelectProps): React.ReactElement {
 	);
 }
 
-export default DateSelect;
+export default DateSelectField;

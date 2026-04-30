@@ -1,4 +1,4 @@
-import { reduce, find, isNil } from 'lodash-es';
+import { reduce, isNil } from 'lodash-es';
 
 export const schemeColorOrder = [
     'primary',
@@ -22,12 +22,15 @@ export const paletteColorOrder = [
 ] as const;
 
 export const paletteShades = [
-    'darkest',
-    'darker',
-    'dark',
-    'light',
-    'lighter',
-    'lightest',
+    '100',
+    '200',
+    '300',
+    '400',
+    '500',
+    '600',
+    '700',
+    '800',
+    '900',
 ] as const;
 
 export const colorOrder = [...schemeColorOrder, ...paletteColorOrder];
@@ -108,11 +111,12 @@ export function getPaletteColorClasses({
         return '';
     }
 
-    let classes = 'ra-palette';
-    classes = !isNil(color) ? `${classes} plt-${color}` : classes;
+    let classes = '';
+    classes = !isNil(color) ? `ra-clr-plt-${color}` : classes;
     classes = !isNil(shade) ? `${classes} plt-${shade}` : classes;
     classes = enableBorder ? `${classes} plt-br` : classes;
     classes = enableBackground ? `${classes} plt-bg` : classes;
+    classes = `${classes} plt-clr`;
     classes = !isNil(borderWidth)
         ? `${classes} border-${borderWidth}`
         : classes;
@@ -120,30 +124,6 @@ export function getPaletteColorClasses({
     return classes;
 }
 
-type ColorInfoOptions = SchemeColorClassesOptions & PaletteColorClassesOptions;
-
-export const getColorInfo = (options: ColorInfoOptions): { colorClasses: string; isSchemeColor: boolean } => {
-    const { colorRequired = true, color } = options;
-
-    let colorClasses = '';
-    let isSchemeColor = false;
-
-    if (!isNil(color)) {
-        const schemeColor = find(
-            schemeColorOrder,
-            (functionalColor) => functionalColor === color,
-        );
-
-        if (isNil(schemeColor)) {
-            colorClasses = getPaletteColorClasses(options);
-        } else {
-            colorClasses = getSchemeColorClasses(options);
-            isSchemeColor = true;
-        }
-    } else if (!colorRequired) {
-        colorClasses = getSchemeColorClasses(options);
-        isSchemeColor = true;
-    }
-
-    return { colorClasses, isSchemeColor };
+export const getColorInfo = (options: PaletteColorClassesOptions): { colorClasses: string } => {
+    return { colorClasses: getPaletteColorClasses(options) };
 };

@@ -2,7 +2,7 @@ $input-sm: 32px;
 $input-md: 40px;
 $input-lg: 48px;
 
-.ra-select-anchor {
+.ra-select-field-container {
     // TODO: improve this class name
     .clear,
     .arrow {
@@ -32,6 +32,7 @@ $input-lg: 48px;
         align-items: center;
         overflow: hidden;
         min-height: inherit;
+        background: transparent;
 
         .anchor-selected-item {
             overflow: hidden;
@@ -92,48 +93,48 @@ $input-lg: 48px;
             z-index: 1;
             border: none;
 
-            &::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                border: solid 1px $--clr-g-40;
-                border-radius: 2px;
-                z-index: 10;
-                pointer-events: none;
-            }
+            // &::before {
+            //     content: '';
+            //     position: absolute;
+            //     top: 0;
+            //     left: 0;
+            //     right: 0;
+            //     bottom: 0;
+            //     border: solid 1px $--clr-g-40;
+            //     border-radius: 2px;
+            //     z-index: 10;
+            //     pointer-events: none;
+            // }
 
             &.has-value {
                 ~ .anchor-content {
                     color: $--clr-g-90;
                 }
 
-                &::before {
-                    border-color: $--clr-g-80;
-                }
+                // &::before {
+                //     border-color: $--clr-g-80;
+                // }
             }
 
-            &:focus,
-            &.focus {
-                &::before {
-                    border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
-                    border-width: 2px;
-                }
+            // &:focus,
+            // &.focus {
+            //     // &::before {
+            //     //     border-color: map.get($--ra-config-interactive-color-primary-base, "clr");
+            //     //     border-width: 2px;
+            //     // }
 
-                &.has-value {
-                    ~ .anchor-content {
-                        .clear {
-                            display: flex;
-                        }
+            //     &.has-value {
+            //         ~ .anchor-content {
+            //             .clear {
+            //                 display: flex;
+            //             }
 
-                        .arrow:not(:last-child) {
-                            display: none;
-                        }
-                    }
-                }
-            }
+            //             .arrow:not(:last-child) {
+            //                 display: none;
+            //             }
+            //         }
+            //     }
+            // }
 
             &:disabled {
                 cursor: not-allowed;
@@ -145,6 +146,25 @@ $input-lg: 48px;
 
                 &::before {
                     border: none;
+                }
+            }
+        }
+    }
+    
+    &:focus-within,
+    &.focus {
+        .ra-anchor-boundary {
+            .button-anchor {
+                &.has-value {
+                    ~ .anchor-content {
+                        .clear {
+                            display: flex;
+                        }
+
+                        .arrow:not(:last-child) {
+                            display: none;
+                        }
+                    }
                 }
             }
         }

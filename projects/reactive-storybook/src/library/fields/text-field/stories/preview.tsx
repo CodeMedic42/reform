@@ -96,16 +96,14 @@ function example(props: ExampleProps) {
 		value,
 		onChange: setValue,
 		messages,
-		leftAnnotation: <span>Foo</span>,
-		rightAnnotation: <span>Bar</span>,
+		// leftAnnotation: <span>Foo</span>,
+		// rightAnnotation: <span>Bar</span>,
 	};
 
 	return (
-		// <Scope fillViewport>
-			<TextField
-				{...(extraProps as any)}
-			/>
-		// </Scope>
+		<TextField
+			{...(extraProps as any)}
+		/>
 	);
 }
 

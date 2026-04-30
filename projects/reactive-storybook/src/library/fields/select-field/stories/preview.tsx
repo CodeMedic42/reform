@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { reduce } from 'lodash-es';
-import SelectInputField from '@reformjs/reactive/fields/select-input-field';
+import SingleSelectField from '@reformjs/reactive/fields/single-select-field';
 import { abbreviated } from '../../../../common/options-data';
 
 function generateMessages(count: number = 0): string[] {
@@ -85,15 +85,20 @@ function Preview(props: PreviewProps) {
             {},
         ),
         options: abbreviated,
-        value: value || 'appleCrumb',
+        value,
         onChange: setValue,
         messages,
+        leftAnnotation: <span>Foo</span>,
+		rightAnnotation: <span>Bar</span>,
     };
 
     return (
-        <SelectInputField
-            {...(extraProps as any)}
-        />
+        <>
+            <SingleSelectField
+                {...(extraProps as any)}
+            />
+            <div><span>{`Value: ${value}`}</span></div>
+        </>
     );
 }
 

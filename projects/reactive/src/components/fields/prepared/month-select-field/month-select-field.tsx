@@ -1,9 +1,9 @@
 import React from 'react';
-import SelectInput from '../../fields/select-input-field/index.js';
+import SelectField from '../../single-select-field/index.js';
 
-interface MonthSelectorProps {
-    month: number;
-    onChange: (value: string | number | null) => void;
+interface MonthSelectFieldProps {
+    value: number | null;
+    onChange: (value: number | null) => void;
 }
 
 const options = [
@@ -57,15 +57,15 @@ const options = [
     },
 ];
 
-function MonthSelector(props: MonthSelectorProps): React.ReactNode {
+function MonthSelectField(props: MonthSelectFieldProps): React.ReactNode {
     const {
-        month,
+        value: month,
         onChange,
     } = props;
 
     return (
-        <SelectInput
-            className="ra-month-selector"
+        <SelectField
+            className="ra-month-select-field"
             value={month}
             onChange={onChange}
             options={options}
@@ -74,4 +74,4 @@ function MonthSelector(props: MonthSelectorProps): React.ReactNode {
     );
 }
 
-export default MonthSelector;
+export default MonthSelectField;

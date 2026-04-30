@@ -50,7 +50,7 @@ class ListItemButton extends PureComponent<ListItemButtonProps> {
             tabIndex = null,
             children = null,
             disabled = false,
-            onClick: _onClick,
+            onClick = null,
             dropDownContext: { open },
         } = this.props;
 
@@ -69,6 +69,7 @@ class ListItemButton extends PureComponent<ListItemButtonProps> {
                     aria-label={ariaLabel ?? undefined}
                     tabIndex={open ? (tabIndex as unknown as number) : -1}
                     disabled={disabled}
+                    onClick={onClick}
                 >
                     {ariaLabel}
                 </button>

@@ -1,7 +1,7 @@
 import React, { useCallback, forwardRef } from 'react';
 import classnames from 'classnames';
 import { isNil, clone, pullAt } from 'lodash-es';
-import Select from '../_support/select/index.js';
+import Select from '../_support/select-field/index.js';
 import MultiSelectAnchor from './multi-select-input-field-anchor.js';
 
 interface MultiSelectInputProps {
@@ -51,8 +51,7 @@ const MultiSelectInput = forwardRef<unknown, MultiSelectInputProps>((props, ref)
 			{...rest}
 			ref={ref}
 			className={classnames(
-				'ra-select-input',
-				'ra-multi-select',
+				'ra-multi-select-field',
 				className,
 				{
 					expandable,

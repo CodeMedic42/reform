@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { memo, forwardRef, useImperativeHandle, useCallback, useRef } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import {
-	Color,
+	PaletteColor,
 	PaletteShade,
 	getColorInfo,
 } from '../../../common/color-list.js';
@@ -16,114 +16,109 @@ interface ChipClickEvent {
 interface ChipProps {
 	id?: string | null;
 	className?: string | null;
-	color?: Color | null;
+	color?: PaletteColor | null;
 	shade?: PaletteShade | null;
 	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | null;
 	disabled?: boolean;
 	floating?: boolean;
 	children?: React.ReactNode;
 	variant?: 'rectangle' | 'pill' | null;
+	bordered?: boolean;
 	onClick?: ((event: ChipClickEvent) => void) | null;
 	onClickMeta?: unknown;
 	asButton?: boolean;
 }
 
-class Chip extends PureComponent<ChipProps> {
-	private buttonRef: React.RefObject<HTMLButtonElement | null>;
+const Chip = memo(forwardRef<{ focus: () => void }, ChipProps>((props, ref) => {
+	const {
+		id = null,
+		className = null,
+		children = null,
+		color = null,
+		shade = '200',
+		size = 'md',
+		floating = false,
+		variant = 'rectangle',
+		bordered = false,
+		onClick = null,
+		disabled = false,
+		asButton = false,
+		onClickMeta,
+	} = props;
 
-	constructor(props: ChipProps) {
-		super(props);
+	const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-		this.buttonRef = React.createRef();
+	useImperativeHandle(ref, () => ({
+		focus: () => {
+			if (isNil(onClick)) {
+				return;
+			}
 
-		this.handleClick = this.handleClick.bind(this);
-	}
+			const { current } = buttonRef;
 
-	handleClick(event: React.MouseEvent<HTMLButtonElement>): void {
-		const { onClick, onClickMeta } = this.props;
+			if (isNil(current)) {
+				console.warn('Attempting to focus on an unmounted component');
+				return;
+			}
 
+			current.focus();
+		},
+	}), [onClick]);
+
+	const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
 		if (isNil(onClick)) {
 			return;
 		}
 
 		onClick({ event, meta: onClickMeta });
-	}
+	}, [onClick, onClickMeta]);
 
-	focus(): void {
-		const { onClick } = this.props;
+	const { colorClasses } = getColorInfo({
+		color,
+		shade,
+		enableBackground: true,
+		enableBorder: bordered,
+		colorRequired: false,
+	});
 
-		if (isNil(onClick)) {
-			return;
-		}
+	const variantClass = !isNil(variant)
+		? `variant-${variant}`
+		: 'variant-rectangle';
 
-		const { current } = this.buttonRef;
+	const finalClassName = classnames(
+		'ra-chip',
+		variantClass,
+		colorClasses,
+		`size-${getDefaultSize(size)}`,
+		className,
+		{
+			'box-shadow-16dp': floating,
+			disabled,
+		},
+	);
 
-		if (isNil(current)) {
-			console.warn('Attempting to focus on an unmounted component');
-
-			return;
-		}
-
-		current.focus();
-	}
-
-	render(): React.ReactNode {
-		const {
-			id = null,
-			className = null,
-			children = null,
-			color = null,
-			shade = 'lighter',
-			size = 'md',
-			floating = false,
-			variant = 'rectangle',
-			onClick = null,
-			disabled = false,
-			asButton = false,
-		} = this.props;
-
-		const { colorClasses } = getColorInfo({
-			color,
-			shade,
-			enableBackground: true,
-			colorRequired: false,
-		});
-
-		const variantClass = !isNil(variant)
-			? `variant-${variant}`
-			: 'variant-rectangle';
-
-		const finalClassName = classnames(
-			'ra-chip',
-			variantClass,
-			colorClasses,
-			`size-${getDefaultSize(size)}`,
-			className,
-			{
-				'box-shadow-16dp': floating,
-				disabled,
-			},
-		);
-
-		if (!isNil(onClick) || asButton) {
-			return (
-				<button
-					id={id ?? undefined}
-					className={finalClassName}
-					type="button"
-					onClick={this.handleClick}
-					disabled={disabled}
-				>
-					{children}
-				</button>
-			);
-		}
+	if (!isNil(onClick) || asButton) {
 		return (
-			<span id={id ?? undefined} className={finalClassName}>
+			<button
+				id={id ?? undefined}
+				className={finalClassName}
+				type="button"
+				onClick={handleClick}
+				disabled={disabled}
+				ref={buttonRef}
+			>
 				{children}
-			</span>
+			</button>
 		);
 	}
-}
+
+	return (
+		<span id={id ?? undefined} className={finalClassName}>
+			{children}
+		</span>
+	);
+}));
+
+Chip.displayName = 'Chip';
 
 export default Chip;

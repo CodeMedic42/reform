@@ -658,7 +658,7 @@ function useMemoDeps<T>(cb: (...args: any[]) => T, deps: unknown[]): T {
     return useMemo(() => cb(...deps), deps);
 }
 
-const Select = forwardRef<unknown, SelectProps>((props, ref) => {
+const SelectField = forwardRef<unknown, SelectProps>((props, ref) => {
     const {
         className,
         label,
@@ -920,7 +920,7 @@ const Select = forwardRef<unknown, SelectProps>((props, ref) => {
 
     return (
         <Field
-            className={classnames('ra-drop-down-input', className)}
+            className={classnames('ra-select-field ra-drop-down-field', className)}
             id={id}
             label={label}
             messages={messages}
@@ -1013,4 +1013,4 @@ const Select = forwardRef<unknown, SelectProps>((props, ref) => {
     );
 });
 
-export default Select;
+export default SelectField;

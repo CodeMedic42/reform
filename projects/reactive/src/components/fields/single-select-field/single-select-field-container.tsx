@@ -4,11 +4,12 @@ import { isNil } from 'lodash-es';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons/faAngleUp';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import IconBox from '../../display/icon-box/index.jsx';
+import IconBox from '../../display/icon-box/index.js';
 import { Text } from '../../display/typography/index.js';
-import IconButton from '../../display/icon-button/index.jsx';
-import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
+import IconButton from '../../display/icon-button/index.js';
+import applyAnchorBinding from '../../controls/drop-down/anchor-binding.js';
 import changeSize from '../../../util/change-size.js';
+import FieldContainer from '../_support/field-container.js';
 
 function prevent(event: React.MouseEvent) {
     event.preventDefault();
@@ -93,11 +94,13 @@ function SelectAnchor(props: SelectAnchorProps): React.ReactElement {
     }, [onClear]);
 
     return (
-        <div
+        <FieldContainer
             className={classnames(
-                'ra-select-anchor',
-                'ra-single-select-anchor',
-                `size-${size}`,
+                'ra-select-field-container',
+                'ra-single-select-field-container',
+                `size-${size}`, {
+                    focus: open,
+                }
             )}
         >
             <div
@@ -144,7 +147,7 @@ function SelectAnchor(props: SelectAnchorProps): React.ReactElement {
                     {clearButton}
                 </div>
             </div>
-        </div>
+        </FieldContainer>
     );
 }
 

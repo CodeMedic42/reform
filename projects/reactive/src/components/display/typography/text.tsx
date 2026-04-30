@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import { Color, getColorInfo } from '../../../common/color-list.js';
+import { PaletteColor, PaletteShade, getColorInfo } from '../../../common/color-list.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
 interface TextProps {
@@ -11,7 +11,8 @@ interface TextProps {
     singleLine?: boolean;
     size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs' | null;
     weight?: 'bold' | 'semi-bold' | 'normal' | null;
-    color?: Color | null;
+    color?: PaletteColor | null;
+    shade?: PaletteShade | null;
     applyMargin?: boolean;
     forwardRef?: React.Ref<HTMLSpanElement> | null;
 }
@@ -20,6 +21,7 @@ class Text extends PureComponent<TextProps> {
     render(): React.ReactNode {
         const {
             color = null,
+            shade = null,
             className = null,
             size = null,
             weight = null,
@@ -32,7 +34,7 @@ class Text extends PureComponent<TextProps> {
 
         const sizeClass = !isNil(size) ? `size-${size}` : null;
         const weightClass = !isNil(weight) ? `weight-${weight}` : null;
-        const { colorClasses } = getColorInfo({ color });
+        const { colorClasses } = getColorInfo({ color, shade });
 
         return (
             <span

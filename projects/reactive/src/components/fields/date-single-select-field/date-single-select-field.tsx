@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import classnames from 'classnames';
-import DateSelect from '../_support/date/date-select.js';
-import DateSelectFieldContainer from './date-select-field-container.js';
+import DateSelect from '../_support/date-select-field/date-select-field.js';
+import DateSelectFieldContainer from './date-single-select-field-container.js';
 
-interface DateSelectFieldProps {
+interface DateSingleSelectFieldProps {
 	className?: string | null;
 	onChange?: ((value: Date | null) => void) | null;
 	onBlur?: (() => void) | null;
@@ -20,7 +20,7 @@ interface DateSelectFieldProps {
 	rightAnnotation?: React.ReactNode;
 }
 
-function DateSelectField(props: DateSelectFieldProps): React.ReactElement {
+function DateSingleSelectField(props: DateSingleSelectFieldProps): React.ReactElement {
 	const {
 		value = null,
 		className = null,
@@ -42,7 +42,7 @@ function DateSelectField(props: DateSelectFieldProps): React.ReactElement {
 	return (
 		<DateSelect
 			{...rest}
-			className={classnames('ra-date-select-field', className)}
+			className={classnames('ra-date-select-field-field', className)}
 			fromDate={value}
 			onSelect={onChange as ((date: Date) => void) | null}
 			Anchor={DateSelectFieldContainer}
@@ -53,4 +53,4 @@ function DateSelectField(props: DateSelectFieldProps): React.ReactElement {
 	);
 }
 
-export default DateSelectField;
+export default DateSingleSelectField;

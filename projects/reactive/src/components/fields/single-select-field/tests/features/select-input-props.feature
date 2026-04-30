@@ -23,22 +23,22 @@ Scenario: Verify "id" prop when undefined
 Scenario: Verify "className" prop
     Given the "className" property is set to "foo"
     Then the root element has attribute "className" which contains "foo"
-    Then the root element has attribute "className" which contains "ra-select-input"
-    Then the root element has attribute "className" which contains "ra-drop-down-input"
+    Then the root element has attribute "className" which contains "ra-select-field"
+    Then the root element has attribute "className" which contains "ra-drop-down-field"
     Then the root element has attribute "className" which contains "ra-input"
     Then the root element has attribute "className" which contains "size-md"
 
 Scenario: Verify "className" prop when null
     Given the "className" property is set to null
-    Then the root element has attribute "className" which contains "ra-select-input"
-    Then the root element has attribute "className" which contains "ra-drop-down-input"
+    Then the root element has attribute "className" which contains "ra-select-field"
+    Then the root element has attribute "className" which contains "ra-drop-down-field"
     Then the root element has attribute "className" which contains "ra-input"
     Then the root element has attribute "className" which does not contain "null"
 
 Scenario: Verify "className" prop when undefined
     Given the "className" property is set to undefined
-    Then the root element has attribute "className" which contains "ra-select-input"
-    Then the root element has attribute "className" which contains "ra-drop-down-input"
+    Then the root element has attribute "className" which contains "ra-select-field"
+    Then the root element has attribute "className" which contains "ra-drop-down-field"
     Then the root element has attribute "className" which contains "ra-input"
     Then the root element has attribute "className" which contains "size-md"
     Then the root element has attribute "className" which does not contain "undefined"
@@ -47,20 +47,20 @@ Scenario: Verify "className" prop when undefined
 Scenario: Verify "placeholder" prop
     Given the "placeholder" property is set to "FooBar"
     And the "value" property is set to undefined
-    Then the ".ra-select-anchor" element has text "FooBar"
+    Then the ".ra-select-field-container" element has text "FooBar"
 
 Scenario: Verify "placeholder" prop and value prop is set
     Given the "placeholder" property is set to "FooBar"
     And the "value" property is set to "targetValue"
-    Then the ".ra-select-anchor" element has text "targetValue"
-    Then the ".ra-select-anchor" element does not have text "FooBar"
+    Then the ".ra-select-field-container" element has text "targetValue"
+    Then the ".ra-select-field-container" element does not have text "FooBar"
 
 Scenario: Verify "placeholder" prop shown when value clearedw
     Given the "placeholder" property is set to "FooBar"
     And the "value" property is set to "targetValue"
     When the "value" property is changed to null
-    Then the ".ra-select-anchor" element has text "FooBar"
-    Then the ".ra-select-anchor" element does not have text "targetValue"
+    Then the ".ra-select-field-container" element has text "FooBar"
+    Then the ".ra-select-field-container" element does not have text "targetValue"
 
 # nullable Prop
 Scenario: Verify "nullable" prop
@@ -141,7 +141,7 @@ Scenario: Verify "value" prop with value in options
     Then the "#foo-valueA.ra-dd-list-item" element from body does not have class "selected"
     Then the "#foo-valueB.ra-dd-list-item" element from body has class "selected"
     Then the "#foo-valueC.ra-dd-list-item" element from body does not have class "selected"
-    Then the ".ra-select-anchor" element has text "Value B"
+    Then the ".ra-select-field-container" element has text "Value B"
 
 Scenario: Verify "value" prop without value in options
     Given the "options" property is set to a collection of:
@@ -154,7 +154,7 @@ Scenario: Verify "value" prop without value in options
     Then the "#foo-valueA.ra-dd-list-item" element from body does not have class "selected"
     Then the "#foo-valueB.ra-dd-list-item" element from body does not have class "selected"
     Then the "#foo-valueC.ra-dd-list-item" element from body does not have class "selected"
-    Then the ".ra-select-anchor" element has text "valueD"
+    Then the ".ra-select-field-container" element has text "valueD"
 
 Scenario: Verify "value" prop with value in options changes
     Given the "options" property is set to a collection of:
@@ -168,7 +168,7 @@ Scenario: Verify "value" prop with value in options changes
     Then the "#foo-valueA.ra-dd-list-item" element from body does not have class "selected"
     Then the "#foo-valueB.ra-dd-list-item" element from body does not have class "selected"
     Then the "#foo-valueC.ra-dd-list-item" element from body has class "selected"
-    Then the ".ra-select-anchor" element has text "Value C"
+    Then the ".ra-select-field-container" element has text "Value C"
 
 #optionValuePath
 Scenario: Verify "optionValuePath" prop
@@ -183,7 +183,7 @@ Scenario: Verify "optionValuePath" prop
     Then the "#foo-valueA.ra-dd-list-item" element from body does not have class "selected"
     Then the "#foo-valueB.ra-dd-list-item" element from body has class "selected"
     Then the "#foo-valueC.ra-dd-list-item" element from body does not have class "selected"
-    Then the ".ra-select-anchor" element has text "Value B"
+    Then the ".ra-select-field-container" element has text "Value B"
 
 #optionLabelPath
 Scenario: Verify "optionLabelPath" prop
@@ -201,7 +201,7 @@ Scenario: Verify "optionLabelPath" prop
     Then the "#foo-valueB.ra-dd-list-item" element from body has class "selected"
     Then the "#foo-valueC.ra-dd-list-item" element from body has text "Value C"
     Then the "#foo-valueC.ra-dd-list-item" element from body does not have class "selected"
-    Then the ".ra-select-anchor" element has text "Value B"
+    Then the ".ra-select-field-container" element has text "Value B"
 
 #selectedLabelPath
 Scenario: Verify "selectedLabelPath" prop
@@ -219,4 +219,4 @@ Scenario: Verify "selectedLabelPath" prop
     Then the "#foo-valueB.ra-dd-list-item" element from body has class "selected"
     Then the "#foo-valueC.ra-dd-list-item" element from body has text "Value C"
     Then the "#foo-valueC.ra-dd-list-item" element from body does not have class "selected"
-    Then the ".ra-select-anchor" element has text "Second"
+    Then the ".ra-select-field-container" element has text "Second"

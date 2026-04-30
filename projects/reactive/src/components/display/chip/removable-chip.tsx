@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons/faCircleXmark';
-import { Color, PaletteShade } from '../../../common/color-list.js';
+import { PaletteColor, PaletteShade } from '../../../common/color-list.js';
 import Chip from './chip.js';
 import Icon from '../icon/index.js';
 
@@ -15,7 +15,7 @@ interface RemovableChipClearEvent {
 interface RemovableChipProps {
 	id?: string | null;
 	className?: string | null;
-	color: Color;
+	color: PaletteColor;
 	shade?: PaletteShade | null;
 	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | null;
 	floating?: boolean;
@@ -35,7 +35,7 @@ function RemovableChip(props: RemovableChipProps): React.ReactNode {
 		className = null,
 		children = null,
 		color,
-		shade = 'lighter',
+		shade = '200',
 		size = null,
 		floating = false,
 		variant = 'rectangle',

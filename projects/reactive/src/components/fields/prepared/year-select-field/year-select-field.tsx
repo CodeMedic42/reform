@@ -1,19 +1,19 @@
 import React, { useMemo } from 'react';
-import SelectInput from '../../fields/select-input-field/index.js';
-import buildId from '../../../common/build-id.js';
+import SelectField from '../../single-select-field/index.js';
+import buildId from '../../../../common/build-id.js';
 
-interface YearSelectorProps {
+interface YearSelectFieldProps {
     id?: string | null;
-    year: number;
-    onChange: (value: string | number | null) => void;
+    value: number | null;
+    onChange: (value: number | null) => void;
     startingYear?: number;
     endingYear?: number;
 }
 
-function YearSelector(props: YearSelectorProps): React.ReactNode {
+function YearSelectField(props: YearSelectFieldProps): React.ReactNode {
     const {
         id = null,
-        year,
+        value: year,
         onChange,
         startingYear = 1970,
         endingYear = 2100,
@@ -33,9 +33,9 @@ function YearSelector(props: YearSelectorProps): React.ReactNode {
     }, [startingYear, endingYear]);
 
     return (
-        <SelectInput
+        <SelectField
             id={buildId(id, 'year')}
-            className="ra-year-selector"
+            className="ra-year-select-field"
             value={year}
             onChange={onChange}
             options={options}
@@ -44,4 +44,4 @@ function YearSelector(props: YearSelectorProps): React.ReactNode {
     );
 }
 
-export default YearSelector;
+export default YearSelectField;

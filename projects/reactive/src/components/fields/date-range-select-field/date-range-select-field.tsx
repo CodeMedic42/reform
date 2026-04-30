@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useMemo, useState, useImperativeHandle 
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import DateRangeSelectFieldContainer from './date-range-select-field-container.js';
-import DateSelect from '../_support/date/date-select.js';
+import DateSelectField from '../_support/date-select-field/date-select-field.js';
 
 interface DateRangeSelectValue {
 	from: Date | null;
@@ -94,7 +94,7 @@ const DateRangeSelectInput = forwardRef<unknown, DateRangeSelectFieldProps>((pro
     }));
 
 	return (
-		<DateSelect
+		<DateSelectField
 			{...rest}
 			className={classnames('ra-date-range-select-field', className)}
 			fromDate={fromDate}

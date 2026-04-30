@@ -11,3 +11,29 @@
         --clr-plt-900: #{map.get($shades, 900)};
     }
 }
+
+@each $level in 100, 200, 300, 400, 500, 600, 700, 800, 900 {
+    .plt-#{$level} {
+        --clr-plt-active: var(--clr-plt-#{$level});
+
+        @if $level <= 500 {
+            --clr-plt-inverse: var(--clr-plt-800);
+        } @else {
+            --clr-plt-inverse: var(--clr-plt-200);
+        }
+    }
+}
+
+.plt-bg {
+    background-color: var(--clr-plt-active);
+}
+
+.plt-br {
+    border-color: var(--clr-plt-inverse);
+    border-width: 2px;
+    border-style: solid;
+}
+
+.plt-clr {
+    color: var(--clr-plt-inverse);
+}

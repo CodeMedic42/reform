@@ -63,6 +63,10 @@
       "import": "./dist/components/controls/menu/index.mjs",
       "types": "./dist/components/controls/menu/index.d.ts"
     },
+    "./display/chip": {
+      "import": "./dist/components/display/chip/index.mjs",
+      "types": "./dist/components/display/chip/index.d.ts"
+    },
     "./display/spinner": {
       "import": "./dist/components/display/spinner/index.mjs",
       "types": "./dist/components/display/spinner/index.d.ts"
@@ -71,17 +75,17 @@
       "import": "./dist/components/fields/date-range-select-field/index.mjs",
       "types": "./dist/components/fields/date-range-select-field/index.d.ts"
     },
-    "./fields/date-select-field": { 
-      "import": "./dist/components/fields/date-select-field/index.mjs",
-      "types": "./dist/components/fields/date-select-field/index.d.ts"
+    "./fields/date-single-select-field": {
+      "import": "./dist/components/fields/date-single-select-field/index.mjs",
+      "types": "./dist/components/fields/date-single-select-field/index.d.ts"
     },
     "./fields/multi-select-input-field": {
       "import": "./dist/components/fields/multi-select-input-field/index.mjs",
       "types": "./dist/components/fields/multi-select-input-field/index.d.ts"
     },
-    "./fields/select-input-field": {
-      "import": "./dist/components/fields/select-input-field/index.mjs",
-      "types": "./dist/components/fields/select-input-field/index.d.ts"
+    "./fields/single-select-field": {
+      "import": "./dist/components/fields/single-select-field/index.mjs",
+      "types": "./dist/components/fields/single-select-field/index.d.ts"
     },
     "./fields/select-text-input-field": {
       "import": "./dist/components/fields/select-text-input-field/index.mjs",
@@ -98,6 +102,14 @@
     "./fields/numeric-field": {
       "import": "./dist/components/fields/numeric-field/index.mjs",
       "types": "./dist/components/fields/numeric-field/index.d.ts"
+    },
+    "./fields/prepared/month-select-field": {
+      "import": "./dist/components/fields/prepared/month-select-field/index.mjs",
+      "types": "./dist/components/fields/prepared/month-select-field/index.d.ts"
+    },
+    "./fields/prepared/year-select-field": {
+      "import": "./dist/components/fields/prepared/year-select-field/index.mjs",
+      "types": "./dist/components/fields/prepared/year-select-field/index.d.ts"
     },
     "./form": {
       "import": "./dist/components/form/index.mjs",

@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 import { PaletteColor, PaletteShade, getColorInfo } from '../../../common/color-list.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-interface TextProps {
+export interface TextProps {
     className?: string | null;
     children?: React.ReactNode;
     style?: React.CSSProperties | null;

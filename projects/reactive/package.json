@@ -71,6 +71,10 @@
       "import": "./dist/components/display/spinner/index.mjs",
       "types": "./dist/components/display/spinner/index.d.ts"
     },
+    "./display/typography": {
+      "import": "./dist/components/display/typography/index.mjs",
+      "types": "./dist/components/display/typography/index.d.ts"
+    },
     "./fields/date-range-select-field": {
       "import": "./dist/components/fields/date-range-select-field/index.mjs",
       "types": "./dist/components/fields/date-range-select-field/index.d.ts"

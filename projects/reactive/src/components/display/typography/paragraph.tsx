@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-interface ParagraphProps {
+export interface ParagraphProps {
     className?: string | null;
     children?: React.ReactNode;
     size?: 'sm' | 'md' | 'lg' | null;

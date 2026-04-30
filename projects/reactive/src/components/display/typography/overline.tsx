@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-interface OverlineProps {
+export interface OverlineProps {
     className?: string | null;
     children?: React.ReactNode;
     forwardRef?: React.Ref<unknown> | null;

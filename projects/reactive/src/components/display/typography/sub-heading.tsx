@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-interface SubHeadingProps {
+export interface SubHeadingProps {
     className?: string | null;
     children?: React.ReactNode;
     level: '1' | '2' | '3' | '4' | '5';

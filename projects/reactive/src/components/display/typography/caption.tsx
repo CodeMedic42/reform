@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-interface CaptionProps {
+export interface CaptionProps {
     className?: string | null;
     children?: React.ReactNode;
     label: string;

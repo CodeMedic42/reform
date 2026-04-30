@@ -13,7 +13,7 @@ interface ChipClickEvent {
 	meta: unknown;
 }
 
-interface ChipProps {
+export interface ChipProps {
 	id?: string | null;
 	className?: string | null;
 	color?: PaletteColor | null;

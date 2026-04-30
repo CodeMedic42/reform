@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 import Typography from './typography.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-interface HeadingProps {
+export interface HeadingProps {
     className?: string | null;
     children?: React.ReactNode;
     level: '1' | '2' | '3' | '4' | '5';

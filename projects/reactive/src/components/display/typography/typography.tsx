@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { PaletteColor, PaletteShade, getColorInfo } from '../../../common/color-list.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-interface TypographyProps {
+export interface TypographyProps {
     className?: string | null;
     children?: React.ReactNode;
     color?: PaletteColor | null;

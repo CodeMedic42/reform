@@ -73,6 +73,10 @@ import configInteractiveSuccessScss from 'reactive-scss-raw/configuration/intera
 import configInteractiveWarnScss from 'reactive-scss-raw/configuration/interactive-designs/warn.scss?raw';
 // @ts-expect-error raw import
 import configInteractiveDangerScss from 'reactive-scss-raw/configuration/interactive-designs/danger.scss?raw';
+// @ts-expect-error raw import
+import configInteractiveGrayscaleScss from 'reactive-scss-raw/configuration/interactive-designs/_grayscale.scss?raw';
+// @ts-expect-error raw import
+import configTypographyScss from 'reactive-scss-raw/configuration/typography.scss?raw';
 
 // Colors
 // @ts-expect-error raw import
@@ -105,6 +109,10 @@ import variablesInteractiveSuccessScss from 'reactive-scss-raw/variables/color-v
 import variablesInteractiveWarnScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/warn.scss?raw';
 // @ts-expect-error raw import
 import variablesInteractiveDangerScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/danger.scss?raw';
+
+// Utilities
+// @ts-expect-error raw import
+import utilitiesScss from 'reactive-scss-raw/_utilities.scss?raw';
 
 // Fields
 // @ts-expect-error raw import
@@ -156,6 +164,8 @@ export const scssSourceMap: Record<string, string> = {
     'configuration/interactive-designs/success.scss': configInteractiveSuccessScss,
     'configuration/interactive-designs/warn.scss': configInteractiveWarnScss,
     'configuration/interactive-designs/danger.scss': configInteractiveDangerScss,
+    'configuration/interactive-designs/_grayscale.scss': configInteractiveGrayscaleScss,
+    'configuration/typography.scss': configTypographyScss,
 
     'colors/index.scss': colorsIndexScss,
     'colors/interactive-designs.scss': colorsInteractiveScss,
@@ -172,6 +182,8 @@ export const scssSourceMap: Record<string, string> = {
     'variables/color-variables/interactive-group-variables/success.scss': variablesInteractiveSuccessScss,
     'variables/color-variables/interactive-group-variables/warn.scss': variablesInteractiveWarnScss,
     'variables/color-variables/interactive-group-variables/danger.scss': variablesInteractiveDangerScss,
+
+    '_utilities.scss': utilitiesScss,
 
     'fields/index.scss': fieldsIndexScss,
     'fields/field-container.scss': fieldContainerScss,

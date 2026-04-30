@@ -3,9 +3,9 @@ import { SubHeading } from '@reformjs/reactive/display/typography';
 import { getPaletteColorOptions } from '../../../../../common/config-colors';
 
 function example(props: Record<string, unknown>) {
-    const { level = '1', ...rest } = props;
+    const { level = 1, ...rest } = props;
     return (
-        <SubHeading level={level as '1' | '2' | '3' | '4' | '5'} {...rest}>The quick brown fox jumps over the lazy dog.</SubHeading>
+        <SubHeading level={level as number} {...rest}>The quick brown fox jumps over the lazy dog.</SubHeading>
     );
 }
 
@@ -16,7 +16,7 @@ example.parameters = {
     },
 };
 example.args = {
-    level: '1',
+    level: 1,
     weightNormal: false,
     responsive: false,
 };
@@ -28,8 +28,7 @@ example.argTypes = {
         control: 'text',
     },
     level: {
-        options: ['1', '2', '3', '4', '5'],
-        control: { type: 'select' },
+        control: { type: 'number', min: 1 },
     },
     weightNormal: {
         control: 'boolean',

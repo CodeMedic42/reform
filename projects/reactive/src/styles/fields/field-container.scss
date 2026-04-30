@@ -1,4 +1,12 @@
-$--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--ra-config-inputs-border-width;
+@use 'sass:list';
+@use 'sass:map';
+@use '../configuration/inputs/input-container' as *;
+@use '../configuration/layout' as *;
+@use '../configuration/interactive-designs/grayscale' as *;
+@use '../variables/font' as *;
+@use '../utilities';
+
+$ra-config-inputs-shadow-width: $ra-config-inputs-focused-border-width - $ra-config-inputs-border-width;
 
 @mixin buildFieldContainerVariantSettings($variant) {
     background-color: map.get($variant, 'background-color');
@@ -20,7 +28,7 @@ $--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--
 
     &.focus,
     &:focus-within {
-        box-shadow: inset 0 0 0 map.get($variant, 'focus-outline-width') $--ra-config-inputs-focus-color;
+        box-shadow: inset 0 0 0 map.get($variant, 'focus-outline-width') $ra-config-inputs-focus-color;
     }
 }
 
@@ -28,9 +36,9 @@ $--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--
     $respChanges: map.get($variant, 'resp-changes');
 
     @if ($respChanges) {
-        @for $i from 1 through length($respChanges) {
-            $change: nth($respChanges, $i);
-            $breakpoint: nth($-ra-config-resp-breakpoints, $i);
+        @for $i from 1 through list.length($respChanges) {
+            $change: list.nth($respChanges, $i);
+            $breakpoint: list.nth($ra-config-resp-breakpoints, $i);
 
             @if ($breakpoint) {
                 @media only screen and (min-width: $breakpoint) {
@@ -47,9 +55,9 @@ $--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--
 }
 
 @mixin buildFieldContainerVariants() {
-    @include buildFieldContainerVariant($--ra-config-input-container-default-variant);
+    @include buildFieldContainerVariant($ra-config-input-container-default-variant);
 
-    @each $variantId, $variant in $--ra-config-input-container-variants {
+    @each $variantId, $variant in $ra-config-input-container-variants {
         &.ra-field-variant-#{$variantId} {
             @include buildFieldContainerVariant($variant);
         }
@@ -57,10 +65,10 @@ $--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--
 }
 
 .ra-field-container {
-    border-radius: $--ra-config-inputs-border-radius;
+    border-radius: $ra-config-inputs-border-radius;
     width: 100%;
     box-sizing: border-box;
-    border-width: $--ra-config-inputs-border-width;
+    border-width: $ra-config-inputs-border-width;
     border-style: solid;
     display: flex;
     align-items: stretch;
@@ -68,15 +76,15 @@ $--ra-config-inputs-shadow-width: $--ra-config-inputs-focused-border-width - $--
 
     &.focus,
     &:focus-within {
-        border-color: $--ra-config-inputs-focus-color;
-        box-shadow: inset 0 0 0 $--ra-config-inputs-shadow-width $--ra-config-inputs-focus-color;
+        border-color: $ra-config-inputs-focus-color;
+        box-shadow: inset 0 0 0 $ra-config-inputs-shadow-width $ra-config-inputs-focus-color;
     }
 
     .ra-field-input {
         padding: 0;
-        color: $--clr-g-80;
+        color: $clr-g-80;
         font: inherit;
-        font-weight: $--font-weight-normal;
+        font-weight: $font-weight-normal;
         outline: 0;
         background: transparent;
         border: 0;

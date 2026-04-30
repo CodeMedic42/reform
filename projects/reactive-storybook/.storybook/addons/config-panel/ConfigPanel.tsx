@@ -9,7 +9,7 @@ import { downloadFile } from './export/download';
 import { PaletteSection } from './sections/PaletteSection';
 import { InteractiveDesignsSection } from './sections/InteractiveDesignsSection';
 import { GrayscaleSection } from './sections/GrayscaleSection';
-import { BaseTypographySection } from './sections/BaseTypographySection';
+import { TypographySection } from './sections/TypographySection';
 import { ButtonSection } from './sections/ButtonSection';
 import { TabsSection } from './sections/TabsSection';
 import { InputsSection } from './sections/InputsSection';
@@ -63,6 +63,7 @@ const buttonStyle: React.CSSProperties = {
     borderRadius: '4px',
     border: '1px solid #ccc',
     background: '#fff',
+    color: '#333',
 };
 
 const containerStyle: React.CSSProperties = {
@@ -220,7 +221,7 @@ export function ConfigPanel({ active }: ConfigPanelProps) {
                     <GrayscaleSection config={config} onChange={updateConfig} />
                 )}
                 {activeTab === 'typography' && (
-                    <BaseTypographySection config={config} onChange={updateConfig} />
+                    <TypographySection config={config} onChange={updateConfig} />
                 )}
                 {activeTab === 'button' && (
                     <ButtonSection config={config} onChange={updateConfig} />

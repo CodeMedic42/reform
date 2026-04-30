@@ -1,42 +1,7 @@
-@mixin textSizeXL($includeLineHeight: true) {
-    font-size: 18px;
-
-    @if $includeLineHeight {
-        line-height: 22px;
-    }
-}
-
-@mixin textSizeLG($includeLineHeight: true) {
-    font-size: 16px;
-
-    @if $includeLineHeight {
-        line-height: 20px;
-    }
-}
-
-@mixin textSizeMD($includeLineHeight: true) {
-    font-size: 15px;
-
-    @if $includeLineHeight {
-        line-height: 19px;
-    }
-}
-
-@mixin textSizeSM($includeLineHeight: true) {
-    font-size: 14px;
-
-    @if $includeLineHeight {
-        line-height: 18px;
-    }
-}
-
-@mixin textSizeXS($includeLineHeight: true) {
-    font-size: 12px;
-
-    @if $includeLineHeight {
-        line-height: 16px;
-    }
-}
+@use 'sass:map';
+@use './configuration/typography' as *;
+@use './configuration/layout' as *;
+@use './variables/font' as *;
 
 .ra-typography {
     white-space: pre-wrap;
@@ -49,169 +14,92 @@
     }
 }
 
-@mixin headingLevel1 {
-    font-size: 56px;
-    line-height: 64px;
-}
-
-@mixin headingLevel2 {
-    font-size: 48px;
-    line-height: 56px;
-}
-
-@mixin headingLevel3 {
-    font-size: 40px;
-    line-height: 48px;
-}
-
-@mixin headingLevel4 {
-    font-size: 32px;
-    line-height: 40px;
-}
-
-@mixin headingLevel5 {
-    font-size: 28px;
-    line-height: 34px;
-}
+// === Heading ===
 
 .ra-heading {
-    color: $--clr-g-90;
-    font-weight: $--font-weight-bold;
+    color: $ra-config-typography-heading-color;
+    font-weight: $ra-config-typography-heading-font-weight;
     margin-bottom: 4px;
 
-    &.level-1 {
-        @include headingLevel1;
+    @each $levelId, $level in $ra-config-typography-heading-levels {
+        &.level-#{$levelId} {
+            font-size: map.get($level, "font-size");
+            line-height: map.get($level, "line-height");
+        }
     }
 
-    &.level-2 {
-        @include headingLevel2;
-    }
-
-    &.level-3 {
-        @include headingLevel3;
-    }
-
-    &.level-4 {
-        @include headingLevel4;
-    }
-
-    &.level-5 {
-        @include headingLevel5;
-    }
-
-    // Responsive logic was determined with very little information.
-    // It was determined using the Page Title spec which stated
-    // SubHeading 2 => SubHeading 5 at mobile size(less than tablet)
-    // If there is ever anything which conflicts with this then
-    // it needs to be reevaluated.
     &.responsive {
-        &.level-1 {
-            @include headingLevel4;
-        }
+        @each $levelId, $level in $ra-config-typography-heading-levels {
+            $mobile: map.get($level, "mobile");
 
-        &.level-2,
-        &.level-3,
-        &.level-4 {
-            @include headingLevel5;
+            @if $mobile != null {
+                &.level-#{$levelId} {
+                    font-size: map.get($mobile, "font-size");
+                    line-height: map.get($mobile, "line-height");
+                }
+            }
         }
     }
 }
 
-@mixin subHeadingLevel1 {
-    font-size: 28px;
-    line-height: 34px;
-}
-
-@mixin subHeadingLevel2 {
-    font-size: 24px;
-    line-height: 30px;
-}
-
-@mixin subHeadingLevel3 {
-    font-size: 22px;
-    line-height: 28px;
-}
-
-@mixin subHeadingLevel4 {
-    font-size: 20px;
-    line-height: 24px;
-}
-
-@mixin subHeadingLevel5 {
-    font-size: 18px;
-    line-height: 22px;
-}
+// === Sub-Heading ===
 
 .ra-sub-heading {
-    color: $--clr-g-90;
-    font-weight: $--font-weight-bold;
+    color: $ra-config-typography-sub-heading-color;
+    font-weight: $ra-config-typography-sub-heading-font-weight;
 
-    &.level-1 {
-        @include subHeadingLevel1;
-    }
-
-    &.level-2 {
-        @include subHeadingLevel2;
-    }
-
-    &.level-3 {
-        @include subHeadingLevel3;
-    }
-
-    &.level-4 {
-        @include subHeadingLevel4;
-    }
-
-    &.level-5 {
-        @include subHeadingLevel5;
-    }
-
-    // Responsive logic was determined with very little information.
-    // It was determined using the Page Title spec which stated
-    // SubHeading 2 => SubHeading 5 at mobile size(less than tablet)
-    // If there is ever anything which conflicts with this then
-    // it needs to be reevaluated.
-    &.responsive {
-        &.level-1 {
-            @include subHeadingLevel4;
+    @each $levelId, $level in $ra-config-typography-sub-heading-levels {
+        &.level-#{$levelId} {
+            font-size: map.get($level, "font-size");
+            line-height: map.get($level, "line-height");
         }
+    }
 
-        &.level-2,
-        &.level-3,
-        &.level-4 {
-            @include subHeadingLevel5;
+    &.responsive {
+        @each $levelId, $level in $ra-config-typography-sub-heading-levels {
+            $mobile: map.get($level, "mobile");
+
+            @if $mobile != null {
+                &.level-#{$levelId} {
+                    font-size: map.get($mobile, "font-size");
+                    line-height: map.get($mobile, "line-height");
+                }
+            }
         }
     }
 }
 
+// === Paragraph ===
+
 .ra-paragraph {
-    color: $--clr-g-80;
-    font-weight: $--font-weight-normal;
+    color: $ra-config-typography-paragraph-color;
+    font-weight: $ra-config-typography-paragraph-font-weight;
 
-    &.size-sm {
-        font-size: 16px;
-        line-height: 22px;
+    @each $sizeId, $size in $ra-config-typography-paragraph-sizes {
+        &.size-#{$sizeId} {
+            font-size: map.get($size, "font-size");
+            line-height: map.get($size, "line-height");
 
-        &:not(:last-of-type) {
-            margin-bottom: 24px;
+            &:not(:last-of-type) {
+                margin-bottom: map.get($size, "margin-bottom");
+            }
         }
     }
 
-    &.size-md {
-        font-size: 18px;
-        line-height: 24px;
+    &.responsive {
+        @each $sizeId, $size in $ra-config-typography-paragraph-sizes {
+            $mobile: map.get($size, "mobile");
 
-        &:not(:last-of-type) {
-            margin-bottom: 32px;
-        }
-    }
+            @if $mobile != null {
+                &.size-#{$sizeId} {
+                    font-size: map.get($mobile, "font-size");
+                    line-height: map.get($mobile, "line-height");
 
-    &.size-lg {
-        font-size: 20px;
-        line-height: 26px;
-
-        &:not(:last-of-type) {
-            margin-bottom: 32px;
+                    &:not(:last-of-type) {
+                        margin-bottom: map.get($mobile, "margin-bottom");
+                    }
+                }
+            }
         }
     }
 
@@ -220,52 +108,58 @@
     }
 }
 
+// === Caption ===
+
 .ra-caption {
-    font-size: 14px;
-    line-height: 18px;
-    color: $--clr-g-90;
+    font-size: $ra-config-typography-caption-font-size;
+    line-height: $ra-config-typography-caption-line-height;
+    color: $ra-config-typography-caption-color;
 
     .ra-caption-label {
-        font-weight: $--font-weight-bold;
+        font-weight: $ra-config-typography-caption-font-weight;
     }
 
     .ra-caption-body {
-        font-weight: $--font-weight-normal;
+        font-weight: $font-weight-normal;
     }
 }
 
+// === Overline ===
+
 .ra-overline {
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: $--font-weight-semi-bold;
-    color: $--clr-g-60;
+    font-size: $ra-config-typography-overline-font-size;
+    line-height: $ra-config-typography-overline-line-height;
+    font-weight: $ra-config-typography-overline-font-weight;
+    color: $ra-config-typography-overline-color;
 }
 
+// === Text ===
+
 .ra-text {
-    font-weight: $--font-weight-normal;
+    font-weight: $ra-config-typography-text-font-weight;
 
     &.apply-margin {
         margin-bottom: 4px;
     }
 
-    &.size-xl {
-        @include textSizeXL();
+    @each $sizeId, $size in $ra-config-typography-text-sizes {
+        &.size-#{$sizeId} {
+            font-size: map.get($size, "font-size");
+            line-height: map.get($size, "line-height");
+        }
     }
 
-    &.size-lg {
-        @include textSizeLG();
-    }
+    &.responsive {
+        @each $sizeId, $size in $ra-config-typography-text-sizes {
+            $mobile: map.get($size, "mobile");
 
-    &.size-md {
-        @include textSizeMD();
-    }
-
-    &.size-sm {
-        @include textSizeSM();
-    }
-
-    &.size-xs {
-        @include textSizeXS();
+            @if $mobile != null {
+                &.size-#{$sizeId} {
+                    font-size: map.get($mobile, "font-size");
+                    line-height: map.get($mobile, "line-height");
+                }
+            }
+        }
     }
 
     &.single-line {
@@ -277,66 +171,139 @@
     }
 }
 
-.weight-medium {
-    font-weight: $--font-weight-normal;
+// === Weight classes ===
+
+@each $name, $value in $ra-config-typography-weights {
+    .weight-#{$name} {
+        font-weight: $value;
+    }
 }
 
-.weight-normal {
-    font-weight: $--font-weight-normal;
-}
-
-.weight-semi-bold {
-    font-weight: $--font-weight-semi-bold;
-}
-
-.weight-bold {
-    font-weight: $--font-weight-bold;
-}
+// === Text list ===
 
 .ra-text-list {
     padding-left: 25px;
     margin: 0;
 }
 
-@if $-ra-config-tablet-resp-breakpoint != null {
-    @media only screen and (min-width: $-ra-config-tablet-resp-breakpoint) {
-        .ra-heading {
-            &.responsive {
-                &.level-1 {
-                    @include headingLevel1;
-                }
+// === Responsive tablet breakpoint ===
 
-                &.level-2 {
-                    @include headingLevel2;
-                }
+@if $ra-config-tablet-resp-breakpoint != null {
+    @media only screen and (min-width: $ra-config-tablet-resp-breakpoint) {
+        .ra-heading.responsive {
+            @each $levelId, $level in $ra-config-typography-heading-levels {
+                $mobile: map.get($level, "mobile");
 
-                &.level-3 {
-                    @include headingLevel3;
-                }
-
-                &.level-4 {
-                    @include headingLevel4;
+                @if $mobile != null {
+                    &.level-#{$levelId} {
+                        font-size: map.get($level, "font-size");
+                        line-height: map.get($level, "line-height");
+                    }
                 }
             }
         }
 
+        .ra-sub-heading.responsive {
+            @each $levelId, $level in $ra-config-typography-sub-heading-levels {
+                $mobile: map.get($level, "mobile");
 
-        .ra-sub-heading {
-            &.responsive {
-                &.level-1 {
-                    @include subHeadingLevel1;
+                @if $mobile != null {
+                    &.level-#{$levelId} {
+                        font-size: map.get($level, "font-size");
+                        line-height: map.get($level, "line-height");
+                    }
                 }
+            }
+        }
 
-                &.level-2 {
-                    @include subHeadingLevel2;
+        .ra-text.responsive {
+            @each $sizeId, $size in $ra-config-typography-text-sizes {
+                $mobile: map.get($size, "mobile");
+
+                @if $mobile != null {
+                    &.size-#{$sizeId} {
+                        font-size: map.get($size, "font-size");
+                        line-height: map.get($size, "line-height");
+                    }
                 }
+            }
+        }
 
-                &.level-3 {
-                    @include subHeadingLevel3;
+        .ra-paragraph.responsive {
+            @each $sizeId, $size in $ra-config-typography-paragraph-sizes {
+                $mobile: map.get($size, "mobile");
+
+                @if $mobile != null {
+                    &.size-#{$sizeId} {
+                        font-size: map.get($size, "font-size");
+                        line-height: map.get($size, "line-height");
+
+                        &:not(:last-of-type) {
+                            margin-bottom: map.get($size, "margin-bottom");
+                        }
+                    }
                 }
+            }
+        }
+    }
+}
 
-                &.level-4 {
-                    @include subHeadingLevel4;
+// === Responsive desktop breakpoint ===
+
+@if $ra-config-desktop-resp-breakpoint != null {
+    @media only screen and (min-width: $ra-config-desktop-resp-breakpoint) {
+        .ra-heading.responsive {
+            @each $levelId, $level in $ra-config-typography-heading-levels {
+                $desktop: map.get($level, "desktop");
+
+                @if $desktop != null {
+                    &.level-#{$levelId} {
+                        font-size: map.get($desktop, "font-size");
+                        line-height: map.get($desktop, "line-height");
+                    }
+                }
+            }
+        }
+
+        .ra-sub-heading.responsive {
+            @each $levelId, $level in $ra-config-typography-sub-heading-levels {
+                $desktop: map.get($level, "desktop");
+
+                @if $desktop != null {
+                    &.level-#{$levelId} {
+                        font-size: map.get($desktop, "font-size");
+                        line-height: map.get($desktop, "line-height");
+                    }
+                }
+            }
+        }
+
+        .ra-text.responsive {
+            @each $sizeId, $size in $ra-config-typography-text-sizes {
+                $desktop: map.get($size, "desktop");
+
+                @if $desktop != null {
+                    &.size-#{$sizeId} {
+                        font-size: map.get($desktop, "font-size");
+                        line-height: map.get($desktop, "line-height");
+                    }
+                }
+            }
+        }
+
+        .ra-paragraph.responsive {
+            @each $sizeId, $size in $ra-config-typography-paragraph-sizes {
+                $desktop: map.get($size, "desktop");
+
+                @if $desktop != null {
+                    &.size-#{$sizeId} {
+                        font-size: map.get($desktop, "font-size");
+                        line-height: map.get($desktop, "line-height");
+
+                        &:not(:last-of-type) {
+                            margin-bottom: map.get($desktop, "margin-bottom");
+                        }
+                    }
                 }
             }
         }

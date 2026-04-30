@@ -1,3 +1,8 @@
+@use 'sass:list';
+@use 'sass:map';
+@use './configuration/button' as *;
+@use './configuration/layout' as *;
+
 @mixin buildButtonVariantSettings($variant) {
     padding-top: map.get($variant, 'padding-v');
     padding-bottom: map.get($variant, 'padding-v');
@@ -16,9 +21,9 @@
     $respChanges: map.get($variant, 'resp-changes');
 
     @if ($respChanges) {
-        @for $i from 1 through length($respChanges) {
-            $change: nth($respChanges, $i);
-            $breakpoint: nth($-ra-config-resp-breakpoints, $i);
+        @for $i from 1 through list.length($respChanges) {
+            $change: list.nth($respChanges, $i);
+            $breakpoint: list.nth($ra-config-resp-breakpoints, $i);
 
             @if ($breakpoint) {
                 @media only screen and (min-width: $breakpoint) {
@@ -35,9 +40,9 @@
 }
 
 @mixin buildButtonVariants() {
-    @include buildButtonVariant($--ra-config-button-default-variant);
+    @include buildButtonVariant($ra-config-button-default-variant);
 
-    @each $variantId, $variant in $--ra-config-button-variants {
+    @each $variantId, $variant in $ra-config-button-variants {
         &.ra-btn-variant-#{$variantId} {
             @include buildButtonVariant($variant);
         }

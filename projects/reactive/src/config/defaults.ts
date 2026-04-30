@@ -1,4 +1,4 @@
-import type { ConfigState, InteractiveScheme, InteractiveVariant } from './types.js';
+import type { ConfigState, InteractiveScheme, InteractiveVariant, TypographyConfig } from './types.js';
 
 function baseVariant(
     clr: string,
@@ -105,6 +105,69 @@ const warnScheme: InteractiveScheme = {
 const dangerScheme: InteractiveScheme = {
     base: baseVariant('#dc3545', '#b02a37', '#b02a37', '#b02a37'),
     fill: fillVariant('#ffffff', '#dc3545', '#b02a37', '#bb2d3b', '#bb2d3b', '#b02a37', 'rgba(225, 83, 97, 0.5)', '#b02a37', '#a52834'),
+};
+
+const typographyDefaults: TypographyConfig = {
+    heading: {
+        color: '#1a1a1a',
+        'font-weight': 700,
+        levels: [
+            { 'font-size': '56px', 'line-height': '64px', mobile: { 'font-size': '32px', 'line-height': '40px' }, desktop: null },
+            { 'font-size': '48px', 'line-height': '56px', mobile: { 'font-size': '28px', 'line-height': '34px' }, desktop: null },
+            { 'font-size': '40px', 'line-height': '48px', mobile: { 'font-size': '28px', 'line-height': '34px' }, desktop: null },
+            { 'font-size': '32px', 'line-height': '40px', mobile: { 'font-size': '28px', 'line-height': '34px' }, desktop: null },
+            { 'font-size': '28px', 'line-height': '34px', mobile: null, desktop: null },
+        ],
+    },
+    subHeading: {
+        color: '#1a1a1a',
+        'font-weight': 700,
+        levels: [
+            { 'font-size': '28px', 'line-height': '34px', mobile: { 'font-size': '20px', 'line-height': '24px' }, desktop: null },
+            { 'font-size': '24px', 'line-height': '30px', mobile: { 'font-size': '18px', 'line-height': '22px' }, desktop: null },
+            { 'font-size': '22px', 'line-height': '28px', mobile: { 'font-size': '18px', 'line-height': '22px' }, desktop: null },
+            { 'font-size': '20px', 'line-height': '24px', mobile: { 'font-size': '18px', 'line-height': '22px' }, desktop: null },
+            { 'font-size': '18px', 'line-height': '22px', mobile: null, desktop: null },
+        ],
+    },
+    text: {
+        color: 'inherit',
+        'font-weight': 400,
+        sizes: [
+            { 'font-size': '18px', 'line-height': '22px', mobile: null, desktop: null },
+            { 'font-size': '16px', 'line-height': '20px', mobile: null, desktop: null },
+            { 'font-size': '15px', 'line-height': '19px', mobile: null, desktop: null },
+            { 'font-size': '14px', 'line-height': '18px', mobile: null, desktop: null },
+            { 'font-size': '12px', 'line-height': '16px', mobile: null, desktop: null },
+        ],
+    },
+    paragraph: {
+        color: '#333333',
+        'font-weight': 400,
+        sizes: [
+            { 'font-size': '16px', 'line-height': '22px', 'margin-bottom': '24px', mobile: null, desktop: null },
+            { 'font-size': '18px', 'line-height': '24px', 'margin-bottom': '32px', mobile: null, desktop: null },
+            { 'font-size': '20px', 'line-height': '26px', 'margin-bottom': '32px', mobile: null, desktop: null },
+        ],
+    },
+    caption: {
+        'font-size': '14px',
+        'line-height': '18px',
+        color: '#1a1a1a',
+        'font-weight': 700,
+    },
+    overline: {
+        'font-size': '14px',
+        'line-height': '20px',
+        color: '#666666',
+        'font-weight': 600,
+    },
+    weights: {
+        normal: 400,
+        medium: 400,
+        'semi-bold': 600,
+        bold: 700,
+    },
 };
 
 export const DEFAULT_CONFIG: ConfigState = {
@@ -224,4 +287,5 @@ export const DEFAULT_CONFIG: ConfigState = {
         tabletBreakpoint: 1,
         desktopBreakpoint: 2,
     },
+    typography: typographyDefaults,
 };

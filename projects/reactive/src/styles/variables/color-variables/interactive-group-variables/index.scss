@@ -1,10 +1,17 @@
-@import './default';
-@import './primary';
-@import './secondary';
-@import './info';
-@import './success';
-@import './warn';
-@import './danger';
+@use './default' as *;
+@forward './default';
+@use './primary' as *;
+@forward './primary';
+@use './secondary' as *;
+@forward './secondary';
+@use './info' as *;
+@forward './info';
+@use './success' as *;
+@forward './success';
+@use './warn' as *;
+@forward './warn';
+@use './danger' as *;
+@forward './danger';
 
 $interactive-colors: (
     "primary": $interactive-color-primary,

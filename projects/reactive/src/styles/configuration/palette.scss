@@ -1,29 +1,32 @@
-$--ra-config-palette-color-blue: () !default;
-$--ra-config-palette-color-purple: () !default;
-$--ra-config-palette-color-green: () !default;
-$--ra-config-palette-color-yellow: () !default;
-$--ra-config-palette-color-orange: () !default;
-$--ra-config-palette-color-red: () !default;
+@use 'sass:list';
+@use 'sass:map';
 
-$--ra-config-palette-colors-custom: () !default;
+$ra-config-palette-color-blue: () !default;
+$ra-config-palette-color-purple: () !default;
+$ra-config-palette-color-green: () !default;
+$ra-config-palette-color-yellow: () !default;
+$ra-config-palette-color-orange: () !default;
+$ra-config-palette-color-red: () !default;
+
+$ra-config-palette-colors-custom: () !default;
 
 // Filter out empty palette maps
-$--ra-config-palette-colors-defaults: ();
+$ra-config-palette-colors-defaults: ();
 @each $name, $shades in (
-    "blue": $--ra-config-palette-color-blue,
-    "purple": $--ra-config-palette-color-purple,
-    "green": $--ra-config-palette-color-green,
-    "yellow": $--ra-config-palette-color-yellow,
-    "orange": $--ra-config-palette-color-orange,
-    "red": $--ra-config-palette-color-red,
+    "blue": $ra-config-palette-color-blue,
+    "purple": $ra-config-palette-color-purple,
+    "green": $ra-config-palette-color-green,
+    "yellow": $ra-config-palette-color-yellow,
+    "orange": $ra-config-palette-color-orange,
+    "red": $ra-config-palette-color-red,
 ) {
-    @if length($shades) > 0 {
-        $--ra-config-palette-colors-defaults: map.merge($--ra-config-palette-colors-defaults, ($name: $shades)) !global;
+    @if list.length($shades) > 0 {
+        $ra-config-palette-colors-defaults: map.merge($ra-config-palette-colors-defaults, ($name: $shades)) !global;
     }
 }
 
-$--ra-config-palette-colors: map.merge($--ra-config-palette-colors-defaults, $--ra-config-palette-colors-custom);
+$ra-config-palette-colors: map.merge($ra-config-palette-colors-defaults, $ra-config-palette-colors-custom);
 
-@if length($--ra-config-palette-colors) == 0 {
+@if list.length($ra-config-palette-colors) == 0 {
     @warn "No palette colors configured. Import defaults.scss before index.scss, or define palette color variables.";
 }

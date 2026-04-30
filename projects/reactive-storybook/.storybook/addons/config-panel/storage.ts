@@ -24,9 +24,12 @@ export function loadPanelState(): ConfigPanelState {
             const parsed = JSON.parse(stored);
             // Support old format (just ConfigState without removedDefaults)
             if (parsed.removedDefaults) {
-                return parsed as ConfigPanelState;
+                // Merge in defaults for any missing top-level keys (e.g. typography added later)
+                const config = { ...DEFAULT_CONFIG, ...parsed.config };
+                return { config, removedDefaults: parsed.removedDefaults } as ConfigPanelState;
             }
-            return { config: parsed as ConfigState, removedDefaults: { ...EMPTY_REMOVED } };
+            const config = { ...DEFAULT_CONFIG, ...parsed } as ConfigState;
+            return { config, removedDefaults: { ...EMPTY_REMOVED } };
         }
     } catch {
         // ignore parse errors

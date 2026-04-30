@@ -1,25 +1,29 @@
+@use 'sass:list';
+@use 'sass:math';
+@use 'sass:string';
+@use './configuration/layout' as *;
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable no-descending-specificity */
 @mixin columnWidth($colCount) {
     flex-grow: 0;
     flex-shrink: 0;
-    flex-basis: #{percentage(math.div($colCount, 12))};
-    max-width: #{percentage(math.div($colCount, 12))};
-    width: #{percentage(math.div($colCount, 12))};
+    flex-basis: #{math.percentage(math.div($colCount, 12))};
+    max-width: #{math.percentage(math.div($colCount, 12))};
+    width: #{math.percentage(math.div($colCount, 12))};
 }
 
 @mixin columnOffsetLeft($colCount) {
-    margin-left: #{percentage(math.div($colCount, 12))};
+    margin-left: #{math.percentage(math.div($colCount, 12))};
 }
 
 @mixin columnOffsetRight($colCount) {
-    margin-right: #{percentage(math.div($colCount, 12))};
+    margin-right: #{math.percentage(math.div($colCount, 12))};
 }
 
 @mixin applyGutter($rezSize) {
     $sizeName: '';
 
-    @if str-length($rezSize) > 0 {
+    @if string.length($rezSize) > 0 {
         $sizeName: '-#{$rezSize}';
     }
 
@@ -55,7 +59,7 @@
 @mixin applyBottomGutter($rezSize) {
     $sizeName: '';
 
-    @if str-length($rezSize) > 0 {
+    @if string.length($rezSize) > 0 {
         $sizeName: '-#{$rezSize}';
     }
 
@@ -363,12 +367,12 @@
 }
 
 @mixin buildBreakPoints($breakpoints) {
-    @for $i from 1 through length($breakpoints) {
-        @include buildBreakPoint(#{$i}, nth($breakpoints, $i));
+    @for $i from 1 through list.length($breakpoints) {
+        @include buildBreakPoint(#{$i}, list.nth($breakpoints, $i));
     }
 }
 
-@include buildBreakPoints($-ra-config-resp-breakpoints);
+@include buildBreakPoints($ra-config-resp-breakpoints);
 
 .layout-row {
     ~ .layout-row {

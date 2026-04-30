@@ -7,14 +7,15 @@ import applyForwardRef from '../../../common/apply-forward-ref.js';
 export interface ParagraphProps {
     className?: string | null;
     children?: React.ReactNode;
-    size?: 'sm' | 'md' | 'lg' | null;
+    size?: number | null;
     weight?: 'bold' | 'semi-bold' | 'normal' | null;
+    responsive?: boolean;
     forwardRef?: React.Ref<unknown> | null;
 }
 
 function Paragraph(props: ParagraphProps): React.ReactNode {
     const {
-        className = null, size = null, weight = null, forwardRef = null, children = null, ...rest
+        className = null, size = null, weight = null, responsive = false, forwardRef = null, children = null, ...rest
     } = props;
 
     const weightClass = !isNil(weight) ? `weight-${weight}` : null;
@@ -29,6 +30,7 @@ function Paragraph(props: ParagraphProps): React.ReactNode {
                 sizeClass,
                 className,
                 weightClass,
+                { responsive },
             )}
             {...rest}
         >

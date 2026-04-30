@@ -15,8 +15,9 @@ example.parameters = {
     },
 };
 example.args = {
-    size: 'md',
+    size: 2,
     weight: 'normal',
+    responsive: false,
 };
 example.argTypes = {
     id: {
@@ -26,8 +27,10 @@ example.argTypes = {
         control: 'text',
     },
     size: {
-        options: ['lg', 'md', 'sm'],
-        control: { type: 'select' },
+        control: { type: 'number', min: 1 },
+    },
+    responsive: {
+        control: 'boolean',
     },
     weight: {
         options: ['bold', 'semi-bold', 'normal'],

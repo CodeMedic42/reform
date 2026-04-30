@@ -3,9 +3,9 @@ import { Heading } from '@reformjs/reactive/display/typography';
 import { getPaletteColorOptions } from '../../../../../common/config-colors';
 
 function example(props: Record<string, unknown>) {
-    const { level = '1', ...rest } = props;
+    const { level = 1, ...rest } = props;
     return (
-        <Heading level={level as '1' | '2' | '3' | '4' | '5'} {...rest}>The quick brown fox jumps over the lazy dog.</Heading>
+        <Heading level={level as number} {...rest}>The quick brown fox jumps over the lazy dog.</Heading>
     );
 }
 
@@ -16,7 +16,7 @@ example.parameters = {
     },
 };
 example.args = {
-    level: '1',
+    level: 1,
     responsive: false,
 };
 example.argTypes = {
@@ -27,8 +27,7 @@ example.argTypes = {
         control: 'text',
     },
     level: {
-        options: ['1', '2', '3', '4', '5'],
-        control: { type: 'select' },
+        control: { type: 'number', min: 1 },
     },
     responsive: {
         control: 'boolean',

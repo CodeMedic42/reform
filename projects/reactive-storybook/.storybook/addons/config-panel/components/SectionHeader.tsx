@@ -13,7 +13,7 @@ const headerStyle = (level: number): React.CSSProperties => ({
 const titleStyle = (level: number): React.CSSProperties => ({
     fontSize: level === 0 ? '14px' : '12px',
     fontWeight: 600,
-    color: '#333',
+    color: '#EEE',
 });
 
 const arrowStyle: React.CSSProperties = {

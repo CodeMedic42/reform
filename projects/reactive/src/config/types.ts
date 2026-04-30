@@ -94,6 +94,73 @@ export interface TabConfig {
     bottomBorderRadius: string;
 }
 
+export interface TypographyResponsiveTier {
+    'font-size': string;
+    'line-height': string;
+}
+
+export interface ParagraphResponsiveTier extends TypographyResponsiveTier {
+    'margin-bottom': string;
+}
+
+export interface HeadingLevelConfig {
+    'font-size': string;
+    'line-height': string;
+    mobile: TypographyResponsiveTier | null;
+    desktop: TypographyResponsiveTier | null;
+}
+
+export interface TextSizeConfig {
+    'font-size': string;
+    'line-height': string;
+    mobile: TypographyResponsiveTier | null;
+    desktop: TypographyResponsiveTier | null;
+}
+
+export interface ParagraphSizeConfig {
+    'font-size': string;
+    'line-height': string;
+    'margin-bottom': string;
+    mobile: ParagraphResponsiveTier | null;
+    desktop: ParagraphResponsiveTier | null;
+}
+
+export interface TypographyConfig {
+    heading: {
+        color: string;
+        'font-weight': number;
+        levels: HeadingLevelConfig[];
+    };
+    subHeading: {
+        color: string;
+        'font-weight': number;
+        levels: HeadingLevelConfig[];
+    };
+    text: {
+        color: string;
+        'font-weight': number;
+        sizes: TextSizeConfig[];
+    };
+    paragraph: {
+        color: string;
+        'font-weight': number;
+        sizes: ParagraphSizeConfig[];
+    };
+    caption: {
+        'font-size': string;
+        'line-height': string;
+        color: string;
+        'font-weight': number;
+    };
+    overline: {
+        'font-size': string;
+        'line-height': string;
+        color: string;
+        'font-weight': number;
+    };
+    weights: Record<string, number>;
+}
+
 export interface ConfigState {
     palette: {
         colors: Record<string, PaletteShades>;
@@ -126,4 +193,5 @@ export interface ConfigState {
         tabletBreakpoint: number | null;
         desktopBreakpoint: number | null;
     };
+    typography: TypographyConfig;
 }

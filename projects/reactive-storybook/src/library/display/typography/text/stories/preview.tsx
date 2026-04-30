@@ -15,10 +15,11 @@ example.parameters = {
     },
 };
 example.args = {
-    size: 'md',
+    size: 3,
     weight: 'normal',
     singleLine: false,
     applyMargin: false,
+    responsive: false,
 };
 example.argTypes = {
     id: {
@@ -28,8 +29,10 @@ example.argTypes = {
         control: 'text',
     },
     size: {
-        options: ['xl', 'lg', 'md', 'sm', 'xs'],
-        control: { type: 'select' },
+        control: { type: 'number', min: 1 },
+    },
+    responsive: {
+        control: 'boolean',
     },
     weight: {
         options: ['bold', 'semi-bold', 'normal'],

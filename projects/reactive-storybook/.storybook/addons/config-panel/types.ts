@@ -6,4 +6,10 @@ export type {
     FieldContainerVariant,
     TabConfig,
     ConfigState,
+    TypographyConfig,
+    HeadingLevelConfig,
+    TextSizeConfig,
+    ParagraphSizeConfig,
+    TypographyResponsiveTier,
+    ParagraphResponsiveTier,
 } from '@reformjs/reactive/config/types';

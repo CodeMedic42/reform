@@ -1,4 +1,6 @@
-$--picker-day-margin: 4px;
+@use 'utilities';
+
+$picker-day-margin: 4px;
 
 .ra-date-picker {
     @extend .no-select;
@@ -65,7 +67,7 @@ $--picker-day-margin: 4px;
     height: 28px;
     width: 28px;
     padding: 0;
-    margin: $--picker-day-margin;
+    margin: $picker-day-margin;
     text-align: center;
     box-sizing: border-box;
 }
@@ -150,9 +152,9 @@ $--picker-day-margin: 4px;
                 &::after {
                     content: '';
                     position: absolute;
-                    width: $--picker-day-margin * 2;
+                    width: $picker-day-margin * 2;
                     height: 100%;
-                    right: $--picker-day-margin * -2;
+                    right: $picker-day-margin * -2;
                     background-color: #b9d5fd;
                     z-index: -1;
                 }

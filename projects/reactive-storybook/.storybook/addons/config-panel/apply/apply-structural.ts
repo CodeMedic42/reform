@@ -28,19 +28,35 @@ function resolvePath(fromDir: string, importUrl: string): string {
     const cleanUrl = importUrl.replace(/^\.\//, '');
 
     // If the import is from a subdirectory, resolve relative to it
-    if (fromDir) {
-        return `${fromDir}/${cleanUrl}`;
+    let resolved = fromDir ? `${fromDir}/${cleanUrl}` : cleanUrl;
+
+    // Normalize .. segments
+    const parts = resolved.split('/');
+    const normalized: string[] = [];
+    for (const part of parts) {
+        if (part === '..') {
+            normalized.pop();
+        } else if (part !== '.') {
+            normalized.push(part);
+        }
     }
-    return cleanUrl;
+    return normalized.join('/');
 }
 
 function findSource(sources: Record<string, string>, basePath: string): { key: string; content: string } | null {
     // Normalize path - remove any double slashes and leading slashes
     const normalized = basePath.replace(/\/+/g, '/').replace(/^\//, '');
 
+    // Build underscore-prefixed partial path
+    const lastSlash = normalized.lastIndexOf('/');
+    const underscored = lastSlash === -1
+        ? `_${normalized}`
+        : `${normalized.substring(0, lastSlash + 1)}_${normalized.substring(lastSlash + 1)}`;
+
     const candidates = [
         normalized,
         `${normalized}.scss`,
+        `${underscored}.scss`,
         `${normalized}/index.scss`,
     ];
 
@@ -58,18 +74,79 @@ function getDirFromPath(path: string): string {
     return path.substring(0, lastSlash);
 }
 
+/**
+ * Insert config variable overrides into a configuration source file.
+ * Only injects variables that the file actually defines (has !default for),
+ * so forwarded modules don't collide.
+ */
+function injectConfigIntoSource(source: string, configLines: string[]): string {
+    // Find which variable names this file defines with !default
+    const defaultVarPattern = /^\$([a-zA-Z0-9_-]+)\s*:/;
+    const fileVars = new Set<string>();
+    for (const line of source.split('\n')) {
+        if (line.includes('!default')) {
+            const match = line.match(defaultVarPattern);
+            if (match) fileVars.add(match[1]);
+        }
+    }
+
+    // Filter config lines to only those whose variable is defined in this file
+    const relevantLines = configLines.filter((line) => {
+        const match = line.match(defaultVarPattern);
+        return match && fileVars.has(match[1]);
+    });
+
+    if (relevantLines.length === 0) return source;
+
+    const sourceLines = source.split('\n');
+    let insertIndex = 0;
+
+    // Find the position after all @use/@forward lines at the top
+    for (let i = 0; i < sourceLines.length; i++) {
+        const trimmed = sourceLines[i].trim();
+        if (trimmed.startsWith('@use ') || trimmed.startsWith('@forward ')) {
+            insertIndex = i + 1;
+        } else if (trimmed !== '' && !trimmed.startsWith('//')) {
+            break;
+        }
+    }
+
+    sourceLines.splice(insertIndex, 0, '', ...relevantLines, '');
+    return sourceLines.join('\n');
+}
+
 async function compileScssToCss(config: ConfigState): Promise<string> {
     const sass = await loadSass();
     const sources = await loadScssSources();
 
-    // Generate the config SCSS (without the @import at the end)
+    // Generate the config SCSS and extract complete variable assignment statements.
+    // Assignments may span multiple lines (e.g. map values), so we track
+    // parenthesis depth to capture the full statement.
     const configScss = generateScss(config);
-    const lines = configScss.split('\n');
-    const configLines = lines.filter((line) => !line.startsWith("@import"));
-    const configOnly = configLines.join('\n');
+    const allLines = configScss.split('\n');
+    const configLines: string[] = [];
+    let current: string[] = [];
+    let depth = 0;
 
-    // Build the full SCSS source with the library entry point
-    const fullScss = `@use 'sass:math';\n@use "sass:map";\n${configOnly}\n@import 'index';`;
+    for (const line of allLines) {
+        if (depth === 0 && !line.startsWith('$')) continue;
+        if (depth === 0 && line.startsWith('$')) {
+            current = [line];
+        } else {
+            current.push(line);
+        }
+        for (const ch of line) {
+            if (ch === '(') depth++;
+            else if (ch === ')') depth--;
+        }
+        if (depth === 0 && current.length > 0) {
+            configLines.push(current.join('\n'));
+            current = [];
+        }
+    }
+
+    // Build the full SCSS source — config vars are injected into modules, not set as globals
+    const fullScss = `@import 'index';`;
 
     const result = await sass.compileStringAsync(fullScss, {
         url: new URL('file:///virtual/entry.scss'),
@@ -107,7 +184,15 @@ async function compileScssToCss(config: ConfigState): Promise<string> {
             load(canonicalUrl: URL) {
                 const path = canonicalUrl.pathname.replace('/virtual/', '');
                 if (sources[path] !== undefined) {
-                    return { contents: sources[path], syntax: 'scss' as const };
+                    let content = sources[path];
+
+                    // Inject config variables into configuration files so they
+                    // override !default values within the module's own scope
+                    if (path.startsWith('configuration/')) {
+                        content = injectConfigIntoSource(content, configLines);
+                    }
+
+                    return { contents: content, syntax: 'scss' as const };
                 }
                 return null;
             },

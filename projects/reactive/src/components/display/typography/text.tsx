@@ -9,11 +9,12 @@ export interface TextProps {
     children?: React.ReactNode;
     style?: React.CSSProperties | null;
     singleLine?: boolean;
-    size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs' | null;
+    size?: number | null;
     weight?: 'bold' | 'semi-bold' | 'normal' | null;
     color?: PaletteColor | null;
     shade?: PaletteShade | null;
     applyMargin?: boolean;
+    responsive?: boolean;
     forwardRef?: React.Ref<HTMLSpanElement> | null;
 }
 
@@ -29,6 +30,7 @@ class Text extends PureComponent<TextProps> {
             style = null,
             applyMargin = false,
             singleLine = false,
+            responsive = false,
             forwardRef = null,
         } = this.props;
 
@@ -49,6 +51,7 @@ class Text extends PureComponent<TextProps> {
                     {
                         'apply-margin': applyMargin,
                         'single-line': singleLine,
+                        responsive,
                     },
                 )}
                 style={style ?? undefined}

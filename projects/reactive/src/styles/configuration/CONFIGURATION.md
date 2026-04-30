@@ -457,6 +457,115 @@ All default to `null` (inherits base value) unless noted.
 
 ---
 
+## Typography
+
+**File:** `typography.scss`
+
+### Heading
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `$--ra-config-typography-heading-color` | `#1a1a1a` | Text color |
+| `$--ra-config-typography-heading-font-weight` | `700` | Font weight |
+| `$--ra-config-typography-heading-levels` | See below | Map of heading level configurations |
+
+Each level in the map has these keys:
+
+| Key | Purpose |
+|-----|---------|
+| `font-size` | Font size (tablet/base tier, always required) |
+| `line-height` | Line height (tablet/base tier, always required) |
+| `mobile` | Mobile tier override map (`font-size`, `line-height`) or `null` to disable |
+| `desktop` | Desktop tier override map (`font-size`, `line-height`) or `null` to disable |
+
+**Responsive behavior:** Levels use a 3-tier mobile-first approach activated by the `.responsive` CSS class. Tablet values are always the base. If mobile is enabled, those values become the default and tablet values kick in at the tablet breakpoint. Desktop values apply at the desktop breakpoint if enabled. Requires `$-ra-config-tablet-resp-breakpoint` and/or `$-ra-config-desktop-resp-breakpoint` to be set in Layout configuration.
+
+### Sub-Heading
+
+Same structure as Heading, using `$--ra-config-typography-sub-heading-*` variables.
+
+### Text
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `$--ra-config-typography-text-color` | `inherit` | Text color |
+| `$--ra-config-typography-text-font-weight` | `400` | Font weight |
+| `$--ra-config-typography-text-sizes` | See below | Map of text size configurations |
+
+Each size uses the same structure as heading levels (font-size, line-height, mobile, desktop).
+
+### Paragraph
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `$--ra-config-typography-paragraph-color` | `#333333` | Text color |
+| `$--ra-config-typography-paragraph-font-weight` | `400` | Font weight |
+| `$--ra-config-typography-paragraph-sizes` | See below | Map of paragraph size configurations |
+
+Each size has these keys:
+
+| Key | Purpose |
+|-----|---------|
+| `font-size` | Font size (tablet/base tier) |
+| `line-height` | Line height (tablet/base tier) |
+| `margin-bottom` | Margin bottom for non-last paragraphs (tablet/base tier) |
+| `mobile` | Mobile tier override map (`font-size`, `line-height`, `margin-bottom`) or `null` |
+| `desktop` | Desktop tier override map (`font-size`, `line-height`, `margin-bottom`) or `null` |
+
+### Caption
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `$--ra-config-typography-caption-font-size` | `14px` | Font size |
+| `$--ra-config-typography-caption-line-height` | `18px` | Line height |
+| `$--ra-config-typography-caption-color` | `#1a1a1a` | Text color |
+| `$--ra-config-typography-caption-font-weight` | `700` | Label font weight |
+
+### Overline
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `$--ra-config-typography-overline-font-size` | `14px` | Font size |
+| `$--ra-config-typography-overline-line-height` | `20px` | Line height |
+| `$--ra-config-typography-overline-color` | `#666666` | Text color |
+| `$--ra-config-typography-overline-font-weight` | `600` | Font weight |
+
+### Weight Classes
+
+`$--ra-config-typography-weights` is a map of weight class names to values:
+
+```scss
+$--ra-config-typography-weights: (
+    "normal": 400,
+    "medium": 400,
+    "semi-bold": 600,
+    "bold": 700,
+);
+```
+
+Generates `.weight-{name}` CSS classes.
+
+### Example: Custom Heading Levels
+
+```scss
+$--ra-config-typography-heading-levels: (
+    1: (
+        "font-size": 48px,
+        "line-height": 56px,
+        "mobile": ("font-size": 28px, "line-height": 34px),
+        "desktop": ("font-size": 56px, "line-height": 64px),
+    ),
+    2: (
+        "font-size": 32px,
+        "line-height": 40px,
+        "mobile": null,
+        "desktop": null,
+    ),
+);
+```
+
+---
+
 ## Layout
 
 **File:** `layout.scss`

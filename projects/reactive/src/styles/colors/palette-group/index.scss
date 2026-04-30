@@ -1,4 +1,7 @@
-@each $name, $shades in $--ra-config-palette-colors {
+@use 'sass:map';
+@use '../../configuration/palette' as *;
+
+@each $name, $shades in $ra-config-palette-colors {
     .ra-clr-plt-#{$name} {
         --clr-plt-100: #{map.get($shades, 100)};
         --clr-plt-200: #{map.get($shades, 200)};

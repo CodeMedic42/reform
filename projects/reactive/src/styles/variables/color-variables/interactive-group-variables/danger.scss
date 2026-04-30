@@ -1,38 +1,40 @@
+@use '../../../configuration/interactive-designs/grayscale' as *;
+
 $base-danger-clr: #dc3545;
-$base-danger-fill-clr: $--clr-white;
+$base-danger-fill-clr: $clr-white;
 
 $interactive-color-danger-base: (
     "clr": $base-danger-clr,
-    "bg": $--clr-transparent,
-    "br": $--clr-transparent,
-    "out": $--clr-transparent,
+    "bg": $clr-transparent,
+    "br": $clr-transparent,
+    "out": $clr-transparent,
 
     "hover-clr": #b02a37,
-    "hover-bg": $--clr-transparent,
-    "hover-br": $--clr-transparent,
-    "hover-out": $--clr-transparent,
+    "hover-bg": $clr-transparent,
+    "hover-br": $clr-transparent,
+    "hover-out": $clr-transparent,
 
     "focus-clr": #b02a37,
-    "focus-bg": $--clr-transparent,
-    "focus-br": $--clr-transparent,
-    "focus-out": $--clr-transparent,
+    "focus-bg": $clr-transparent,
+    "focus-br": $clr-transparent,
+    "focus-out": $clr-transparent,
 
     "active-clr": #b02a37,
-    "active-bg": $--clr-transparent,
-    "active-br": $--clr-transparent,
-    "active-out": $--clr-transparent,
+    "active-bg": $clr-transparent,
+    "active-br": $clr-transparent,
+    "active-out": $clr-transparent,
 ) !default;
 
 $interactive-color-danger-fill: (
     "clr": $base-danger-fill-clr,
     "bg": $base-danger-clr,
     "br": $base-danger-clr,
-    "out": $--clr-transparent,
+    "out": $clr-transparent,
 
     "hover-clr": $base-danger-fill-clr,
     "hover-bg": #b02a37,
     "hover-br": #bb2d3b,
-    "hover-out": $--clr-transparent,
+    "hover-out": $clr-transparent,
 
     "focus-clr": $base-danger-fill-clr,
     "focus-bg": #bb2d3b,
@@ -42,7 +44,7 @@ $interactive-color-danger-fill: (
     "active-clr": $base-danger-fill-clr,
     "active-bg": #b02a37,
     "active-br": #a52834,
-    "active-out": $--clr-transparent,
+    "active-out": $clr-transparent,
 ) !default;
 
 $interactive-color-danger: (

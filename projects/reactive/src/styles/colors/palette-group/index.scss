@@ -19,8 +19,12 @@
     .plt-#{$level} {
         --clr-plt-active: var(--clr-plt-#{$level});
 
-        @if $level <= 500 {
-            --clr-plt-inverse: var(--clr-plt-800);
+        @if $level <= 200 {
+            --clr-plt-inverse: var(--clr-plt-700);
+        } @else if $level <= 400 {
+            --clr-plt-inverse: var(--clr-plt-900);
+        } @else if $level <= 700 {
+            --clr-plt-inverse: var(--clr-plt-100);
         } @else {
             --clr-plt-inverse: var(--clr-plt-200);
         }

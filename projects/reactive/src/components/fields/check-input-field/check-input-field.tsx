@@ -6,7 +6,7 @@ import FieldMessages from '../_support/field-messages.js';
 import type { FieldMessageData } from '../_support/field-messages.js';
 import buildLabeledControlProps, { type BuildLabeledControlPropsOutput } from '../../../common/build-labeled-control-props.js';
 
-interface CheckInputProps {
+interface CheckInputFieldProps {
     id?: string | null;
     className?: string | null;
     label?: string | null;
@@ -29,7 +29,7 @@ interface CheckInputProps {
     constrictField?: boolean;
 }
 
-interface CheckInputState {
+interface CheckInputFieldState {
     inputId: string;
     labelId: string;
     descriptionId: string | null;
@@ -38,7 +38,7 @@ interface CheckInputState {
     ariaLabel: string | null;
 }
 
-class CheckInput extends PureComponent<CheckInputProps, CheckInputState> {
+class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFieldState> {
     static defaultProps = {
         id: null,
         className: null,
@@ -64,7 +64,7 @@ class CheckInput extends PureComponent<CheckInputProps, CheckInputState> {
 
     inputRef: React.RefObject<HTMLInputElement>;
 
-    constructor(props: CheckInputProps) {
+    constructor(props: CheckInputFieldProps) {
         super(props);
 
         this.inputRef = createRef<HTMLInputElement>();
@@ -72,10 +72,10 @@ class CheckInput extends PureComponent<CheckInputProps, CheckInputState> {
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
 
-        this.state = {} as CheckInputState;
+        this.state = {} as CheckInputFieldState;
     }
 
-    static getDerivedStateFromProps(nextProps: CheckInputProps): BuildLabeledControlPropsOutput | null {
+    static getDerivedStateFromProps(nextProps: CheckInputFieldProps): BuildLabeledControlPropsOutput | null {
         return buildLabeledControlProps(nextProps);
     }
 
@@ -229,4 +229,4 @@ class CheckInput extends PureComponent<CheckInputProps, CheckInputState> {
     }
 }
 
-export default CheckInput;
+export default CheckInputField;

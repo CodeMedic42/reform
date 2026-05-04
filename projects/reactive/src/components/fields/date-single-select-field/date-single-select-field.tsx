@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import DateSelect from '../_support/date-select-field/date-select-field.js';
 import DateSelectFieldContainer from './date-single-select-field-container.js';
 
-interface DateSingleSelectFieldProps {
+export interface DateSingleSelectFieldProps {
 	className?: string | null;
 	onChange?: ((value: Date | null) => void) | null;
 	onBlur?: (() => void) | null;

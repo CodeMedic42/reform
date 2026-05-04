@@ -9,7 +9,7 @@ interface FormControlProps {
 	ControlComponent: React.ComponentType<any>,
 	validateOnBlur?: boolean,
 	nativeAttributes: string[],
-	onBlur?: Function,
+	onBlur?: Function | null,
 }
 
 function FormField(props: FormControlProps) {

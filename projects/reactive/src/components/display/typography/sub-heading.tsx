@@ -7,12 +7,15 @@ export interface SubHeadingProps {
     className?: string | null;
     children?: React.ReactNode;
     level: number;
-    forwardRef?: React.Ref<unknown> | null;
     weightNormal?: boolean;
     responsive?: boolean;
 }
 
-class SubHeading extends PureComponent<SubHeadingProps> {
+interface InternalSubHeadingProps extends SubHeadingProps {
+    forwardRef?: React.Ref<HTMLDivElement> | null;
+}
+
+class SubHeading extends PureComponent<InternalSubHeadingProps> {
     render(): React.ReactNode {
         const {
             className = null,

@@ -3,18 +3,21 @@ import classnames from 'classnames';
 import { PaletteColor, PaletteShade, getColorInfo } from '../../../common/color-list.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 
-export interface TypographyProps {
+export interface TypographyProps<T extends React.ElementType = React.ElementType> {
     className?: string | null;
     children?: React.ReactNode;
     color?: PaletteColor | null;
     shade?: PaletteShade | null;
-    Component?: React.ElementType;
-    forwardRef?: React.Ref<unknown> | null;
+    Component?: T;
     inline?: boolean;
     [key: string]: unknown;
 }
 
-class Typography extends PureComponent<TypographyProps> {
+interface InternalTypographyProps<T extends React.ElementType = React.ElementType> extends TypographyProps<T> {
+    forwardRef?: React.Ref<React.ComponentRef<T>> | null;
+}
+
+class Typography<T extends React.ElementType = React.ElementType> extends PureComponent<InternalTypographyProps<T>> {
     render(): React.ReactNode {
         const {
             className = null,
@@ -31,7 +34,7 @@ class Typography extends PureComponent<TypographyProps> {
 
         return (
             <Component
-                ref={forwardRef}
+                ref={forwardRef as React.Ref<any>}
                 className={classnames(
                     'ra-typography',
                     className,
@@ -46,4 +49,11 @@ class Typography extends PureComponent<TypographyProps> {
     }
 }
 
-export default applyForwardRef(Typography);
+interface TypographyWithRef {
+    <T extends React.ElementType = 'span'>(
+        props: TypographyProps<T> & React.RefAttributes<React.ComponentRef<T>>
+    ): React.ReactElement | null;
+    displayName?: string;
+}
+
+export default applyForwardRef<InternalTypographyProps, TypographyWithRef>(Typography);

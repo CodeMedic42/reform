@@ -6,10 +6,11 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import IconBox from '../../display/icon-box/index.js';
 import IconButton from '../../display/icon-button/index.js';
-import RemovableChip from '../../display/chip/removable-chip.js';
+import Tag from '../../controls/tag/tag.js';
 import Chip from '../../display/chip/index.js';
 import applyAnchorBinding from '../../controls/drop-down/anchor-binding.js';
 import changeSize from '../../../util/change-size.js';
+import FieldContainer from '../_support/field-container.js';
 
 interface ClearEvent {
 	event: React.MouseEvent;
@@ -42,7 +43,7 @@ interface MultiSelectAnchorProps {
 	listBoxId: string;
 }
 
-class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
+class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 	static defaultProps = {
 		id: null,
 		size: null,
@@ -136,7 +137,7 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 		}
 
 		const ItemComponent =
-			disabled || (!nullable && value.length <= 1) ? Chip : RemovableChip;
+			disabled || (!nullable && value.length <= 1) ? Chip : Tag;
 
 		return map(value, (text, index) => {
 			const itemProps: Record<string, unknown> = {
@@ -185,17 +186,18 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 			) : null;
 
 		return (
-			<div
+			<FieldContainer
 				className={classnames(
-					'select-anchor',
-					'multi-select-anchor',
-					`size-${size}`,
+					'ra-select-field-container',
+					'ra-multi-select-field-container',
+					`size-${size}`, {
+						focus: open,
+					}
 				)}
 			>
 				<div
-					className={classnames('anchor-boundary', {
+					className={classnames('ra-anchor-boundary', {
 						expandable,
-						focus: open,
 					})}
 				>
 					<button
@@ -242,12 +244,12 @@ class MultiSelectAnchor extends PureComponent<MultiSelectAnchorProps> {
 						{clearButton}
 					</div>
 				</div>
-			</div>
+			</FieldContainer>
 		);
 	}
 }
 
-export default applyAnchorBinding(MultiSelectAnchor, {
+export default applyAnchorBinding(MultiSelectFieldContainer, {
 	focusSelector: '.button-anchor',
-	boundingSelector: '.anchor-boundary',
+	// boundingSelector: '.ra-anchor-boundary',
 });

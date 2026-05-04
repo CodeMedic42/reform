@@ -63,6 +63,10 @@
       "import": "./dist/components/controls/menu/index.mjs",
       "types": "./dist/components/controls/menu/index.d.ts"
     },
+    "./controls/tag": {
+      "import": "./dist/components/controls/tag/index.mjs",
+      "types": "./dist/components/controls/tag/index.d.ts"
+    },
     "./display/chip": {
       "import": "./dist/components/display/chip/index.mjs",
       "types": "./dist/components/display/chip/index.d.ts"
@@ -74,6 +78,10 @@
     "./display/typography": {
       "import": "./dist/components/display/typography/index.mjs",
       "types": "./dist/components/display/typography/index.d.ts"
+    },
+    "./fields/check-input-field": {
+      "import": "./dist/components/fields/check-input-field/index.mjs",
+      "types": "./dist/components/fields/check-input-field/index.d.ts"
     },
     "./fields/date-range-select-field": {
       "import": "./dist/components/fields/date-range-select-field/index.mjs",

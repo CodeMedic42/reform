@@ -4,12 +4,12 @@ import { isNil } from 'lodash-es';
 import DateRangeSelectFieldContainer from './date-range-select-field-container.js';
 import DateSelectField from '../_support/date-select-field/date-select-field.js';
 
-interface DateRangeSelectValue {
+export interface DateRangeSelectValue {
 	from: Date | null;
 	to: Date | null;
 }
 
-interface DateRangeSelectFieldProps {
+export interface DateRangeSelectFieldProps {
 	className?: string | null;
 	onChange?: ((value: DateRangeSelectValue) => void) | null;
 	onBlur?: (() => void) | null;

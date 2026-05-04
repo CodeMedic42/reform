@@ -2,9 +2,9 @@ import React, { useCallback, forwardRef } from 'react';
 import classnames from 'classnames';
 import { isNil, clone, pullAt } from 'lodash-es';
 import Select from '../_support/select-field/index.js';
-import MultiSelectAnchor from './multi-select-input-field-anchor.js';
+import MultiSelectFieldContainer from './multi-select-field-container.js';
 
-interface MultiSelectInputProps {
+interface MultiSelectFieldProps {
 	className?: string | null;
 	expandable?: boolean;
 	onChange?: ((value: Array<string | number> | null) => void) | null;
@@ -12,7 +12,7 @@ interface MultiSelectInputProps {
 	nullable?: boolean;
 }
 
-const MultiSelectInput = forwardRef<unknown, MultiSelectInputProps>((props, ref) => {
+const MultiSelectField = forwardRef<unknown, MultiSelectFieldProps>((props, ref) => {
 	const {
 		className = null,
 		expandable = false,
@@ -57,7 +57,7 @@ const MultiSelectInput = forwardRef<unknown, MultiSelectInputProps>((props, ref)
 					expandable,
 				},
 			)}
-			Anchor={MultiSelectAnchor}
+			Anchor={MultiSelectFieldContainer}
             anchorProps={{
                 onClear: handleClear,
 				onClearIndex: handleClearIndex,
@@ -70,4 +70,4 @@ const MultiSelectInput = forwardRef<unknown, MultiSelectInputProps>((props, ref)
 	);
 });
 
-export default MultiSelectInput;
+export default MultiSelectField;

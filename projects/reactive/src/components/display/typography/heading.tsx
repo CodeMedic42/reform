@@ -8,11 +8,14 @@ export interface HeadingProps {
     className?: string | null;
     children?: React.ReactNode;
     level: number;
-    forwardRef?: React.Ref<unknown> | null;
     responsive?: boolean;
 }
 
-class Heading extends PureComponent<HeadingProps> {
+interface InternalHeadingProps extends HeadingProps {
+    forwardRef?: React.Ref<HTMLElement> | null;
+}
+
+class Heading extends PureComponent<InternalHeadingProps> {
     render(): React.ReactNode {
         const {
             level, className = null, children = null, forwardRef = null, responsive = false, ...rest
@@ -22,7 +25,7 @@ class Heading extends PureComponent<HeadingProps> {
             throw new Error('Heading requires a valid level to be specified.');
         }
 
-        const Component = level <= 6 ? `h${level}` : 'div';
+        const Component = (level <= 6 ? `h${level}` : 'div') as React.ElementType;
 
         return (
             <Typography

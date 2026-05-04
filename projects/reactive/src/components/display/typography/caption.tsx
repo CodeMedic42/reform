@@ -8,10 +8,13 @@ export interface CaptionProps {
     className?: string | null;
     children?: React.ReactNode;
     label: string;
-    forwardRef?: React.Ref<unknown> | null;
 }
 
-class Caption extends PureComponent<CaptionProps> {
+interface InternalCaptionProps extends CaptionProps {
+    forwardRef?: React.Ref<HTMLDivElement> | null;
+}
+
+class Caption extends PureComponent<InternalCaptionProps> {
     render(): React.ReactNode {
         const {
             className = null, label, forwardRef = null, children = null, ...rest

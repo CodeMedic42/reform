@@ -10,10 +10,13 @@ export interface ParagraphProps {
     size?: number | null;
     weight?: 'bold' | 'semi-bold' | 'normal' | null;
     responsive?: boolean;
-    forwardRef?: React.Ref<unknown> | null;
 }
 
-function Paragraph(props: ParagraphProps): React.ReactNode {
+interface InternalParagraphProps extends ParagraphProps {
+    forwardRef?: React.Ref<HTMLParagraphElement> | null;
+}
+
+function Paragraph(props: InternalParagraphProps): React.ReactNode {
     const {
         className = null, size = null, weight = null, responsive = false, forwardRef = null, children = null, ...rest
     } = props;

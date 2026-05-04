@@ -4,23 +4,23 @@ import { isNil } from 'lodash-es';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons/faCircleXmark';
 import { PaletteColor, PaletteShade } from '../../../common/color-list.js';
-import Chip from './chip.js';
-import Icon from '../icon/index.js';
+import Chip from '../../display/chip/chip.js';
+import Icon from '../../display/icon/index.js';
 
-interface RemovableChipClearEvent {
+export interface TagClearEvent {
 	event: React.MouseEvent<HTMLButtonElement>;
 	meta: unknown;
 }
 
-interface RemovableChipProps {
+export interface TagProps {
 	id?: string | null;
 	className?: string | null;
-	color: PaletteColor;
+	color?: PaletteColor | null;
 	shade?: PaletteShade | null;
 	size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | null;
 	floating?: boolean;
 	children?: React.ReactNode;
-	onClear?: ((event: RemovableChipClearEvent) => void) | null;
+	onClear?: ((event: TagClearEvent) => void) | null;
 	onClearMeta?: unknown;
 	variant?: 'rectangle' | 'pill';
 	clearType?: 'normal' | 'inverse';
@@ -29,7 +29,7 @@ interface RemovableChipProps {
 	'aria-label'?: string;
 }
 
-function RemovableChip(props: RemovableChipProps): React.ReactNode {
+function Tag(props: TagProps): React.ReactNode {
 	const {
 		id = null,
 		className = null,
@@ -87,4 +87,4 @@ function RemovableChip(props: RemovableChipProps): React.ReactNode {
 	);
 }
 
-export default memo(RemovableChip);
+export default memo(Tag);

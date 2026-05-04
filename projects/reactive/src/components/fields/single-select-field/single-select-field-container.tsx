@@ -104,9 +104,7 @@ function SelectAnchor(props: SelectAnchorProps): React.ReactElement {
             )}
         >
             <div
-                className={classnames('ra-anchor-boundary', {
-                    focus: open,
-                })}
+                className={classnames('ra-anchor-boundary')}
             >
                 <button
                     id={id ?? undefined}

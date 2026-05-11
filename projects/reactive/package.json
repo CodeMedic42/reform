@@ -80,6 +80,10 @@
       "import": "./dist/components/display/typography/index.mjs",
       "types": "./dist/components/display/typography/index.d.ts"
     },
+    "./display/timeline": {
+      "import": "./dist/components/display/timeline/index.mjs",
+      "types": "./dist/components/display/timeline/index.d.ts"
+    },
     "./fields/check-input-field": {
       "import": "./dist/components/fields/check-input-field/index.mjs",
       "types": "./dist/components/fields/check-input-field/index.d.ts"

@@ -139,10 +139,16 @@ function buildCutoutMask(id: string, offset: number = 0, width: number = LANE_WI
  * Processes raw moments into ProcessedMoments with lane assignments,
  * branch/merge connections, and active lane tracking.
  *
- * Pass 1: Lane assignment — assigns lanes, handles primary vs ancillary priority
- * Pass 2: Build & compute — creates entries, classifies connections,
- *          computes branches, active lanes, passThroughMerges, hasLineAbove
- * Pass 3: hasLineBelow — requires next moment's activeLanes snapshot
+ * Pass 1:   Lane assignment — assigns lanes, handles primary vs ancillary priority
+ * Compact:  Removes gaps in lane numbering left by freed-then-unused lanes
+ * Pass 1.5: Collision detection — detects connections whose lines pass through
+ *           intervening moments. Fixes via rerouting (use the other endpoint's
+ *           lane), relocating (move merge curve to parent's row), or as a last
+ *           resort, shifting lanes to insert a routing lane.
+ * Pass 2:   Build & compute — creates entries, classifies connections, computes
+ *           branches, merges, incoming connections, active lanes,
+ *           pass-through sets, and hasLineAbove
+ * Pass 3:   hasLineBelow — requires next moment's activeLanes snapshot
  */
 function processMoments(moments: Moment[]): ProcessedMoment[] {
     // =====================================================================
@@ -208,9 +214,8 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         }
     }
 
-    // Compact lanes: remove gaps in lane numbering caused by freed lanes
-    // that were never permanently used (e.g., lane 2 freed when I was
-    // reassigned, temporarily used by J/K, then freed again).
+    // Compact lanes: remove gaps in lane numbering caused by lanes that
+    // were freed during reassignment but never permanently occupied.
     const usedLanes = new Set(Object.values(laneMap));
     const sortedUsed = [...usedLanes].sort((a, b) => a - b);
     const compactMap: Record<number, number> = {};
@@ -227,9 +232,20 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     // PASS 1.5: Collision Detection & Resolution
     //
     // Detects connections whose visual lines pass through intervening
-    // moments on the same lane. Two fixes:
-    // - Branch collisions: shift lanes right to create a routing lane
-    // - Merge collisions: relocate curve to the parent's row
+    // moments on the same lane. Three resolution strategies:
+    //
+    // 1. Rerouted branch: child's lane has collision but parent's lane
+    //    is clear → use parent's lane instead. Adds an incoming
+    //    connection at the child's row from the parent's lane.
+    //
+    // 2. Relocated merge: parent's lane has collision but child's lane
+    //    is clear → extend child's lane to the parent's row. Adds an
+    //    incoming connection at the parent's row from the child's lane.
+    //
+    // 3. Routing lane (last resort): both lanes blocked → shift all
+    //    lanes >= child's lane right by 1 to insert an empty routing
+    //    lane. Two-part connection: branch at parent's row to the
+    //    routing lane, incoming at child's row from the routing lane.
     // =====================================================================
 
     const momentIndex: Record<string, number> = {};
@@ -276,6 +292,7 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         }
     }
 
+    /** Returns true if any moment between indexA and indexB sits on connectingLane. */
     function hasCollision(connectingLane: number, indexA: number, indexB: number): boolean {
         const minIdx = Math.min(indexA, indexB);
         const maxIdx = Math.max(indexA, indexB);
@@ -285,6 +302,7 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         return false;
     }
 
+    /** Shifts all lanes >= fromLane right by 1, opening fromLane as a routing lane. */
     function shiftLanes(fromLane: number) {
         for (const id of Object.keys(laneMap)) {
             if (laneMap[id] >= fromLane) {
@@ -293,7 +311,11 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         }
     }
 
-    // Track collision resolution results
+    // Collision resolution tracking (keyed by "childId:parentId"):
+    // - routedConnections: maps to routing lane number (strategy 3)
+    // - reroutedBranches: branches using parent's lane instead (strategy 1)
+    // - relocatedMerges: merges with curve moved to parent's row (strategy 2)
+    // - incomingMap: incoming connections to add to target moments
     const routedConnections: Record<string, number> = {};
     const reroutedBranches: Set<string> = new Set();
     const relocatedMerges: Set<string> = new Set();
@@ -354,8 +376,12 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         }
     }
 
-    // Compute lastMomentIndexOnLane after shifts, accounting for
-    // routing lane endpoints and extended lane ranges
+    // Compute the last row index where each lane is needed. Starts with
+    // the last actual moment on each lane, then extended for:
+    // - Routing lane endpoints (routing lane active until the parent's row)
+    // - Relocated merges (child's lane active until the parent's row)
+    // - Normal branches (child's lane active until the furthest parent's row)
+    // Used to control branch deactivation and through-line rendering.
     const lastMomentIndexOnLane: Record<number, number> = {};
     for (let i = 0; i < moments.length; i++) {
         const lane = laneMap[moments[i].id];

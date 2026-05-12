@@ -731,7 +731,7 @@ function MomentNode({ moment, index, getLaneClass }: MomentNodeProps) {
     return (
         <div
             className="ra-timeline-moment-node-container"
-            style={{ width: svgWidth, minHeight: 20, display: 'flex', flexDirection: 'column' }}
+            style={{ width: svgWidth, minHeight: 20, position: 'relative', overflow: 'hidden' }}
         >
             {/* Static SVG: fixed 20px height with all complex graphics */}
             <svg
@@ -894,31 +894,31 @@ function MomentNode({ moment, index, getLaneClass }: MomentNodeProps) {
             <svg
                 viewBox={`0 0 ${svgWidth} 20`}
                 preserveAspectRatio="none"
-                style={{ display: 'block', flex: 1, width: svgWidth }}
+                style={{ position: 'absolute', top: 20, left: 0, width: svgWidth, height: 'calc(100% - 20px)', display: 'block' }}
             >
-                {activeLanes.map((active, laneIndex) => {
-                    if (!active) return null;
-                    if (branches.includes(laneIndex) && !passThroughBranches.includes(laneIndex)) return null;
-                    // Incoming lanes that terminate here have no through-line below
-                    const isTerminating = incomingConnections.some(
-                        c => c.lane === laneIndex && c.terminates
-                    );
-                    if (isTerminating) return null;
-                    if (laneIndex === lane && !hasLineBelow) return null;
-                    return (
-                        <g key={`var-${laneIndex}`} className={getLaneClass(laneIndex)}>
-                            <line
-                                x1={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                y1="0"
-                                x2={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                y2="20"
-                                stroke={LINE_STROKE}
-                                strokeWidth="2"
-                            />
-                        </g>
-                    );
-                })}
-            </svg>
+                    {activeLanes.map((active, laneIndex) => {
+                        if (!active) return null;
+                        if (branches.includes(laneIndex) && !passThroughBranches.includes(laneIndex)) return null;
+                        // Incoming lanes that terminate here have no through-line below
+                        const isTerminating = incomingConnections.some(
+                            c => c.lane === laneIndex && c.terminates
+                        );
+                        if (isTerminating) return null;
+                        if (laneIndex === lane && !hasLineBelow) return null;
+                        return (
+                            <g key={`var-${laneIndex}`} className={getLaneClass(laneIndex)}>
+                                <line
+                                    x1={laneIndex * LANE_WIDTH + LANE_CENTER}
+                                    y1="0"
+                                    x2={laneIndex * LANE_WIDTH + LANE_CENTER}
+                                    y2="20"
+                                    stroke={LINE_STROKE}
+                                    strokeWidth="2"
+                                />
+                            </g>
+                        );
+                    })}
+                </svg>
         </div>
     );
 }

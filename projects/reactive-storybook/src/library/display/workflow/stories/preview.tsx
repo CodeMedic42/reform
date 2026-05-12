@@ -45,7 +45,7 @@ function example() {
             moments={moments}
             colors={colors}
             renderMoment={(moment) => (
-                <div style={{ height: 40 }}>
+                <div style={{ height: 20 }}>
                     {moment.id}
                 </div>
             )}

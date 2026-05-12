@@ -3,17 +3,36 @@ import Timeline from '../../../../../../reactive/dist/components/display/timelin
 
 const moments = [
     { id: 'AA', parent: 'D' },
-    { id: 'A', parent: 'B', mergeParents: ['I'] },
-    { id: 'B', parent: 'C', mergeParents: ['D', 'F'] },
-    { id: 'BB', parent: 'C' },
+    { id: 'A', parent: 'B', 
+        ancillaryParents: ['I']
+    },
+    { id: 'B', parent: 'C', 
+        ancillaryParents: ['D', 'F'] 
+    },
+    { id: 'BB', 
+        ancillaryParents: ['C'] 
+    },
     { id: 'C', parent: 'H' },
-    { id: 'CC', parent: 'K', mergeParents: ['I'] },
+    { id: 'CC', 
+        ancillaryParents: [
+            'I', 
+            'K'
+        ] 
+    },
     { id: 'D', parent: 'E' },
-    { id: 'E', parent: 'I', mergeParents: ['H'] },
-    { id: 'F', parent: 'G', mergeParents: ['H'] },
-    { id: 'G', parent: 'J' },
+    { id: 'E', parent: 'I', 
+        ancillaryParents: ['H'] 
+    },
+    { id: 'F', parent: 'G', 
+        ancillaryParents: ['H'] 
+    },
+    { id: 'G', 
+        ancillaryParents: ['J'] 
+    },
     { id: 'H', parent: 'J' },
-    { id: 'I', parent: 'K' },
+    { id: 'I', 
+        ancillaryParents: ['K'] 
+    },
     { id: 'J', parent: 'K' },
     { id: 'K', parent: null },
 ];
@@ -25,15 +44,12 @@ function example() {
         <Timeline
             moments={moments}
             colors={colors}
-        >
-            {(moment) => {
-                return (
-                    <div>
-                        {moment.id}
-                    </div>
-                );
-            }}
-        </Timeline>
+            renderMoment={(moment) => (
+                <div style={{ height: 40 }}>
+                    {moment.id}
+                </div>
+            )}
+        />
     );
 }
 

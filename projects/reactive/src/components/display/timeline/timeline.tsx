@@ -214,6 +214,13 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         }
     }
 
+    // Build moment index lookup (used by compaction, collapsing, and
+    // collision detection below).
+    const momentIndex: Record<string, number> = {};
+    for (let i = 0; i < moments.length; i++) {
+        momentIndex[moments[i].id] = i;
+    }
+
     // Compact lanes: remove gaps in lane numbering caused by lanes that
     // were freed during reassignment but never permanently occupied.
     const usedLanes = new Set(Object.values(laneMap));
@@ -226,6 +233,117 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         for (const id of Object.keys(laneMap)) {
             laneMap[id] = compactMap[laneMap[id]];
         }
+    }
+
+    // Collapse lanes: merge non-overlapping lanes into the same column
+    // to minimize graph width (interval graph coloring). Two lanes can
+    // share a column if their active row ranges don't overlap.
+    const laneRanges: Record<number, [number, number]> = {};
+    for (let i = 0; i < moments.length; i++) {
+        const lane = laneMap[moments[i].id];
+        if (laneRanges[lane] === undefined) {
+            laneRanges[lane] = [i, i];
+        } else {
+            laneRanges[lane][0] = Math.min(laneRanges[lane][0], i);
+            laneRanges[lane][1] = Math.max(laneRanges[lane][1], i);
+        }
+    }
+
+    // Extend ranges for cross-lane connections: branches extend the
+    // child's lane to the parent's row, merges extend the parent's
+    // lane to the child's row.
+    for (const moment of moments) {
+        const childLane = laneMap[moment.id];
+        const childIdx = momentIndex[moment.id];
+        const parents = [...(moment.ancillaryParents || [])];
+        let effectivePrimary: string | null | undefined = moment.parent;
+        if (demotedPrimary[moment.id]) {
+            parents.unshift(demotedPrimary[moment.id]);
+            effectivePrimary = null;
+        }
+        if (effectivePrimary) parents.push(effectivePrimary);
+
+        for (const parentId of parents) {
+            const parentLane = laneMap[parentId];
+            if (parentLane === undefined || parentLane === childLane) continue;
+            const parentIdx = momentIndex[parentId];
+            if (parentLane < childLane) {
+                laneRanges[childLane][1] = Math.max(laneRanges[childLane][1], parentIdx);
+            } else {
+                laneRanges[parentLane][0] = Math.min(laneRanges[parentLane][0], childIdx);
+            }
+        }
+    }
+
+    // Greedy coloring: assign each lane to the lowest column whose
+    // last active range ends before this lane's range starts.
+    const sortedLanes = Object.keys(laneRanges).map(Number).sort(
+        (a, b) => laneRanges[a][0] - laneRanges[b][0]
+    );
+    const columnEnds: number[] = [];
+    const laneToColumn: Record<number, number> = {};
+
+    for (const lane of sortedLanes) {
+        const [start, end] = laneRanges[lane];
+        let assigned = false;
+        for (let col = 0; col < columnEnds.length; col++) {
+            if (columnEnds[col] < start) {
+                laneToColumn[lane] = col;
+                columnEnds[col] = end;
+                assigned = true;
+                break;
+            }
+        }
+        if (!assigned) {
+            laneToColumn[lane] = columnEnds.length;
+            columnEnds.push(end);
+        }
+    }
+
+    // Build per-lane active segments from the collapse mapping.
+    // Collapsed lanes have multiple segments (one per original lane);
+    // non-collapsed lanes have a single segment. Segments track
+    // discontinuous active ranges so through-lines don't falsely bridge
+    // independent sections sharing a column.
+    const laneSegments: Record<number, [number, number][]> = {};
+    for (const lane of sortedLanes) {
+        const col = laneToColumn[lane];
+        if (!laneSegments[col]) laneSegments[col] = [];
+        laneSegments[col].push([laneRanges[lane][0], laneRanges[lane][1]]);
+    }
+    for (const col of Object.keys(laneSegments)) {
+        laneSegments[Number(col)].sort((a, b) => a[0] - b[0]);
+    }
+
+    for (const id of Object.keys(laneMap)) {
+        laneMap[id] = laneToColumn[laneMap[id]];
+    }
+
+    /** Returns the end index of the segment containing `index` on `lane`, or -1 if none. */
+    function getSegmentEnd(lane: number, index: number): number {
+        const segs = laneSegments[lane];
+        if (!segs) return -1;
+        for (const seg of segs) {
+            if (index >= seg[0] && index <= seg[1]) return seg[1];
+        }
+        return -1;
+    }
+
+    /** Extends the segment on `lane` that contains `containingIndex` to reach `newEnd`.
+     *  Creates a new segment if none contains the index. */
+    function extendSegment(lane: number, containingIndex: number, newEnd: number) {
+        if (!laneSegments[lane]) {
+            laneSegments[lane] = [[containingIndex, newEnd]];
+            return;
+        }
+        for (const seg of laneSegments[lane]) {
+            if (containingIndex >= seg[0] && containingIndex <= seg[1]) {
+                seg[1] = Math.max(seg[1], newEnd);
+                return;
+            }
+        }
+        laneSegments[lane].push([containingIndex, newEnd]);
+        laneSegments[lane].sort((a, b) => a[0] - b[0]);
     }
 
     // =====================================================================
@@ -247,11 +365,6 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     //    lane. Two-part connection: branch at parent's row to the
     //    routing lane, incoming at child's row from the routing lane.
     // =====================================================================
-
-    const momentIndex: Record<string, number> = {};
-    for (let i = 0; i < moments.length; i++) {
-        momentIndex[moments[i].id] = i;
-    }
 
     // Collect all cross-lane connections
     interface ConnectionInfo {
@@ -307,6 +420,14 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         for (const id of Object.keys(laneMap)) {
             if (laneMap[id] >= fromLane) {
                 laneMap[id] += 1;
+            }
+        }
+        // Shift segment keys in descending order to avoid key collisions
+        const keys = Object.keys(laneSegments).map(Number).sort((a, b) => b - a);
+        for (const lane of keys) {
+            if (lane >= fromLane) {
+                laneSegments[lane + 1] = laneSegments[lane];
+                delete laneSegments[lane];
             }
         }
     }
@@ -376,41 +497,30 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         }
     }
 
-    // Compute the last row index where each lane is needed. Starts with
-    // the last actual moment on each lane, then extended for:
-    // - Routing lane endpoints (routing lane active until the parent's row)
-    // - Relocated merges (child's lane active until the parent's row)
-    // - Normal branches (child's lane active until the furthest parent's row)
-    // Used to control branch deactivation and through-line rendering.
-    const lastMomentIndexOnLane: Record<number, number> = {};
-    for (let i = 0; i < moments.length; i++) {
-        const lane = laneMap[moments[i].id];
-        lastMomentIndexOnLane[lane] = i;
-    }
+    // Extend lane segments for connection endpoints. Each extension
+    // grows the segment containing the child moment to reach the
+    // parent's row, ensuring through-lines span the full connection.
 
-    // Routing lanes end at the parent's index
+    // Routing lanes: create a new segment spanning child to parent
     for (const [key, routingLane] of Object.entries(routedConnections)) {
-        const parentId = key.split(':')[1];
+        const [childId, parentId] = key.split(':');
+        const childIdx = momentIndex[childId];
         const parentIdx = momentIndex[parentId];
-        lastMomentIndexOnLane[routingLane] = Math.max(
-            lastMomentIndexOnLane[routingLane] || 0, parentIdx
-        );
+        extendSegment(routingLane, childIdx, parentIdx);
     }
 
-    // Relocated merges extend the child's lane to the parent's index
+    // Relocated merges: extend the child's lane segment to the parent's row
     for (const key of relocatedMerges) {
         const [childId, parentId] = key.split(':');
         const childLane = laneMap[childId];
+        const childIdx = momentIndex[childId];
         const parentIdx = momentIndex[parentId];
-        lastMomentIndexOnLane[childLane] = Math.max(
-            lastMomentIndexOnLane[childLane] || 0, parentIdx
-        );
+        extendSegment(childLane, childIdx, parentIdx);
     }
 
-    // Normal branches extend the child's lane to the parent's index.
+    // Normal branches: extend the child's lane segment to the parent's row.
     // When multiple branches share a lane (e.g., CC→I and CC→K both
-    // branch to CC's lane), the lane must stay active until the
-    // furthest parent.
+    // branch to CC's lane), the segment grows to the furthest parent.
     for (const conn of connections) {
         const key = `${conn.childId}:${conn.parentId}`;
         if (routedConnections[key] !== undefined) continue;
@@ -421,19 +531,16 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         const parentLane = laneMap[conn.parentId];
 
         if (parentLane < childLane) {
-            lastMomentIndexOnLane[childLane] = Math.max(
-                lastMomentIndexOnLane[childLane] || 0, conn.parentIndex
-            );
+            extendSegment(childLane, conn.childIndex, conn.parentIndex);
         }
     }
 
-    // Compute terminates for incoming connections now that
-    // lastMomentIndexOnLane includes routing endpoints and extensions
+    // Compute terminates for incoming connections using segment data
     for (const [momentId, conns] of Object.entries(incomingMap)) {
         const targetIndex = momentIndex[momentId];
         for (const conn of conns) {
-            const last = lastMomentIndexOnLane[conn.lane];
-            conn.terminates = last === undefined || last <= targetIndex;
+            const segEnd = getSegmentEnd(conn.lane, targetIndex);
+            conn.terminates = segEnd <= targetIndex;
         }
     }
 
@@ -540,27 +647,33 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         processed.activeLanes = [...currentActiveLanes];
 
         // hasLineAbove: was this lane active in the previous row?
+        // For collapsed lanes, the previous snapshot may show the lane as
+        // active (pre-deactivation) even though a segment gap exists. Check
+        // that the previous row's segment actually reaches this row.
         if (i > 0) {
             const prevActiveLanes = lookup[moments[i - 1].id].activeLanes;
             processed.hasLineAbove = !!prevActiveLanes[lane];
+            if (processed.hasLineAbove && getSegmentEnd(lane, i - 1) < i) {
+                processed.hasLineAbove = false;
+            }
         }
 
-        // Identify pass-through branches: branch lanes that have moments
-        // below this row and thus need full through-lines.
+        // Identify pass-through branches: branch lanes whose current
+        // segment continues below this row.
         processed.passThroughBranches = processed.branches.filter(
-            branchLane => lastMomentIndexOnLane[branchLane] > i
+            branchLane => getSegmentEnd(branchLane, i) > i
         );
 
-        // Deactivate branch lanes that end here (no moments below use them).
+        // Deactivate branch lanes whose current segment ends here.
         for (const branchLane of processed.branches) {
-            if (lastMomentIndexOnLane[branchLane] <= i) {
+            if (getSegmentEnd(branchLane, i) <= i) {
                 currentActiveLanes[branchLane] = false;
             }
         }
 
-        // Deactivate incoming lanes that terminate here (fromAbove connections)
+        // Deactivate incoming lanes whose current segment ends here
         for (const conn of processed.incomingConnections) {
-            if (conn.fromAbove && lastMomentIndexOnLane[conn.lane] <= i) {
+            if (conn.fromAbove && getSegmentEnd(conn.lane, i) <= i) {
                 currentActiveLanes[conn.lane] = false;
             }
         }

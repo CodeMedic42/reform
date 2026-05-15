@@ -1,20 +1,22 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 
 // =============================================================================
 // TYPES
 // =============================================================================
 
 /**
- * Input data for a single moment (node) in the timeline.
+ * Input data for a single event (node) in the timeline.
  * Moments are ordered newest-first in the array.
  */
-interface Moment {
-    /** Unique identifier for this moment */
+interface TimelineEvent {
+    /** Unique identifier for this event */
     id: string;
+    /** Display title for this event, shown next to the node SVG */
+    title?: string;
     /**
-     * The primary parent of this moment. Determines lane inheritance:
-     * the primary parent is placed on the same lane as this moment.
-     * Only ONE child may claim a given moment as its primary parent.
+     * The primary parent of this event. Determines lane inheritance:
+     * the primary parent is placed on the same lane as this event.
+     * Only ONE child may claim a given event as its primary parent.
      */
     parent?: string | null;
     /**
@@ -25,7 +27,7 @@ interface Moment {
 }
 
 /**
- * A connection from a moment to an ancillary parent on a higher lane.
+ * A connection from a event to an ancillary parent on a higher lane.
  * Rendered as a curve coming down from the parent's lane.
  */
 interface MergeConnection {
@@ -34,7 +36,7 @@ interface MergeConnection {
 }
 
 /**
- * A connection arriving at a moment's row from a routing lane or
+ * A connection arriving at a event's row from a routing lane or
  * extended child lane. Used for routed branches (two-part connections)
  * and relocated merges (curve at parent's row instead of child's).
  */
@@ -43,58 +45,61 @@ interface IncomingConnection {
     lane: number;
     /** true = line enters from above (y=0), false = from below (y=20) */
     fromAbove: boolean;
-    /** true = the incoming lane ends here (no moments on it below this row) */
+    /** true = the incoming lane ends here (no events on it below this row) */
     terminates: boolean;
 }
 
 /**
- * A fully processed moment with all rendering data computed.
+ * A fully processed event with all rendering data computed.
  */
-interface ProcessedMoment extends Moment {
-    /** The horizontal lane (column) this moment is rendered in. Lane 0 is leftmost. */
+interface ProcessedEvent extends TimelineEvent {
+    /** The horizontal lane (column) this event is rendered in. Lane 0 is leftmost. */
     lane: number;
     /**
-     * Lane numbers of children that branch off from this moment.
-     * Rendered as curves going upward from this moment's circle.
+     * Lane numbers of children that branch off from this event.
+     * Rendered as curves going upward from this event's circle.
      */
     branches: number[];
     /**
      * Ancillary parent connections where the parent is on a higher lane number.
-     * Rendered as curves on this moment's row coming down from the parent's lane.
+     * Rendered as curves on this event's row coming down from the parent's lane.
      */
     mergesFromAbove: MergeConnection[];
     /**
-     * Connections arriving at this moment's row from a routing lane or
+     * Connections arriving at this event's row from a routing lane or
      * extended child lane. Rendered as curves from the incoming lane
-     * to this moment's circle.
+     * to this event's circle.
      */
     incomingConnections: IncomingConnection[];
-    /** Snapshot of active lanes at this moment's row. */
+    /** Snapshot of active lanes at this event's row. */
     activeLanes: boolean[];
     /**
      * Merge lanes that were already active before the merge — these need full
-     * through-lines because they continue past this moment in both directions.
+     * through-lines because they continue past this event in both directions.
      */
     passThroughMerges: number[];
     /**
-     * Branch lanes that continue below this moment — these need full
-     * through-lines because the lane has moments further down.
+     * Branch lanes that continue below this event — these need full
+     * through-lines because the lane has events further down.
      */
     passThroughBranches: number[];
     /**
      * Incoming connection lanes that were already active — these need full
-     * through-lines because they continue past this moment in both directions.
+     * through-lines because they continue past this event in both directions.
      */
     passThroughIncoming: number[];
-    /** Whether this moment's lane was active in the row above. */
+    /** Whether this event's lane was active in the row above. */
     hasLineAbove: boolean;
-    /** Whether this moment's lane is active in the row below. */
+    /** Whether this event's lane is active in the row below. */
     hasLineBelow: boolean;
 }
 
 interface TimelineProps {
-    moments?: Moment[];
-    renderMoment: (moment: Moment, index: number) => React.ReactNode;
+    events?: TimelineEvent[];
+    renderEvent?: (event: TimelineEvent, index: number) => React.ReactNode;
+    /** When true, content from renderEvent is initially hidden and can be
+     *  toggled open/closed by clicking or pressing Enter on the header row. */
+    expandable?: boolean;
     /** Palette color names (e.g., ['blue', 'purple', 'green']). Applied as
      *  CSS classes `ra-clr-plt-{name}` which provide `--clr-plt-*` custom properties. */
     colors: string[];
@@ -118,7 +123,7 @@ const CIRCLE_FILL = 'var(--clr-plt-600)';
 // =============================================================================
 
 /**
- * Creates an SVG mask that cuts out a circle around the moment's dot,
+ * Creates an SVG mask that cuts out a circle around the event's dot,
  * preventing through-lines and curves from drawing over it.
  * Must use maskUnits="userSpaceOnUse" with explicit dimensions for cross-browser compatibility.
  */
@@ -136,26 +141,26 @@ function buildCutoutMask(id: string, offset: number = 0, width: number = LANE_WI
 // =============================================================================
 
 /**
- * Processes raw moments into ProcessedMoments with lane assignments,
+ * Processes raw events into ProcessedEvents with lane assignments,
  * branch/merge connections, and active lane tracking.
  *
  * Pass 1:   Lane assignment — assigns lanes, handles primary vs ancillary priority
  * Compact:  Removes gaps in lane numbering left by freed-then-unused lanes
  * Pass 1.5: Collision detection — detects connections whose lines pass through
- *           intervening moments. Fixes via rerouting (use the other endpoint's
+ *           intervening events. Fixes via rerouting (use the other endpoint's
  *           lane), relocating (move merge curve to parent's row), or as a last
  *           resort, shifting lanes to insert a routing lane.
  * Pass 2:   Build & compute — creates entries, classifies connections, computes
  *           branches, merges, incoming connections, active lanes,
  *           pass-through sets, and hasLineAbove
- * Pass 3:   hasLineBelow — requires next moment's activeLanes snapshot
+ * Pass 3:   hasLineBelow — requires next event's activeLanes snapshot
  */
-function processMoments(moments: Moment[]): ProcessedMoment[] {
+function processEvents(events: TimelineEvent[]): ProcessedEvent[] {
     // =====================================================================
     // PASS 1: Lane Assignment (top-to-bottom, newest to oldest)
     //
     // Lane inheritance rules:
-    // - A moment's primary parent inherits the moment's lane (same column).
+    // - An event's primary parent inherits the event's lane (same column).
     // - Ancillary parents get new lanes.
     // - Primary assignments supersede earlier ancillary assignments.
     // - If two children claim the same primary parent, the second is warned
@@ -178,15 +183,15 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         freeLanes.push(oldLane);
     }
 
-    for (let i = 0; i < moments.length; i++) {
-        const moment = moments[i];
-        const primaryParent = moment.parent;
-        const ancillaryParents = moment.ancillaryParents || [];
+    for (let i = 0; i < events.length; i++) {
+        const event = events[i];
+        const primaryParent = event.parent;
+        const ancillaryParents = event.ancillaryParents || [];
 
-        if (laneMap[moment.id] === undefined) {
-            laneMap[moment.id] = allocLane();
+        if (laneMap[event.id] === undefined) {
+            laneMap[event.id] = allocLane();
         }
-        const lane = laneMap[moment.id];
+        const lane = laneMap[event.id];
 
         // Process primary parent
         if (primaryParent) {
@@ -194,8 +199,8 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
                 laneMap[primaryParent] = lane;
                 assignedBy[primaryParent] = 'primary';
             } else if (assignedBy[primaryParent] === 'primary' && laneMap[primaryParent] !== lane) {
-                console.warn(`Moment "${moment.id}": primary parent "${primaryParent}" was already claimed as primary by another child. Treating as ancillary.`);
-                demotedPrimary[moment.id] = primaryParent;
+                console.warn(`Event "${event.id}": primary parent "${primaryParent}" was already claimed as primary by another child. Treating as ancillary.`);
+                demotedPrimary[event.id] = primaryParent;
             } else if (assignedBy[primaryParent] === 'merge') {
                 if (laneMap[primaryParent] !== lane) {
                     reassignLane(primaryParent, laneMap[primaryParent], lane);
@@ -214,11 +219,11 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         }
     }
 
-    // Build moment index lookup (used by compaction, collapsing, and
+    // Build event index lookup (used by compaction, collapsing, and
     // collision detection below).
-    const momentIndex: Record<string, number> = {};
-    for (let i = 0; i < moments.length; i++) {
-        momentIndex[moments[i].id] = i;
+    const eventIndex: Record<string, number> = {};
+    for (let i = 0; i < events.length; i++) {
+        eventIndex[events[i].id] = i;
     }
 
     // Compact lanes: remove gaps in lane numbering caused by lanes that
@@ -239,8 +244,8 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     // to minimize graph width (interval graph coloring). Two lanes can
     // share a column if their active row ranges don't overlap.
     const laneRanges: Record<number, [number, number]> = {};
-    for (let i = 0; i < moments.length; i++) {
-        const lane = laneMap[moments[i].id];
+    for (let i = 0; i < events.length; i++) {
+        const lane = laneMap[events[i].id];
         if (laneRanges[lane] === undefined) {
             laneRanges[lane] = [i, i];
         } else {
@@ -252,13 +257,13 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     // Extend ranges for cross-lane connections: branches extend the
     // child's lane to the parent's row, merges extend the parent's
     // lane to the child's row.
-    for (const moment of moments) {
-        const childLane = laneMap[moment.id];
-        const childIdx = momentIndex[moment.id];
-        const parents = [...(moment.ancillaryParents || [])];
-        let effectivePrimary: string | null | undefined = moment.parent;
-        if (demotedPrimary[moment.id]) {
-            parents.unshift(demotedPrimary[moment.id]);
+    for (const event of events) {
+        const childLane = laneMap[event.id];
+        const childIdx = eventIndex[event.id];
+        const parents = [...(event.ancillaryParents || [])];
+        let effectivePrimary: string | null | undefined = event.parent;
+        if (demotedPrimary[event.id]) {
+            parents.unshift(demotedPrimary[event.id]);
             effectivePrimary = null;
         }
         if (effectivePrimary) parents.push(effectivePrimary);
@@ -266,7 +271,7 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         for (const parentId of parents) {
             const parentLane = laneMap[parentId];
             if (parentLane === undefined || parentLane === childLane) continue;
-            const parentIdx = momentIndex[parentId];
+            const parentIdx = eventIndex[parentId];
             if (parentLane < childLane) {
                 laneRanges[childLane][1] = Math.max(laneRanges[childLane][1], parentIdx);
             } else {
@@ -350,7 +355,7 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     // PASS 1.5: Collision Detection & Resolution
     //
     // Detects connections whose visual lines pass through intervening
-    // moments on the same lane. Three resolution strategies:
+    // events on the same lane. Three resolution strategies:
     //
     // 1. Rerouted branch: child's lane has collision but parent's lane
     //    is clear → use parent's lane instead. Adds an incoming
@@ -375,42 +380,42 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     }
 
     const connections: ConnectionInfo[] = [];
-    for (const moment of moments) {
-        const effectiveAncillary = [...(moment.ancillaryParents || [])];
-        let effectivePrimary: string | null | undefined = moment.parent;
-        if (demotedPrimary[moment.id]) {
-            effectiveAncillary.unshift(demotedPrimary[moment.id]);
+    for (const event of events) {
+        const effectiveAncillary = [...(event.ancillaryParents || [])];
+        let effectivePrimary: string | null | undefined = event.parent;
+        if (demotedPrimary[event.id]) {
+            effectiveAncillary.unshift(demotedPrimary[event.id]);
             effectivePrimary = null;
         }
 
         for (const parentId of effectiveAncillary) {
-            if (laneMap[parentId] !== undefined && laneMap[parentId] !== laneMap[moment.id]) {
+            if (laneMap[parentId] !== undefined && laneMap[parentId] !== laneMap[event.id]) {
                 connections.push({
-                    childId: moment.id,
+                    childId: event.id,
                     parentId,
-                    childIndex: momentIndex[moment.id],
-                    parentIndex: momentIndex[parentId],
+                    childIndex: eventIndex[event.id],
+                    parentIndex: eventIndex[parentId],
                 });
             }
         }
 
         if (effectivePrimary && laneMap[effectivePrimary] !== undefined
-            && laneMap[effectivePrimary] !== laneMap[moment.id]) {
+            && laneMap[effectivePrimary] !== laneMap[event.id]) {
             connections.push({
-                childId: moment.id,
+                childId: event.id,
                 parentId: effectivePrimary,
-                childIndex: momentIndex[moment.id],
-                parentIndex: momentIndex[effectivePrimary],
+                childIndex: eventIndex[event.id],
+                parentIndex: eventIndex[effectivePrimary],
             });
         }
     }
 
-    /** Returns true if any moment between indexA and indexB sits on connectingLane. */
+    /** Returns true if any event between indexA and indexB sits on connectingLane. */
     function hasCollision(connectingLane: number, indexA: number, indexB: number): boolean {
         const minIdx = Math.min(indexA, indexB);
         const maxIdx = Math.max(indexA, indexB);
         for (let i = minIdx + 1; i < maxIdx; i++) {
-            if (laneMap[moments[i].id] === connectingLane) return true;
+            if (laneMap[events[i].id] === connectingLane) return true;
         }
         return false;
     }
@@ -436,15 +441,15 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     // - routedConnections: maps to routing lane number (strategy 3)
     // - reroutedBranches: branches using parent's lane instead (strategy 1)
     // - relocatedMerges: merges with curve moved to parent's row (strategy 2)
-    // - incomingMap: incoming connections to add to target moments
+    // - incomingMap: incoming connections to add to target events
     const routedConnections: Record<string, number> = {};
     const reroutedBranches: Set<string> = new Set();
     const relocatedMerges: Set<string> = new Set();
     const incomingMap: Record<string, IncomingConnection[]> = {};
 
-    function addIncoming(momentId: string, lane: number, fromAbove: boolean) {
-        if (!incomingMap[momentId]) incomingMap[momentId] = [];
-        incomingMap[momentId].push({ lane, fromAbove, terminates: false });
+    function addIncoming(eventId: string, lane: number, fromAbove: boolean) {
+        if (!incomingMap[eventId]) incomingMap[eventId] = [];
+        incomingMap[eventId].push({ lane, fromAbove, terminates: false });
     }
 
     // Process branch collisions
@@ -498,14 +503,14 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     }
 
     // Extend lane segments for connection endpoints. Each extension
-    // grows the segment containing the child moment to reach the
+    // grows the segment containing the child event to reach the
     // parent's row, ensuring through-lines span the full connection.
 
     // Routing lanes: create a new segment spanning child to parent
     for (const [key, routingLane] of Object.entries(routedConnections)) {
         const [childId, parentId] = key.split(':');
-        const childIdx = momentIndex[childId];
-        const parentIdx = momentIndex[parentId];
+        const childIdx = eventIndex[childId];
+        const parentIdx = eventIndex[parentId];
         extendSegment(routingLane, childIdx, parentIdx);
     }
 
@@ -513,8 +518,8 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     for (const key of relocatedMerges) {
         const [childId, parentId] = key.split(':');
         const childLane = laneMap[childId];
-        const childIdx = momentIndex[childId];
-        const parentIdx = momentIndex[parentId];
+        const childIdx = eventIndex[childId];
+        const parentIdx = eventIndex[parentId];
         extendSegment(childLane, childIdx, parentIdx);
     }
 
@@ -536,8 +541,8 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     }
 
     // Compute terminates for incoming connections using segment data
-    for (const [momentId, conns] of Object.entries(incomingMap)) {
-        const targetIndex = momentIndex[momentId];
+    for (const [eventId, conns] of Object.entries(incomingMap)) {
+        const targetIndex = eventIndex[eventId];
         for (const conn of conns) {
             const segEnd = getSegmentEnd(conn.lane, targetIndex);
             conn.terminates = segEnd <= targetIndex;
@@ -549,18 +554,18 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
     //         active lanes, passThroughMerges, and hasLineAbove
     // =====================================================================
 
-    const lookup: Record<string, ProcessedMoment> = {};
+    const lookup: Record<string, ProcessedEvent> = {};
     const currentActiveLanes: boolean[] = [];
 
-    // Pre-create all entries so branches can be pushed to parent moments
+    // Pre-create all entries so branches can be pushed to parent events
     // (parents appear later in the array but need their entry to exist)
-    for (const moment of moments) {
-        lookup[moment.id] = {
-            ...moment,
-            lane: laneMap[moment.id],
+    for (const event of events) {
+        lookup[event.id] = {
+            ...event,
+            lane: laneMap[event.id],
             branches: [],
             mergesFromAbove: [],
-            incomingConnections: incomingMap[moment.id] || [],
+            incomingConnections: incomingMap[event.id] || [],
             activeLanes: [],
             passThroughMerges: [],
             passThroughBranches: [],
@@ -570,24 +575,24 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         };
     }
 
-    for (let i = 0; i < moments.length; i++) {
-        const moment = moments[i];
-        const processed = lookup[moment.id];
+    for (let i = 0; i < events.length; i++) {
+        const event = events[i];
+        const processed = lookup[event.id];
         const lane = processed.lane;
 
         // Determine effective parents (accounting for demoted primaries)
-        let effectivePrimary = moment.parent;
-        const effectiveAncillary = [...(moment.ancillaryParents || [])];
+        let effectivePrimary = event.parent;
+        const effectiveAncillary = [...(event.ancillaryParents || [])];
 
-        if (demotedPrimary[moment.id]) {
-            effectiveAncillary.unshift(demotedPrimary[moment.id]);
+        if (demotedPrimary[event.id]) {
+            effectiveAncillary.unshift(demotedPrimary[event.id]);
             effectivePrimary = null;
         }
 
         // Classify ancillary connections by direction
         for (const ancParentId of effectiveAncillary) {
             const parentLane = laneMap[ancParentId];
-            const connKey = `${moment.id}:${ancParentId}`;
+            const connKey = `${event.id}:${ancParentId}`;
 
             if (parentLane !== undefined && parentLane !== lane) {
                 if (routedConnections[connKey] !== undefined) {
@@ -597,7 +602,7 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
                         lookup[ancParentId].branches.push(routingLane);
                     }
                 } else if (reroutedBranches.has(connKey) || relocatedMerges.has(connKey)) {
-                    // Rerouted: skip (handled by incoming on target moment)
+                    // Rerouted: skip (handled by incoming on target event)
                 } else if (parentLane > lane) {
                     processed.mergesFromAbove.push({ parentId: ancParentId, lane: parentLane });
                 } else if (lookup[ancParentId]) {
@@ -609,7 +614,7 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         // Primary parent on different lane → branch on parent
         if (effectivePrimary && laneMap[effectivePrimary] !== undefined) {
             const parentLane = laneMap[effectivePrimary];
-            const connKey = `${moment.id}:${effectivePrimary}`;
+            const connKey = `${event.id}:${effectivePrimary}`;
 
             if (parentLane !== lane && lookup[effectivePrimary]) {
                 if (routedConnections[connKey] !== undefined) {
@@ -651,7 +656,7 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
         // active (pre-deactivation) even though a segment gap exists. Check
         // that the previous row's segment actually reaches this row.
         if (i > 0) {
-            const prevActiveLanes = lookup[moments[i - 1].id].activeLanes;
+            const prevActiveLanes = lookup[events[i - 1].id].activeLanes;
             processed.hasLineAbove = !!prevActiveLanes[lane];
             if (processed.hasLineAbove && getSegmentEnd(lane, i - 1) < i) {
                 processed.hasLineAbove = false;
@@ -681,244 +686,327 @@ function processMoments(moments: Moment[]): ProcessedMoment[] {
 
     // =====================================================================
     // PASS 3: Compute hasLineBelow
-    // Requires the next moment's activeLanes snapshot, which wasn't
+    // Requires the next event's activeLanes snapshot, which wasn't
     // available during pass 2.
     // =====================================================================
 
-    for (let i = 0; i < moments.length - 1; i++) {
-        const processed = lookup[moments[i].id];
-        const nextActiveLanes = lookup[moments[i + 1].id].activeLanes;
+    for (let i = 0; i < events.length - 1; i++) {
+        const processed = lookup[events[i].id];
+        const nextActiveLanes = lookup[events[i + 1].id].activeLanes;
         processed.hasLineBelow = !!nextActiveLanes[processed.lane];
     }
 
-    return moments.map(m => lookup[m.id]);
+    return events.map(m => lookup[m.id]);
 }
 
 // =============================================================================
-// MOMENT NODE COMPONENT
+// MOMENT NODE COMPONENTS
 // =============================================================================
 
-interface MomentNodeProps {
-    moment: ProcessedMoment;
+interface EventNodeProps {
+    event: ProcessedEvent;
     index: number;
     getLaneClass: (laneIndex: number) => string;
+    svgWidth: number;
+}
+
+function computeSvgWidth(event: ProcessedEvent): number {
+    const { lane, branches, mergesFromAbove, incomingConnections, activeLanes } = event;
+    const mergeLanes = mergesFromAbove.map(c => c.lane);
+    const incomingLanes = incomingConnections.map(c => c.lane);
+    const maxLane = Math.max(lane, ...branches, ...mergeLanes, ...incomingLanes, activeLanes.length - 1);
+    return (maxLane + 1) * LANE_WIDTH;
 }
 
 /**
- * Renders the SVG node column for a single moment row.
- *
- * Uses two SVGs stacked vertically:
- * 1. Static SVG (fixed 20px) — curves, through-lines, mask, and circle in a
- *    fixed viewBox so curves stay crisp.
- * 2. Variable SVG (flex: 1) — straight through-lines with preserveAspectRatio="none"
- *    that stretch to fill any extra row height from taller content.
+ * Renders the fixed 20px static SVG with curves, through-lines, mask, and circle.
  */
-function MomentNode({ moment, index, getLaneClass }: MomentNodeProps) {
+function EventNodeStatic({ event, index, getLaneClass, svgWidth }: EventNodeProps) {
     const { lane, branches, mergesFromAbove, incomingConnections, activeLanes,
         passThroughMerges, passThroughBranches, passThroughIncoming,
-        hasLineAbove, hasLineBelow } = moment;
+        hasLineAbove, hasLineBelow } = event;
 
     const mergeLanes = mergesFromAbove.map(c => c.lane);
     const incomingLanes = incomingConnections.map(c => c.lane);
     const offset = lane * LANE_WIDTH;
-    const maxLane = Math.max(lane, ...branches, ...mergeLanes, ...incomingLanes, activeLanes.length - 1);
-    const svgWidth = (maxLane + 1) * LANE_WIDTH;
     const maskId = `cutout-${index}`;
-
-    // Render highest-lane-first so lower lanes draw on top
     const sortedBranches = [...branches].sort((a, b) => b - a);
 
     return (
-        <div
-            className="ra-timeline-moment-node-container"
-            style={{ width: svgWidth, minHeight: 20, position: 'relative', overflow: 'hidden' }}
+        <svg
+            width={svgWidth}
+            height="20"
+            viewBox={`0 0 ${svgWidth} 20`}
+            style={{ display: 'block', flexShrink: 0 }}
         >
-            {/* Static SVG: fixed 20px height with all complex graphics */}
-            <svg
-                width={svgWidth}
-                height="20"
-                viewBox={`0 0 ${svgWidth} 20`}
-                style={{ display: 'block', flexShrink: 0 }}
-            >
-                <defs>
-                    {buildCutoutMask(maskId, offset, svgWidth)}
-                </defs>
+            <defs>
+                {buildCutoutMask(maskId, offset, svgWidth)}
+            </defs>
 
-                {/* Masked group: prevents lines/curves from drawing over the circle */}
-                <g mask={`url(#${maskId})`}>
+            <g mask={`url(#${maskId})`}>
+                {activeLanes.map((active, laneIndex) => {
+                    if (!active) return null;
+                    const isOwnLane = laneIndex === lane;
+                    const isBranch = branches.includes(laneIndex);
+                    const isMerge = mergeLanes.includes(laneIndex);
+                    const isIncoming = incomingLanes.includes(laneIndex);
+                    const isPassThrough = passThroughMerges.includes(laneIndex)
+                        || passThroughBranches.includes(laneIndex)
+                        || passThroughIncoming.includes(laneIndex);
 
-                    {/* Through-lines: vertical lines for lanes passing through this row.
-                        Skipped for branch/merge lanes (curve handles the connection)
-                        unless the lane is a pass-through that continues both directions. */}
-                    {activeLanes.map((active, laneIndex) => {
-                        if (!active) return null;
-                        const isOwnLane = laneIndex === lane;
-                        const isBranch = branches.includes(laneIndex);
-                        const isMerge = mergeLanes.includes(laneIndex);
-                        const isIncoming = incomingLanes.includes(laneIndex);
-                        const isPassThrough = passThroughMerges.includes(laneIndex)
-                            || passThroughBranches.includes(laneIndex)
-                            || passThroughIncoming.includes(laneIndex);
+                    if (isOwnLane && !hasLineAbove && !hasLineBelow) return null;
 
-                        if (isOwnLane && !hasLineAbove && !hasLineBelow) return null;
+                    let y1 = "0";
+                    let y2 = "20";
+                    if (isOwnLane && !hasLineAbove) y1 = "10";
+                    if (isOwnLane && !hasLineBelow) y2 = "10";
 
-                        let y1 = "0";
-                        let y2 = "20";
-                        if (isOwnLane && !hasLineAbove) y1 = "10";
-                        if (isOwnLane && !hasLineBelow) y2 = "10";
+                    if ((isBranch || isMerge || isIncoming) && !isPassThrough) return null;
 
-                        if ((isBranch || isMerge || isIncoming) && !isPassThrough) return null;
+                    if (isIncoming && incomingConnections.some(
+                        c => c.lane === laneIndex && c.terminates
+                    )) return null;
+                    if (y1 === y2) return null;
 
-                        // Terminating incoming: skip through-line even if
-                        // pass-through — the curve handles the visual and
-                        // the lane doesn't continue below.
-                        if (isIncoming && incomingConnections.some(
-                            c => c.lane === laneIndex && c.terminates
-                        )) return null;
-                        if (y1 === y2) return null;
+                    return (
+                        <g key={`through-${laneIndex}`} className={getLaneClass(laneIndex)}>
+                            <line
+                                x1={laneIndex * LANE_WIDTH + LANE_CENTER}
+                                y1={y1}
+                                x2={laneIndex * LANE_WIDTH + LANE_CENTER}
+                                y2={y2}
+                                stroke={LINE_STROKE}
+                                strokeWidth="2"
+                            />
+                        </g>
+                    );
+                })}
 
-                        return (
-                            <g key={`through-${laneIndex}`} className={getLaneClass(laneIndex)}>
+                {sortedBranches.map((branchLane) => {
+                    const curveStartX = (branchLane - 1) * LANE_WIDTH + LANE_CENTER;
+                    const curveEndX = branchLane * LANE_WIDTH + LANE_CENTER;
+
+                    return (
+                        <g key={`branch-${branchLane}`} className={getLaneClass(branchLane)}>
+                            {branchLane - lane > 1 && (
                                 <line
-                                    x1={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                    y1={y1}
-                                    x2={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                    y2={y2}
+                                    x1={offset + LANE_CENTER}
+                                    y1="10"
+                                    x2={curveStartX}
+                                    y2="10"
                                     stroke={LINE_STROKE}
                                     strokeWidth="2"
                                 />
-                            </g>
-                        );
-                    })}
+                            )}
+                            <path
+                                d={`M ${curveStartX},10 Q ${curveEndX},10 ${curveEndX},0`}
+                                stroke={LINE_STROKE}
+                                strokeWidth="2"
+                                fill="none"
+                            />
+                        </g>
+                    );
+                })}
 
-                    {/* Branch curves: from this moment's circle (y=10) upward to
-                        the branch lane (y=0). Horizontal bridge added when > 1 lane away. */}
-                    {sortedBranches.map((branchLane) => {
-                        const curveStartX = (branchLane - 1) * LANE_WIDTH + LANE_CENTER;
-                        const curveEndX = branchLane * LANE_WIDTH + LANE_CENTER;
+                {[...mergesFromAbove].sort((a, b) => b.lane - a.lane).map((conn) => {
+                    const mergeLane = conn.lane;
+                    const curveStartX = mergeLane * LANE_WIDTH + LANE_CENTER;
+                    const curveEndX = (mergeLane - 1) * LANE_WIDTH + LANE_CENTER;
 
-                        return (
-                            <g key={`branch-${branchLane}`} className={getLaneClass(branchLane)}>
-                                {branchLane - lane > 1 && (
-                                    <line
-                                        x1={offset + LANE_CENTER}
-                                        y1="10"
-                                        x2={curveStartX}
-                                        y2="10"
-                                        stroke={LINE_STROKE}
-                                        strokeWidth="2"
-                                    />
-                                )}
-                                <path
-                                    d={`M ${curveStartX},10 Q ${curveEndX},10 ${curveEndX},0`}
-                                    stroke={LINE_STROKE}
-                                    strokeWidth="2"
-                                    fill="none"
-                                />
-                            </g>
-                        );
-                    })}
-
-                    {/* Merge curves from above: come down from the parent's lane (y=20)
-                        and turn toward this moment's circle. Rendered highest-first. */}
-                    {[...mergesFromAbove].sort((a, b) => b.lane - a.lane).map((conn) => {
-                        const mergeLane = conn.lane;
-                        const curveStartX = mergeLane * LANE_WIDTH + LANE_CENTER;
-                        const curveEndX = (mergeLane - 1) * LANE_WIDTH + LANE_CENTER;
-
-                        return (
-                            <g key={`merge-above-${mergeLane}`} className={getLaneClass(mergeLane)}>
-                                <path
-                                    d={`M ${curveStartX},20 Q ${curveStartX},10 ${curveEndX},10`}
-                                    stroke={LINE_STROKE}
-                                    strokeWidth="2"
-                                    fill="none"
-                                />
-                                {mergeLane - lane > 1 && (
-                                    <line
-                                        x1={curveEndX}
-                                        y1="10"
-                                        x2={offset + LANE_CENTER}
-                                        y2="10"
-                                        stroke={LINE_STROKE}
-                                        strokeWidth="2"
-                                    />
-                                )}
-                            </g>
-                        );
-                    })}
-
-                    {/* Incoming connections: curves from routing lanes or extended child
-                        lanes arriving at this moment's circle. */}
-                    {incomingConnections.map((conn) => {
-                        const incLane = conn.lane;
-                        const incX = incLane * LANE_WIDTH + LANE_CENTER;
-                        const startY = conn.fromAbove ? 0 : 20;
-                        // Adjacent lane: one step toward this moment's lane
-                        const adjacentLane = incLane < lane ? incLane + 1 : incLane - 1;
-                        const adjacentX = adjacentLane * LANE_WIDTH + LANE_CENTER;
-
-                        return (
-                            <g key={`incoming-${incLane}`} className={getLaneClass(incLane)}>
-                                <path
-                                    d={`M ${incX},${startY} Q ${incX},10 ${adjacentX},10`}
-                                    stroke={LINE_STROKE}
-                                    strokeWidth="2"
-                                    fill="none"
-                                />
-                                {Math.abs(incLane - lane) > 1 && (
-                                    <line
-                                        x1={adjacentX}
-                                        y1="10"
-                                        x2={offset + LANE_CENTER}
-                                        y2="10"
-                                        stroke={LINE_STROKE}
-                                        strokeWidth="2"
-                                    />
-                                )}
-                            </g>
-                        );
-                    })}
-                </g>
-
-                <title>{moment.id}</title>
-
-                {/* Circle rendered outside the mask so it draws on top */}
-                <g className={getLaneClass(lane)}>
-                    <circle cx={offset + LANE_CENTER} cy="10" r="4" fill={CIRCLE_FILL} />
-                </g>
-            </svg>
-
-            {/* Variable SVG: straight through-lines that stretch to fill extra row height.
-                Uses preserveAspectRatio="none" so lines extend with the content. */}
-            <svg
-                viewBox={`0 0 ${svgWidth} 20`}
-                preserveAspectRatio="none"
-                style={{ position: 'absolute', top: 20, left: 0, width: svgWidth, height: 'calc(100% - 20px)', display: 'block' }}
-            >
-                    {activeLanes.map((active, laneIndex) => {
-                        if (!active) return null;
-                        if (branches.includes(laneIndex) && !passThroughBranches.includes(laneIndex)) return null;
-                        // Incoming lanes that terminate here have no through-line below
-                        const isTerminating = incomingConnections.some(
-                            c => c.lane === laneIndex && c.terminates
-                        );
-                        if (isTerminating) return null;
-                        if (laneIndex === lane && !hasLineBelow) return null;
-                        return (
-                            <g key={`var-${laneIndex}`} className={getLaneClass(laneIndex)}>
+                    return (
+                        <g key={`merge-above-${mergeLane}`} className={getLaneClass(mergeLane)}>
+                            <path
+                                d={`M ${curveStartX},20 Q ${curveStartX},10 ${curveEndX},10`}
+                                stroke={LINE_STROKE}
+                                strokeWidth="2"
+                                fill="none"
+                            />
+                            {mergeLane - lane > 1 && (
                                 <line
-                                    x1={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                    y1="0"
-                                    x2={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                    y2="20"
+                                    x1={curveEndX}
+                                    y1="10"
+                                    x2={offset + LANE_CENTER}
+                                    y2="10"
                                     stroke={LINE_STROKE}
                                     strokeWidth="2"
                                 />
-                            </g>
-                        );
-                    })}
-                </svg>
+                            )}
+                        </g>
+                    );
+                })}
+
+                {incomingConnections.map((conn) => {
+                    const incLane = conn.lane;
+                    const incX = incLane * LANE_WIDTH + LANE_CENTER;
+                    const startY = conn.fromAbove ? 0 : 20;
+                    const adjacentLane = incLane < lane ? incLane + 1 : incLane - 1;
+                    const adjacentX = adjacentLane * LANE_WIDTH + LANE_CENTER;
+
+                    return (
+                        <g key={`incoming-${incLane}`} className={getLaneClass(incLane)}>
+                            <path
+                                d={`M ${incX},${startY} Q ${incX},10 ${adjacentX},10`}
+                                stroke={LINE_STROKE}
+                                strokeWidth="2"
+                                fill="none"
+                            />
+                            {Math.abs(incLane - lane) > 1 && (
+                                <line
+                                    x1={adjacentX}
+                                    y1="10"
+                                    x2={offset + LANE_CENTER}
+                                    y2="10"
+                                    stroke={LINE_STROKE}
+                                    strokeWidth="2"
+                                />
+                            )}
+                        </g>
+                    );
+                })}
+            </g>
+
+            <title>{event.id}</title>
+
+            <g className={getLaneClass(lane)}>
+                <circle cx={offset + LANE_CENTER} cy="10" r="4" fill={CIRCLE_FILL} />
+            </g>
+        </svg>
+    );
+}
+
+/**
+ * Renders the variable SVG with straight through-lines that stretch
+ * to fill extra row height from taller content.
+ */
+function EventNodeVariable({ event, getLaneClass, svgWidth }: Omit<EventNodeProps, 'index'>) {
+    const { lane, branches, incomingConnections, activeLanes,
+        passThroughBranches, hasLineBelow } = event;
+
+    return (
+        <svg
+            viewBox={`0 0 ${svgWidth} 20`}
+            preserveAspectRatio="none"
+            style={{ position: 'absolute', top: 20, left: 0, width: svgWidth, height: 'calc(100% - 20px)', display: 'block' }}
+        >
+                {activeLanes.map((active, laneIndex) => {
+                    if (!active) return null;
+                    if (branches.includes(laneIndex) && !passThroughBranches.includes(laneIndex)) return null;
+                    const isTerminating = incomingConnections.some(
+                        c => c.lane === laneIndex && c.terminates
+                    );
+                    if (isTerminating) return null;
+                    if (laneIndex === lane && !hasLineBelow) return null;
+                    return (
+                        <g key={`var-${laneIndex}`} className={getLaneClass(laneIndex)}>
+                            <line
+                                x1={laneIndex * LANE_WIDTH + LANE_CENTER}
+                                y1="0"
+                                x2={laneIndex * LANE_WIDTH + LANE_CENTER}
+                                y2="20"
+                                stroke={LINE_STROKE}
+                                strokeWidth="2"
+                            />
+                        </g>
+                    );
+                })}
+        </svg>
+    );
+}
+
+// =============================================================================
+// TIMELINE STEP COMPONENT
+// =============================================================================
+
+interface TimelineStepProps {
+    event: ProcessedEvent;
+    index: number;
+    getLaneClass: (laneIndex: number) => string;
+    renderEvent?: (event: TimelineEvent, index: number) => React.ReactNode;
+    expandable?: boolean;
+}
+
+function TimelineStep({ event, index, getLaneClass, renderEvent, expandable }: TimelineStepProps) {
+    const [isExpanded, setIsExpanded] = useState(!expandable);
+    const [isHovered, setIsHovered] = useState(false);
+    const hasMountedRef = useRef(false);
+
+    useEffect(() => {
+        hasMountedRef.current = true;
+    }, []);
+
+    const svgWidth = computeSvgWidth(event);
+    const hasContent = !!renderEvent;
+
+    const handleToggle = () => {
+        if (expandable) setIsExpanded(prev => !prev);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (expandable && e.key === 'Enter') {
+            e.preventDefault();
+            setIsExpanded(prev => !prev);
+        }
+    };
+
+    return (
+        <div
+            className="ra-timeline-step"
+            style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}
+        >
+            {/* Node column: both SVGs, stretches to full step height */}
+            <div
+                style={{ width: svgWidth, minHeight: 20, position: 'relative', overflow: 'hidden' }}
+            >
+                <EventNodeStatic event={event} index={index} getLaneClass={getLaneClass} svgWidth={svgWidth} />
+                {hasContent && (
+                    <EventNodeVariable event={event} getLaneClass={getLaneClass} svgWidth={svgWidth} />
+                )}
+            </div>
+
+            {/* Content column: title header + collapsible body */}
+            <div style={{ flex: 1 }}>
+                <div
+                    className="ra-timeline-step-header"
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        cursor: expandable ? 'pointer' : 'default',
+                        backgroundColor: (expandable && isHovered) ? '#f0f0f0' : 'transparent',
+                        borderRadius: expandable ? 5 : 0,
+                    }}
+                    onClick={expandable ? handleToggle : undefined}
+                    onMouseEnter={expandable ? () => setIsHovered(true) : undefined}
+                    onMouseLeave={expandable ? () => setIsHovered(false) : undefined}
+                    onKeyDown={expandable ? handleKeyDown : undefined}
+                    tabIndex={expandable ? 0 : undefined}
+                    role={expandable ? 'button' : undefined}
+                    aria-expanded={expandable ? isExpanded : undefined}
+                >
+                    {event.title != null && (
+                        <div className="ra-timeline-event-title">
+                            {event.title}
+                        </div>
+                    )}
+                </div>
+
+                {hasContent && (
+                    <div
+                        className="ra-timeline-step-body"
+                        style={{
+                            display: 'grid',
+                            gridTemplateRows: isExpanded ? '1fr' : '0fr',
+                            transition: hasMountedRef.current ? 'grid-template-rows 1000ms ease' : 'none',
+                        }}
+                    >
+                        <div style={{ overflow: 'hidden' }}>
+                            <div className="ra-timeline-event-content">
+                                {renderEvent(event, index)}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
@@ -929,12 +1017,13 @@ function MomentNode({ moment, index, getLaneClass }: MomentNodeProps) {
 
 function Timeline(props: TimelineProps) {
     const {
-        moments = [],
-        renderMoment,
+        events = [],
+        renderEvent,
+        expandable = false,
         colors = [],
     } = props;
 
-    const processedMoments = useMemo(() => processMoments(moments), [moments]);
+    const processedEvents = useMemo(() => processEvents(events), [events]);
 
     function getLaneClass(laneIndex: number) {
         return `ra-clr-plt-${colors[laneIndex % colors.length]}`;
@@ -942,17 +1031,15 @@ function Timeline(props: TimelineProps) {
 
     return (
         <div className="ra-timeline">
-            {processedMoments.map((moment, index) => (
-                <div
-                    key={moment.id}
-                    className="ra-timeline-step"
-                    style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}
-                >
-                    <MomentNode moment={moment} index={index} getLaneClass={getLaneClass} />
-                    <div className="ra-timeline-moment-content">
-                        {renderMoment(moment, index)}
-                    </div>
-                </div>
+            {processedEvents.map((event, index) => (
+                <TimelineStep
+                    key={event.id}
+                    event={event}
+                    index={index}
+                    getLaneClass={getLaneClass}
+                    renderEvent={renderEvent}
+                    expandable={expandable}
+                />
             ))}
         </div>
     );

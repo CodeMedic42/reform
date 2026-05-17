@@ -112,4 +112,12 @@ export interface ProcessedEventType extends TimelineEventType {
      * traverse the BOTTOM HALF (y=10..20) of any through-line on that lane.
      */
     laneBottomEvents: Record<number, string[]>;
+    /**
+     * For each active lane at this row, the IDs of the events whose edges
+     * cross the GAP between this row and the next row on that lane. Drives
+     * the variable SVG (continuation lines in the expanded body). Unlike
+     * laneBottom/Top, this is NOT suppressed by skipLo/skipHi — the
+     * continuation segment always belongs to every edge passing through it.
+     */
+    laneContinuationEvents: Record<number, string[]>;
 }

@@ -94,6 +94,7 @@ The `processEvents` function transforms raw events into fully rendered data thro
   - At `hi` (not skipped) → `top`
   - At every mid row `lo < r < hi` → both `top` and `bottom`
 - Multiple edges sharing a row × lane × half union their endpoint IDs — so a through-line carrying both the I→CC and K→CC edges shows up with `data-events="I CC K"`.
+- A third array `laneContinuationEvents[lane]` is also populated, capturing the edges that cross the **gap between this row and the next row** on each lane. Attribution here is **unconditional** — `skipLo` / `skipHi` only suppress the static-SVG endpoint halves, not the between-row continuation. For every row `r` in `[lo, hi-1]`, the edge is added. This drives the variable-SVG continuation lines in the expanded body.
 - These arrays drive the `data-events` attributes on rendered through-lines (see Click-to-Highlight below).
 
 ## Visual Rendering
@@ -135,7 +136,7 @@ Each event's node column contains two SVGs stacked vertically:
   - Branch lanes that are not pass-through (they end at this event).
   - Terminating incoming lanes (the lane ends here, no through-line below).
   - The event's own lane if `hasLineBelow` is false.
-- Variable-SVG through-lines tag their `data-events` from the event's `laneBottomEvents[lane]` (the bottom-half attribution of the row above carries through the continuation).
+- Variable-SVG through-lines tag their `data-events` from the event's `laneContinuationEvents[lane]` — the unconditional between-row attribution from Pass 4. Using the continuation arrays (not `laneBottomEvents`) ensures rerouted/routed/relocated edges still highlight their downstream continuation in the body, even though their static-SVG endpoint halves are suppressed by `skipLo`/`skipHi`.
 
 ### Branch Curves
 - Drawn on the **parent** event's row.
@@ -285,7 +286,7 @@ Clicking a node shape highlights it and every line directly connecting it to its
 - `BranchType { lane: number; childId: string }` — a branch curve on a parent event, with the child it leads to.
 - `MergeConnectionType { parentId: string; lane: number }` — a merge curve on a child event, with the ancillary parent it connects to.
 - `IncomingConnectionType { lane: number; fromAbove: boolean; terminates: boolean; otherEventId: string }` — a curve arriving at the event's row from a routing / extended lane, with the event at the far end of the edge.
-- `ProcessedEventType extends TimelineEventType` adds `lane`, `branches`, `mergesFromAbove`, `incomingConnections`, `activeLanes`, `passThroughMerges`, `passThroughBranches`, `passThroughIncoming`, `hasLineAbove`, `hasLineBelow`, `laneTopEvents`, `laneBottomEvents`.
+- `ProcessedEventType extends TimelineEventType` adds `lane`, `branches`, `mergesFromAbove`, `incomingConnections`, `activeLanes`, `passThroughMerges`, `passThroughBranches`, `passThroughIncoming`, `hasLineAbove`, `hasLineBelow`, `laneTopEvents`, `laneBottomEvents`, `laneContinuationEvents`.
 
 ## Known Limitations / Future Work
 - Lane width (`LANE_WIDTH = 12`) and SVG height (20px) are hardcoded constants, not configurable via props.

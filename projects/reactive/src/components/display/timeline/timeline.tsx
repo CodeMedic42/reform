@@ -449,6 +449,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             hasLineBelow: false,
             laneTopEvents: {},
             laneBottomEvents: {},
+            laneContinuationEvents: {},
         };
     }
 
@@ -673,12 +674,14 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         });
     }
 
-    function addEvents(row: number, lane: number, half: 'top' | 'bottom', ids: string[]) {
+    function addEvents(row: number, lane: number, target: 'top' | 'bottom' | 'continuation', ids: string[]) {
         const e = lookup[events[row].id];
-        const target = half === 'top' ? e.laneTopEvents : e.laneBottomEvents;
-        if (!target[lane]) target[lane] = [];
+        const bucket = target === 'top' ? e.laneTopEvents
+                     : target === 'bottom' ? e.laneBottomEvents
+                     : e.laneContinuationEvents;
+        if (!bucket[lane]) bucket[lane] = [];
         for (const id of ids) {
-            if (!target[lane].includes(id)) target[lane].push(id);
+            if (!bucket[lane].includes(id)) bucket[lane].push(id);
         }
     }
 
@@ -693,6 +696,13 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         for (let r = lo + 1; r < hi; r++) {
             addEvents(r, trace.lane, 'top', ids);
             addEvents(r, trace.lane, 'bottom', ids);
+        }
+
+        // Continuation: the edge crosses every row-to-row gap from lo to hi-1.
+        // Attribution is unconditional (skipLo/skipHi only suppress static-SVG
+        // endpoint halves, not the between-row continuation).
+        for (let r = lo; r < hi; r++) {
+            addEvents(r, trace.lane, 'continuation', ids);
         }
     }
 

@@ -11,7 +11,7 @@ function joinEvents(ids: string[] | undefined): string | undefined {
 
 function TimelineEventNodeExtension({ event, getLaneClass, svgWidth }: TimelineEventNodeExtensionProps) {
     const { lane, branches, incomingConnections, activeLanes,
-        passThroughBranches, hasLineBelow, laneBottomEvents } = event;
+        passThroughBranches, hasLineBelow, laneContinuationEvents } = event;
 
     const branchLanes = branches.map(b => b.lane);
 
@@ -32,7 +32,7 @@ function TimelineEventNodeExtension({ event, getLaneClass, svgWidth }: TimelineE
                     if (isTerminating) return null;
                     if (laneIndex === lane && !hasLineBelow) return null;
 
-                    const dataEvents = joinEvents(laneBottomEvents[laneIndex]);
+                    const dataEvents = joinEvents(laneContinuationEvents[laneIndex]);
 
                     return (
                         <g key={`var-${laneIndex}`} className={getLaneClass(laneIndex)}>

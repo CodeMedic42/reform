@@ -9,7 +9,7 @@ const events = [
     { id: 'B', title: 'Event B', parent: 'C',
         ancillaryParents: ['D', 'F']
     },
-    { id: 'BB', title: 'Event BB',
+    { id: 'BB', title: 'Event BB', variant: 'square' as const,
         ancillaryParents: ['C']
     },
     { id: 'C', title: 'Event C', parent: 'H' },
@@ -20,16 +20,16 @@ const events = [
         ]
     },
     { id: 'D', title: 'Event D', parent: 'E' },
-    { id: 'E', title: 'Event E', parent: 'I',
+    { id: 'E', title: 'Event E', parent: 'I', variant: 'triangle' as const,
         ancillaryParents: ['H']
     },
-    { id: 'F', title: 'Event F', parent: 'G',
+    { id: 'F', title: 'Event F', parent: 'G', variant: 'square' as const,
         ancillaryParents: ['H']
     },
     { id: 'G', title: 'Event G',
         ancillaryParents: ['J']
     },
-    { id: 'H', title: 'Event H', parent: 'J' },
+    { id: 'H', title: 'Event H', parent: 'J', variant: 'triangle' as const },
     { id: 'I', title: 'Event I',
         ancillaryParents: ['K']
     },

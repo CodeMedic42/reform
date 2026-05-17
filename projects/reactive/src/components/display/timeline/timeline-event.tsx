@@ -16,9 +16,10 @@ interface TimelineEventProps {
 
 function computeSvgWidth(event: ProcessedEventType): number {
     const { lane, branches, mergesFromAbove, incomingConnections, activeLanes } = event;
+    const branchLanes = branches.map(b => b.lane);
     const mergeLanes = mergesFromAbove.map(c => c.lane);
     const incomingLanes = incomingConnections.map(c => c.lane);
-    const maxLane = Math.max(lane, ...branches, ...mergeLanes, ...incomingLanes, activeLanes.length - 1);
+    const maxLane = Math.max(lane, ...branchLanes, ...mergeLanes, ...incomingLanes, activeLanes.length - 1);
     return (maxLane + 1) * LANE_WIDTH;
 }
 
@@ -34,8 +35,10 @@ function TimelineEvent({ event, index, getLaneClass, renderEvent, expandable }: 
     const svgWidth = computeSvgWidth(event);
     const hasContent = !!renderEvent;
 
-    const handleToggle = () => {
-        if (expandable) setExpanded(prev => !prev);
+    const handleToggle = (e: React.MouseEvent) => {
+        if (!expandable) return;
+        if ((e.target as Element).closest('[data-event-id]')) return;
+        setExpanded(prev => !prev);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {

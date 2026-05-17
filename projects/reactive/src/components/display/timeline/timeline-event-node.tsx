@@ -1,7 +1,9 @@
 import React from 'react';
 import { LANE_WIDTH, LANE_CENTER, LINE_STROKE, CIRCLE_FILL } from './timeline-constants.js';
 
-import type { ProcessedEventType } from './timeline-types.js';
+import type { ProcessedEventType, TimelineEventType } from './timeline-types.js';
+
+type Variant = NonNullable<TimelineEventType['variant']>;
 
 export interface TimelineEventNodeProps {
     event: ProcessedEventType;
@@ -11,15 +13,60 @@ export interface TimelineEventNodeProps {
 }
 
 /**
- * Creates an SVG mask that cuts out a circle around the event's dot,
- * preventing through-lines and curves from drawing over it.
- * Must use maskUnits="userSpaceOnUse" with explicit dimensions for cross-browser compatibility.
+ * Renders the visible node shape. All variants share an 8×8 bounding box
+ * centered at (cx, 10).
  */
-function buildCutoutMask(id: string, offset: number = 0, width: number = LANE_WIDTH) {
+function renderShape(variant: Variant, cx: number, eventId: string) {
+    switch (variant) {
+        case 'square':
+            return <rect x={cx - 4} y={6} width={8} height={8} fill={CIRCLE_FILL} data-event-id={eventId} />;
+        case 'triangle':
+            return <polygon points={`${cx},6 ${cx - 4},14 ${cx + 4},14`} fill={CIRCLE_FILL} data-event-id={eventId} />;
+        case 'circle':
+        default:
+            return <circle cx={cx} cy={10} r={4} fill={CIRCLE_FILL} data-event-id={eventId} />;
+    }
+}
+
+/**
+ * Renders the black cutout shape used inside the mask. 2px larger than the
+ * visible shape on every side so lines visually clear the node.
+ */
+function renderCutout(variant: Variant, cx: number) {
+    switch (variant) {
+        case 'square':
+            return <rect x={cx - 6} y={4} width={12} height={12} fill="black" />;
+        case 'triangle':
+            // Apex (cx, 2) and base (cx ± 7, 16) — slanted sides parallel to
+            // the triangle's edges with ~1.79px perpendicular clearance,
+            // while the bottom keeps the 2px gap.
+            return <polygon points={`${cx},2 ${cx - 7},16 ${cx + 7},16`} fill="black" />;
+        case 'circle':
+        default:
+            return <circle cx={cx} cy={10} r={6} fill="black" />;
+    }
+}
+
+function tagEvents(...ids: Array<string | null | undefined>): string | undefined {
+    const filtered = ids.filter((x): x is string => !!x);
+    return filtered.length > 0 ? filtered.join(' ') : undefined;
+}
+
+function joinEvents(ids: string[] | undefined): string | undefined {
+    return ids && ids.length > 0 ? ids.join(' ') : undefined;
+}
+
+/**
+ * Creates an SVG mask that cuts the event's shape out of through-lines and
+ * curves so they don't draw over the node. Cutout shape matches the visible
+ * variant. Must use maskUnits="userSpaceOnUse" with explicit dimensions for
+ * cross-browser compatibility.
+ */
+function buildCutoutMask(id: string, variant: Variant, cx: number, width: number) {
     return (
         <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width={width} height="20">
             <rect x="0" y="0" width={width} height="20" fill="white" />
-            <circle cx={offset + LANE_CENTER} cy="10" r="6" fill="black" />
+            {renderCutout(variant, cx)}
         </mask>
     );
 }
@@ -27,13 +74,16 @@ function buildCutoutMask(id: string, offset: number = 0, width: number = LANE_WI
 function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEventNodeProps) {
     const { lane, branches, mergesFromAbove, incomingConnections, activeLanes,
         passThroughMerges, passThroughBranches, passThroughIncoming,
-        hasLineAbove, hasLineBelow } = event;
+        hasLineAbove, hasLineBelow, laneTopEvents, laneBottomEvents } = event;
 
+    const branchLanes = branches.map(b => b.lane);
     const mergeLanes = mergesFromAbove.map(c => c.lane);
     const incomingLanes = incomingConnections.map(c => c.lane);
     const offset = lane * LANE_WIDTH;
+    const centerX = offset + LANE_CENTER;
+    const variant: Variant = event.variant ?? 'circle';
     const maskId = `cutout-${index}`;
-    const sortedBranches = [...branches].sort((a, b) => b - a);
+    const sortedBranches = [...branches].sort((a, b) => b.lane - a.lane);
 
     return (
         <svg
@@ -43,14 +93,14 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
             viewBox={`0 0 ${svgWidth} 20`}
         >
             <defs>
-                {buildCutoutMask(maskId, offset, svgWidth)}
+                {buildCutoutMask(maskId, variant, centerX, svgWidth)}
             </defs>
 
             <g mask={`url(#${maskId})`}>
                 {activeLanes.map((active, laneIndex) => {
                     if (!active) return null;
                     const isOwnLane = laneIndex === lane;
-                    const isBranch = branches.includes(laneIndex);
+                    const isBranch = branchLanes.includes(laneIndex);
                     const isMerge = mergeLanes.includes(laneIndex);
                     const isIncoming = incomingLanes.includes(laneIndex);
                     const isPassThrough = passThroughMerges.includes(laneIndex)
@@ -58,39 +108,73 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                         || passThroughIncoming.includes(laneIndex);
 
                     if (isOwnLane && !hasLineAbove && !hasLineBelow) return null;
-
-                    let y1 = "0";
-                    let y2 = "20";
-                    if (isOwnLane && !hasLineAbove) y1 = "10";
-                    if (isOwnLane && !hasLineBelow) y2 = "10";
-
                     if ((isBranch || isMerge || isIncoming) && !isPassThrough) return null;
-
                     if (isIncoming && incomingConnections.some(
                         c => c.lane === laneIndex && c.terminates
                     )) return null;
-                    if (y1 === y2) return null;
+
+                    const renderTop = !isOwnLane || hasLineAbove;
+                    const renderBottom = !isOwnLane || hasLineBelow;
+                    if (!renderTop && !renderBottom) return null;
+
+                    const x = laneIndex * LANE_WIDTH + LANE_CENTER;
+                    const topData = joinEvents(laneTopEvents[laneIndex]);
+                    const bottomData = joinEvents(laneBottomEvents[laneIndex]);
+
+                    // Combine into one line when both halves render with the
+                    // same attribution — avoids redundant DOM nodes.
+                    if (renderTop && renderBottom && topData === bottomData) {
+                        return (
+                            <g key={`through-${laneIndex}`} className={getLaneClass(laneIndex)}>
+                                <line
+                                    x1={x}
+                                    y1="0"
+                                    x2={x}
+                                    y2="20"
+                                    stroke={LINE_STROKE}
+                                    strokeWidth="2"
+                                    data-events={topData}
+                                />
+                            </g>
+                        );
+                    }
 
                     return (
                         <g key={`through-${laneIndex}`} className={getLaneClass(laneIndex)}>
-                            <line
-                                x1={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                y1={y1}
-                                x2={laneIndex * LANE_WIDTH + LANE_CENTER}
-                                y2={y2}
-                                stroke={LINE_STROKE}
-                                strokeWidth="2"
-                            />
+                            {renderTop && (
+                                <line
+                                    x1={x}
+                                    y1="0"
+                                    x2={x}
+                                    y2="10"
+                                    stroke={LINE_STROKE}
+                                    strokeWidth="2"
+                                    data-events={topData}
+                                />
+                            )}
+                            {renderBottom && (
+                                <line
+                                    x1={x}
+                                    y1="10"
+                                    x2={x}
+                                    y2="20"
+                                    stroke={LINE_STROKE}
+                                    strokeWidth="2"
+                                    data-events={bottomData}
+                                />
+                            )}
                         </g>
                     );
                 })}
 
-                {sortedBranches.map((branchLane) => {
+                {sortedBranches.map((branch) => {
+                    const branchLane = branch.lane;
                     const curveStartX = (branchLane - 1) * LANE_WIDTH + LANE_CENTER;
                     const curveEndX = branchLane * LANE_WIDTH + LANE_CENTER;
+                    const dataEvents = tagEvents(event.id, branch.childId);
 
                     return (
-                        <g key={`branch-${branchLane}`} className={getLaneClass(branchLane)}>
+                        <g key={`branch-${branchLane}-${branch.childId}`} className={getLaneClass(branchLane)}>
                             {branchLane - lane > 1 && (
                                 <line
                                     x1={offset + LANE_CENTER}
@@ -99,6 +183,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                                     y2="10"
                                     stroke={LINE_STROKE}
                                     strokeWidth="2"
+                                    data-events={dataEvents}
                                 />
                             )}
                             <path
@@ -106,6 +191,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                                 stroke={LINE_STROKE}
                                 strokeWidth="2"
                                 fill="none"
+                                data-events={dataEvents}
                             />
                         </g>
                     );
@@ -115,6 +201,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                     const mergeLane = conn.lane;
                     const curveStartX = mergeLane * LANE_WIDTH + LANE_CENTER;
                     const curveEndX = (mergeLane - 1) * LANE_WIDTH + LANE_CENTER;
+                    const dataEvents = tagEvents(event.id, conn.parentId);
 
                     return (
                         <g key={`merge-above-${mergeLane}`} className={getLaneClass(mergeLane)}>
@@ -123,6 +210,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                                 stroke={LINE_STROKE}
                                 strokeWidth="2"
                                 fill="none"
+                                data-events={dataEvents}
                             />
                             {mergeLane - lane > 1 && (
                                 <line
@@ -132,6 +220,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                                     y2="10"
                                     stroke={LINE_STROKE}
                                     strokeWidth="2"
+                                    data-events={dataEvents}
                                 />
                             )}
                         </g>
@@ -144,6 +233,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                     const startY = conn.fromAbove ? 0 : 20;
                     const adjacentLane = incLane < lane ? incLane + 1 : incLane - 1;
                     const adjacentX = adjacentLane * LANE_WIDTH + LANE_CENTER;
+                    const dataEvents = tagEvents(event.id, conn.otherEventId);
 
                     return (
                         <g key={`incoming-${incLane}`} className={getLaneClass(incLane)}>
@@ -152,6 +242,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                                 stroke={LINE_STROKE}
                                 strokeWidth="2"
                                 fill="none"
+                                data-events={dataEvents}
                             />
                             {Math.abs(incLane - lane) > 1 && (
                                 <line
@@ -161,6 +252,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                                     y2="10"
                                     stroke={LINE_STROKE}
                                     strokeWidth="2"
+                                    data-events={dataEvents}
                                 />
                             )}
                         </g>
@@ -171,7 +263,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
             <title>{event.id}</title>
 
             <g className={getLaneClass(lane)}>
-                <circle cx={offset + LANE_CENTER} cy="10" r="4" fill={CIRCLE_FILL} />
+                {renderShape(variant, centerX, event.id)}
             </g>
         </svg>
     );

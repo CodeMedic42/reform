@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import classNames from 'classnames';
 import TimelineEvent from './timeline-event.js';
 
@@ -322,9 +322,9 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
     const relocatedMerges: Set<string> = new Set();
     const incomingMap: Record<string, IncomingConnectionType[]> = {};
 
-    function addIncoming(eventId: string, lane: number, fromAbove: boolean) {
+    function addIncoming(eventId: string, lane: number, fromAbove: boolean, otherEventId: string) {
         if (!incomingMap[eventId]) incomingMap[eventId] = [];
-        incomingMap[eventId].push({ lane, fromAbove, terminates: false });
+        incomingMap[eventId].push({ lane, fromAbove, terminates: false, otherEventId });
     }
 
     // Process branch collisions
@@ -345,13 +345,13 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                     if (!hasCollision(parentLane, conn.childIndex, conn.parentIndex)) {
                         // Parent's lane is clear — use it instead
                         reroutedBranches.add(key);
-                        addIncoming(conn.childId, parentLane, false);
+                        addIncoming(conn.childId, parentLane, false, conn.parentId);
                     } else {
                         // Both lanes blocked — fall back to routing lane shift
                         const routingLane = childLane;
                         shiftLanes(childLane);
                         routedConnections[key] = routingLane;
-                        addIncoming(conn.childId, routingLane, false);
+                        addIncoming(conn.childId, routingLane, false, conn.parentId);
                         changed = true;
                         break;
                     }
@@ -372,7 +372,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         if (parentLane > childLane) {
             if (hasCollision(parentLane, conn.childIndex, conn.parentIndex)) {
                 relocatedMerges.add(key);
-                addIncoming(conn.parentId, childLane, true);
+                addIncoming(conn.parentId, childLane, true, conn.childId);
             }
         }
     }
@@ -447,6 +447,8 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             passThroughIncoming: [],
             hasLineAbove: false,
             hasLineBelow: false,
+            laneTopEvents: {},
+            laneBottomEvents: {},
         };
     }
 
@@ -474,14 +476,14 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                     // Routed branch: parent gets branch to routing lane
                     const routingLane = routedConnections[connKey];
                     if (lookup[ancParentId]) {
-                        lookup[ancParentId].branches.push(routingLane);
+                        lookup[ancParentId].branches.push({ lane: routingLane, childId: event.id });
                     }
                 } else if (reroutedBranches.has(connKey) || relocatedMerges.has(connKey)) {
                     // Rerouted: skip (handled by incoming on target event)
                 } else if (parentLane > lane) {
                     processed.mergesFromAbove.push({ parentId: ancParentId, lane: parentLane });
                 } else if (lookup[ancParentId]) {
-                    lookup[ancParentId].branches.push(lane);
+                    lookup[ancParentId].branches.push({ lane, childId: event.id });
                 }
             }
         }
@@ -494,9 +496,9 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             if (parentLane !== lane && lookup[effectivePrimary]) {
                 if (routedConnections[connKey] !== undefined) {
                     const routingLane = routedConnections[connKey];
-                    lookup[effectivePrimary].branches.push(routingLane);
+                    lookup[effectivePrimary].branches.push({ lane: routingLane, childId: event.id });
                 } else if (!reroutedBranches.has(connKey)) {
-                    lookup[effectivePrimary].branches.push(lane);
+                    lookup[effectivePrimary].branches.push({ lane, childId: event.id });
                 }
             }
         }
@@ -540,12 +542,12 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
 
         // Identify pass-through branches: branch lanes whose current
         // segment continues below this row.
-        processed.passThroughBranches = processed.branches.filter(
-            branchLane => getSegmentEnd(branchLane, i) > i
-        );
+        processed.passThroughBranches = processed.branches
+            .map(b => b.lane)
+            .filter(branchLane => getSegmentEnd(branchLane, i) > i);
 
         // Deactivate branch lanes whose current segment ends here.
-        for (const branchLane of processed.branches) {
+        for (const { lane: branchLane } of processed.branches) {
             if (getSegmentEnd(branchLane, i) <= i) {
                 currentActiveLanes[branchLane] = false;
             }
@@ -571,6 +573,129 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         processed.hasLineBelow = !!nextActiveLanes[processed.lane];
     }
 
+    // =====================================================================
+    // PASS 4: Compute laneTopEvents / laneBottomEvents via edge tracing.
+    //
+    // For each child-parent edge in the graph, determine the lane its
+    // through-line travels along and the row range it covers, then mark each
+    // row × lane × half (top/bottom) with the edge's endpoint IDs.
+    //
+    // This correctly attributes shared lane segments to ALL edges that
+    // traverse them (e.g., when two children both branch to the same parent
+    // via a shared lane, the segment between them carries both edges).
+    // =====================================================================
+
+    interface EdgeTrace {
+        childId: string;
+        parentId: string;
+        lane: number;
+        fromRow: number; // child row (smaller — newest-first ordering)
+        toRow: number;   // parent row (larger — older)
+        /** Skip lo-bottom attribution when this edge has a curve at lo; the
+         *  curve already represents the edge's entry, and the through-line at
+         *  lo belongs to the lane's other traffic. */
+        skipLo: boolean;
+        /** Same for the hi-top endpoint. */
+        skipHi: boolean;
+    }
+
+    const edgeTraces: EdgeTrace[] = [];
+
+    // Primary same-lane parent edges (not in the `connections` array, which
+    // only tracks cross-lane connections). No curves at either end.
+    for (const event of events) {
+        const parentId = event.parent;
+        if (!parentId) continue;
+        const childLane = laneMap[event.id];
+        const parentLane = laneMap[parentId];
+        if (parentLane === undefined || childLane !== parentLane) continue;
+        edgeTraces.push({
+            childId: event.id,
+            parentId,
+            lane: childLane,
+            fromRow: eventIndex[event.id],
+            toRow: eventIndex[parentId],
+            skipLo: false,
+            skipHi: false,
+        });
+    }
+
+    // Cross-lane edges — derive traversed lane and curve presence from
+    // collision-resolution state.
+    for (const conn of connections) {
+        const key = `${conn.childId}:${conn.parentId}`;
+        const childLane = laneMap[conn.childId];
+        const parentLane = laneMap[conn.parentId];
+
+        let traceLane: number;
+        let skipLo: boolean;
+        let skipHi: boolean;
+        if (routedConnections[key] !== undefined) {
+            // Routed via a dedicated routing lane: incoming curve at lo,
+            // branch curve at hi. Both endpoints have curves.
+            traceLane = routedConnections[key];
+            skipLo = true;
+            skipHi = true;
+        } else if (reroutedBranches.has(key)) {
+            // Through-line rides the parent's primary lane. Incoming curve at
+            // lo (child's row); parent just sits on its own lane at hi.
+            traceLane = parentLane;
+            skipLo = true;
+            skipHi = false;
+        } else if (relocatedMerges.has(key)) {
+            // Through-line extends child's lane to parent's row; incoming
+            // curve at hi (parent's row). Child just sits on its own lane at lo.
+            traceLane = childLane;
+            skipLo = false;
+            skipHi = true;
+        } else if (parentLane < childLane) {
+            // Normal branch: child sits on its own lane at lo; branch curve
+            // at hi (parent's row).
+            traceLane = childLane;
+            skipLo = false;
+            skipHi = true;
+        } else {
+            // Normal merge: merge curve at lo (child's row); parent sits on
+            // its own lane at hi.
+            traceLane = parentLane;
+            skipLo = true;
+            skipHi = false;
+        }
+
+        edgeTraces.push({
+            childId: conn.childId,
+            parentId: conn.parentId,
+            lane: traceLane,
+            fromRow: conn.childIndex,
+            toRow: conn.parentIndex,
+            skipLo,
+            skipHi,
+        });
+    }
+
+    function addEvents(row: number, lane: number, half: 'top' | 'bottom', ids: string[]) {
+        const e = lookup[events[row].id];
+        const target = half === 'top' ? e.laneTopEvents : e.laneBottomEvents;
+        if (!target[lane]) target[lane] = [];
+        for (const id of ids) {
+            if (!target[lane].includes(id)) target[lane].push(id);
+        }
+    }
+
+    for (const trace of edgeTraces) {
+        const ids = [trace.childId, trace.parentId];
+        const lo = Math.min(trace.fromRow, trace.toRow);
+        const hi = Math.max(trace.fromRow, trace.toRow);
+        if (lo === hi) continue;
+
+        if (!trace.skipLo) addEvents(lo, trace.lane, 'bottom', ids);
+        if (!trace.skipHi) addEvents(hi, trace.lane, 'top', ids);
+        for (let r = lo + 1; r < hi; r++) {
+            addEvents(r, trace.lane, 'top', ids);
+            addEvents(r, trace.lane, 'bottom', ids);
+        }
+    }
+
     return events.map(m => lookup[m.id]);
 }
 
@@ -584,14 +709,59 @@ function Timeline(props: TimelineProps) {
 
     const processedEvents = useMemo(() => processEvents(events), [events]);
 
+    const containerRef = useRef<HTMLDivElement>(null);
+    const styleRef = useRef<HTMLStyleElement>(null);
+
     function getLaneClass(laneIndex: number) {
         return `ra-clr-plt-${colors[laneIndex % colors.length]}`;
     }
 
+    const handleClick = (e: React.MouseEvent) => {
+        const target = (e.target as Element).closest('[data-event-id]') as HTMLElement | null;
+        if (!target) return;
+
+        const id = target.dataset.eventId;
+        const container = containerRef.current;
+        const styleEl = styleRef.current;
+        if (!id || !container || !styleEl) return;
+
+        if (container.dataset.selected === id) {
+            delete container.dataset.selected;
+            styleEl.textContent = '';
+        } else {
+            container.dataset.selected = id;
+            const safe = CSS.escape(id);
+            styleEl.textContent =
+                `.ra-timeline[data-selected="${safe}"] [data-events~="${safe}"],` +
+                `.ra-timeline[data-selected="${safe}"] [data-event-id="${safe}"] {` +
+                    `stroke-width: 3;` +
+                    `filter: brightness(1.2);` +
+                `}`;
+
+            // SVG has no z-index — paint order is document order. Move every
+            // highlighted leaf to the end of its parent, and move its lane
+            // group to the end of the mask group, so highlights paint on top
+            // of any non-highlighted siblings they cross.
+            const selector = `[data-events~="${safe}"]`;
+            container.querySelectorAll(selector).forEach(el => {
+                const parent = el.parentNode as Element | null;
+                if (!parent) return;
+                parent.appendChild(el);
+                const grandparent = parent.parentNode as Element | null;
+                if (grandparent && grandparent.tagName.toLowerCase() === 'g') {
+                    grandparent.appendChild(parent);
+                }
+            });
+        }
+    };
+
     return (
         <div
+            ref={containerRef}
             className={classNames(['ra-timeline', { expandable }])}
+            onClick={handleClick}
         >
+            <style ref={styleRef} />
             {processedEvents.map((event, index) => (
                 <TimelineEvent
                     key={event.id}

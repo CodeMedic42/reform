@@ -273,6 +273,16 @@ Clicking a node shape highlights it and every line directly connecting it to its
 | `expandable` | `boolean` | `false` | When true, body content is initially hidden and toggled by clicking/Enter on the header. |
 | `colors` | `string[]` | `[]` (required prop) | Palette color names for lane coloring. Lanes cycle through this list. |
 
+### Imperative Handle (via `ref`)
+Timeline is wrapped in `forwardRef` and exposes methods through `useImperativeHandle`. The handle type is `TimelineHandle`:
+
+| Method | Description |
+|--------|-------------|
+| `expandAll()` | Expand every event's body. No visible effect when `expandable={false}` (bodies are always shown in that mode). |
+| `collapseAll()` | Collapse every event's body. No visible effect when `expandable={false}`. |
+
+Implementation: each `TimelineEvent` keeps its own local `expanded` state and registers its `setExpanded` setter into a `Map` ref (`ExpandRegistry`) owned by Timeline. The imperative methods iterate the map and call each setter. Local state is preserved so a single user-driven header toggle re-renders only that one event, not the whole list.
+
 ### TimelineEventType Interface
 | Field | Type | Description |
 |-------|------|-------------|

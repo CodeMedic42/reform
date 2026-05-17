@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, forwardRef, useImperativeHandle } from 'react';
 import classNames from 'classnames';
 import TimelineEvent from './timeline-event.js';
 
@@ -14,6 +14,21 @@ export interface TimelineProps {
      *  CSS classes `ra-clr-plt-{name}` which provide `--clr-plt-*` custom properties. */
     colors: string[];
 }
+
+/**
+ * Imperative methods exposed via `ref`. Only meaningful when `expandable`
+ * is true — when expandable is false, the body is always shown regardless.
+ */
+export interface TimelineHandle {
+    expandAll: () => void;
+    collapseAll: () => void;
+}
+
+/** Map keyed by event id → setter for that event's local `expanded` state.
+ *  Each TimelineEvent registers itself on mount and unregisters on unmount,
+ *  so the parent can broadcast bulk expand/collapse without lifting state
+ *  (which would re-render every event on every single-event toggle). */
+export type ExpandRegistry = React.MutableRefObject<Map<string, (expanded: boolean) => void>>;
 
 /**
  * Processes raw events into ProcessedEvents with lane assignments,
@@ -709,7 +724,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
     return events.map(m => lookup[m.id]);
 }
 
-function Timeline(props: TimelineProps) {
+const Timeline = forwardRef<TimelineHandle, TimelineProps>(function Timeline(props, ref) {
     const {
         events = [],
         renderEvent,
@@ -721,6 +736,12 @@ function Timeline(props: TimelineProps) {
 
     const containerRef = useRef<HTMLDivElement>(null);
     const styleRef = useRef<HTMLStyleElement>(null);
+    const expandRegistry: ExpandRegistry = useRef(new Map());
+
+    useImperativeHandle(ref, () => ({
+        expandAll: () => expandRegistry.current.forEach(set => set(true)),
+        collapseAll: () => expandRegistry.current.forEach(set => set(false)),
+    }), []);
 
     function getLaneClass(laneIndex: number) {
         return `ra-clr-plt-${colors[laneIndex % colors.length]}`;
@@ -780,10 +801,11 @@ function Timeline(props: TimelineProps) {
                     getLaneClass={getLaneClass}
                     renderEvent={renderEvent}
                     expandable={expandable}
+                    expandRegistry={expandRegistry}
                 />
             ))}
         </div>
     );
-}
+});
 
 export default Timeline;

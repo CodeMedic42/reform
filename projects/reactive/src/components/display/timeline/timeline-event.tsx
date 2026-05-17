@@ -5,6 +5,7 @@ import TimelineEventNodeExtension from './timeline-event-node-extension.js';
 import { LANE_WIDTH } from './timeline-constants.js';
 
 import type { TimelineEventType, ProcessedEventType } from './timeline-types.js';
+import type { ExpandRegistry } from './timeline.js';
 
 interface TimelineEventProps {
     event: ProcessedEventType;
@@ -12,6 +13,7 @@ interface TimelineEventProps {
     getLaneClass: (laneIndex: number) => string;
     renderEvent?: (event: TimelineEventType, index: number) => React.ReactNode;
     expandable?: boolean;
+    expandRegistry?: ExpandRegistry;
 }
 
 function computeSvgWidth(event: ProcessedEventType): number {
@@ -23,7 +25,7 @@ function computeSvgWidth(event: ProcessedEventType): number {
     return (maxLane + 1) * LANE_WIDTH;
 }
 
-function TimelineEvent({ event, index, getLaneClass, renderEvent, expandable }: TimelineEventProps) {
+function TimelineEvent({ event, index, getLaneClass, renderEvent, expandable, expandRegistry }: TimelineEventProps) {
     const [expanded, setExpanded] = useState(!expandable);
     const [isHovered, setIsHovered] = useState(false);
     const hasMountedRef = useRef(false);
@@ -31,6 +33,16 @@ function TimelineEvent({ event, index, getLaneClass, renderEvent, expandable }: 
     useEffect(() => {
         hasMountedRef.current = true;
     }, []);
+
+    // Register this event's setExpanded so Timeline's imperative handle
+    // (expandAll / collapseAll) can broadcast bulk state changes without
+    // lifting state to the parent.
+    useEffect(() => {
+        const registry = expandRegistry?.current;
+        if (!registry) return;
+        registry.set(event.id, setExpanded);
+        return () => { registry.delete(event.id); };
+    }, [event.id, expandRegistry]);
 
     const svgWidth = computeSvgWidth(event);
     const hasContent = !!renderEvent;

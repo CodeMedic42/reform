@@ -1,5 +1,6 @@
-import React from 'react';
-import Timeline from '../../../../../../reactive/dist/components/display/timeline';
+import React, { useRef } from 'react';
+import Timeline, { TimelineHandle } from '../../../../../../reactive/dist/components/display/timeline';
+import Button from '../../../../../../reactive/dist/components/controls/button';
 
 const events = [
     { id: 'AA', title: 'Event AA', parent: 'D' },
@@ -40,17 +41,38 @@ const events = [
 const colors = ['blue', 'purple', 'green', 'orange', 'red'];
 
 function example() {
+    const timelineRef = useRef<TimelineHandle>(null);
+
     return (
-        <Timeline
-            events={events}
-            colors={colors}
-            expandable
-            renderEvent={(event) => (
-                <div style={{ height: 40 }}>
-                    Content for {event.id}
-                </div>
-            )}
-        />
+        <div>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                <Button
+                    design="fill"
+                    color="primary"
+                    onClick={() => timelineRef.current?.expandAll()}
+                >
+                    Expand
+                </Button>
+                <Button
+                    design="fill"
+                    color="primary"
+                    onClick={() => timelineRef.current?.collapseAll()}
+                >
+                    Collapse
+                </Button>
+            </div>
+            <Timeline
+                ref={timelineRef}
+                events={events}
+                colors={colors}
+                expandable
+                renderEvent={(event) => (
+                    <div style={{ height: 40 }}>
+                        Content for {event.id}
+                    </div>
+                )}
+            />
+        </div>
     );
 }
 

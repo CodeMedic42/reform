@@ -11,6 +11,7 @@
 @use 'spinner';
 @use 'typography';
 @use 'button';
+@use './display/index' as display;
 // @use 'inputs';
 @use './fields/index' as fields;
 @use 'tabs';

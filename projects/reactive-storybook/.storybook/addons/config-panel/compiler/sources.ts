@@ -114,6 +114,12 @@ import variablesInteractiveDangerScss from 'reactive-scss-raw/variables/color-va
 // @ts-expect-error raw import
 import utilitiesScss from 'reactive-scss-raw/_utilities.scss?raw';
 
+// Display
+// @ts-expect-error raw import
+import displayIndexScss from 'reactive-scss-raw/display/index.scss?raw';
+// @ts-expect-error raw import
+import displayTimelineScss from 'reactive-scss-raw/display/timeline.scss?raw';
+
 // Fields
 // @ts-expect-error raw import
 import fieldsIndexScss from 'reactive-scss-raw/fields/index.scss?raw';
@@ -184,6 +190,9 @@ export const scssSourceMap: Record<string, string> = {
     'variables/color-variables/interactive-group-variables/danger.scss': variablesInteractiveDangerScss,
 
     '_utilities.scss': utilitiesScss,
+
+    'display/index.scss': displayIndexScss,
+    'display/timeline.scss': displayTimelineScss,
 
     'fields/index.scss': fieldsIndexScss,
     'fields/field-container.scss': fieldContainerScss,

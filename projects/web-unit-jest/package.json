@@ -2,45 +2,45 @@
   "name": "@reformjs/web-unit-jest",
   "version": "0.0.3-rc.12",
   "description": "",
+  "type": "module",
   "main": "lib/index.js",
   "scripts": {
-    "build:push": "ncp ./build ./lib ; rimraf build",
-    "build:commit": "rimraf lib ; pnpm build:push",
-    "build:clean": "rimraf build",
-    "compile:js": "tsc",
-    "build:compile": "pnpm compile:js",
-    "build": "pnpm build:clean ; pnpm build:compile ; pnpm build:commit",
-    "lint": "npx eslint ./src"
+    "clean": "rimraf dist",
+    "build:js": "pnpm rollup --config rollup.config.mjs",
+    "build": "npm run clean && npm run build:js",
+    "lint": "npx eslint ./src",
+    "typecheck": "tsc --noEmit"
   },
   "exports": {
     ".": {
-      "import": "./lib/index.js",
-      "require": "./lib/index.js",
-      "types": "./lib/index.d.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     },
     "./jest-preset": {
-      "import": "./lib/jest-preset.js",
-      "require": "./lib/jest-preset.js",
-      "types": "./lib/jest-preset.d.ts"
+      "import": "./dist/jest-preset.mjs",
+      "types": "./dist/jest-preset.d.ts"
     }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "files": [
-    "/lib"
+    "/dist"
   ],
   "eslintConfig": {
-    "extends": "@reformjs/eslint-config"
+    "extends": "@config/eslint-config"
   },
   "dependencies": {
     "@jest/globals": "^29.3.1",
     "@reformjs/web-unit": "workspace:*",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
-    "ncp": "2.0.0",
+    "@config/eslint-config": "workspace:*",
+    "@config/rollup-config": "workspace:*",
+    "@types/jest": "^29.0.0",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.0.0",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"
   },

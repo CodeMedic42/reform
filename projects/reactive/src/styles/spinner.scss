@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use './configuration/palette' as *;
+
 // Widths should be divisible by 4px.
 // This is because of a bug in how firefox renders borders with a border radius to make a circle.
 // If it is not divisible by 4px there will be 4 slightly off color portions of the spinner.
@@ -61,13 +64,7 @@ $spinner-xl-width: 140px;
         }
     }
 
-    @include spinnerColor('blue', $--clr-plt-blue-700, $--clr-plt-blue-100);
-    // @include spinnerColor('cyan', $--var-cyan-dark, $--var-cyan-light);
-    // @include spinnerColor('green', $--var-green-dark, $--var-green-light);
-    // @include spinnerColor('grey', $--var-g-700, $--var-g-40);
-    // @include spinnerColor('navy', $--var-navy-dark, $--var-navy-light);
-    // @include spinnerColor('orange', $--var-orange-dark, $--var-orange-light);
-    // @include spinnerColor('purple', $--var-purple-dark, $--var-purple-light);
-    // @include spinnerColor('red', $--var-red-dark, $--var-red-light);
-    // @include spinnerColor('yellow', $--var-yellow-dark, $--var-yellow-light);
+    @each $name, $shades in $ra-config-palette-colors {
+        @include spinnerColor($name, map.get($shades, 700), map.get($shades, 100));
+    }
 }

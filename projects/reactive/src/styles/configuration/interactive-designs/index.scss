@@ -1,39 +1,44 @@
-$--clr-g-0: #fff;
-$--clr-g-2: #fafafa;
-$--clr-g-4: #f5f5f5;
-$--clr-g-5: #f2f2f2;
-$--clr-g-10: #e6e6e6;
-$--clr-g-11: #e3e3e3;
-$--clr-g-12: #e0e0e0;
-$--clr-g-13:#dedede;
-$--clr-g-20: #ccc;
-$--clr-g-30: #b3b3b3;
-$--clr-g-40: #999;
-$--clr-g-50: #808080;
-$--clr-g-60: #666;
-$--clr-g-70: #4d4d4d;
-$--clr-g-80: #333;
-$--clr-g-90: #1a1a1a;
-$--clr-g-100: #000;
-$--clr-white: $--clr-g-0;
-$--clr-black: $--clr-g-100;
-$--clr-transparent: transparent;
+@use 'sass:list';
+@use 'sass:map';
 
-@import './default';
-@import './primary';
-@import './secondary';
-@import './info';
-@import './success';
-@import './warn';
-@import './danger';
+@forward './grayscale';
+@forward './default';
+@forward './primary';
+@forward './secondary';
+@forward './info';
+@forward './success';
+@forward './warn';
+@forward './danger';
 
-$--ra-config-interactive-designs: 'fill';
+@use './default' as *;
+@use './primary' as *;
+@use './secondary' as *;
+@use './info' as *;
+@use './success' as *;
+@use './warn' as *;
+@use './danger' as *;
 
-$--ra-config-interactive-colors: (
-    "primary": $--ra-config-interactive-color-primary,
-    "secondary": $--ra-config-interactive-color-secondary,
-    "info": $--ra-config-interactive-color-info,
-    "success": $--ra-config-interactive-color-success,
-    "warn": $--ra-config-interactive-color-warn,
-    "danger": $--ra-config-interactive-color-danger,
-) !default;
+$ra-config-interactive-designs: 'fill';
+
+$ra-config-interactive-colors-custom: () !default;
+
+// Filter out empty scheme maps
+$ra-config-interactive-colors-defaults: ();
+@each $name, $scheme in (
+    "primary": $ra-config-interactive-color-primary,
+    "secondary": $ra-config-interactive-color-secondary,
+    "info": $ra-config-interactive-color-info,
+    "success": $ra-config-interactive-color-success,
+    "warn": $ra-config-interactive-color-warn,
+    "danger": $ra-config-interactive-color-danger,
+) {
+    @if list.length($scheme) > 0 {
+        $ra-config-interactive-colors-defaults: map.merge($ra-config-interactive-colors-defaults, ($name: $scheme)) !global;
+    }
+}
+
+$ra-config-interactive-colors: map.merge($ra-config-interactive-colors-defaults, $ra-config-interactive-colors-custom);
+
+@if list.length($ra-config-interactive-colors) == 0 and list.length($ra-config-interactive-color-default) == 0 {
+    @warn "No interactive color schemes configured. Import defaults.scss before index.scss, or define interactive color variables.";
+}

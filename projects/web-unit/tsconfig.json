@@ -1,25 +1,12 @@
 {
+  "extends": "../../configurations/config-typescript/tsconfig.json",
   "compilerOptions": {
-    "target": "es6",
+    "noEmit": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "jsx": "react",
-    "module": "node16",
-    "rootDir": "src",
-    "moduleResolution": "node16",
-    "allowJs": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "build",
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "skipLibCheck": true
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "build",

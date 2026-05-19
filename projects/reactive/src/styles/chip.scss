@@ -1,9 +1,11 @@
+@use './variables/font' as *;
+
 /* stylelint-disable no-descending-specificity */
 .ra-chip {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  font-weight: $--font-weight-bold;
+  font-weight: $font-weight-bold;
   border: 0;
   float: initial;
   width: initial;
@@ -41,7 +43,8 @@
   }
 
   &.size-xs {
-      @include textSizeXS();
+      font-size: 12px;
+      line-height: 16px;
 
       min-height: 16px;
       padding-left: 4px;
@@ -60,7 +63,8 @@
   }
 
   &.size-sm {
-      @include textSizeXS();
+      font-size: 12px;
+      line-height: 16px;
 
       min-height: 18px;
       padding-left: 4px;
@@ -79,7 +83,8 @@
   }
 
   &.size-md {
-      @include textSizeSM();
+      font-size: 14px;
+      line-height: 18px;
 
       min-height: 20px;
       padding-left: 4px;
@@ -98,7 +103,8 @@
   }
 
   &.size-lg {
-      @include textSizeSM();
+      font-size: 14px;
+      line-height: 18px;
 
       min-height: 24px;
       padding-left: 6px;
@@ -117,7 +123,8 @@
   }
 
   &.size-xl {
-      @include textSizeMD();
+      font-size: 15px;
+      line-height: 19px;
 
       min-height: 28px;
       padding-left: 8px;

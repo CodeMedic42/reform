@@ -1,69 +1,46 @@
-// .ra-clr-plt {
-//     &.ra-plt-br,
-//     .ra-plt-br {
-//         border-color: var(--clr-plt-base-br);
-//     }
+@use 'sass:map';
+@use '../../configuration/palette' as *;
 
-//     &.ra-plt-bg,
-//     .ra-plt-bg {
-//         background-color: var(--clr-plt-base-bg);
-//     }
+@each $name, $shades in $ra-config-palette-colors {
+    .ra-clr-plt-#{$name} {
+        --clr-plt-100: #{map.get($shades, 100)};
+        --clr-plt-200: #{map.get($shades, 200)};
+        --clr-plt-300: #{map.get($shades, 300)};
+        --clr-plt-400: #{map.get($shades, 400)};
+        --clr-plt-500: #{map.get($shades, 500)};
+        --clr-plt-600: #{map.get($shades, 600)};
+        --clr-plt-700: #{map.get($shades, 700)};
+        --clr-plt-800: #{map.get($shades, 800)};
+        --clr-plt-900: #{map.get($shades, 900)};
+    }
+}
 
-//     &.ra-plt-darkest {
-//         color: var(--clr-plt-darkest);
+@each $level in 100, 200, 300, 400, 500, 600, 700, 800, 900 {
+    .plt-#{$level} {
+        --clr-plt-active: var(--clr-plt-#{$level});
 
-//         &.plt-br,
-//         .plt-br {
-//             border-color: var(--clr-plt-darkest-br);
-//         }
+        @if $level <= 200 {
+            --clr-plt-inverse: var(--clr-plt-700);
+        } @else if $level <= 400 {
+            --clr-plt-inverse: var(--clr-plt-900);
+        } @else if $level <= 700 {
+            --clr-plt-inverse: var(--clr-plt-100);
+        } @else {
+            --clr-plt-inverse: var(--clr-plt-200);
+        }
+    }
+}
 
-//         &.plt-bg,
-//         .plt-bg {
-//             background-color: var(--clr-plt-darkest-bg);
-//         }
-//     }
+.plt-bg {
+    background-color: var(--clr-plt-active);
+}
 
-//     &.ra-plt-dark {
-//         color: var(--clr-plt-dark);
+.plt-br {
+    border-color: var(--clr-plt-inverse);
+    border-width: 2px;
+    border-style: solid;
+}
 
-//         &.plt-br,
-//         .plt-br {
-//             border-color: var(--clr-plt-dark-br);
-//         }
-
-//         &.plt-bg,
-//         .plt-bg {
-//             background-color: var(--clr-plt-dark-bg);
-//         }
-//     }
-
-//     &.ra-plt-light {
-//         color: var(--clr-plt-light);
-
-//         &.plt-br,
-//         .plt-br {
-//             border-color: var(--clr-plt-light-br);
-//         }
-
-//         &.plt-bg,
-//         .plt-bg {
-//             background-color: var(--clr-plt-light-bg);
-//         }
-//     }
-
-//     &.ra-plt-lightest {
-//         color: var(--clr-plt-lightest);
-
-//         &.plt-br,
-//         .plt-br {
-//             border-color: var(--clr-plt-lightest-br);
-//         }
-
-//         &.plt-bg,
-//         .plt-bg {
-//             background-color: var(--clr-plt-lightest-bg);
-//         }
-//     }
-// }
-
-@import './blue';
+.plt-clr {
+    color: var(--clr-plt-inverse);
+}

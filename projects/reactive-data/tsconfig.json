@@ -1,0 +1,10 @@
+{
+  "extends": "../../configurations/config-typescript/tsconfig.json",
+  "compilerOptions": {
+    "module": "ES2020",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "checkJs": false
+  },
+  "include": ["**/*", "*"]
+}

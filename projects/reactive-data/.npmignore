@@ -1,0 +1,16 @@
+*.tgz
+*.test.js
+.eslintignore
+.eslintrc
+.gitignore
+.npmignore
+.npmrc
+.prettierrc
+.stylelintrc
+.stylelintignore
+node_modules
+src
+.storybook
+jest.config.*
+rollup.config.*
+tsconfig.*

@@ -1,0 +1,51 @@
+import React, { PureComponent } from 'react';
+import classnames from 'classnames';
+import Typography from './typography.js';
+import applyForwardRef from '../../../common/apply-forward-ref.js';
+
+export interface SubHeadingProps {
+    className?: string | null;
+    children?: React.ReactNode;
+    level: number;
+    weightNormal?: boolean;
+    responsive?: boolean;
+}
+
+interface InternalSubHeadingProps extends SubHeadingProps {
+    forwardRef?: React.Ref<HTMLDivElement> | null;
+}
+
+class SubHeading extends PureComponent<InternalSubHeadingProps> {
+    render(): React.ReactNode {
+        const {
+            className = null,
+            children = null,
+            level,
+            weightNormal = false,
+            forwardRef = null,
+            responsive = false,
+            ...rest
+        } = this.props;
+
+        return (
+            <Typography
+                ref={forwardRef}
+                Component="div"
+                className={classnames(
+                    'ra-sub-heading',
+                    className,
+                    `level-${level}`,
+                    {
+                        'weight-normal': weightNormal,
+                        responsive,
+                    },
+                )}
+                {...rest}
+            >
+                {children}
+            </Typography>
+        );
+    }
+}
+
+export default applyForwardRef(SubHeading);

@@ -1,11 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import startsWith from 'lodash/startsWith';
-import isString from 'lodash/isString';
-import isArray from 'lodash/isArray';
-import forEach from 'lodash/forEach';
-import Row from './row';
+import { isNil, startsWith, isString, isArray, forEach } from 'lodash-es';
+import Row from './row.js';
 
 type StaticType = `static:${number}`;
 type JustifyType = null | 'left' | 'center' | 'right';
@@ -32,7 +28,7 @@ export interface ColumnProps {
     children?: JSX.Element | JSX.Element[],
 }
 
-interface classStates {
+interface ClassStates {
     classNames: string[],
     styles: {
       [index: string]: string;
@@ -52,7 +48,7 @@ function buildClass(prop: string | string[], prefix: string): null | string {
         [key: string]: boolean,
     } = {};
 
-    forEach(prop, (value, index) => {
+    forEach(prop, (value: string, index: number) => {
         let size = '';
 
         if (index > 0) {
@@ -67,7 +63,7 @@ function buildClass(prop: string | string[], prefix: string): null | string {
     return classnames(classNames);
 }
 
-function applySequenceOrderState(acc: classStates, value: string, suffix: string): void {
+function applySequenceOrderState(acc: ClassStates, value: string, suffix: string): void {
     if (isNil(value)) {
         return;
     }
@@ -76,7 +72,7 @@ function applySequenceOrderState(acc: classStates, value: string, suffix: string
     acc.styles[`--layout-col-order${suffix}`] = value;
 }
 
-function applyWidthState(acc: classStates, value: string, suffix: string): void {
+function applyWidthState(acc: ClassStates, value: string, suffix: string): void {
     if (isNil(value)) {
         return;
     }
@@ -92,7 +88,7 @@ function applyWidthState(acc: classStates, value: string, suffix: string): void 
 }
 
 function applyWidthLimitState(
-    acc: classStates,
+    acc: ClassStates,
     value: string,
     suffix: string,
     limitType: string,
@@ -113,7 +109,7 @@ function applyWidthLimitState(
     ] = `${value.slice(7)}px`;
 }
 
-function applyPaddingTopState(acc: classStates, value: string, suffix: string): void {
+function applyPaddingTopState(acc: ClassStates, value: string, suffix: string): void {
     if (isNil(value)) {
         return;
     }
@@ -130,13 +126,13 @@ function applyPaddingTopState(acc: classStates, value: string, suffix: string): 
     )}px`;
 }
 
-type classFunction = (acc: classStates, value: string, suffix: string, ...args: string[]) => void;
+type ClassFunction = (acc: ClassStates, value: string, suffix: string, ...args: string[]) => void;
 
 function buildClassState(
     value: string | string[],
-    cb: classFunction,
+    cb: ClassFunction,
     ...args: string[]
-): classStates {
+): ClassStates {
     const states = {
         classNames: [],
         styles: {},
@@ -146,7 +142,7 @@ function buildClassState(
         if (isString(value)) {
             cb(states, value, '', ...args);
         } else {
-            forEach(value, (valueItem, index) => {
+            forEach(value, (valueItem: string, index: number) => {
                 let size = '';
 
                 if (index > 0) {
@@ -239,21 +235,5 @@ function Column(props: ColumnProps) {
         </div>
     );
 }
-
-Column.defaultProps = {
-    className: null,
-    justify: null,
-    align: null,
-    width: null,
-    minWidth: null,
-    maxWidth: null,
-    paddingTop: null,
-    leftOffset: null,
-    rightOffset: null,
-    order: null,
-    useContentBox: null,
-    style: null,
-    children: null,
-};
 
 export default Column;

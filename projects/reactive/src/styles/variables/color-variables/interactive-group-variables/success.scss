@@ -1,38 +1,40 @@
+@use '../../../configuration/interactive-designs/grayscale' as *;
+
 $base-success-clr: #198754;
-$base-success-fill-clr: $--clr-white;
+$base-success-fill-clr: $clr-white;
 
 $interactive-color-success-base: (
     "clr": $base-success-clr,
-    "bg": $--clr-transparent,
-    "br": $--clr-transparent,
-    "out": $--clr-transparent,
+    "bg": $clr-transparent,
+    "br": $clr-transparent,
+    "out": $clr-transparent,
 
     "hover-clr": #157347,
-    "hover-bg": $--clr-transparent,
-    "hover-br": $--clr-transparent,
-    "hover-out": $--clr-transparent,
+    "hover-bg": $clr-transparent,
+    "hover-br": $clr-transparent,
+    "hover-out": $clr-transparent,
 
     "focus-clr": #157347,
-    "focus-bg": $--clr-transparent,
-    "focus-br": $--clr-transparent,
-    "focus-out": $--clr-transparent,
+    "focus-bg": $clr-transparent,
+    "focus-br": $clr-transparent,
+    "focus-out": $clr-transparent,
 
     "active-clr": #146c43,
-    "active-bg": $--clr-transparent,
-    "active-br": $--clr-transparent,
-    "active-out": $--clr-transparent,
+    "active-bg": $clr-transparent,
+    "active-br": $clr-transparent,
+    "active-out": $clr-transparent,
 ) !default;
 
 $interactive-color-success-fill: (
     "clr": $base-success-fill-clr,
     "bg": $base-success-clr,
     "br": $base-success-clr,
-    "out": $--clr-transparent,
+    "out": $clr-transparent,
 
     "hover-clr": $base-success-fill-clr,
     "hover-bg": #157347,
     "hover-br": #157347,
-    "hover-out": $--clr-transparent,
+    "hover-out": $clr-transparent,
 
     "focus-clr": $base-success-fill-clr,
     "focus-bg": #157347,
@@ -42,7 +44,7 @@ $interactive-color-success-fill: (
     "active-clr": $base-success-fill-clr,
     "active-bg": #146c43,
     "active-br": #146c43,
-    "active-out": $--clr-transparent,
+    "active-out": $clr-transparent,
 ) !default;
 
 $interactive-color-success: (

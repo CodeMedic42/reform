@@ -1,16 +1,54 @@
 {
   "name": "reform",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "lerna run build --stream",
+    "typecheck": "lerna run typecheck --stream",
     "lint": "lerna run lint --stream",
     "test": "lerna run test --stream",
     "start:examples:girder": "lerna run start --scope=girder-example",
     "start:examples:girder-react": "lerna run start --scope=girder-react-example",
     "start:examples:girder-store": "lerna run start --scope=girder-store-example",
-    "start:examples:girder-service": "lerna run start --scope=girder-service-example"
+    "start:examples:girder-service": "lerna run start --scope=girder-service-example",
+    "start:storybook": "lerna run start --scope=@reformjs/reactive-storybook",
+    "build:reactive": "lerna run build --scope=@reformjs/reactive",
+    "watch:reactive": "lerna run watch --scope=@reformjs/reactive",
+    "storybook": "pnpm run build:reactive && concurrently --kill-others -n watch,storybook -c blue,green \"pnpm run watch:reactive\" \"pnpm run start:storybook\""
   },
   "dependencies": {
     "lerna": "^8.1.9"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/bluebird": "^3.5.42",
+    "@types/lodash-es": "^4.17.12",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "c8": "latest",
+    "concurrently": "^9.2.1",
+    "eslint": "8.57.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "18.0.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-jest": "28.6.0",
+    "globals": "^15.8.0",
+    "ignore-styles": "^5.0.1",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "jsdom": "^19.0.0",
+    "lerna": "8.1.8",
+    "lint-staged": "latest",
+    "postcss-scss": "latest",
+    "prettier": "latest",
+    "rimraf": "latest",
+    "rollup": "^4.24.3",
+    "simple-git-hooks": "latest",
+    "stylelint": "14.16.1",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-scss": "4.7.0",
+    "ts-jest": "^29.1.5",
+    "typescript": "^5.4.5"
   }
 }

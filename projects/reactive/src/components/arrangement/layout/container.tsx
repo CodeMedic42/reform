@@ -1,17 +1,13 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import classnames from 'classnames';
-import isNil from 'lodash/isNil';
-import isString from 'lodash/isString';
-import isEmpty from 'lodash/isEmpty';
-import forEach from 'lodash/forEach';
+import { isNil, isString, isEmpty, forEach } from 'lodash-es';
 
 type GutterValueType = string;
-type gutterType = GutterValueType | GutterValueType[];
+type GutterType = GutterValueType | GutterValueType[];
 
 export interface ContainerProps {
     className?: string,
-    gutter?: gutterType,
+    gutter?: GutterType,
     hideOverflow?: boolean,
     children?: JSX.Element | JSX.Element[],
     style?: {
@@ -28,7 +24,7 @@ interface AccInt {
 
 function buildGutterClassName(
     acc: AccInt,
-    gutter?: gutterType,
+    gutter?: GutterType,
     additionalPrefix?: string,
     suffix?: string,
 ) {
@@ -46,7 +42,7 @@ function buildGutterClassName(
     }
 }
 
-function buildGutterClassGroup(acc: AccInt, gutter?: gutterType, additionalPrefix?: string) {
+function buildGutterClassGroup(acc: AccInt, gutter?: GutterType, additionalPrefix?: string) {
     if (isNil(gutter)) {
         return;
     }
@@ -54,7 +50,7 @@ function buildGutterClassGroup(acc: AccInt, gutter?: gutterType, additionalPrefi
     if (isString(gutter)) {
         buildGutterClassName(acc, gutter, additionalPrefix, '');
     } else {
-        forEach(gutter as GutterValueType[], (valueItem, index) => {
+        forEach(gutter as GutterValueType[], (valueItem: GutterValueType, index: number) => {
             let size = '';
 
             if (index > 0) {
@@ -66,7 +62,7 @@ function buildGutterClassGroup(acc: AccInt, gutter?: gutterType, additionalPrefi
     }
 }
 
-function buildGutterClasses(gutter?: gutterType) {
+function buildGutterClasses(gutter?: GutterType) {
     const states = {
         classNames: [],
         styles: {},
@@ -114,13 +110,5 @@ function Container(props: ContainerProps) {
         </div>
     );
 }
-
-Container.defaultProps = {
-    className: null,
-    gutter: null,
-    hideOverflow: null,
-    children: null,
-    style: null,
-};
 
 export default Container;

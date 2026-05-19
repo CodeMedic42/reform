@@ -1,0 +1,57 @@
+import React, { useCallback, useState } from 'react';
+import { observer } from 'mobx-react';
+import { useAspect, useAction } from '@reformjs/girder-react-aspect';
+import { isEmpty } from 'lodash-es';
+import Todo from './todo';
+import { toggleAll } from '../actions/todo-actions';
+
+interface TodoItem {
+    text: string;
+    completed: boolean;
+}
+
+function Page(): React.ReactElement {
+    const todoStore = useAspect('mobx').getStore('TodoListStore');
+
+    const [tempValue, setTempValue] = useState<string>('');
+
+    const handleClick = useCallback(() => {
+        todoStore.addTodo({
+            text: tempValue,
+            completed: false,
+        });
+
+        setTempValue('');
+    });
+
+    const handleToggleClick = useAction(toggleAll);
+
+    return (
+        <div>
+            <input
+                value={tempValue}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setTempValue(event.target.value)}
+            />
+            <button
+                onClick={handleClick}
+                disabled={isEmpty(tempValue)}
+            >
+                Create Todo
+            </button>
+            <button
+                onClick={() => handleToggleClick(true)}
+            >
+                Mark All Completed
+            </button>
+            {
+                todoStore.todos.map((todo: TodoItem, index: number) => {
+                    return (
+                        <Todo key={index} todo={todo}/>
+                    );
+                })
+            }
+        </div>
+    );
+}
+
+export default observer(Page);

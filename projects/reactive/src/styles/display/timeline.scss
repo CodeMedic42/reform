@@ -1,0 +1,57 @@
+.ra-timeline {
+    // .ra-timeline-event {}
+
+    .ra-timeline-event-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: default;
+        background-color: transparent;
+        border-radius: 5px;
+    }
+
+    &.expandable {
+        .ra-timeline-event-header {
+            padding-left: 5px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f0f0f0;
+            }
+
+            .ra-timeline-event-title {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .ra-timeline-event-body {
+            padding-left: 5px;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 300ms ease;
+            align-items: flex-start;
+            overflow: hidden;
+
+            &.expanded {
+                grid-template-rows: 1fr;
+            }
+
+            .ra-timeline-event-body-inner {
+                display: flex;
+                flex-direction: row;
+                overflow: hidden;
+            }
+
+            .ra-timeline-event-node {
+                display: block;
+                flex-shrink: 0;
+            }
+
+            .ra-timeline-event-content {
+                flex: 1
+            }
+        }
+    }
+}

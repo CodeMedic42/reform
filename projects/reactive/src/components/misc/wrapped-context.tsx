@@ -1,5 +1,3 @@
-// /* eslint-disable arrow-body-style */
-// /* eslint-disable react/jsx-props-no-spreading */
 // import React, {
 //     Context,
 //     Component,
@@ -24,7 +22,6 @@
 
 //     const { Consumer } = context;
 
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 //     const wrapped = React.forwardRef<CType, TProps>((
 //         props: TProps,
 //         ref: ForwardedRef<CType>,
@@ -48,7 +45,6 @@
 
 //     wrapped.displayName = InnerComponent.name;
 
-//     // eslint-disable-next-line no-param-reassign
 //     InnerComponent.displayName = `Wrapped${InnerComponent.name}`;
 
 //     return wrapped;

@@ -1,5 +1,7 @@
+@use './configuration/base' as *;
+
 :root {
-    font-size: $--ra-config-default-font-size;
-    font-weight: $--ra-config-default-font-weight;
+    font-size: $ra-config-default-font-size;
+    font-weight: $ra-config-default-font-weight;
     scroll-behavior: smooth;
 }

@@ -1,0 +1,154 @@
+// Heading
+$ra-config-typography-heading-color: #1a1a1a !default;
+$ra-config-typography-heading-font-weight: 700 !default;
+$ra-config-typography-heading-levels: (
+    1: (
+        "font-size": 56px,
+        "line-height": 64px,
+        "mobile": ("font-size": 32px, "line-height": 40px),
+        "desktop": null,
+    ),
+    2: (
+        "font-size": 48px,
+        "line-height": 56px,
+        "mobile": ("font-size": 28px, "line-height": 34px),
+        "desktop": null,
+    ),
+    3: (
+        "font-size": 40px,
+        "line-height": 48px,
+        "mobile": ("font-size": 28px, "line-height": 34px),
+        "desktop": null,
+    ),
+    4: (
+        "font-size": 32px,
+        "line-height": 40px,
+        "mobile": ("font-size": 28px, "line-height": 34px),
+        "desktop": null,
+    ),
+    5: (
+        "font-size": 28px,
+        "line-height": 34px,
+        "mobile": null,
+        "desktop": null,
+    ),
+) !default;
+
+// Sub-Heading
+$ra-config-typography-sub-heading-color: #1a1a1a !default;
+$ra-config-typography-sub-heading-font-weight: 700 !default;
+$ra-config-typography-sub-heading-levels: (
+    1: (
+        "font-size": 28px,
+        "line-height": 34px,
+        "mobile": ("font-size": 20px, "line-height": 24px),
+        "desktop": null,
+    ),
+    2: (
+        "font-size": 24px,
+        "line-height": 30px,
+        "mobile": ("font-size": 18px, "line-height": 22px),
+        "desktop": null,
+    ),
+    3: (
+        "font-size": 22px,
+        "line-height": 28px,
+        "mobile": ("font-size": 18px, "line-height": 22px),
+        "desktop": null,
+    ),
+    4: (
+        "font-size": 20px,
+        "line-height": 24px,
+        "mobile": ("font-size": 18px, "line-height": 22px),
+        "desktop": null,
+    ),
+    5: (
+        "font-size": 18px,
+        "line-height": 22px,
+        "mobile": null,
+        "desktop": null,
+    ),
+) !default;
+
+// Text
+$ra-config-typography-text-color: inherit !default;
+$ra-config-typography-text-font-weight: 400 !default;
+$ra-config-typography-text-sizes: (
+    1: (
+        "font-size": 18px,
+        "line-height": 22px,
+        "mobile": null,
+        "desktop": null,
+    ),
+    2: (
+        "font-size": 16px,
+        "line-height": 20px,
+        "mobile": null,
+        "desktop": null,
+    ),
+    3: (
+        "font-size": 15px,
+        "line-height": 19px,
+        "mobile": null,
+        "desktop": null,
+    ),
+    4: (
+        "font-size": 14px,
+        "line-height": 18px,
+        "mobile": null,
+        "desktop": null,
+    ),
+    5: (
+        "font-size": 12px,
+        "line-height": 16px,
+        "mobile": null,
+        "desktop": null,
+    ),
+) !default;
+
+// Paragraph
+$ra-config-typography-paragraph-color: #333333 !default;
+$ra-config-typography-paragraph-font-weight: 400 !default;
+$ra-config-typography-paragraph-sizes: (
+    1: (
+        "font-size": 16px,
+        "line-height": 22px,
+        "margin-bottom": 24px,
+        "mobile": null,
+        "desktop": null,
+    ),
+    2: (
+        "font-size": 18px,
+        "line-height": 24px,
+        "margin-bottom": 32px,
+        "mobile": null,
+        "desktop": null,
+    ),
+    3: (
+        "font-size": 20px,
+        "line-height": 26px,
+        "margin-bottom": 32px,
+        "mobile": null,
+        "desktop": null,
+    ),
+) !default;
+
+// Caption
+$ra-config-typography-caption-font-size: 14px !default;
+$ra-config-typography-caption-line-height: 18px !default;
+$ra-config-typography-caption-color: #1a1a1a !default;
+$ra-config-typography-caption-font-weight: 700 !default;
+
+// Overline
+$ra-config-typography-overline-font-size: 14px !default;
+$ra-config-typography-overline-line-height: 20px !default;
+$ra-config-typography-overline-color: #666666 !default;
+$ra-config-typography-overline-font-weight: 600 !default;
+
+// Weight classes
+$ra-config-typography-weights: (
+    "normal": 400,
+    "medium": 400,
+    "semi-bold": 600,
+    "bold": 700,
+) !default;

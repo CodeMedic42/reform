@@ -1,5 +1,4 @@
-import isNil from 'lodash/isNil';
-import throttle from 'lodash/throttle';
+import { isNil, throttle } from 'lodash-es';
 
 // let lastCalledFor: Element | null = null;
 // let lastCalledForContainer: Element | null = null;
@@ -10,14 +9,14 @@ function getScrollContainer(node: Element | null, stop: Element): Element | null
         return null;
     }
 
-    const { overflowY } = window.getComputedStyle(node);
+    const { overflowY } = window.getComputedStyle(node!);
     const isScrollable = overflowY !== 'visible' && overflowY !== 'hidden';
 
-    if (isScrollable && node.scrollHeight >= node.clientHeight) {
+    if (isScrollable && node!.scrollHeight >= node!.clientHeight) {
         return node;
     }
 
-    return getScrollContainer(node.parentElement, stop);
+    return getScrollContainer(node!.parentElement, stop);
 }
 
 function findScrollingContainer(node: Element, stop: Element) {
@@ -43,6 +42,6 @@ function findScrollingContainer(node: Element, stop: Element) {
     return lastCalledForContainer;
 }
 
-const throttled = throttle(findScrollingContainer, 500, { leading: true });
+const throttled = throttle(findScrollingContainer, 500, { leading: true }) as unknown as (node: Element, stop?: Element) => Element | null;
 
 export default throttled;

@@ -1,0 +1,151 @@
+@use 'sass:list';
+@use 'sass:map';
+@use '../configuration/inputs/input-container' as *;
+@use '../configuration/layout' as *;
+@use '../configuration/interactive-designs/grayscale' as *;
+@use '../variables/font' as *;
+@use '../utilities';
+
+$ra-config-inputs-shadow-width: $ra-config-inputs-focused-border-width - $ra-config-inputs-border-width;
+
+@mixin buildFieldContainerVariantSettings($variant) {
+    background-color: map.get($variant, 'background-color');
+    border-width: map.get($variant, 'border-width');
+
+    .ra-field-input {
+        // The 4px is to account for the border width and
+        // padding added to prevent the box shadow from
+        // being blocked.
+        height: map.get($variant, 'height') - (map.get($variant, 'border-width') * 2) - (map.get($variant, 'focus-outline-width') * 2);
+        padding-top: map.get($variant, 'padding-v');
+        padding-bottom: map.get($variant, 'padding-v');
+        padding-left: map.get($variant, 'padding-h');
+        padding-right: map.get($variant, 'padding-h');
+        font-size: map.get($variant, 'font-size');
+        font-weight: map.get($variant, 'font-weight');
+        line-height: map.get($variant, 'line-height');
+    }
+
+    &.focus,
+    &:focus-within {
+        box-shadow: inset 0 0 0 map.get($variant, 'focus-outline-width') $ra-config-inputs-focus-color;
+    }
+}
+
+@mixin buildFieldContainerVariantResponsiveSettings($variant) {
+    $respChanges: map.get($variant, 'resp-changes');
+
+    @if ($respChanges) {
+        @for $i from 1 through list.length($respChanges) {
+            $change: list.nth($respChanges, $i);
+            $breakpoint: list.nth($ra-config-resp-breakpoints, $i);
+
+            @if ($breakpoint) {
+                @media only screen and (min-width: $breakpoint) {
+                    @include buildFieldContainerVariantSettings($change);
+                }
+            }
+        }
+    }
+}
+
+@mixin buildFieldContainerVariant($variant) {
+    @include buildFieldContainerVariantSettings($variant);
+    @include buildFieldContainerVariantResponsiveSettings($variant);
+}
+
+@mixin buildFieldContainerVariants() {
+    @include buildFieldContainerVariant($ra-config-input-container-default-variant);
+
+    @each $variantId, $variant in $ra-config-input-container-variants {
+        &.ra-field-variant-#{$variantId} {
+            @include buildFieldContainerVariant($variant);
+        }
+    }
+}
+
+.ra-field-container {
+    border-radius: $ra-config-inputs-border-radius;
+    width: 100%;
+    box-sizing: border-box;
+    border-width: $ra-config-inputs-border-width;
+    border-style: solid;
+    display: flex;
+    align-items: stretch;
+    padding: 1px;
+
+    &.focus,
+    &:focus-within {
+        border-color: $ra-config-inputs-focus-color;
+        box-shadow: inset 0 0 0 $ra-config-inputs-shadow-width $ra-config-inputs-focus-color;
+    }
+
+    .ra-field-input {
+        padding: 0;
+        color: $clr-g-80;
+        font: inherit;
+        font-weight: $font-weight-normal;
+        outline: 0;
+        background: transparent;
+        border: 0;
+        height: 100%;
+        z-index: 1;
+        position: relative;
+
+        * {
+            background: transparent;
+        }
+    }
+
+    @include buildFieldContainerVariants();
+}
+
+.ra-field-text-input,
+.ra-field-numeric-input,
+.ra-select-text-input,
+.ra-field-textarea-input {
+    width: 100%;
+}
+
+.ra-field-annotation {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    overflow: hidden;
+}
+
+.ra-field-textarea-input {
+    resize: vertical;
+}
+
+.ra-field-content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ra-field-label {
+    @extend .no-select;
+
+    display: block;
+    font: inherit;
+    outline: none;
+}
+
+.ra-field-label-text {
+    padding-left: 4px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-bottom: 8px;
+    display: block;
+
+    &:empty {
+        &::before {
+            content: ' ';
+            white-space: pre;
+        }
+    }
+}

@@ -1,6 +1,8 @@
-@import './base';
-@import './interactive-designs/index';
-@import './inputs/index';
-@import './tabs';
-@import './layout';
-@import './button';
+@forward './palette';
+@forward './base';
+@forward './interactive-designs/index';
+@forward './inputs/index';
+@forward './tabs';
+@forward './layout';
+@forward './typography';
+@forward './button';

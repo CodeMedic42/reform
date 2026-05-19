@@ -1,10 +1,22 @@
 {
-    "targetDefaults": {
-        "build": {
-            "cache": true
-        },
-        "lint": {
-            "cache": true
-        }
+  "namedInputs": {
+		"src": ["{projectRoot}/**/src/**"],
+		"dependencies": ["{workspaceRoot}/pnpm-lock.yaml", "{projectRoot}/package.json"]
+	},
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "inputs": ["src", "dependencies"]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": ["src", "dependencies"],
+      "dependsOn": []
+    },
+    "test": {
+      "cache": true,
+      "inputs": ["src", "dependencies"],
+      "dependsOn": []
     }
+  }
 }

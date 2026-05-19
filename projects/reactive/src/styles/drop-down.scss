@@ -1,13 +1,16 @@
+@use './configuration/interactive-designs/grayscale' as *;
+@use 'utilities';
+
 /* stylelint-disable no-descending-specificity */
-$-list-background: $--clr-white;
-$-hover-menu-background: $--clr-g-4;
-$-targeted-menu-background: $--clr-g-10;
+$-list-background: $clr-white;
+$-hover-menu-background: $clr-g-4;
+$-targeted-menu-background: $clr-g-10;
 $-hover-targeted-menu-background: #dfdfe0;
 $-selected-menu-background: #eff7fe;
 $-hover-selected-menu-background: #dceffd;
 $-selected-targeted-menu-background: #d3ebfc;
 $-hover-selected-targeted-menu-background: #c5e4fb;
-$-disabled-menu-background: $--clr-g-10;
+$-disabled-menu-background: $clr-g-10;
 
 .ra-drop-down {
     display: inline-block;
@@ -27,7 +30,7 @@ $-disabled-menu-background: $--clr-g-10;
     list-style-type: none;
     position: relative;
     outline: none;
-    color: $--clr-g-80;
+    color: $clr-g-80;
     background-color: transparent;
     word-break: break-word;
 
@@ -75,7 +78,7 @@ $-disabled-menu-background: $--clr-g-10;
         &:disabled,
         &.disabled {
             ~ .ra-dd-list-item-content {
-                color: $--clr-g-30;
+                color: $clr-g-30;
                 background-color: transparent;
             }
         }
@@ -143,18 +146,18 @@ $-disabled-menu-background: $--clr-g-10;
             &:disabled,
             &.disabled {
                 cursor: not-allowed;
-                color: $--clr-g-30;
+                color: $clr-g-30;
                 background-color: $-disabled-menu-background;
             }
         }
     }
 
     &.border-bottom {
-        border-bottom: 1px solid $--clr-g-10;
+        border-bottom: 1px solid $clr-g-10;
     }
 
     &.border-top {
-        border-top: 1px solid $--clr-g-10;
+        border-top: 1px solid $clr-g-10;
     }
 
     &.ra-dd-menu-list-item {
@@ -185,33 +188,33 @@ $-disabled-menu-background: $--clr-g-10;
     background-color: $-list-background;
 
     &.dark {
-        background-color: $--clr-g-80;
+        background-color: $clr-g-80;
 
         .ra-dd-list-item {
-            color: $--clr-g-10;
+            color: $clr-g-10;
 
             .ra-dd-list-item-control {
                 &:hover,
                 &.hover {
                     ~ .ra-dd-list-item-content {
-                        color: $--clr-g-5;
-                        background-color: $--clr-g-70;
+                        color: $clr-g-5;
+                        background-color: $clr-g-70;
                     }
                 }
 
                 &:focus,
                 &.focus {
                     ~ .ra-dd-list-item-content {
-                        color: $--clr-g-11;
-                        background-color: $--clr-g-90;
+                        color: $clr-g-11;
+                        background-color: $clr-g-90;
                     }
                 }
 
                 &:active,
                 &.active {
                     ~ .ra-dd-list-item-content {
-                        color: $--clr-g-13;
-                        background-color: $--clr-black;
+                        color: $clr-g-13;
+                        background-color: $clr-black;
                     }
                 }
 
@@ -262,11 +265,11 @@ $-disabled-menu-background: $--clr-g-10;
             }
 
             &.border-bottom {
-                border-bottom-color: $--clr-g-60;
+                border-bottom-color: $clr-g-60;
             }
 
             &.border-top {
-                border-top-color: $--clr-g-60;
+                border-top-color: $clr-g-60;
             }
         }
     }
@@ -279,7 +282,7 @@ $-disabled-menu-background: $--clr-g-10;
     &.size-xs {
         .ra-dd-list-item {
             .ra-dd-list-item-content {
-                @include textSizeMD(false);
+                font-size: 15px;
             }
         }
     }
@@ -287,7 +290,7 @@ $-disabled-menu-background: $--clr-g-10;
     &.size-sm {
         .ra-dd-list-item {
             .ra-dd-list-item-content {
-                @include textSizeLG(false);
+                font-size: 16px;
             }
         }
     }
@@ -345,7 +348,7 @@ $-disabled-menu-background: $--clr-g-10;
     &.size-md {
         .ra-dd-list-item {
             .ra-dd-list-item-content {
-                @include textSizeLG(false);
+                font-size: 16px;
 
                 padding-top: 8px;
                 min-height: 40px;
@@ -392,7 +395,7 @@ $-disabled-menu-background: $--clr-g-10;
     &.size-lg {
         .ra-dd-list-item {
             .ra-dd-list-item-content {
-                @include textSizeLG(false);
+                font-size: 16px;
             }
         }
     }
@@ -400,7 +403,7 @@ $-disabled-menu-background: $--clr-g-10;
     &.size-xl {
         .ra-dd-list-item {
             .ra-dd-list-item-content {
-                @include textSizeXL(false);
+                font-size: 18px;
             }
         }
     }

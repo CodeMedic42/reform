@@ -3,7 +3,7 @@
   "npmClient": "pnpm",
   "packages": [
     "examples/*",
-    "packages/*",
+    "configurations/*",
     "projects/*"
   ]
 }

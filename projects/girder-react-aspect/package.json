@@ -2,55 +2,51 @@
   "name": "@reformjs/girder-react-aspect",
   "version": "0.0.3-rc.12",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "build:push": "ncp ./build ./lib ; rimraf build",
-    "build:commit": "rimraf lib ; pnpm build:push",
-    "build:clean": "rimraf build",
-    "compile:js": "tsc",
-    "build:compile": "pnpm compile:js",
-    "build": "pnpm build:clean ; pnpm build:compile ; pnpm build:commit",
-    "lint": "npx eslint ./src"
+    "clean": "rimraf dist",
+    "build:js": "pnpm rollup --config rollup.config.mjs",
+    "build": "npm run clean && npm run build:js",
+    "typecheck": "tsc --noEmit", "lint": "npx eslint ./src"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "exports": {
     ".": {
-      "import": "./lib",
-      "require": "./lib",
-      "types": "./lib/index.d.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     },
     "./17": {
-      "import": "./lib/react-aspect-17.js",
-      "require": "./lib/react-aspect-17.js",
-      "types": "./lib/react-aspect-17.d.ts"
+      "import": "./dist/react-aspect-17.mjs",
+      "types": "./dist/react-aspect-17.d.ts"
     },
     "./18": {
-      "import": "./lib/react-aspect-18.js",
-      "require": "./lib/react-aspect-18.js",
-      "types": "./lib/react-aspect-18.d.ts"
+      "import": "./dist/react-aspect-18.mjs",
+      "types": "./dist/react-aspect-18.d.ts"
     }
   },
   "files": [
-    "/lib"
+    "/dist"
   ],
   "peerDependencies": {
     "react": "^16 || ^17 || ^18",
     "react-dom": "^16 || ^17 || ^18"
   },
   "eslintConfig": {
-    "extends": "@reformjs/eslint-config"
+    "extends": "@config/eslint-config"
   },
   "dependencies": {
     "@reformjs/girder": "workspace:*",
     "bluebird": "^3.7.2",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "prop-types": "^15.8.1"
   },
   "devDependencies": {
-    "@reformjs/eslint-config": "workspace:*",
-    "ncp": "2.0.0",
+    "@config/eslint-config": "workspace:*",
+    "@config/rollup-config": "workspace:*",
+    "@types/lodash-es": "^4.17.12",
     "rimraf": "^5.0.0",
     "typescript": "~5.3.3"
   },

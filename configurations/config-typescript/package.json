@@ -1,0 +1,6 @@
+{
+    "name": "@config/typescript-config",
+    "version": "5.1.0",
+    "type": "module",
+    "private": true
+}

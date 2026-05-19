@@ -1,7 +1,10 @@
+@use 'sass:string';
+@use '../configuration/interactive-designs/index' as *;
+
 @mixin interactiveDesignContent($design, $designName: "") {
     $designId: '';
 
-    @if (str-length($designName) > 0) {
+    @if (string.length($designName) > 0) {
         $designId: '-#{$designName}';
     }
 
@@ -11,7 +14,7 @@
 }
 
 @mixin buildInteractiveColor($colorId, $color) {
-    @if (str-length($colorId) < 0) {
+    @if (string.length($colorId) < 0) {
         @error "Color name cannot be empty";
     }
 
@@ -25,7 +28,7 @@
 @mixin interactiveDesignControl($designName) {
     $designId: '';
 
-    @if (str-length($designName) > 0) {
+    @if (string.length($designName) > 0) {
         $designId: '-#{$designName}';
     }
 
@@ -83,8 +86,8 @@
 .ra-clr-int {
     @include interactiveDesignControl('');
 
-    @each $designId in $--ra-config-interactive-designs {
-        @if (str-length($designId) <= 0) {
+    @each $designId in $ra-config-interactive-designs {
+        @if (string.length($designId) <= 0) {
             @error "A design must have a non empty id";
         }
 
@@ -96,7 +99,7 @@
 }
 
 :root {
-    @each $designName, $colors in $--ra-config-interactive-color-default {
+    @each $designName, $colors in $ra-config-interactive-color-default {
         @include interactiveDesignContent($colors, $designName);
     }
 }
@@ -107,4 +110,4 @@
     }
 }
 
-@include buildInteractiveColors($--ra-config-interactive-colors);
+@include buildInteractiveColors($ra-config-interactive-colors);

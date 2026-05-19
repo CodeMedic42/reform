@@ -57,12 +57,13 @@
 
 .layout-story {
   border: black 1px solid;
+  position: relative;
 
-  .background-div {
-    bottom: -16px;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+  // .background-div {
+    // bottom: -16px;
+    // padding-left: 16px;
+    // padding-right: 16px;
+  // }
 
   .column-content {
     background-color: var(--clr-g-20);

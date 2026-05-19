@@ -1,6 +1,8 @@
-$shadow-14-color: rgba($--clr-g-90, 0.14);
-$shadow-12-color: rgba($--clr-g-90, 0.12);
-$shadow-20-color: rgba($--clr-g-90, 0.2);
+@use './configuration/interactive-designs/grayscale' as *;
+
+$shadow-14-color: rgba($clr-g-90, 0.14);
+$shadow-12-color: rgba($clr-g-90, 0.12);
+$shadow-20-color: rgba($clr-g-90, 0.2);
 
 @mixin boxShadow1dp {
     box-shadow:

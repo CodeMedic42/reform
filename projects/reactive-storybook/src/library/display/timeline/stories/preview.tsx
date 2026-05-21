@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import Timeline, { TimelineHandle } from '../../../../../../reactive/dist/components/display/timeline';
-import Button from '../../../../../../reactive/dist/components/controls/button';
+import Timeline, { TimelineHandle } from '@reformjs/reactive/display/timeline';
+import Button from '@reformjs/reactive/controls/button';
 
 const events = [
     { id: 'AA', title: 'Event AA', parent: 'D' },

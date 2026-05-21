@@ -52,6 +52,8 @@ import configLayoutScss from 'reactive-scss-raw/configuration/layout.scss?raw';
 // @ts-expect-error raw import
 import configPaletteScss from 'reactive-scss-raw/configuration/palette.scss?raw';
 // @ts-expect-error raw import
+import configSystemScss from 'reactive-scss-raw/configuration/system.scss?raw';
+// @ts-expect-error raw import
 import configTabsScss from 'reactive-scss-raw/configuration/tabs.scss?raw';
 // @ts-expect-error raw import
 import configInputsIndexScss from 'reactive-scss-raw/configuration/inputs/index.scss?raw';
@@ -119,6 +121,20 @@ import utilitiesScss from 'reactive-scss-raw/_utilities.scss?raw';
 import displayIndexScss from 'reactive-scss-raw/display/index.scss?raw';
 // @ts-expect-error raw import
 import displayTimelineScss from 'reactive-scss-raw/display/timeline.scss?raw';
+// @ts-expect-error raw import
+import displayTableScss from 'reactive-scss-raw/display/table.scss?raw';
+
+// Arrangement
+// @ts-expect-error raw import
+import arrangementIndexScss from 'reactive-scss-raw/arrangement/index.scss?raw';
+// @ts-expect-error raw import
+import arrangementPageIndexScss from 'reactive-scss-raw/arrangement/page/index.scss?raw';
+// @ts-expect-error raw import
+import arrangementPagePageScss from 'reactive-scss-raw/arrangement/page/page.scss?raw';
+// @ts-expect-error raw import
+import arrangementStickyContainerScss from 'reactive-scss-raw/arrangement/sticky-container.scss?raw';
+// @ts-expect-error raw import
+import arrangementCardScss from 'reactive-scss-raw/arrangement/card.scss?raw';
 
 // Fields
 // @ts-expect-error raw import
@@ -159,6 +175,7 @@ export const scssSourceMap: Record<string, string> = {
     'configuration/button.scss': configButtonScss,
     'configuration/layout.scss': configLayoutScss,
     'configuration/palette.scss': configPaletteScss,
+    'configuration/system.scss': configSystemScss,
     'configuration/tabs.scss': configTabsScss,
     'configuration/inputs/index.scss': configInputsIndexScss,
     'configuration/inputs/input-container.scss': configFieldContainerScss,
@@ -193,6 +210,13 @@ export const scssSourceMap: Record<string, string> = {
 
     'display/index.scss': displayIndexScss,
     'display/timeline.scss': displayTimelineScss,
+    'display/table.scss': displayTableScss,
+
+    'arrangement/index.scss': arrangementIndexScss,
+    'arrangement/page/index.scss': arrangementPageIndexScss,
+    'arrangement/page/page.scss': arrangementPagePageScss,
+    'arrangement/sticky-container.scss': arrangementStickyContainerScss,
+    'arrangement/card.scss': arrangementCardScss,
 
     'fields/index.scss': fieldsIndexScss,
     'fields/field-container.scss': fieldContainerScss,

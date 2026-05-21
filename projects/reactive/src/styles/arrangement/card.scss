@@ -1,0 +1,52 @@
+@use '../box-shadow' as *;
+
+.ra-card {
+    --sticky-gutter-width: var(--gutter-width);
+    --border-radius: 5px;
+    --sticky-gutter-padding: 6px;
+    
+    box-sizing: border-box;
+    width: 100%;
+
+    .ra-sticky-container-left-gutter,
+    .ra-sticky-container-right-gutter {
+        &::before {
+            @include boxShadow1dp;
+            background-color: #fff;
+        }
+    }
+
+    .ra-sticky-container-left-gutter {
+        &::before {
+            border-top-left-radius: var(--border-radius);
+            border-bottom-left-radius: var(--border-radius);
+            clip-path: inset(-20px 0 -20px -20px);
+        }
+
+        &::after {
+            @include boxShadow1dp;
+
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: calc(var(--sticky-visible-content-width-transfer) - var(--sticky-gutter-padding) - var(--sticky-gutter-padding));
+            left: calc(var(--sticky-gutter-width) + var(--sticky-gutter-padding));
+            clip-path: inset(0 0 -20px 0);
+        }
+    }
+
+    .ra-sticky-container-right-gutter {
+        &::before {
+            border-top-right-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+            clip-path: inset(-20px -20px -20px 0);
+        }
+    }
+
+    .ra-sticky-container-inner {
+        padding-top: var(--gutter-width);
+        padding-bottom: var(--gutter-width);
+        background-color: #fff;
+    }
+}

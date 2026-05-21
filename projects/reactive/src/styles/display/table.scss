@@ -1,0 +1,399 @@
+@use '../configuration/system' as *;
+@use '../configuration/layout' as *;
+@use '../utilities';
+
+.ra-table {
+    // By default the table handles it's own scrolling
+    overflow: auto;
+
+    // However you can disable the table scrolling with this class
+    &.parent-scroll {
+        display: inline-block;
+        overflow: initial;
+    }
+
+    &:not(.parent-scroll) {
+        /* stylelint-disable-next-line length-zero-no-unit */
+        --sticky-top-offset: 0px;
+        /* stylelint-disable-next-line length-zero-no-unit */
+        --sticky-left-offset: 0px;
+    }
+
+    .ra-table-container {
+        // This is needed to spread out the children correctly for the left and right gutters for a page table.
+        display: inline-flex;
+
+        &:not(:last-child) {
+            margin-bottom: 48px;
+        }
+    }
+
+    table {
+        background: #fff; // $--var-white
+        width: 100%;
+        position: relative;
+        border-collapse: separate;
+        border-spacing: 0;
+
+        thead {
+            tr {
+                th {
+                    text-align: left;
+                    padding: 0;
+                    box-sizing: border-box;
+
+                    .ra-header-cell {
+                        background-color: #f7f9fd; // $--var-navy-bg
+                        color: #2c344e; // $--var-navy-text
+                        font-size: 15px;
+                        font-weight: 600; // $--var-font-weight-semi-bold
+                        text-align: left;
+                        word-break: break-word;
+                        box-sizing: border-box;
+                        outline: none;
+                        letter-spacing: 0.14px;
+                        line-height: 1.71;
+                        padding: 8px 12px;
+                        // padding-top: 8px;
+                        // padding-bottom: 8px;
+                        // padding-left: 12px;
+                        // padding-right: 12px;
+                        border: 0;
+                        border-bottom: 2px #cbdef6 solid; // $--var-navy-light
+                        min-height: 40px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        width: 100%;
+                        height: 1.71em;
+
+                        &:empty {
+                            &::after {
+                                content: ' ';
+                                visibility: hidden;
+                                white-space: pre;
+                            }
+                        }
+
+                        &.ra-header-sortable {
+                            position: relative;
+                            cursor: pointer;
+                            font-family: inherit;
+
+                            &.sort-asc,
+                            &.sort-dec {
+                                color: #0c5bc0; // $--var-primary-hover
+                            }
+
+                            &:focus,
+                            &.focus {
+                                color: #024fb1; // $--var-primary-focus
+                                background-color: #e5eefa; // $--var-primary-focus-opaque
+                                border-bottom-color: currentcolor;
+                            }
+
+                            &:hover,
+                            &.hover {
+                                color: #0c5bc0; // $--var-primary-hover
+                                background-color: #edf4fc; // $--var-primary-hover-opaque
+                                border-bottom-color: currentcolor;
+                            }
+
+                            &:active,
+                            &.active {
+                                color: #084491; // $--var-primary-active
+                                background-color: #d6e6fa; // $--var-primary-active-opaque
+                                border-bottom-color: currentcolor;
+                            }
+
+                            .ra-sort-icon {
+                                display: inline-block;
+                                margin-left: 7px;
+
+                                &::before,
+                                &::after {
+                                    width: 0;
+                                    height: 0;
+                                    border-left: 4px solid transparent;
+                                    border-right: 4px solid transparent;
+                                    display: block;
+                                    content: '';
+                                }
+
+                                &::before {
+                                    border-bottom: 4px solid currentcolor;
+                                    margin-bottom: 4px;
+                                }
+
+                                &::after {
+                                    border-top: 4px solid currentcolor;
+                                }
+                            }
+
+                            &.sort-asc {
+                                .ra-sort-icon {
+                                    &::after {
+                                        border-top-color: #b4b4b4; // $--var-g-300
+                                    }
+                                }
+                            }
+
+                            &.sort-dec {
+                                .ra-sort-icon {
+                                    &::before {
+                                        border-bottom-color: #b4b4b4; // $--var-g-300
+                                    }
+                                }
+                            }
+                        }
+
+                        .row-check-box {
+                            margin-top: 3px;
+                            margin-left: 4px;
+                        }
+                    }
+
+                    &:first-child {
+                        .ra-header-cell {
+                            padding-left: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    background: #fff; // $--var-white
+                    color: #363636; // $--var-g-800
+                    font-size: 16px;
+                    line-height: 1.38;
+                    vertical-align: top;
+                    word-break: break-word;
+                    outline: none;
+                    min-width: 0;
+                    box-sizing: border-box;
+                    padding: 16px 12px;
+                    z-index: 10;
+                    border-bottom: 1px solid #e8e8e8; // $--var-g-100
+
+                    &:first-child {
+                        padding-left: 16px;
+                    }
+                }
+
+                /* stylelint-disable-next-line no-descending-specificity */
+                .row-check-box {
+                    margin-left: 4px;
+                }
+
+                &.clickable-row {
+                    @extend .no-select;
+
+                    cursor: pointer;
+                }
+
+                &.active {
+                    td:not([rowspan]) {
+                        background-color: #ecf6fd; // $--var-info-ctn-bg
+                    }
+
+                    & + .row-child {
+                        td:not([rowspan]) {
+                            background-color: #ecf6fd; // $--var-info-ctn-bg
+                        }
+                    }
+                }
+
+                &:hover {
+                    /* stylelint-disable-next-line no-descending-specificity */
+                    td:not([rowspan]) {
+                        background-color: #f7f7f7; // $--var-g-20
+                    }
+
+                    & + .row-child {
+                        td:not([rowspan]) {
+                            background-color: #f7f7f7; // $--var-g-20
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.selectable {
+        table thead tr th:first-child {
+            .ra-header-cell {
+                padding-left: 8px;
+                padding-right: 0;
+            }
+
+            + th {
+                .ra-header-cell {
+                    padding-left: 16px;
+                }
+            }
+        }
+
+        /* stylelint-disable-next-line no-descending-specificity */
+        table tbody tr td:first-child {
+            padding-left: 8px;
+            padding-right: 0;
+
+            /* stylelint-disable-next-line no-descending-specificity */
+            + td {
+                padding-left: 16px;
+            }
+        }
+    }
+}
+
+.ra-simple-table {
+    td > button {
+        margin: 0;
+    }
+
+    .no-display {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+}
+
+.ra-table-row-header {
+    font-weight: 600;
+    color: #363636; // $--var-g-800
+}
+
+.ra-table-row-sub-header {
+    color: #67676a; // $--var-g-600
+}
+
+.ra-table-data-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4d4d4f; // $--var-g-700
+}
+
+// Style sticky table header and columns if the browser supports it
+@supports (position: sticky) {
+    .ra-table {
+        // This class turns all the sticky features on.
+        .enable-sticky {
+            table {
+                .ra-header {
+                    position: sticky;
+                    /* stylelint-disable-next-line length-zero-no-unit */
+                    top: var(--sticky-top-offset, 0px);
+                    // This will put all headers above the cells, even the sticky ones.
+                    z-index: 13;
+                }
+
+                .sticky-column {
+                    // This variable is used dynamic at runtime to set the left offset for sticky items.
+                    // It needs to be this way because we use it in a media query later.
+                    --sticky-table-left-offset: 0;
+
+                    left: var(--sticky-table-left-offset);
+                    position: sticky;
+
+                    &.ra-header {
+                        // This will put the sticky column header items above all others.
+                        z-index: 14;
+                    }
+
+                    &.ra-cell {
+                        // This will put all sticky row columns above the others so that the other slide underneath.
+                        z-index: 12;
+                    }
+
+                    // This targets the last column which is sticky so we can apply additional css to it.
+                    &.last-column {
+                        &.ra-header {
+                            .ra-header-cell {
+                                padding-right: 16px;
+                            }
+
+                            + .ra-header {
+                                .ra-header-cell {
+                                    padding-left: 16px;
+                                }
+                            }
+                        }
+
+                        &.ra-cell {
+                            padding-right: 16px;
+
+                            + .ra-cell {
+                                padding-left: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.show-sticky-border {
+                table {
+                    .sticky-column {
+                        &.last-column {
+                            box-sizing: border-box;
+                            border-right: 2px solid #e8e8e8; // $--var-g-100
+                        }
+                    }
+                }
+            }
+
+            &.page-table {
+                table {
+                    .sticky-column {
+                        left: var(--sticky-table-left-offset);
+                    }
+                }
+            }
+        }
+
+        // this is the shadow which shows up when table is scrolled downward.
+        // This only works when the table relies on a parent to handle the scrolling.
+        &.parent-scroll {
+            .enable-sticky {
+                .table-content {
+                    &::before {
+                        content: '';
+                        position: sticky;
+                        width: 100%;
+                        z-index: 13;
+                        height: 0;
+                        top: calc(var(--sticky-top-offset, 0px) + 40px);
+                        box-shadow: 0 -3px 8px 5px #e0e0e0; // $--var-g-120
+                        clip-path: inset(0 0 -15px 0);
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@if $ra-config-desktop-resp-breakpoint != null {
+    @media only screen and (min-width: $ra-config-desktop-resp-breakpoint) {
+        // Here the gutter switches from being a static value to a dynamically calculated value.
+        .ra-table {
+            .enable-sticky {
+                &.page-table {
+                    table {
+                        .sticky-column {
+                            // This is calculating the width of the gutter and then adding the offset.
+                            // As mentioned before the --sticky-table-left-offset variable though defaulted to 0
+                            // is set via the react component as the final offset value can only be calculated at run time.
+                            left: var(--sticky-table-left-offset);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

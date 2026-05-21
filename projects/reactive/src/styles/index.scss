@@ -4,6 +4,7 @@
 @use './variables/index' as vars;
 @use 'box-shadow';
 @use 'hidden';
+@use './arrangement/index' as arrangement;
 @use 'layout';
 @use 'scaling-container';
 @use 'tray';

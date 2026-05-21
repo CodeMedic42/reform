@@ -1,0 +1,58 @@
+@use '../../configuration/system' as *;
+@use '../../configuration/layout' as *;
+
+.ra-page {
+    --sticky-left-offset: 0px;
+    --sticky-right-offset: 0px;
+    --sticky-top-offset: 0px;
+
+    display: inline-block;
+    background-color: $ra-config-system-color-page-background;
+
+    &::before {
+        content: '';
+        background-color: inherit;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -10;
+    }
+
+    .ra-page-container {
+        --sticky-gutter-width: var(--gutter-width);
+
+        > .ra-sticky-container-inner {
+            padding-bottom: 24px;
+        }
+    }
+
+    .ra-page-viewport {
+        --gutter-width: 15px;
+        --sticky-left-offset: 0px;
+        --sticky-right-offset: 0px;
+        --sticky-container-left-offset: 0px;
+        --sticky-content-left-offset: calc(var(--sticky-left-offset) + var(--gutter-width));
+        --sticky-content-right-offset: calc(var(--sticky-right-offset) + var(--gutter-width));
+        --page-container-width: var(--doc-client-width);
+        --page-content-width: calc(var(--page-container-width) - var(--sticky-content-left-offset) - var(--gutter-width));
+
+        margin-left: 0;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        background-color: inherit;
+        padding-top: 24px;
+    }
+}
+
+@if $ra-config-desktop-resp-breakpoint != null {
+    @media only screen and (min-width: $ra-config-desktop-resp-breakpoint) {
+        .ra-page {
+            .ra-page-viewport {
+                --gutter-width: calc((100vw - #{$ra-config-system-style-screen-max-width}) / 2);
+            }
+        }
+    }
+}

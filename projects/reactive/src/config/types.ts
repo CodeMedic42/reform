@@ -170,6 +170,16 @@ export interface ConfigState {
         schemes: Record<string, InteractiveScheme>;
         custom: Record<string, InteractiveScheme>;
     };
+    system: {
+        colors: {
+            defaults: Record<string, string>;
+            custom: Record<string, string>;
+        };
+        styles: {
+            defaults: Record<string, string>;
+            custom: Record<string, string>;
+        };
+    };
     grayscale: Record<string, string>;
     base: {
         fontSize: string;

@@ -1,4 +1,4 @@
-import Timeline from '../../../../../reactive/dist/components/display/timeline';
+import Timeline from '@reformjs/reactive/display/timeline';
 
 export default {
     title: 'Display/Timeline',

@@ -9,6 +9,7 @@ import { downloadFile } from './export/download';
 import { PaletteSection } from './sections/PaletteSection';
 import { InteractiveDesignsSection } from './sections/InteractiveDesignsSection';
 import { GrayscaleSection } from './sections/GrayscaleSection';
+import { SystemSection } from './sections/SystemSection';
 import { TypographySection } from './sections/TypographySection';
 import { ButtonSection } from './sections/ButtonSection';
 import { TabsSection } from './sections/TabsSection';
@@ -20,6 +21,7 @@ const TABS = [
     { id: 'palette', label: 'Palette' },
     { id: 'interactive', label: 'Interactive' },
     { id: 'grayscale', label: 'Grayscale' },
+    { id: 'system', label: 'System' },
     { id: 'typography', label: 'Typography' },
     { id: 'button', label: 'Button' },
     { id: 'tabs', label: 'Tabs' },
@@ -219,6 +221,9 @@ export function ConfigPanel({ active }: ConfigPanelProps) {
                 )}
                 {activeTab === 'grayscale' && (
                     <GrayscaleSection config={config} onChange={updateConfig} />
+                )}
+                {activeTab === 'system' && (
+                    <SystemSection config={config} onChange={updateConfig} />
                 )}
                 {activeTab === 'typography' && (
                     <TypographySection config={config} onChange={updateConfig} />

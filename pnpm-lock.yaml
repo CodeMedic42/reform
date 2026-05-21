@@ -724,6 +724,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.18.1
+      memoize-one:
+        specifier: ^5.2.1
+        version: 5.2.1
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
@@ -735,7 +738,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       react-text-mask:
         specifier: ^5.5.0
-        version: 5.5.0
+        version: 5.5.0(react@18.3.1)
       scroll-into-view-if-needed:
         specifier: ^3.0.10
         version: 3.1.0
@@ -769,7 +772,7 @@ importers:
         version: 5.17.0
       '@testing-library/react':
         specifier: ^12.1.0
-        version: 12.1.5
+        version: 12.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
         specifier: ^14.4.3
         version: 14.6.1(@testing-library/dom@9.3.4)
@@ -856,7 +859,7 @@ importers:
         version: 4.1.5(@types/node@20.19.39)(@vitest/browser-playwright@4.1.5)(jsdom@20.0.3)(vite@8.0.10(@types/node@20.19.39)(esbuild@0.27.7)(sass@1.99.0)(terser@5.36.0)(tsx@4.21.0)(yaml@2.8.3))
       vitest-browser-react:
         specifier: ^2.2.0
-        version: 2.2.0(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(vitest@4.1.5)
+        version: 2.2.0(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@4.1.5)
       webpack:
         specifier: ^5.75.0
         version: 5.96.1(@swc/core@1.9.2)(esbuild@0.27.7)(webpack-cli@5.1.4)
@@ -7793,6 +7796,9 @@ packages:
     resolution: {integrity: sha512-UERzLsxzllchadvbPs5aolHh65ISpKpM+ccLbOJ8/vvpBKmAWf+la7dXFy7Mr0ySHbdHrFv5kGFCUHHe6GFEmw==}
     engines: {node: '>= 4.0.0'}
 
+  memoize-one@5.2.1:
+    resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
+
   meow@13.2.0:
     resolution: {integrity: sha512-pxQJQzB6djGPXh08dacEloMFopsOqGVRKFPYvPOt9XDZ1HasbgDZA74CJGreSU4G3Ak7EFJGoiH2auq+yXISgA==}
     engines: {node: '>=18'}
@@ -13580,11 +13586,13 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/react@12.1.5':
+  '@testing-library/react@12.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@testing-library/dom': 8.20.1
       '@types/react-dom': 17.0.25
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   '@testing-library/user-event@14.6.1(@testing-library/dom@9.3.4)':
     dependencies:
@@ -19185,6 +19193,8 @@ snapshots:
     dependencies:
       fs-monkey: 1.0.6
 
+  memoize-one@5.2.1: {}
+
   meow@13.2.0: {}
 
   meow@5.0.0:
@@ -20471,9 +20481,10 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       redux: 4.2.1
 
-  react-text-mask@5.5.0:
+  react-text-mask@5.5.0(react@18.3.1):
     dependencies:
       prop-types: 15.8.1
+      react: 18.3.1
 
   react@18.3.1:
     dependencies:
@@ -22299,8 +22310,10 @@ snapshots:
       tsx: 4.21.0
       yaml: 2.8.3
 
-  vitest-browser-react@2.2.0(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(vitest@4.1.5):
+  vitest-browser-react@2.2.0(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vitest@4.1.5):
     dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       vitest: 4.1.5(@types/node@20.19.39)(@vitest/browser-playwright@4.1.5)(jsdom@20.0.3)(vite@8.0.10(@types/node@20.19.39)(esbuild@0.27.7)(sass@1.99.0)(terser@5.36.0)(tsx@4.21.0)(yaml@2.8.3))
     optionalDependencies:
       '@types/react': 18.3.28

@@ -5,3 +5,17 @@
     font-weight: $ra-config-default-font-weight;
     scroll-behavior: smooth;
 }
+
+html {
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}
+
+html,
+body {
+    overscroll-behavior: none;
+    margin: 0px !important;
+    padding: 0px !important;
+    -webkit-tap-highlight-color: transparent;
+}

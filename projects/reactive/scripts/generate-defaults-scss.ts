@@ -118,6 +118,18 @@ function generate(): string {
         lines.push('');
     }
 
+    // System colors
+    for (const [name, value] of Object.entries(config.system.colors.defaults)) {
+        lines.push(`$ra-config-system-color-${name}: ${value};`);
+    }
+    lines.push('');
+
+    // System styles
+    for (const [name, value] of Object.entries(config.system.styles.defaults)) {
+        lines.push(`$ra-config-system-style-${name}: ${value};`);
+    }
+    lines.push('');
+
     // Grayscale
     for (const [key, value] of Object.entries(config.grayscale)) {
         if (key === 'transparent') continue; // transparent is not a configurable color

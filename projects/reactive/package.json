@@ -28,6 +28,10 @@
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     },
+    "./arrangement/card": {
+      "import": "./dist/components/arrangement/card/index.mjs",
+      "types": "./dist/components/arrangement/card/index.d.ts"
+    },
     "./arrangement/infinite-list": {
       "import": "./dist/components/arrangement/infinite-list/index.mjs",
       "types": "./dist/components/arrangement/infinite-list/index.d.ts"
@@ -36,9 +40,17 @@
       "import": "./dist/components/arrangement/layout/index.mjs",
       "types": "./dist/components/arrangement/layout/index.d.ts"
     },
+    "./arrangement/page": {
+      "import": "./dist/components/arrangement/page/index.mjs",
+      "types": "./dist/components/arrangement/page/index.d.ts"
+    },
     "./arrangement/scaling-container": {
       "import": "./dist/components/arrangement/scaling-container/index.mjs",
       "types": "./dist/components/arrangement/scaling-container/index.d.ts"
+    },
+    "./arrangement/sticky-container": {
+      "import": "./dist/components/arrangement/sticky-container/index.mjs",
+      "types": "./dist/components/arrangement/sticky-container/index.d.ts"
     },
     "./arrangement/tab-bar": {
       "import": "./dist/components/arrangement/tab-bar/index.mjs",
@@ -75,6 +87,10 @@
     "./display/spinner": {
       "import": "./dist/components/display/spinner/index.mjs",
       "types": "./dist/components/display/spinner/index.d.ts"
+    },
+    "./display/table": {
+      "import": "./dist/components/display/table/index.mjs",
+      "types": "./dist/components/display/table/index.d.ts"
     },
     "./display/typography": {
       "import": "./dist/components/display/typography/index.mjs",
@@ -201,6 +217,7 @@
     "fs-extra": "^9.0.1",
     "jest-puppeteer": "^6.2.0",
     "lodash-es": "^4.17.21",
+    "memoize-one": "^5.2.1",
     "prop-types": "^15.8.1",
     "react-text-mask": "^5.5.0",
     "scroll-into-view-if-needed": "^3.0.10",

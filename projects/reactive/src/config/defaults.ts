@@ -194,6 +194,20 @@ export const DEFAULT_CONFIG: ConfigState = {
         },
         custom: {},
     },
+    system: {
+        colors: {
+            defaults: {
+                'page-background': '#f7f7f7',
+            },
+            custom: {},
+        },
+        styles: {
+            defaults: {
+                'screen-max-width': '1710px',
+            },
+            custom: {},
+        },
+    },
     grayscale: {
         'g-0': '#ffffff',
         'g-2': '#fafafa',

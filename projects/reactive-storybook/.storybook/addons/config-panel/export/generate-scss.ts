@@ -147,6 +147,28 @@ export function generateScss(config: ConfigState): string {
         lines.push(`$ra-config-interactive-colors-custom: (\n${entries.join('\n')}\n);`);
     }
 
+    // System colors - always emit all active colors since the library has no built-in defaults
+    for (const [name, value] of Object.entries(config.system.colors.defaults)) {
+        lines.push(`$ra-config-system-color-${name}: ${value};`);
+    }
+    if (Object.keys(config.system.colors.custom).length > 0) {
+        lines.push('');
+        const entries = Object.entries(config.system.colors.custom)
+            .map(([name, value]) => `${indent(`"${name}": ${value},`, 1)}`);
+        lines.push(`$ra-config-system-colors-custom: (\n${entries.join('\n')}\n);`);
+    }
+
+    // System styles - always emit all active styles since the library has no built-in defaults
+    for (const [name, value] of Object.entries(config.system.styles.defaults)) {
+        lines.push(`$ra-config-system-style-${name}: ${value};`);
+    }
+    if (Object.keys(config.system.styles.custom).length > 0) {
+        lines.push('');
+        const entries = Object.entries(config.system.styles.custom)
+            .map(([name, value]) => `${indent(`"${name}": ${value},`, 1)}`);
+        lines.push(`$ra-config-system-styles-custom: (\n${entries.join('\n')}\n);`);
+    }
+
     // Grayscale overrides
     for (const [key, value] of Object.entries(config.grayscale)) {
         if (DEFAULT_CONFIG.grayscale[key] !== value) {

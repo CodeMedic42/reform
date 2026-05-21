@@ -1,0 +1,50 @@
+@use 'sass:list';
+@use 'sass:map';
+
+// ---------------------------------------------------------------------------
+// System colors
+// ---------------------------------------------------------------------------
+
+$ra-config-system-color-page-background: null !default;
+
+$ra-config-system-colors-custom: () !default;
+
+// Filter out null system color values
+$ra-config-system-colors-defaults: ();
+@each $name, $value in (
+    "page-background": $ra-config-system-color-page-background,
+) {
+    @if $value != null {
+        $ra-config-system-colors-defaults: map.merge($ra-config-system-colors-defaults, ($name: $value)) !global;
+    }
+}
+
+$ra-config-system-colors: map.merge($ra-config-system-colors-defaults, $ra-config-system-colors-custom);
+
+@if list.length($ra-config-system-colors) == 0 {
+    @warn "No system colors configured. Import defaults.scss before index.scss, or define system color variables.";
+}
+
+// ---------------------------------------------------------------------------
+// System styles
+// ---------------------------------------------------------------------------
+
+$ra-config-system-style-screen-max-width: null !default;
+
+$ra-config-system-styles-custom: () !default;
+
+// Filter out null system style values
+$ra-config-system-styles-defaults: ();
+@each $name, $value in (
+    "screen-max-width": $ra-config-system-style-screen-max-width,
+) {
+    @if $value != null {
+        $ra-config-system-styles-defaults: map.merge($ra-config-system-styles-defaults, ($name: $value)) !global;
+    }
+}
+
+$ra-config-system-styles: map.merge($ra-config-system-styles-defaults, $ra-config-system-styles-custom);
+
+@if list.length($ra-config-system-styles) == 0 {
+    @warn "No system styles configured. Import defaults.scss before index.scss, or define system style variables.";
+}

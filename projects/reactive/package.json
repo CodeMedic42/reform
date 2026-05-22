@@ -48,6 +48,10 @@
       "import": "./dist/components/arrangement/scaling-container/index.mjs",
       "types": "./dist/components/arrangement/scaling-container/index.d.ts"
     },
+    "./arrangement/static-container": {
+      "import": "./dist/components/arrangement/static-container/index.mjs",
+      "types": "./dist/components/arrangement/static-container/index.d.ts"
+    },
     "./arrangement/sticky-container": {
       "import": "./dist/components/arrangement/sticky-container/index.mjs",
       "types": "./dist/components/arrangement/sticky-container/index.d.ts"

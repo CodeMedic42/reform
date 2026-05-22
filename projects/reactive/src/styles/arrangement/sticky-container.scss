@@ -13,6 +13,8 @@
     align-items: stretch;
     box-sizing: content-box;
     background-color: inherit;
+    position: relative;
+    z-index: 1;
 
     .ra-sticky-container-left-gutter,
     .ra-sticky-container-right-gutter {
@@ -55,10 +57,18 @@
     .ra-sticky-container-inner {
         --sticky-left-offset: calc(var(--sticky-left-offset-transfer) + var(--sticky-gutter-width) + var(--sticky-gutter-padding));
         --sticky-right-offset: calc(var(--sticky-right-offset-transfer) + var(--sticky-gutter-width) + var(--sticky-gutter-padding));
-        --sticky-visible-content-width: var(--sticky-visible-content-width-transfer);
+        --sticky-visible-content-width: calc(var(--sticky-visible-content-width-transfer) - var(--sticky-gutter-padding) - var(--sticky-gutter-padding));
 
         flex-grow: 1;
         flex-shrink: 1;
         background-color: inherit;
     }
+}
+
+.ra-static-container {
+    position: sticky;
+    left: var(--sticky-left-offset);
+    width: var(--sticky-visible-content-width);
+    z-index: 110;
+    // transform-style: preserve-3d;
 }

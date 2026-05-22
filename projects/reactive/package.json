@@ -44,6 +44,10 @@
       "import": "./dist/components/arrangement/page/index.mjs",
       "types": "./dist/components/arrangement/page/index.d.ts"
     },
+    "./arrangement/panel-group": {
+      "import": "./dist/components/arrangement/panel-group/index.mjs",
+      "types": "./dist/components/arrangement/panel-group/index.d.ts"
+    },
     "./arrangement/scaling-container": {
       "import": "./dist/components/arrangement/scaling-container/index.mjs",
       "types": "./dist/components/arrangement/scaling-container/index.d.ts"

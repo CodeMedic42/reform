@@ -128,9 +128,9 @@ import displayTableScss from 'reactive-scss-raw/display/table.scss?raw';
 // @ts-expect-error raw import
 import arrangementIndexScss from 'reactive-scss-raw/arrangement/index.scss?raw';
 // @ts-expect-error raw import
-import arrangementPageIndexScss from 'reactive-scss-raw/arrangement/page/index.scss?raw';
+import arrangementPageScss from 'reactive-scss-raw/arrangement/page.scss?raw';
 // @ts-expect-error raw import
-import arrangementPagePageScss from 'reactive-scss-raw/arrangement/page/page.scss?raw';
+import arrangementPanelGroupScss from 'reactive-scss-raw/arrangement/panel-group.scss?raw';
 // @ts-expect-error raw import
 import arrangementStickyContainerScss from 'reactive-scss-raw/arrangement/sticky-container.scss?raw';
 // @ts-expect-error raw import
@@ -213,8 +213,8 @@ export const scssSourceMap: Record<string, string> = {
     'display/table.scss': displayTableScss,
 
     'arrangement/index.scss': arrangementIndexScss,
-    'arrangement/page/index.scss': arrangementPageIndexScss,
-    'arrangement/page/page.scss': arrangementPagePageScss,
+    'arrangement/page.scss': arrangementPageScss,
+    'arrangement/panel-group.scss': arrangementPanelGroupScss,
     'arrangement/sticky-container.scss': arrangementStickyContainerScss,
     'arrangement/card.scss': arrangementCardScss,
 

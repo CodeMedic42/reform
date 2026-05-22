@@ -1,5 +1,5 @@
-@use '../../configuration/system' as *;
-@use '../../configuration/layout' as *;
+@use '../configuration/system' as *;
+@use '../configuration/layout' as *;
 
 .ra-page {
     --sticky-left-offset: 0px;
@@ -22,6 +22,8 @@
 
     .ra-page-container {
         --sticky-gutter-width: var(--gutter-width);
+
+        min-width: var(--doc-client-width);
 
         > .ra-sticky-container-inner {
             padding-bottom: 24px;

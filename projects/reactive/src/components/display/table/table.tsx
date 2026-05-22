@@ -1,9 +1,8 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import {
     get,
     map,
-    slice,
     isString,
     isNil,
     noop,
@@ -11,21 +10,9 @@ import {
     forEach,
     join,
     isArray,
-    isEmpty,
     isBoolean,
     reduce,
-    orderBy,
-    words,
-    escapeRegExp,
-    filter,
 } from 'lodash-es';
-// memoize-one ships an ESM `.d.ts` (`export default memoizeOne`) but a CJS
-// runtime (`module.exports = memoizeOne`). Under `moduleResolution: nodenext`
-// TypeScript resolves the package as CJS and treats the default-import as the
-// namespace, which then appears non-callable. The runtime value IS the
-// function, so cast to a callable shape that preserves the wrapped fn's type.
-import memoizeOneDefault from 'memoize-one';
-const memoize = memoizeOneDefault as unknown as <T extends (...args: never[]) => unknown>(fn: T) => T;
 import TableBase from './base/table-base.js';
 import HeadBase from './base/head-base.js';
 import HeaderBase from './base/header-base.js';
@@ -68,8 +55,6 @@ export interface SimpleTableColumn {
     headerClass?: string | null;
     cellValuePath?: SortPath;
     width?: string;
-    cellFilterPath?: SortPath;
-    filterable?: boolean;
     cellSortPath?: SortPath;
     sortable?: boolean;
     bold?: boolean;
@@ -108,13 +93,10 @@ export interface SimpleTableProps {
     className?: string | null;
     items?: TableItem[] | Record<string, TableItem> | null;
     columns: SimpleTableColumn[];
-    filterText?: string | null;
     alwaysShowHeaders?: boolean;
     minWidth?: number | null;
     maxHeight?: number | null;
     pageTable?: boolean;
-    initialSortPath?: SortPath | null;
-    initialSortDescending?: boolean;
     sortPath?: SortPath | null;
     sortDescending?: boolean;
     paddingSize?: 'sm' | 'md' | 'lg';
@@ -130,20 +112,9 @@ export interface SimpleTableProps {
     onHeaderSelect?: (items: TableItem[], checked: boolean) => void;
     onRowSelect?: (item: TableItem, checked: boolean, rowIndex: number) => void;
     renderRowChild?: ((item: TableItem, rowIndex: number) => React.ReactNode) | null;
-    isRowFiltered?: ((item: TableItem, filterText: string | null) => boolean) | null;
     onClickRow?: ((event: RowClickEvent) => void) | null;
-    currentPage?: number | null;
-    recordsPerPage?: number | null;
     useParentScroll?: boolean;
-    onFilteredItemsChange?: ((items: TableItem[]) => void) | null;
     onSortChange?: ((sortPath: SortPath | null, sortDescending: boolean) => void) | null;
-    disableInternalSorting?: boolean;
-}
-
-interface SimpleTableState {
-    sortPath: SortPath | null;
-    sortDescending: boolean;
-    disableInternalSorting: boolean;
 }
 
 function isSortPathsEqual(first: SortPath | null, second: SortPath | null) {
@@ -173,273 +144,141 @@ function getValueFromPath(item: TableItem, valuePath: SortPath | undefined): str
     return get(item, valuePath, '') as string;
 }
 
-/**
- * Builds the filter regex used to filter table rows from the filterText
- * string. Matching rows must have values strings that partially match each
- * word in filterText.
- */
-function buildFilterRegex(filterText: string): RegExp {
-    const filterWords = words(filterText, /[^\s]+/g);
-
-    // Construct a regex lookahead for each word, which is how to do AND
-    // operators in regex
-    let regexStr = '';
-    forEach(filterWords, (word) => {
-        regexStr = `${regexStr}(?=.*${escapeRegExp(word)})`;
-    });
-
-    return new RegExp(`^${regexStr}.*$`, 'i');
-}
-
-function sortItems(
-    items: TableItem[],
-    sortPath: SortPath | null,
-    sortDescending: boolean,
-): TableItem[] {
-    if (!sortPath) {
-        return items;
+export default function Table({
+    id = null,
+    className = '',
+    items = null,
+    columns,
+    alwaysShowHeaders = false,
+    minWidth = null,
+    maxHeight = null,
+    pageTable = false,
+    stickyColumns = 0,
+    columnWidthsFitContent = false,
+    headerSelectable = false,
+    selectable = false,
+    isHeaderSelected,
+    isRowSelected,
+    onHeaderSelect = noop,
+    onRowSelect = noop,
+    renderRowChild = null,
+    onClickRow = null,
+    useParentScroll = false,
+    sortPath = null,
+    sortDescending = false,
+    onSortChange = null,
+}: SimpleTableProps): React.ReactElement | null {
+    let baseItems: TableItem[] = [];
+    if (isArray(items)) {
+        baseItems = items;
+    } else if (!isNil(items)) {
+        baseItems = Object.values(items);
     }
 
-    return orderBy(
-        items,
-        (item) => {
-            if (isArray(sortPath)) {
-                return map(sortPath, (path) => {
-                    const ref = (get(item, path) ?? '') as unknown;
-                    if (typeof ref === 'string') {
-                        return ref.toLowerCase();
-                    }
-                    return ref;
-                });
+    if (baseItems.length === 0 && !alwaysShowHeaders) {
+        return null;
+    }
+
+    const handleSort = ({ meta }: SortClickEvent) => {
+        const clicked = meta as SortPath | null;
+        let nextSortPath: SortPath | null = clicked;
+        let nextSortDescending = false;
+
+        if (isSortPathsEqual(clicked, sortPath)) {
+            if (sortDescending) {
+                nextSortPath = null;
+            } else {
+                nextSortDescending = true;
             }
-            const ref = (get(item, sortPath) ?? '') as unknown;
-            if (typeof ref === 'string') {
-                return ref.toLowerCase();
-            }
-            return ref;
-        },
-        sortDescending ? 'desc' : 'asc',
-    );
-}
-
-function filterItems(
-    items: TableItem[],
-    columns: SimpleTableColumn[],
-    isRowFiltered: SimpleTableProps['isRowFiltered'],
-    filterText: string | null | undefined,
-): TableItem[] {
-    let filterRegex: RegExp | null = null;
-
-    if (filterText && filterText.length > 0) {
-        filterRegex = buildFilterRegex(filterText);
-    }
-
-    if (isNil(filterRegex) && isNil(isRowFiltered)) {
-        return items;
-    }
-
-    return filter(items, (item) => {
-        let rowFilterString = '';
-
-        if (!isNil(isRowFiltered) && isRowFiltered(item, filterText ?? null)) {
-            return false;
         }
 
-        if (isNil(filterRegex)) {
-            return true;
+        if (onSortChange) {
+            onSortChange(nextSortPath, nextSortDescending);
         }
-
-        forEach(columns, (column) => {
-            const { renderCell, cellValuePath, filterable, cellFilterPath } = column;
-
-            let cellFilterString = '';
-            if (!renderCell && cellValuePath) {
-                cellFilterString = getValueFromPath(item, cellValuePath);
-            }
-
-            if (filterable) {
-                if (cellFilterPath) {
-                    cellFilterString = getValueFromPath(item, cellFilterPath);
-                }
-            } else if (isEmpty(cellFilterString)) {
-                cellFilterString = getValueFromPath(item, cellValuePath);
-            }
-
-            if (!isEmpty(cellFilterString)) {
-                rowFilterString = `${rowFilterString} ${cellFilterString}`;
-            }
-        });
-
-        return rowFilterString.match(filterRegex) !== null;
-    });
-}
-
-function getPageItems(
-    items: TableItem[],
-    currentPage: number | null | undefined,
-    recordsPerPage: number | null | undefined,
-): TableItem[] {
-    if (
-        isNil(currentPage)
-        || currentPage <= 0
-        || isNil(recordsPerPage)
-        || recordsPerPage < 1
-    ) {
-        return items;
-    }
-
-    return slice(
-        items,
-        (currentPage - 1) * recordsPerPage,
-        currentPage * recordsPerPage,
-    );
-}
-
-export default class Table extends PureComponent<SimpleTableProps, SimpleTableState> {
-    static defaultProps: Partial<SimpleTableProps> = {
-        id: null,
-        className: '',
-        items: null,
-        filterText: null,
-        alwaysShowHeaders: false,
-        minWidth: null,
-        maxHeight: null,
-        pageTable: false,
-        initialSortPath: null,
-        initialSortDescending: false,
-        paddingSize: 'md',
-        stickyColumns: 0,
-        columnWidthsFitContent: false,
-        headerSelectable: false,
-        selectable: false,
-        isHeaderSelected: () => false,
-        isRowSelected: () => false,
-        onHeaderSelect: noop,
-        onRowSelect: noop,
-        renderRowChild: null,
-        isRowFiltered: null,
-        onClickRow: null,
-        currentPage: null,
-        recordsPerPage: null,
-        useParentScroll: false,
-        onFilteredItemsChange: null,
-        onSortChange: null,
-        disableInternalSorting: false,
-        sortPath: null,
-        sortDescending: false,
     };
 
-    allColumns: SimpleTableColumn[] = [];
-    finalItems: TableItem[] = [];
-    sortItems: typeof sortItems;
-    filterItems: typeof filterItems;
-    getPageItems: typeof getPageItems;
+    const handleHeadCheck = (headerChecked: boolean) => {
+        onHeaderSelect([...baseItems], headerChecked);
+    };
 
-    constructor(props: SimpleTableProps) {
-        super(props);
-        const {
-            initialSortPath,
-            initialSortDescending,
-            disableInternalSorting,
-            sortPath,
-            sortDescending,
-        } = props;
+    let allColumns: SimpleTableColumn[] = columns;
 
-        this.state = {
-            sortPath: disableInternalSorting ? sortPath ?? null : initialSortPath ?? null,
-            sortDescending: disableInternalSorting
-                ? sortDescending ?? false
-                : initialSortDescending ?? false,
-            disableInternalSorting: disableInternalSorting ?? false,
-        };
-
-        this.handleHeadCheck = this.handleHeadCheck.bind(this);
-        this.handleSort = this.handleSort.bind(this);
-        this.renderHeader = this.renderHeader.bind(this);
-        this.renderRow = this.renderRow.bind(this);
-
-        this.sortItems = memoize(sortItems);
-        this.filterItems = memoize(filterItems);
-        this.getPageItems = memoize(getPageItems);
+    // Add first column with checkboxes if the table rows are selectable
+    if (selectable) {
+        allColumns = [
+            {
+                headerBody: headerSelectable ? (
+                    <>
+                        <div className="no-display">Select</div>
+                        <CheckInput
+                            id="header-check-input"
+                            className="row-check-box"
+                            value={isHeaderSelected ? isHeaderSelected(items) : false}
+                            aria-label="Select all rows"
+                            size="sm"
+                            onChange={handleHeadCheck}
+                            ignoreHalo
+                        />
+                    </>
+                ) : (
+                    <div className="no-display">Select Item</div>
+                ),
+                renderCell: (_cellValue, item, rowIndex, selectionStatus) => (
+                    <CheckInput
+                        id={`check-input-${rowIndex}`}
+                        className="row-check-box"
+                        value={selectionStatus.selected}
+                        disabled={selectionStatus.disabled}
+                        aria-label="Select row"
+                        size="sm"
+                        onChange={(newChecked: boolean) =>
+                            onRowSelect(item, newChecked, rowIndex)
+                        }
+                        ignoreHalo
+                    />
+                ),
+                width: '48px',
+                sortable: false,
+            },
+            ...columns,
+        ];
     }
 
-    static getDerivedStateFromProps(
-        nextProps: SimpleTableProps,
-        currentState: SimpleTableState,
-    ): Partial<SimpleTableState> | null {
-        const { disableInternalSorting } = currentState;
+    // Set left for sticky columns beyond the first so th and td elements in
+    // that column will not overlap previous sticky columns when scrolling
+    // horizontally
+    if (stickyColumns > 1 || (pageTable && stickyColumns > 0)) {
+        allColumns = reduce(
+            allColumns,
+            (acc: SimpleTableColumn[], col, idx) => {
+                if (idx >= stickyColumns) {
+                    acc.push(col);
+                    return acc;
+                }
+                let leftPx = 0;
 
-        if (!disableInternalSorting) {
-            return null;
-        }
+                forEach(acc, ({ width }) => {
+                    if (!width || !width.includes('px')) {
+                        throw new Error(
+                            'Sticky columns other than the last must have static widths in pixels',
+                        );
+                    }
 
-        const { sortPath, sortDescending } = nextProps;
+                    leftPx += parseInt(width, 10);
+                });
 
-        return {
-            sortPath: sortPath ?? null,
-            sortDescending: sortDescending ?? false,
-        };
+                acc.push({
+                    ...col,
+                    left: `${leftPx}px`,
+                    lastColumn: idx === stickyColumns - 1,
+                });
+                return acc;
+            },
+            [] as SimpleTableColumn[],
+        );
     }
 
-    handleHeadCheck(headerChecked: boolean) {
-        const { onHeaderSelect } = this.props;
-
-        if (onHeaderSelect) {
-            onHeaderSelect([...this.finalItems], headerChecked);
-        }
-    }
-
-    handleSort({ meta }: SortClickEvent) {
-        const { onSortChange } = this.props;
-
-        const { disableInternalSorting } = this.state;
-
-        let { sortPath, sortDescending } = this.state;
-        let path = meta as SortPath | null;
-
-        if (isSortPathsEqual(path, sortPath)) {
-            if (sortDescending) {
-                sortPath = null;
-                sortDescending = false;
-            } else {
-                sortPath = path;
-                sortDescending = true;
-            }
-        } else {
-            sortPath = path;
-            sortDescending = false;
-        }
-
-        if (onSortChange) {
-            onSortChange(sortPath, sortDescending);
-        }
-
-        if (!disableInternalSorting) {
-            this.setState({ sortPath, sortDescending });
-        }
-    }
-
-    setSorting(sortPath: SortPath | null, sortDescending: boolean) {
-        const { onSortChange } = this.props;
-
-        const { disableInternalSorting } = this.state;
-
-        if (disableInternalSorting) {
-            return;
-        }
-
-        if (onSortChange) {
-            onSortChange(sortPath, sortDescending);
-        }
-
-        this.setState({ sortPath, sortDescending });
-    }
-
-    getFilteredItems(): TableItem[] {
-        return [...this.finalItems];
-    }
-
-    renderHeader(column: SimpleTableColumn, colIndex: number) {
+    const renderHeader = (column: SimpleTableColumn, colIndex: number) => {
         const {
             headerBody,
             headerClass,
@@ -465,8 +304,6 @@ export default class Table extends PureComponent<SimpleTableProps, SimpleTableSt
             );
         }
 
-        const { sortPath, sortDescending } = this.state;
-
         const newSortPath = cellSortPath ?? cellValuePath ?? null;
         let sortDirection: 'none' | 'ascending' | 'descending' = 'none';
 
@@ -484,18 +321,16 @@ export default class Table extends PureComponent<SimpleTableProps, SimpleTableSt
                 <HeaderSortableCellBase
                     sortDirection={sortDirection}
                     headerText={isString(headerBody) ? headerBody : null}
-                    onClick={this.handleSort}
+                    onClick={handleSort}
                     onClickMeta={newSortPath}
                 >
                     {headerBody}
                 </HeaderSortableCellBase>
             </HeaderBase>
         );
-    }
+    };
 
-    renderRow(item: TableItem, rowIndex: number) {
-        const { renderRowChild, isRowSelected, onClickRow } = this.props;
-
+    const renderRow = (item: TableItem, rowIndex: number) => {
         const rowChild = renderRowChild ? renderRowChild(item, rowIndex) : null;
 
         let selectedState = isRowSelected
@@ -509,7 +344,7 @@ export default class Table extends PureComponent<SimpleTableProps, SimpleTableSt
         const selectionState = selectedState as RowSelectionState;
 
         const cells = map(
-            this.allColumns,
+            allColumns,
             (
                 { cellValuePath, left, bold, renderCell, lastColumn },
                 colIndex,
@@ -564,160 +399,27 @@ export default class Table extends PureComponent<SimpleTableProps, SimpleTableSt
                 ) : null}
             </Fragment>
         );
-    }
+    };
 
-    render() {
-        const {
-            id,
-            className,
-            items,
-            columns,
-            filterText,
-            alwaysShowHeaders,
-            minWidth,
-            maxHeight,
-            pageTable,
-            paddingSize,
-            stickyColumns = 0,
-            columnWidthsFitContent,
-            selectable,
-            headerSelectable,
-            isHeaderSelected,
-            onRowSelect,
-            isRowFiltered,
-            currentPage,
-            recordsPerPage,
-            useParentScroll,
-            onFilteredItemsChange,
-        } = this.props;
-
-        this.allColumns = columns;
-
-        const { sortPath, sortDescending, disableInternalSorting } = this.state;
-
-        const baseItems = isArray(items)
-            ? items
-            : !isNil(items)
-                ? Object.values(items)
-                : [];
-
-        if (baseItems.length === 0 && !alwaysShowHeaders) {
-            return null;
-        }
-
-        let finalItems = this.filterItems(
-            baseItems,
-            columns,
-            isRowFiltered,
-            filterText,
-        );
-
-        if (!disableInternalSorting) {
-            finalItems = this.sortItems(finalItems, sortPath, sortDescending);
-        }
-
-        if (onFilteredItemsChange) {
-            onFilteredItemsChange(finalItems);
-        }
-
-        finalItems = this.getPageItems(finalItems, currentPage, recordsPerPage);
-        this.finalItems = finalItems;
-
-        // Add first column with checkboxes if the table rows are selectable
-        if (selectable) {
-            this.allColumns = [
-                {
-                    headerBody: headerSelectable ? (
-                        <>
-                            <div className="no-display">Select</div>
-                            <CheckInput
-                                id="header-check-input"
-                                className="row-check-box"
-                                value={isHeaderSelected ? isHeaderSelected(items) : false}
-                                aria-label="Select all rows"
-                                size="sm"
-                                onChange={this.handleHeadCheck}
-                                ignoreHalo
-                            />
-                        </>
-                    ) : (
-                        <div className="no-display">Select Item</div>
-                    ),
-                    renderCell: (_cellValue, item, rowIndex, selectionStatus) => (
-                        <CheckInput
-                            id={`check-input-${rowIndex}`}
-                            className="row-check-box"
-                            value={selectionStatus.selected}
-                            disabled={selectionStatus.disabled}
-                            aria-label="Select row"
-                            size="sm"
-                            onChange={(newChecked: boolean) =>
-                                onRowSelect && onRowSelect(item, newChecked, rowIndex)
-                            }
-                            ignoreHalo
-                        />
-                    ),
-                    width: '48px',
-                    sortable: false,
-                },
-                ...columns,
-            ];
-        }
-
-        // Set left for sticky columns beyond the first so th and td elements in
-        // that column will not overlap previous sticky columns when scrolling
-        // horizontally
-        if (stickyColumns > 1 || (pageTable && stickyColumns > 0)) {
-            this.allColumns = reduce(
-                this.allColumns,
-                (acc: SimpleTableColumn[], col, idx) => {
-                    if (idx >= stickyColumns) {
-                        acc.push(col);
-                        return acc;
-                    }
-                    let leftPx = 0;
-
-                    forEach(acc, ({ width }) => {
-                        if (!width || !width.includes('px')) {
-                            throw new Error(
-                                'Sticky columns other than the last must have static widths in pixels',
-                            );
-                        }
-
-                        leftPx += parseInt(width, 10);
-                    });
-
-                    acc.push({
-                        ...col,
-                        left: `${leftPx}px`,
-                        lastColumn: idx === stickyColumns - 1,
-                    });
-                    return acc;
-                },
-                [] as SimpleTableColumn[],
-            );
-        }
-
-        return (
-            <TableBase
-                id={id}
-                className={classnames(
-                    'ra-simple-table',
-                    selectable ? 'selectable' : '',
-                    className,
-                )}
-                minWidth={minWidth}
-                maxHeight={maxHeight}
-                pageTable={pageTable}
-                stickyColumns={stickyColumns}
-                columnWidthsFitContent={columnWidthsFitContent}
-                useParentScroll={useParentScroll}
-            >
-                <HeadBase>
-                    <RowBase>{map(this.allColumns, this.renderHeader)}</RowBase>
-                </HeadBase>
-                <BodyBase>{map(this.finalItems, this.renderRow)}</BodyBase>
-            </TableBase>
-        );
-    }
+    return (
+        <TableBase
+            id={id}
+            className={classnames(
+                'ra-simple-table',
+                selectable ? 'selectable' : '',
+                className,
+            )}
+            minWidth={minWidth}
+            maxHeight={maxHeight}
+            pageTable={pageTable}
+            stickyColumns={stickyColumns}
+            columnWidthsFitContent={columnWidthsFitContent}
+            useParentScroll={useParentScroll}
+        >
+            <HeadBase>
+                <RowBase>{map(allColumns, renderHeader)}</RowBase>
+            </HeadBase>
+            <BodyBase>{map(baseItems, renderRow)}</BodyBase>
+        </TableBase>
+    );
 }

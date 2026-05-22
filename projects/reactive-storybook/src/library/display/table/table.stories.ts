@@ -9,6 +9,7 @@ export default {
 export { default as RealPageLevel } from './stories/real/page-level';
 export { default as Minimum } from './stories/basic/minimum';
 export { default as ColumnWidthsFitContent } from './stories/basic/column-widths-fit-content';
+export { default as Sorting } from './stories/basic/sorting';
 
 export { default as StickyBasic } from './stories/sticky/basic';
 // export { default as basicOld } from './stories/basic-old';

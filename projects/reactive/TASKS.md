@@ -8,6 +8,12 @@
   - Replace the local `CheckInput` stub in `src/components/display/table/table.tsx` with `@reformjs/reactive/fields/check-input-field`. Adapt `onRowSelect` / `onHeaderSelect` (and `handleHeadCheck`) to the new `onChange(checked, meta)` two-arg signature. Until this is done, the `selectable` column renders blank cells.
   - Once the CheckInput wiring is fixed, port the `selectable` and `filterable` stories into `projects/reactive-storybook/src/library/display/table/stories/`. `filterable` also depends on a `Data` / `DataAccess` / `DataTextProperty` context, which doesn't currently exist in this project — confirm those are available (or stub equivalents) before porting.
   - Generic-type `Table<T>` (and `SimpleTableColumn<T>`, `RowClickMeta<T>`) so `items`, `renderCell`, `renderRowChild`, `isRowSelected`, `onRowSelect`, etc. carry real row types instead of `Record<string, unknown>`.
+- `display/table` is now a pure rendering component (sort/filter/paging logic removed). Update storybook stories that still rely on the old uncontrolled sort API — replace `initialSortPath`/`initialSortDescending` with controlled `sortPath` + `useState` + `onSortChange` (and pre-sort `items` if a sorted default is desired):
+  - `projects/reactive-storybook/src/library/display/table/stories/basic-old.tsx`
+  - `projects/reactive-storybook/src/library/display/table/stories/row-child.tsx`
+  - `projects/reactive-storybook/src/library/display/table/stories/scroll-container.tsx`
+  - `projects/reactive-storybook/src/library/display/table/stories/sticky/basic.tsx`
+  - `projects/reactive-storybook/src/library/display/table/stories/real/page-level.tsx`
 
 ## Bugs
 

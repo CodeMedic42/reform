@@ -1,5 +1,5 @@
 import PanelGroup from '@reformjs/reactive/arrangement/panel-group';
-import previewStory from './stories/preview.story';
+import horizontalStory from './stories/horizontal.story';
 import verticalStory from './stories/vertical.story';
 
 export default {
@@ -7,8 +7,8 @@ export default {
     component: PanelGroup,
 };
 
-export const Default = {
-    render: previewStory,
+export const Horizontal = {
+    render: horizontalStory,
 };
 
 export const Vertical = {

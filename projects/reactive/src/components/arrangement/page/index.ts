@@ -1,14 +1,10 @@
 import Page from './page.js';
-// import PageHeader from './page-header';
-// import PageLogo from './page-logo';
-import PageContainer from './page-container.js';
-// import PageContainerGroup from './page-container-group';
-// import PageTitle from './page-title';
+import PageContent from './page-content.js';
+import PageSurface from './page-surface.js';
 
 export default Page;
 
 export { 
-// PageHeader, PageLogo, 
-PageContainer, 
-// PageContainerGroup, PageTitle 
+    PageContent,
+    PageSurface,
 };

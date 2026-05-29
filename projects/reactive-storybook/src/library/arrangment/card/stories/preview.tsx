@@ -1,11 +1,11 @@
 import React from 'react';
 import Card from '@reformjs/reactive/arrangement/card';
-import Page, { PageContainer } from '@reformjs/reactive/arrangement/page';
+import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
 
 export default function DefaultStory() {
     return (
         <Page>
-			<PageContainer>
+			<PageContent>
 				<Card>
 					<div style={{ whiteSpace: 'nowrap' }}>
 						<span style={{
@@ -20,7 +20,7 @@ export default function DefaultStory() {
 						<span style={{ padding: '0 8px', background:'green', boxSizing: 'content-box' }}><span>Content that is long enough to test overflow behavior</span></span>
 					</div>
 				</Card>
-			</PageContainer>
+			</PageContent>
         </Page>
     );
 }

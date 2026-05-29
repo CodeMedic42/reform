@@ -5,8 +5,15 @@
     --sticky-left-offset: 0px;
     --sticky-right-offset: 0px;
     --sticky-top-offset: 0px;
+    --sticky-bottom-offset: 0px;
+    --gutter-width: 15px;
+    --page-top-panel-height: 0px;
+    --page-bottom-panel-height: 0px;
+    --page-left-panel-width: 0px;
+    --page-right-panel-width: 0px;
 
     display: inline-block;
+    vertical-align: top;
     background-color: $ra-config-system-color-page-background;
 
     &::before {
@@ -20,41 +27,117 @@
         z-index: -10;
     }
 
-    .ra-page-container {
-        --sticky-gutter-width: var(--gutter-width);
+    .ra-page-surface {
+        z-index: 2;
+        position: sticky;
+        background-color: inherit;
+        box-sizing: border-box;
 
-        min-width: var(--doc-client-width);
+        &.position-top,
+        &.position-bottom {
+            width: var(--doc-client-width);
+            left: 0px;
+            right: 0px;
+        }
 
-        > .ra-sticky-container-inner {
-            padding-bottom: 24px;
+        &.position-top {
+            grid-area: header;
+            height: var(--page-top-panel-height);
+            top: 0px;
+        }
+
+        &.position-bottom {
+            grid-area: footer;
+            height: var(--page-bottom-panel-height);
+            bottom: 0px;
+        }
+
+        &.position-left,
+        &.position-right {
+            height: calc(var(--doc-client-height) - var(--sticky-top-offset) - var(--sticky-bottom-offset));
+            top: 0px;
+            bottom: 0px;
+        } 
+
+        &.position-left {
+            width: var(--page-left-panel-width);
+            grid-area: left;
+            left: 0px;
+        }
+
+        &.position-right {
+            width: var(--page-right-panel-width);
+            grid-area: right;
+            right: 0px;
+        }
+    }
+
+    .ra-page-content {
+        --sticky-gutter-width: 20px;
+
+        grid-area: content;
+        min-width: var(--sticky-visible-content-width);
+        width: min-content;
+        
+        .ra-sticky-container-inner {
+            padding-top: var(--sticky-gutter-width);
+            padding-bottom: var(--sticky-gutter-width);
         }
     }
 
     .ra-page-viewport {
-        --gutter-width: 15px;
-        --sticky-left-offset: 0px;
-        --sticky-right-offset: 0px;
-        --sticky-container-left-offset: 0px;
-        --sticky-content-left-offset: calc(var(--sticky-left-offset) + var(--gutter-width));
-        --sticky-content-right-offset: calc(var(--sticky-right-offset) + var(--gutter-width));
-        --page-container-width: var(--doc-client-width);
-        --page-content-width: calc(var(--page-container-width) - var(--sticky-content-left-offset) - var(--gutter-width));
+        --sticky-visible-content-width: calc(var(--doc-client-width) - var(--sticky-left-offset) - var(--sticky-right-offset));
 
         margin-left: 0;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "header  header  header"
+            "left    content right"
+            "footer  footer  footer";
         box-sizing: border-box;
         background-color: inherit;
-        padding-top: 24px;
-    }
-}
+        min-height: var(--doc-client-height);
 
-@if $ra-config-desktop-resp-breakpoint != null {
-    @media only screen and (min-width: $ra-config-desktop-resp-breakpoint) {
-        .ra-page {
-            .ra-page-viewport {
-                --gutter-width: calc((100vw - #{$ra-config-system-style-screen-max-width}) / 2);
+        &:has(.ra-page-surface.position-top) {
+            --sticky-top-offset: var(--page-top-panel-height, 0px);
+
+            .ra-page-surface {
+                &.position-left,
+                &.position-right {
+                    top: var(--sticky-top-offset);
+                } 
             }
+        }
+
+        &:has(.ra-page-surface.position-bottom) {
+            --sticky-bottom-offset: var(--page-bottom-panel-height, 0px);
+
+            .ra-page-surface {
+                &.position-left,
+                &.position-right {
+                    bottom: var(--sticky-bottom-offset);
+                } 
+            }
+        }
+
+        &:has(.ra-page-surface.position-left) {
+            --sticky-left-offset: var(--page-left-panel-width, 0px);
+        }
+
+        &:has(.ra-page-surface.position-right) {
+            --sticky-right-offset: var(--page-right-panel-width, 0px);
         }
     }
 }
+
+// @if $ra-config-desktop-resp-breakpoint != null {
+//     @media only screen and (min-width: $ra-config-desktop-resp-breakpoint) {
+//         .ra-page {
+//             .ra-page-viewport {
+//                 --gutter-width: calc((100vw - #{$ra-config-system-style-screen-max-width}) / 2);
+//             }
+//         }
+//     }
+// }

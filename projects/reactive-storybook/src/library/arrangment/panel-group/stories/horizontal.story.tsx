@@ -1,12 +1,12 @@
 import React from 'react';
 import PanelGroup, { Panel } from '@reformjs/reactive/arrangement/panel-group';
-import Page, { PageContainer } from '@reformjs/reactive/arrangement/page';
+import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
 import Card from '@reformjs/reactive/arrangement/card';
 
 export default function DefaultStory() {
     return (
         <Page>
-            <PageContainer>
+            <PageContent>
                 <Card>
                     <PanelGroup
                         onResize={(weights) => console.log('onResize', weights)}
@@ -35,7 +35,7 @@ export default function DefaultStory() {
                         </Panel>
                     </PanelGroup>
                 </Card>
-            </PageContainer>
+            </PageContent>
         </Page>
     );
 }

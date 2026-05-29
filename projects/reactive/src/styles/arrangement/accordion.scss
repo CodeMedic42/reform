@@ -1,0 +1,85 @@
+.ra-accordion {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    &.orientation-vertical { flex-direction: column; }
+    &.orientation-horizontal { flex-direction: row; }
+
+    .ra-accordion-frame {
+        display: flex;
+        flex: 0 1 auto;
+        flex-grow: 0;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        transition: flex-grow 100ms linear;
+    }
+
+    &.orientation-vertical .ra-accordion-frame {
+        flex-direction: column;
+        border-top: 1px solid lightgray;
+    }
+
+    &.orientation-horizontal .ra-accordion-frame {
+        flex-direction: row;
+        border-left: 1px solid lightgray;
+    }
+
+    .ra-accordion-frame--expanded { flex-grow: 1; }
+
+    &.dragging .ra-accordion-frame,
+    &.dragging .ra-accordion-frame-content {
+        transition: none;
+    }
+
+    .ra-accordion-frame-header {
+        flex: 0 0 auto;
+        padding: 6px 10px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .ra-accordion-frame-resizer {
+        flex: 0 0 auto;
+        background-color: grey;
+
+        &:hover {
+            background: black;
+        }
+    }
+
+    &.orientation-vertical {
+        .ra-accordion-frame-resizer {
+            height: 4px;
+            width: 100%;
+            cursor: row-resize;
+        }
+    }
+
+    &.orientation-horizontal .ra-accordion-frame-resizer {
+        width: 4px;
+        height: 100%;
+        cursor: col-resize;
+    }
+
+    .ra-accordion-frame-content {
+        flex: 1 1 auto;
+        display: grid;
+        overflow: hidden;
+        transition: grid-template-rows 100ms linear, grid-template-columns 100ms linear;
+    }
+
+    &.orientation-vertical .ra-accordion-frame-content { grid-template-rows: 0fr; }
+    &.orientation-vertical .ra-accordion-frame--expanded > .ra-accordion-frame-content { grid-template-rows: 1fr; }
+
+    &.orientation-horizontal .ra-accordion-frame-content { grid-template-columns: 0fr; }
+    &.orientation-horizontal .ra-accordion-frame--expanded > .ra-accordion-frame-content { grid-template-columns: 1fr; }
+
+    .ra-accordion-frame-content-inner {
+        min-height: 0;
+        min-width: 0;
+    }
+}

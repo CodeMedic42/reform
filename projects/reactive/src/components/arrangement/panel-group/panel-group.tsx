@@ -204,7 +204,7 @@ function PanelGroup(props: PanelGroupProps) {
     return (
         <div
             ref={containerRef}
-            className={classNames('ra-panel-group', `ra-panel-group--${direction}`, className)}
+            className={classNames('ra-panel-group', `ra-panel-group', ${direction}`, className)}
             {...rest}
         >
             {content}

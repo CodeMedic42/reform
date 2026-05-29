@@ -135,6 +135,8 @@ import arrangementPanelGroupScss from 'reactive-scss-raw/arrangement/panel-group
 import arrangementStickyContainerScss from 'reactive-scss-raw/arrangement/sticky-container.scss?raw';
 // @ts-expect-error raw import
 import arrangementCardScss from 'reactive-scss-raw/arrangement/card.scss?raw';
+// @ts-expect-error raw import
+import arrangementAccordionScss from 'reactive-scss-raw/arrangement/accordion.scss?raw';
 
 // Fields
 // @ts-expect-error raw import
@@ -217,6 +219,7 @@ export const scssSourceMap: Record<string, string> = {
     'arrangement/panel-group.scss': arrangementPanelGroupScss,
     'arrangement/sticky-container.scss': arrangementStickyContainerScss,
     'arrangement/card.scss': arrangementCardScss,
+    'arrangement/accordion.scss': arrangementAccordionScss,
 
     'fields/index.scss': fieldsIndexScss,
     'fields/field-container.scss': fieldContainerScss,

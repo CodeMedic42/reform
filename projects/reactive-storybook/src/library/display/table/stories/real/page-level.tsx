@@ -1,14 +1,14 @@
 import React from 'react';
 import Table from '@reformjs/reactive/display/table';
 import { items, columns } from '../constants';
-import Page, { PageContainer } from '@reformjs/reactive/arrangement/page';
+import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
 import StaticContainer from '@reformjs/reactive/arrangement/static-container';
 import Card from '@reformjs/reactive/arrangement/card';
 
 function Basic() {
     return (
         <Page>
-            <PageContainer>
+            <PageContent>
                 <div
                     style={{
                         position: 'sticky',
@@ -51,7 +51,7 @@ function Basic() {
                         useParentScroll
                     />
                 </Card>
-            </PageContainer>
+            </PageContent>
         </Page> 
     );
 }

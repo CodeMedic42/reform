@@ -2,54 +2,66 @@ import React, { memo, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 
-function initScrollbarListener() {
-	const currentViewportWidth = null;
-	const currentViewportHeight = null;
-
-	function scrollbarHandler() {
-		const documentClientWidth = document.documentElement.clientWidth;
-		const documentClientHeight = document.documentElement.clientHeight;
-
-		if (currentViewportWidth !== documentClientWidth) {
-			document.documentElement.style.setProperty(
-				'--doc-client-width',
-				`${documentClientWidth}px`,
-			);
-		}
-
-		if (currentViewportHeight !== documentClientHeight) {
-			document.documentElement.style.setProperty(
-				'--doc-client-height',
-				`${documentClientHeight}px`,
-			);
-		}
-	}
-
-	scrollbarHandler();
-
-	window.addEventListener('resize', scrollbarHandler);
-
-	return scrollbarHandler;
-}
-
-const force = initScrollbarListener();
-
-export interface PageProps {
-	id?: string;
-	className?: string;
-	sticky?: boolean;
-	children?: React.ReactNode;
+export interface PageProps extends Omit<React.ComponentPropsWithoutRef<'div'>, 'style'> {
+	disableAdjustment?: boolean;
+	style?: React.CSSProperties & {
+		'--page-top-panel-height'?: string;
+		'--page-bottom-panel-height'?: string;
+		'--page-left-panel-width'?: string;
+		'--page-right-panel-width'?: string;
+		'--gutter-width'?: string;
+	};
 }
 
 function Page(props: PageProps): React.ReactElement {
-	const { id, className, sticky, children } = props;
+	const {
+		id,
+		className,
+		children,
+		disableAdjustment,
+		...rest
+	} = props;
 
 	const pageRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		force();
+		if (disableAdjustment) {
+			return;
+		}
 
-		const resizeObserver = new ResizeObserver(force);
+		let currentViewportWidth: number = 0;
+		let currentViewportHeight: number = 0;
+
+		function setClientLengths() {
+			const documentClientWidth = document.documentElement.clientWidth;
+			const documentClientHeight = document.documentElement.clientHeight;
+
+			if (currentViewportWidth !== documentClientWidth) {
+				document.documentElement.style.setProperty(
+					'--doc-client-width',
+					`${documentClientWidth}px`,
+				);
+
+				currentViewportWidth = documentClientWidth;
+			}
+
+			if (currentViewportHeight !== documentClientHeight) {
+				document.documentElement.style.setProperty(
+					'--doc-client-height',
+					`${documentClientHeight}px`,
+				);
+
+				currentViewportHeight = documentClientHeight;
+			}
+		}
+		
+		setClientLengths();
+
+		if (!isNil(window)) {
+			window.addEventListener('resize', setClientLengths);
+		}
+
+		const resizeObserver = new ResizeObserver(setClientLengths);
 		const node = pageRef.current;
 
 		if (!isNil(node)) {
@@ -60,6 +72,10 @@ function Page(props: PageProps): React.ReactElement {
 			if (!isNil(node)) {
 				resizeObserver.unobserve(node);
 			}
+
+			if (!isNil(window)) {
+				window.removeEventListener('resize', setClientLengths);
+			}
 		};
 	}, []);
 
@@ -67,9 +83,8 @@ function Page(props: PageProps): React.ReactElement {
 		<div
 			ref={pageRef}
 			id={id}
-			className={classnames('ra-page', className, {
-				sticky,
-			})}
+			className={classnames('ra-page', className)}
+			{...rest}
 		>
 			<div className="ra-page-viewport">{children}</div>
 		</div>

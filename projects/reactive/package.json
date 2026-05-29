@@ -28,6 +28,10 @@
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     },
+    "./arrangement/accordion": {
+      "import": "./dist/components/arrangement/accordion/index.mjs",
+      "types": "./dist/components/arrangement/accordion/index.d.ts"
+    },
     "./arrangement/card": {
       "import": "./dist/components/arrangement/card/index.mjs",
       "types": "./dist/components/arrangement/card/index.d.ts"

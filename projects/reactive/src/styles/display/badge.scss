@@ -1,0 +1,42 @@
+.ra-badge.ra-badge {
+    position: relative;
+    display: inline-flex;
+
+    .ra-badge-value {
+        z-index: 20;
+        position: absolute;
+        line-height: 1px;
+
+        &.ra-badge-tag {
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            line-height: 10px;
+            padding: 3px 5px;
+        }
+
+        &.position-top-right {
+            left: 100%;
+            bottom: 100%;
+            transform: translate(-50%, 50%) translateZ(1px);
+        }
+
+        &.position-bottom-right {
+            left: 100%;
+            top: 100%;
+            transform: translate(-50%, -50%) translateZ(1px);
+        }
+
+        &.position-top-left {
+            right: 100%;
+            bottom: 100%;
+            transform: translate(50%, 50%) translateZ(1px);
+        }
+
+        &.position-bottom-left {
+            right: 100%;
+            top: 100%;
+            transform: translate(50%, -50%) translateZ(1px);
+        }
+    }
+}

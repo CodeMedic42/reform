@@ -123,6 +123,8 @@ import displayIndexScss from 'reactive-scss-raw/display/index.scss?raw';
 import displayTimelineScss from 'reactive-scss-raw/display/timeline.scss?raw';
 // @ts-expect-error raw import
 import displayTableScss from 'reactive-scss-raw/display/table.scss?raw';
+// @ts-expect-error raw import
+import displayBadgeScss from 'reactive-scss-raw/display/badge.scss?raw';
 
 // Arrangement
 // @ts-expect-error raw import
@@ -213,6 +215,7 @@ export const scssSourceMap: Record<string, string> = {
     'display/index.scss': displayIndexScss,
     'display/timeline.scss': displayTimelineScss,
     'display/table.scss': displayTableScss,
+    'display/badge.scss': displayBadgeScss,
 
     'arrangement/index.scss': arrangementIndexScss,
     'arrangement/page.scss': arrangementPageScss,

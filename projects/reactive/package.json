@@ -92,6 +92,10 @@
       "import": "./dist/components/controls/tag/index.mjs",
       "types": "./dist/components/controls/tag/index.d.ts"
     },
+    "./display/badge": {
+      "import": "./dist/components/display/badge/index.mjs",
+      "types": "./dist/components/display/badge/index.d.ts"
+    },
     "./display/chip": {
       "import": "./dist/components/display/chip/index.mjs",
       "types": "./dist/components/display/chip/index.d.ts"

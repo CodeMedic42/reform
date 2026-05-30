@@ -10,35 +10,32 @@ export interface PaletteShades {
     900: string;
 }
 
-export interface InteractiveVariant {
-    clr: string;
-    bg: string;
-    br: string;
-    out: string;
-    'hover-clr': string;
-    'hover-bg': string;
-    'hover-br': string;
-    'hover-out': string;
-    'focus-clr': string;
-    'focus-bg': string;
-    'focus-br': string;
-    'focus-out': string;
-    'active-clr': string;
-    'active-bg': string;
-    'active-br': string;
-    'active-out': string;
-    'disabled-clr'?: string;
-    'disabled-bg'?: string;
-    'disabled-br'?: string;
-    'disabled-out'?: string;
+export type PaletteShade = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+
+export type PaletteRef =
+    | { palette: string; shade: PaletteShade }
+    | 'transparent';
+
+export interface VariantStateSlots {
+    clr: PaletteRef;
+    bg: PaletteRef;
+    br: PaletteRef;
+    out: PaletteRef;
+}
+
+export interface VariantStates {
+    default: VariantStateSlots;
+    hover: VariantStateSlots;
+    focus: VariantStateSlots;
+    active: VariantStateSlots;
+    disabled: VariantStateSlots;
 }
 
 export interface InteractiveScheme {
-    base: InteractiveVariant;
-    fill: InteractiveVariant;
+    variants: Record<string, VariantStates>;
 }
 
-export interface ButtonVariant {
+export interface ButtonDesign {
     'padding-v': string;
     'padding-h': string;
     'border-radius': string;
@@ -180,14 +177,13 @@ export interface ConfigState {
             custom: Record<string, string>;
         };
     };
-    grayscale: Record<string, string>;
     base: {
         fontSize: string;
         fontWeight: number;
     };
     button: {
-        defaultVariant: ButtonVariant;
-        variants: Record<string, ButtonVariant>;
+        defaultDesign: ButtonDesign;
+        designs: Record<string, ButtonDesign>;
     };
     tabs: TabConfig;
     inputs: {

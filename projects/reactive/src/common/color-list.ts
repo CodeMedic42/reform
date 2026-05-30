@@ -64,7 +64,7 @@ interface SchemeColorClassesOptions {
     colorRequired?: boolean;
     color?: string | null;
     enableBorder?: boolean;
-    design?: string | null;
+    variant?: string | null;
     borderWidth?: string | number | null;
 }
 
@@ -72,7 +72,7 @@ export function getSchemeColorClasses({
     colorRequired = true,
     color,
     enableBorder,
-    design,
+    variant,
     borderWidth,
 }: SchemeColorClassesOptions): string {
     if (isNil(color) && colorRequired) {
@@ -81,7 +81,7 @@ export function getSchemeColorClasses({
 
     let classes = 'ra-clr-int';
     classes = !isNil(color) ? `${classes} ra-clr-int-${color}` : classes;
-    classes = !isNil(design) ? `${classes} ra-clr-int-${design}` : classes;
+    classes = !isNil(variant) ? `${classes} ra-clr-int-${variant}` : classes;
     classes = enableBorder ? `${classes} sch-br` : classes;
     classes = !isNil(borderWidth)
         ? `${classes} border-${borderWidth}`

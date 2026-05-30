@@ -1,5 +1,13 @@
-import type { ConfigState, PaletteShades, InteractiveScheme, InteractiveVariant, ButtonVariant, FieldContainerVariant, HeadingLevelConfig, TextSizeConfig, ParagraphSizeConfig, TypographyResponsiveTier, ParagraphResponsiveTier } from '../types';
+import type { ConfigState, PaletteShades, InteractiveScheme, VariantStates, VariantStateSlots, ButtonDesign, FieldContainerVariant, HeadingLevelConfig, TextSizeConfig, ParagraphSizeConfig, TypographyResponsiveTier, ParagraphResponsiveTier } from '../types';
 import { DEFAULT_CONFIG } from '../defaults';
+import { buildPaletteMap, resolvePaletteRef, type PaletteMap } from '../util/resolve-palette-ref';
+
+const STATE_KEYS: (keyof VariantStates)[] = ['default', 'hover', 'focus', 'active', 'disabled'];
+const SLOT_KEYS: (keyof VariantStateSlots)[] = ['clr', 'bg', 'br', 'out'];
+
+function statePrefix(state: keyof VariantStates): string {
+    return state === 'default' ? '' : `${state}-`;
+}
 
 function indent(str: string, level: number): string {
     return '    '.repeat(level) + str;
@@ -12,21 +20,30 @@ function formatPaletteMap(shades: PaletteShades): string {
     return `(\n${lines.join('\n')}\n${indent(')', 1)}`;
 }
 
-function formatInteractiveVariant(variant: InteractiveVariant, indentLevel: number): string {
-    const props = Object.entries(variant)
-        .filter(([, v]) => v !== undefined)
-        .map(([k, v]) => indent(`"${k}": ${v},`, indentLevel));
-    return `(\n${props.join('\n')}\n${indent(')', indentLevel - 1)}`;
+function formatVariantStates(states: VariantStates, palettes: PaletteMap, indentLevel: number): string {
+    const lines: string[] = [];
+    for (const state of STATE_KEYS) {
+        const slots = states[state];
+        const prefix = statePrefix(state);
+        for (const slot of SLOT_KEYS) {
+            const resolved = resolvePaletteRef(slots[slot], palettes);
+            lines.push(indent(`"${prefix}${slot}": ${resolved},`, indentLevel));
+        }
+    }
+    return `(\n${lines.join('\n')}\n${indent(')', indentLevel - 1)}`;
 }
 
-function formatInteractiveScheme(scheme: InteractiveScheme, indentLevel: number): string {
-    const base = `${indent('"": ', indentLevel)}${formatInteractiveVariant(scheme.base, indentLevel + 1)},`;
-    const fill = `${indent('"fill": ', indentLevel)}${formatInteractiveVariant(scheme.fill, indentLevel + 1)},`;
-    return `(\n${base}\n${fill}\n${indent(')', indentLevel - 1)}`;
+function formatInteractiveScheme(scheme: InteractiveScheme, palettes: PaletteMap, indentLevel: number): string {
+    const entries: string[] = [];
+    for (const [variantName, states] of Object.entries(scheme.variants)) {
+        const key = variantName === 'base' ? '""' : `"${variantName}"`;
+        entries.push(indent(`${key}: ${formatVariantStates(states, palettes, indentLevel + 1)},`, indentLevel));
+    }
+    return `(\n${entries.join('\n')}\n${indent(')', indentLevel - 1)}`;
 }
 
-function formatButtonVariant(variant: ButtonVariant): string {
-    const entries = Object.entries(variant)
+function formatButtonDesign(design: ButtonDesign): string {
+    const entries = Object.entries(design)
         .filter(([, v]) => v !== undefined)
         .map(([k, v]) => indent(`"${k}": ${typeof v === 'number' ? v : v},`, 2));
     return `(\n${entries.join('\n')}\n${indent(')', 1)}`;
@@ -126,25 +143,40 @@ export function generateScss(config: ConfigState): string {
         lines.push(`$ra-config-palette-colors-custom: (\n${entries.join('\n')}\n);`);
     }
 
-    // Interactive design schemes - always emit all active schemes since the library has no built-in defaults
-    for (const [name, scheme] of Object.entries(config.interactiveDesigns.schemes)) {
+    // Interactive design schemes - resolved palette refs to hex
+    const palettes: PaletteMap = buildPaletteMap(config);
+    const schemeEntries = Object.entries(config.interactiveDesigns.schemes);
+    const defaultScheme = schemeEntries.find(([n]) => n === 'default')?.[1];
+    const nonDefaultSchemes = schemeEntries.filter(([n]) => n !== 'default');
+
+    if (defaultScheme) {
         lines.push('');
-        lines.push(`$ra-config-interactive-color-${name}-base: ${formatInteractiveVariant(scheme.base, 2)};`);
-        lines.push('');
-        lines.push(`$ra-config-interactive-color-${name}-fill: ${formatInteractiveVariant(scheme.fill, 2)};`);
-        lines.push('');
-        lines.push(`$ra-config-interactive-color-${name}: (`);
-        lines.push(`${indent('"": $ra-config-interactive-color-' + name + '-base,', 1)}`);
-        lines.push(`${indent('"fill": $ra-config-interactive-color-' + name + '-fill,', 1)}`);
-        lines.push(');');
+        lines.push(`$ra-config-interactive-color-default: ${formatInteractiveScheme(defaultScheme, palettes, 2)};`);
     }
 
-    // Custom interactive schemes
-    if (Object.keys(config.interactiveDesigns.custom).length > 0) {
+    // Union of non-base variant names across all schemes
+    const variantNames = new Set<string>();
+    for (const [, scheme] of [...schemeEntries, ...Object.entries(config.interactiveDesigns.custom)]) {
+        for (const variant of Object.keys(scheme.variants)) {
+            if (variant !== 'base') variantNames.add(variant);
+        }
+    }
+    const variantList = [...variantNames].map((v) => `'${v}'`).join(', ');
+    lines.push('');
+    lines.push(`$ra-config-interactive-designs: ${variantList || '()'};`);
+
+    // Combined interactive colors map (default scheme is emitted separately above)
+    const combinedSchemes = [
+        ...nonDefaultSchemes,
+        ...Object.entries(config.interactiveDesigns.custom),
+    ];
+    if (combinedSchemes.length > 0) {
         lines.push('');
-        const entries = Object.entries(config.interactiveDesigns.custom)
-            .map(([name, scheme]) => `${indent(`"${name}": ${formatInteractiveScheme(scheme, 3)},`, 1)}`);
-        lines.push(`$ra-config-interactive-colors-custom: (\n${entries.join('\n')}\n);`);
+        lines.push('$ra-config-interactive-colors: (');
+        for (const [name, scheme] of combinedSchemes) {
+            lines.push(indent(`"${name}": ${formatInteractiveScheme(scheme, palettes, 2)},`, 1));
+        }
+        lines.push(');');
     }
 
     // System colors - always emit all active colors since the library has no built-in defaults
@@ -167,17 +199,6 @@ export function generateScss(config: ConfigState): string {
         const entries = Object.entries(config.system.styles.custom)
             .map(([name, value]) => `${indent(`"${name}": ${value},`, 1)}`);
         lines.push(`$ra-config-system-styles-custom: (\n${entries.join('\n')}\n);`);
-    }
-
-    // Grayscale overrides
-    for (const [key, value] of Object.entries(config.grayscale)) {
-        if (DEFAULT_CONFIG.grayscale[key] !== value) {
-            const varName = key === 'white' ? '$clr-white' :
-                            key === 'black' ? '$clr-black' :
-                            key === 'transparent' ? '$clr-transparent' :
-                            `$clr-${key}`;
-            lines.push(`${varName}: ${value};`);
-        }
     }
 
     // Input settings
@@ -342,15 +363,15 @@ export function generateScss(config: ConfigState): string {
     }
 
     // Button settings
-    if (!mapsEqual(config.button.defaultVariant as unknown as Record<string, unknown>, DEFAULT_CONFIG.button.defaultVariant as unknown as Record<string, unknown>)) {
+    if (!mapsEqual(config.button.defaultDesign as unknown as Record<string, unknown>, DEFAULT_CONFIG.button.defaultDesign as unknown as Record<string, unknown>)) {
         lines.push('');
-        lines.push(`$ra-config-button-default-variant: ${formatButtonVariant(config.button.defaultVariant)};`);
+        lines.push(`$ra-config-button-default-design: ${formatButtonDesign(config.button.defaultDesign)};`);
     }
-    if (Object.keys(config.button.variants).length > 0) {
+    if (Object.keys(config.button.designs).length > 0) {
         lines.push('');
-        const entries = Object.entries(config.button.variants)
-            .map(([name, variant]) => `${indent(`"${name}": ${formatButtonVariant(variant)},`, 1)}`);
-        lines.push(`$ra-config-button-variants: (\n${entries.join('\n')}\n);`);
+        const entries = Object.entries(config.button.designs)
+            .map(([name, design]) => `${indent(`"${name}": ${formatButtonDesign(design)},`, 1)}`);
+        lines.push(`$ra-config-button-designs: (\n${entries.join('\n')}\n);`);
     }
 
     lines.push('');

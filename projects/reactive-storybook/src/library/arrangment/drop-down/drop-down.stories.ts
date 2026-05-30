@@ -1,7 +1,7 @@
-import DropDown from '@reformjs/reactive/controls/drop-down';
+import DropDown from '@reformjs/reactive/arrangement/drop-down';
 
 // export default {
-//     title: 'Controls/Drop Down',
+//     title: 'Arrangement/Drop Down',
 //     component: DropDown,
 // };
 
@@ -13,7 +13,7 @@ import DropDown from '@reformjs/reactive/controls/drop-down';
 // export { default as dropping } from './stories/dropping';
 
 export default {
-    title: 'Controls/Drop Down',
+    title: 'Arrangement/Drop Down',
     component: DropDown,
     // tags: ['autodocs'],
     // argTypes: {

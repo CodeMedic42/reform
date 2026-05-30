@@ -178,21 +178,21 @@ function LoadedComponent(props: LoadedComponentProps) {
 					<FormTextField path="a" />
 					<FormButton
 						color='primary'
-						design='fill'
+						variant='fill'
 						onClick={handleListRemove}
 					>
 						-
 					</FormButton>
 					<FormButton
 						color='primary'
-						design='fill'
+						variant='fill'
 						onClick={handleListItemUp}
 					>
 						up
 					</FormButton>
 					<FormButton
 						color='primary'
-						design='fill'
+						variant='fill'
 						onClick={handleListItemDown}
 					>
 						down
@@ -202,14 +202,14 @@ function LoadedComponent(props: LoadedComponentProps) {
 			<FormButton
 				path='baz'
 				color='primary'
-        		design='fill'
+        		variant='fill'
 				onClick={handleListAdd}>
 				Add
 			</FormButton>
 			<FormButton
 				type='submit'
 				color='primary'
-        		design='fill'
+        		variant='fill'
 			>
 				Submit
 			</FormButton>

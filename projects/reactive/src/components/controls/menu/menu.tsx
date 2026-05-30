@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import DropDown from '../drop-down/index.js';
+import DropDown from '../../arrangement/drop-down/index.js';
 import MenuList from './menu-list.js';
-import Provider, { Consumer } from '../drop-down/drop-down-context.js';
+import Provider, { Consumer } from '../../arrangement/drop-down/drop-down-context.js';
 
 interface MenuProps {
     id?: string | null;

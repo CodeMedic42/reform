@@ -2,7 +2,7 @@
 @use 'sass:map';
 @use '../configuration/inputs/input-container' as *;
 @use '../configuration/layout' as *;
-@use '../configuration/interactive-designs/grayscale' as *;
+@use '../colors/gray' as *;
 @use '../variables/font' as *;
 @use '../utilities';
 
@@ -82,7 +82,7 @@ $ra-config-inputs-shadow-width: $ra-config-inputs-focused-border-width - $ra-con
 
     .ra-field-input {
         padding: 0;
-        color: $clr-g-80;
+        color: gray(800);
         font: inherit;
         font-weight: $font-weight-normal;
         outline: 0;

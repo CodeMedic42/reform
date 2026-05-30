@@ -7,6 +7,8 @@ $ra-config-palette-color-green: () !default;
 $ra-config-palette-color-yellow: () !default;
 $ra-config-palette-color-orange: () !default;
 $ra-config-palette-color-red: () !default;
+$ra-config-palette-color-cyan: () !default;
+$ra-config-palette-color-gray: () !default;
 
 $ra-config-palette-colors-custom: () !default;
 
@@ -19,6 +21,8 @@ $ra-config-palette-colors-defaults: ();
     "yellow": $ra-config-palette-color-yellow,
     "orange": $ra-config-palette-color-orange,
     "red": $ra-config-palette-color-red,
+    "cyan": $ra-config-palette-color-cyan,
+    "gray": $ra-config-palette-color-gray,
 ) {
     @if list.length($shades) > 0 {
         $ra-config-palette-colors-defaults: map.merge($ra-config-palette-colors-defaults, ($name: $shades)) !global;

@@ -5,7 +5,7 @@ import addDays from 'date-fns/addDays';
 import startOfToday from 'date-fns/startOfToday';
 /* eslint-enable import/no-duplicates */
 import DatePicker from '../../../controls/date-picker/index.js';
-import DropDown from '../../../controls/drop-down/index.js';
+import DropDown from '../../../arrangement/drop-down/index.js';
 import Field from '../field.js';
 import isInvalidDate from '../../../../common/is-invalid-date.js';
 import type { FieldMessageData } from '../field-messages.js';

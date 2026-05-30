@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
-import Button from '../../button/index.js';
+import Button from '../../../controls/button/index.js';
 import applyAnchorBinding from '../anchor-binding.js';
 
 interface AnchorButtonProps {

@@ -1,6 +1,6 @@
 import React, { PureComponent, createRef } from 'react';
 import classnames from 'classnames';
-import DropDownList from '../drop-down/drop-down-list.js';
+import DropDownList from '../../arrangement/drop-down/drop-down-list.js';
 
 interface MenuListProps {
     id?: string | null;

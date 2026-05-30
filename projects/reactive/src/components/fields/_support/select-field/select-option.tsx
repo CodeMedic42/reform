@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import classnames from 'classnames';
-import DropDownListItem from '../../../controls/drop-down/drop-down-list-item.js';
-import ListItemButton from '../../../controls/drop-down/list-item-button.js';
+import DropDownListItem from '../../../arrangement/drop-down/drop-down-list-item.js';
+import ListItemButton from '../../../arrangement/drop-down/list-item-button.js';
 
 interface SelectOptionProps {
     id?: string | null;

@@ -1,6 +1,13 @@
-import type { ConfigState } from '../types';
+import type { ConfigState, VariantStateSlots, VariantStates } from '../types';
+import { buildPaletteMap, resolvePaletteRef } from '../util/resolve-palette-ref';
 
 const COLOR_STYLE_ID = 'ra-config-colors';
+const STATE_KEYS: (keyof VariantStates)[] = ['default', 'hover', 'focus', 'active', 'disabled'];
+const SLOT_KEYS: (keyof VariantStateSlots)[] = ['clr', 'bg', 'br', 'out'];
+
+function statePrefix(state: keyof VariantStates): string {
+    return state === 'default' ? '' : `${state}-`;
+}
 
 export function applyColors(config: ConfigState): void {
     let styleEl = document.getElementById(COLOR_STYLE_ID) as HTMLStyleElement | null;
@@ -10,45 +17,36 @@ export function applyColors(config: ConfigState): void {
         document.head.appendChild(styleEl);
     }
 
+    const palettes = buildPaletteMap(config);
     const rules: string[] = [];
 
-    // Grayscale on :root
-    const grayscaleProps = Object.entries(config.grayscale)
-        .map(([key, value]) => {
-            const cssVar = key === 'white' ? '--clr-white' :
-                           key === 'black' ? '--clr-black' :
-                           key === 'transparent' ? '--clr-transparent' :
-                           `--clr-${key}`;
-            return `  ${cssVar}: ${value};`;
-        })
-        .join('\n');
-    rules.push(`:root {\n${grayscaleProps}\n}`);
-
-    // Palette colors
-    const allPaletteColors = { ...config.palette.colors, ...config.palette.custom };
-    for (const [name, shades] of Object.entries(allPaletteColors)) {
+    for (const [name, shades] of Object.entries(palettes)) {
         const props = [100, 200, 300, 400, 500, 600, 700, 800, 900]
             .map((shade) => `  --clr-plt-${shade}: ${shades[shade as keyof typeof shades]};`)
             .join('\n');
         rules.push(`.ra-clr-plt-${name} {\n${props}\n}`);
     }
 
-    // Interactive design colors
     const allSchemes = { ...config.interactiveDesigns.schemes, ...config.interactiveDesigns.custom };
     for (const [name, scheme] of Object.entries(allSchemes)) {
         const variantProps: string[] = [];
 
-        for (const [variantName, variant] of Object.entries({ '': scheme.base, fill: scheme.fill })) {
-            const prefix = variantName ? `-${variantName}` : '';
-            for (const [prop, value] of Object.entries(variant)) {
-                if (value !== undefined) {
-                    variantProps.push(`  --ra-int${prefix}-${prop}: ${value};`);
+        for (const [variantName, states] of Object.entries(scheme.variants)) {
+            const variantPrefix = variantName === 'base' ? '' : `-${variantName}`;
+            for (const state of STATE_KEYS) {
+                const slots = states[state];
+                if (!slots) continue;
+                const sp = statePrefix(state);
+                for (const slot of SLOT_KEYS) {
+                    const ref = slots[slot];
+                    if (ref === undefined) continue;
+                    const resolved = resolvePaletteRef(ref, palettes);
+                    variantProps.push(`  --ra-int${variantPrefix}-${sp}${slot}: ${resolved};`);
                 }
             }
         }
 
         if (name === 'default') {
-            // Default scheme goes on :root
             rules.push(`:root {\n${variantProps.join('\n')}\n}`);
         } else {
             rules.push(`.ra-clr-int.ra-clr-int-${name} {\n${variantProps.join('\n')}\n}`);

@@ -1,5 +1,5 @@
 import Button from '@reformjs/reactive/controls/button';
-import { getInteractiveColorOptions, getButtonVariantOptions, getInteractiveDesignOptions } from '../../../common/config-colors';
+import { getInteractiveColorOptions, getButtonDesignOptions, getInteractiveVariantOptions } from '../../../common/config-colors';
 import previewStory from './stories/preview.story';
 
 export default {
@@ -14,7 +14,7 @@ export default {
             control: 'text',
         },
         design: {
-            options: getInteractiveDesignOptions(),
+            options: getButtonDesignOptions(),
             control: 'select',
         },
         color: {
@@ -22,7 +22,7 @@ export default {
             control: 'select',
         },
         variant: {
-            options: getButtonVariantOptions(),
+            options: getInteractiveVariantOptions(),
             control: 'select',
         },
         disabled: {

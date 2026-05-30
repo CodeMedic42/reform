@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { isNil } from 'lodash-es';
-import ListItemContent from '../drop-down/list-item-content.js';
+import ListItemContent from '../../arrangement/drop-down/list-item-content.js';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 import MenuItem from './menu-item.js';

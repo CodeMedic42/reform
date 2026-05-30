@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { NumberInput } from '../components/NumberInput';
+import { SectionDescription } from '../components/SectionDescription';
 import { SectionHeader } from '../components/SectionHeader';
-import type { ConfigState, ButtonVariant } from '../types';
+import type { ConfigState, ButtonDesign } from '../types';
 
-const VARIANT_FIELDS: { key: keyof ButtonVariant; label: string }[] = [
+const DESIGN_FIELDS: { key: keyof ButtonDesign; label: string }[] = [
     { key: 'padding-v', label: 'Padding Vertical' },
     { key: 'padding-h', label: 'Padding Horizontal' },
     { key: 'border-radius', label: 'Border Radius' },
@@ -39,7 +40,7 @@ const addButtonStyle: React.CSSProperties = {
     color: '#fff',
 };
 
-const DEFAULT_BUTTON_VARIANT: ButtonVariant = {
+const DEFAULT_BUTTON_DESIGN: ButtonDesign = {
     'padding-v': '6px',
     'padding-h': '12px',
     'border-radius': '6px',
@@ -54,30 +55,30 @@ interface ButtonSectionProps {
 }
 
 export function ButtonSection({ config, onChange }: ButtonSectionProps) {
-    const [newVariantName, setNewVariantName] = useState('');
+    const [newDesignName, setNewDesignName] = useState('');
 
-    const updateDefaultVariant = useCallback((key: keyof ButtonVariant, value: string | number) => {
+    const updateDefaultDesign = useCallback((key: keyof ButtonDesign, value: string | number) => {
         onChange((prev) => ({
             ...prev,
             button: {
                 ...prev.button,
-                defaultVariant: {
-                    ...prev.button.defaultVariant,
+                defaultDesign: {
+                    ...prev.button.defaultDesign,
                     [key]: value,
                 },
             },
         }));
     }, [onChange]);
 
-    const updateVariant = useCallback((name: string, key: keyof ButtonVariant, value: string | number) => {
+    const updateDesign = useCallback((name: string, key: keyof ButtonDesign, value: string | number) => {
         onChange((prev) => ({
             ...prev,
             button: {
                 ...prev.button,
-                variants: {
-                    ...prev.button.variants,
+                designs: {
+                    ...prev.button.designs,
                     [name]: {
-                        ...prev.button.variants[name],
+                        ...prev.button.designs[name],
                         [key]: value,
                     },
                 },
@@ -85,43 +86,43 @@ export function ButtonSection({ config, onChange }: ButtonSectionProps) {
         }));
     }, [onChange]);
 
-    const addVariant = useCallback(() => {
-        const name = newVariantName.trim().toLowerCase();
-        if (!name || config.button.variants[name]) return;
+    const addDesign = useCallback(() => {
+        const name = newDesignName.trim().toLowerCase();
+        if (!name || config.button.designs[name]) return;
 
         onChange((prev) => ({
             ...prev,
             button: {
                 ...prev.button,
-                variants: {
-                    ...prev.button.variants,
-                    [name]: { ...DEFAULT_BUTTON_VARIANT },
+                designs: {
+                    ...prev.button.designs,
+                    [name]: { ...DEFAULT_BUTTON_DESIGN },
                 },
             },
         }));
-        setNewVariantName('');
-    }, [newVariantName, config, onChange]);
+        setNewDesignName('');
+    }, [newDesignName, config, onChange]);
 
-    const removeVariant = useCallback((name: string) => {
+    const removeDesign = useCallback((name: string) => {
         onChange((prev) => {
-            const variants = { ...prev.button.variants };
-            delete variants[name];
-            return { ...prev, button: { ...prev.button, variants } };
+            const designs = { ...prev.button.designs };
+            delete designs[name];
+            return { ...prev, button: { ...prev.button, designs } };
         });
     }, [onChange]);
 
-    const renderVariantEditor = (
-        variant: ButtonVariant,
-        onUpdate: (key: keyof ButtonVariant, value: string | number) => void,
+    const renderDesignEditor = (
+        design: ButtonDesign,
+        onUpdate: (key: keyof ButtonDesign, value: string | number) => void,
     ) => (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {VARIANT_FIELDS.map(({ key, label }) => {
-                if (key === 'min-width' && variant['min-width'] === undefined) return null;
+            {DESIGN_FIELDS.map(({ key, label }) => {
+                if (key === 'min-width' && design['min-width'] === undefined) return null;
                 return (
                     <NumberInput
                         key={key}
                         label={label}
-                        value={String(variant[key] ?? '')}
+                        value={String(design[key] ?? '')}
                         onChange={(v) => onUpdate(key, key === 'font-weight' ? (parseInt(v) || 400) : v)}
                     />
                 );
@@ -131,33 +132,37 @@ export function ButtonSection({ config, onChange }: ButtonSectionProps) {
 
     return (
         <div>
-            <SectionHeader title="Default Variant" level={0} defaultOpen>
-                {renderVariantEditor(config.button.defaultVariant, updateDefaultVariant)}
+            <SectionDescription
+                title="Button"
+                description="Defines button shape: padding, border-radius, font size and weight, line height, and optional minimum width. The default design applies to every Button; named designs (e.g. sm, lg-long) are opted in via the Button's `design` prop. Button colors come from the Interactive section."
+            />
+            <SectionHeader title="Default Design" level={0} defaultOpen>
+                {renderDesignEditor(config.button.defaultDesign, updateDefaultDesign)}
             </SectionHeader>
 
-            <h3 style={{ fontSize: '14px', margin: '16px 0 8px 0' }}>Custom Variants</h3>
-            {Object.entries(config.button.variants).map(([name, variant]) => (
+            <h3 style={{ fontSize: '14px', margin: '16px 0 8px 0' }}>Custom Designs</h3>
+            {Object.entries(config.button.designs).map(([name, design]) => (
                 <SectionHeader
                     key={name}
                     title={name}
                     level={0}
-                    onRemove={() => removeVariant(name)}
+                    onRemove={() => removeDesign(name)}
                 >
-                    {renderVariantEditor(variant, (key, value) => updateVariant(name, key, value))}
+                    {renderDesignEditor(design, (key, value) => updateDesign(name, key, value))}
                 </SectionHeader>
             ))}
 
             <div style={addBarStyle}>
                 <input
                     type="text"
-                    placeholder="Variant name"
-                    value={newVariantName}
-                    onChange={(e) => setNewVariantName(e.target.value)}
+                    placeholder="Design name"
+                    value={newDesignName}
+                    onChange={(e) => setNewDesignName(e.target.value)}
                     style={addInputStyle}
-                    onKeyDown={(e) => e.key === 'Enter' && addVariant()}
+                    onKeyDown={(e) => e.key === 'Enter' && addDesign()}
                 />
-                <button style={addButtonStyle} onClick={addVariant}>
-                    Add Variant
+                <button style={addButtonStyle} onClick={addDesign}>
+                    Add Design
                 </button>
             </div>
         </div>

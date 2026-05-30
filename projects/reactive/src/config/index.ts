@@ -1,11 +1,15 @@
 export type {
     PaletteShades,
-    InteractiveVariant,
+    PaletteShade,
+    PaletteRef,
+    VariantStateSlots,
+    VariantStates,
     InteractiveScheme,
-    ButtonVariant,
+    ButtonDesign,
     FieldContainerVariant,
     TabConfig,
     ConfigState,
 } from './types.js';
 
 export { DEFAULT_CONFIG } from './defaults.js';
+export { resolvePaletteRef, type PaletteMap } from './resolve-palette-ref.js';

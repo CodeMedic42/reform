@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { findIndex, clone } from 'lodash-es';
-import DropDown, { AnchorButton } from '@reformjs/reactive/controls/drop-down';
+import DropDown, { AnchorButton } from '@reformjs/reactive/arrangement/drop-down';
 
 type DropPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -87,7 +87,7 @@ function dropping() {
                             Anchor={AnchorButton}
                             anchorProps={{
                                 children: 'Drop',
-                                design: 'fill',
+                                variant: 'fill',
                             }}
                             enableTail={enableTail}
                             dropPositions={dropPositions}
@@ -115,7 +115,7 @@ function dropping() {
                             Anchor={AnchorButton}
                             anchorProps={{
                                 children: 'Text',
-                                design: 'fill',
+                                variant: 'fill',
                             }}
                             enableTail={enableTail}
                             dropPositions={dropPositions}
@@ -143,7 +143,7 @@ function dropping() {
                             Anchor={AnchorButton}
                             anchorProps={{
                                 children: 'Text',
-                                design: 'fill',
+                                variant: 'fill',
                             }}
                             enableTail={enableTail}
                             dropPositions={dropPositions}
@@ -171,7 +171,7 @@ function dropping() {
                             Anchor={AnchorButton}
                             anchorProps={{
                                 children: 'Text',
-                                design: 'fill',
+                                variant: 'fill',
                             }}
                             enableTail={enableTail}
                             dropPositions={dropPositions}

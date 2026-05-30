@@ -8,7 +8,7 @@ import IconBox from '../../display/icon-box/index.js';
 import IconButton from '../../display/icon-button/index.js';
 import Tag from '../../controls/tag/tag.js';
 import Chip from '../../display/chip/index.js';
-import applyAnchorBinding from '../../controls/drop-down/anchor-binding.js';
+import applyAnchorBinding from '../../arrangement/drop-down/anchor-binding.js';
 import changeSize from '../../../util/change-size.js';
 import FieldContainer from '../_support/field-container.js';
 

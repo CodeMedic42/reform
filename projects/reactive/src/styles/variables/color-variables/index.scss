@@ -1,24 +1,24 @@
-@use '../../configuration/interactive-designs/grayscale' as *;
+@use '../../colors/gray' as *;
 
 :root {
-  --clr-g-0: #{$clr-g-0};
-  --clr-g-2: #{$clr-g-2};
-  --clr-g-4: #{$clr-g-4};
-  --clr-g-5: #{$clr-g-5};
-  --clr-g-10: #{$clr-g-10};
-  --clr-g-11: #{$clr-g-11};
-  --clr-g-12: #{$clr-g-12};
-  --clr-g-13: #{$clr-g-13};
-  --clr-g-20: #{$clr-g-20};
-  --clr-g-30: #{$clr-g-30};
-  --clr-g-40: #{$clr-g-40};
-  --clr-g-50: #{$clr-g-50};
-  --clr-g-60: #{$clr-g-60};
-  --clr-g-70: #{$clr-g-70};
-  --clr-g-80: #{$clr-g-80};
-  --clr-g-90: #{$clr-g-90};
-  --clr-g-100: #{$clr-g-100};
-  --clr-white: #{$clr-white};
-  --clr-black: #{$clr-black};
-  --clr-transparent: #{$clr-transparent};
+    --clr-g-0: #{gray(100)};
+    --clr-g-2: #{gray(100)};
+    --clr-g-4: #{gray(100)};
+    --clr-g-5: #{gray(100)};
+    --clr-g-10: #{gray(200)};
+    --clr-g-11: #{gray(200)};
+    --clr-g-12: #{gray(200)};
+    --clr-g-13: #{gray(200)};
+    --clr-g-20: #{gray(300)};
+    --clr-g-30: #{gray(300)};
+    --clr-g-40: #{gray(400)};
+    --clr-g-50: #{gray(500)};
+    --clr-g-60: #{gray(600)};
+    --clr-g-70: #{gray(700)};
+    --clr-g-80: #{gray(800)};
+    --clr-g-90: #{gray(800)};
+    --clr-g-100: #{gray(900)};
+    --clr-white: #{gray(100)};
+    --clr-black: #{gray(900)};
+    --clr-transparent: transparent;
 }

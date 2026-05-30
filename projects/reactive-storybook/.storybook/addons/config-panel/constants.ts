@@ -5,4 +5,4 @@ export const EVENTS = {
     REQUEST_CONFIG: `${ADDON_ID}/request-config`,
     SEND_CONFIG: `${ADDON_ID}/send-config`,
 };
-export const STORAGE_KEY = 'ra-config-panel-state';
+export const STORAGE_KEY = 'ra-config-panel-state-v4';

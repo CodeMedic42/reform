@@ -47,14 +47,14 @@ function example() {
         <div>
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                 <Button
-                    design="fill"
+                    variant="fill"
                     color="primary"
                     onClick={() => timelineRef.current?.expandAll()}
                 >
                     Expand
                 </Button>
                 <Button
-                    design="fill"
+                    variant="fill"
                     color="primary"
                     onClick={() => timelineRef.current?.collapseAll()}
                 >

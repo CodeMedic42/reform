@@ -1,10 +1,30 @@
 import fs from 'fs';
 import path from 'path';
 import { DEFAULT_CONFIG } from '../src/config/defaults.js';
-import type { PaletteShades, InteractiveVariant, InteractiveScheme, ButtonVariant, FieldContainerVariant, HeadingLevelConfig, TextSizeConfig, ParagraphSizeConfig, TypographyResponsiveTier, ParagraphResponsiveTier } from '../src/config/types.js';
+import { resolvePaletteRef, type PaletteMap } from '../src/config/resolve-palette-ref.js';
+import type {
+    ButtonDesign,
+    FieldContainerVariant,
+    HeadingLevelConfig,
+    InteractiveScheme,
+    ParagraphResponsiveTier,
+    ParagraphSizeConfig,
+    PaletteShades,
+    TextSizeConfig,
+    TypographyResponsiveTier,
+    VariantStateSlots,
+    VariantStates,
+} from '../src/config/types.js';
+
+const STATE_KEYS: (keyof VariantStates)[] = ['default', 'hover', 'focus', 'active', 'disabled'];
+const SLOT_KEYS: (keyof VariantStateSlots)[] = ['clr', 'bg', 'br', 'out'];
 
 function indent(str: string, level: number): string {
     return '    '.repeat(level) + str;
+}
+
+function statePrefix(state: keyof VariantStates): string {
+    return state === 'default' ? '' : `${state}-`;
 }
 
 function formatPaletteMap(shades: PaletteShades, indentLevel: number): string {
@@ -14,15 +34,30 @@ function formatPaletteMap(shades: PaletteShades, indentLevel: number): string {
     return `(\n${lines.join('\n')}\n${indent(')', indentLevel - 1)}`;
 }
 
-function formatInteractiveVariant(variant: InteractiveVariant, indentLevel: number): string {
-    const props = Object.entries(variant)
-        .filter(([, v]) => v !== undefined)
-        .map(([k, v]) => indent(`"${k}": ${v},`, indentLevel));
-    return `(\n${props.join('\n')}\n${indent(')', indentLevel - 1)}`;
+function formatVariantStates(states: VariantStates, palettes: PaletteMap, indentLevel: number): string {
+    const lines: string[] = [];
+    for (const state of STATE_KEYS) {
+        const slots = states[state];
+        const prefix = statePrefix(state);
+        for (const slot of SLOT_KEYS) {
+            const resolved = resolvePaletteRef(slots[slot], palettes);
+            lines.push(indent(`"${prefix}${slot}": ${resolved},`, indentLevel));
+        }
+    }
+    return `(\n${lines.join('\n')}\n${indent(')', indentLevel - 1)}`;
 }
 
-function formatButtonVariant(variant: ButtonVariant, indentLevel: number): string {
-    const entries = Object.entries(variant)
+function formatScheme(scheme: InteractiveScheme, palettes: PaletteMap, indentLevel: number): string {
+    const entries: string[] = [];
+    for (const [variantName, states] of Object.entries(scheme.variants)) {
+        const key = variantName === 'base' ? '""' : `"${variantName}"`;
+        entries.push(indent(`${key}: ${formatVariantStates(states, palettes, indentLevel + 1)},`, indentLevel));
+    }
+    return `(\n${entries.join('\n')}\n${indent(')', indentLevel - 1)}`;
+}
+
+function formatButtonDesign(design: ButtonDesign, indentLevel: number): string {
+    const entries = Object.entries(design)
         .filter(([, v]) => v !== undefined)
         .map(([k, v]) => indent(`"${k}": ${typeof v === 'number' ? v : v},`, indentLevel));
     return `(\n${entries.join('\n')}\n${indent(')', indentLevel - 1)}`;
@@ -98,6 +133,7 @@ function generate(): string {
     ];
 
     const config = DEFAULT_CONFIG;
+    const palettes: PaletteMap = { ...config.palette.colors, ...config.palette.custom };
 
     // Palette colors
     for (const [name, shades] of Object.entries(config.palette.colors)) {
@@ -106,17 +142,33 @@ function generate(): string {
     }
 
     // Interactive design schemes
-    for (const [name, scheme] of Object.entries(config.interactiveDesigns.schemes)) {
-        lines.push(`$ra-config-interactive-color-${name}-base: ${formatInteractiveVariant(scheme.base, 2)};`);
-        lines.push('');
-        lines.push(`$ra-config-interactive-color-${name}-fill: ${formatInteractiveVariant(scheme.fill, 2)};`);
-        lines.push('');
-        lines.push(`$ra-config-interactive-color-${name}: (`);
-        lines.push(`${indent('"": $ra-config-interactive-color-' + name + '-base,', 1)}`);
-        lines.push(`${indent('"fill": $ra-config-interactive-color-' + name + '-fill,', 1)}`);
-        lines.push(');');
+    const schemeEntries = Object.entries(config.interactiveDesigns.schemes);
+    const defaultScheme = schemeEntries.find(([n]) => n === 'default')?.[1];
+    const nonDefaultSchemes = schemeEntries.filter(([n]) => n !== 'default');
+
+    if (defaultScheme) {
+        lines.push(`$ra-config-interactive-color-default: ${formatScheme(defaultScheme, palettes, 2)};`);
         lines.push('');
     }
+
+    // Union of non-base variant names across all schemes (including default)
+    const variantNames = new Set<string>();
+    for (const [, scheme] of schemeEntries) {
+        for (const variant of Object.keys(scheme.variants)) {
+            if (variant !== 'base') variantNames.add(variant);
+        }
+    }
+    const variantList = [...variantNames].map((v) => `'${v}'`).join(', ');
+    lines.push(`$ra-config-interactive-designs: ${variantList || "()"};`);
+    lines.push('');
+
+    // Combined interactive colors map (excluding 'default' which goes to :root)
+    lines.push(`$ra-config-interactive-colors: (`);
+    for (const [name, scheme] of nonDefaultSchemes) {
+        lines.push(indent(`"${name}": ${formatScheme(scheme, palettes, 2)},`, 1));
+    }
+    lines.push(`);`);
+    lines.push('');
 
     // System colors
     for (const [name, value] of Object.entries(config.system.colors.defaults)) {
@@ -127,16 +179,6 @@ function generate(): string {
     // System styles
     for (const [name, value] of Object.entries(config.system.styles.defaults)) {
         lines.push(`$ra-config-system-style-${name}: ${value};`);
-    }
-    lines.push('');
-
-    // Grayscale
-    for (const [key, value] of Object.entries(config.grayscale)) {
-        if (key === 'transparent') continue; // transparent is not a configurable color
-        const varName = key === 'white' ? '$clr-white' :
-                        key === 'black' ? '$clr-black' :
-                        `$clr-${key}`;
-        lines.push(`${varName}: ${value};`);
     }
     lines.push('');
 
@@ -252,7 +294,7 @@ function generate(): string {
     lines.push('');
 
     // Button settings
-    lines.push(`$ra-config-button-default-variant: ${formatButtonVariant(config.button.defaultVariant, 2)};`);
+    lines.push(`$ra-config-button-default-design: ${formatButtonDesign(config.button.defaultDesign, 2)};`);
     lines.push('');
 
     return lines.join('\n');

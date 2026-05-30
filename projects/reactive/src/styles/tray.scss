@@ -1,4 +1,4 @@
-@use './configuration/interactive-designs/grayscale' as *;
+@use './colors/gray' as *;
 @use 'box-shadow' as *;
 
 // This is a special class.
@@ -16,7 +16,7 @@
     @include boxShadow16dp;
 
     position: fixed;
-    background-color: $clr-white;
+    background-color: gray(100);
     border-radius: 4px;
     outline: none;
     overflow: auto;

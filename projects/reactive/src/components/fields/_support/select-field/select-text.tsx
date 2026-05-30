@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import DropDownListItem from '../../../controls/drop-down/drop-down-list-item.js';
-import ListItemContent from '../../../controls/drop-down/list-item-content.js';
+import DropDownListItem from '../../../arrangement/drop-down/drop-down-list-item.js';
+import ListItemContent from '../../../arrangement/drop-down/list-item-content.js';
 import buildId from '../../../../common/build-id.js';
 
 interface SelectTextProps {

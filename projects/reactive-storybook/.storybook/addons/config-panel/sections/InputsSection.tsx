@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { NumberInput } from '../components/NumberInput';
 import { ColorPicker } from '../components/ColorPicker';
+import { SectionDescription } from '../components/SectionDescription';
 import { SectionHeader } from '../components/SectionHeader';
 import type { ConfigState, FieldContainerVariant } from '../types';
 
@@ -156,6 +157,10 @@ export function InputsSection({ config, onChange }: InputsSectionProps) {
 
     return (
         <div>
+            <SectionDescription
+                title="Inputs"
+                description="Controls form-field containers (text inputs, select fields, etc.): height, padding, font, border, and focus styling. The default container variant applies to every field; named variants are opted in via the field's `variant` prop."
+            />
             <h3 style={{ fontSize: '14px', margin: '0 0 12px 0' }}>Global Input Settings</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
                 <ColorPicker label="Focus Color" value={config.inputs.focusColor} onChange={(v) => updateInput('focusColor', v)} />

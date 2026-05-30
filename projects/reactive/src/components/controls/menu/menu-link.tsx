@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import ListItemLink from '../drop-down/list-item-link.js';
+import ListItemLink from '../../arrangement/drop-down/list-item-link.js';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 import MenuItem from './menu-item.js';

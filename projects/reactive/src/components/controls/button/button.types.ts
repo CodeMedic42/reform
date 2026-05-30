@@ -1,8 +1,8 @@
 import React from 'react';
 
 type ButtonColor = 'primary' | 'secondary' | 'info' | 'success' | 'warn' | 'danger' | (string & {});
-type ButtonDesign = 'fill' | (string & {});
-type ButtonVariant = 'sm' | 'lg-long' | (string & {});
+type ButtonDesign = 'sm' | 'lg-long' | (string & {});
+type ButtonVariant = 'fill' | (string & {});
 
 export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
 	className?: string;

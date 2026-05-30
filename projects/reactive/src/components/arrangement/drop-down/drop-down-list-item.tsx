@@ -69,7 +69,7 @@ function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
 
     const colorClasses = getSchemeColorClasses({
         color,
-        design: 'opaque',
+        variant: 'opaque',
     });
 
     return (

@@ -62,22 +62,6 @@ import configFieldContainerScss from 'reactive-scss-raw/configuration/inputs/inp
 // @ts-expect-error raw import
 import configInteractiveIndexScss from 'reactive-scss-raw/configuration/interactive-designs/index.scss?raw';
 // @ts-expect-error raw import
-import configInteractiveDefaultScss from 'reactive-scss-raw/configuration/interactive-designs/default.scss?raw';
-// @ts-expect-error raw import
-import configInteractivePrimaryScss from 'reactive-scss-raw/configuration/interactive-designs/primary.scss?raw';
-// @ts-expect-error raw import
-import configInteractiveSecondaryScss from 'reactive-scss-raw/configuration/interactive-designs/secondary.scss?raw';
-// @ts-expect-error raw import
-import configInteractiveInfoScss from 'reactive-scss-raw/configuration/interactive-designs/info.scss?raw';
-// @ts-expect-error raw import
-import configInteractiveSuccessScss from 'reactive-scss-raw/configuration/interactive-designs/success.scss?raw';
-// @ts-expect-error raw import
-import configInteractiveWarnScss from 'reactive-scss-raw/configuration/interactive-designs/warn.scss?raw';
-// @ts-expect-error raw import
-import configInteractiveDangerScss from 'reactive-scss-raw/configuration/interactive-designs/danger.scss?raw';
-// @ts-expect-error raw import
-import configInteractiveGrayscaleScss from 'reactive-scss-raw/configuration/interactive-designs/_grayscale.scss?raw';
-// @ts-expect-error raw import
 import configTypographyScss from 'reactive-scss-raw/configuration/typography.scss?raw';
 
 // Colors
@@ -87,6 +71,8 @@ import colorsIndexScss from 'reactive-scss-raw/colors/index.scss?raw';
 import colorsInteractiveScss from 'reactive-scss-raw/colors/interactive-designs.scss?raw';
 // @ts-expect-error raw import
 import colorsPaletteIndexScss from 'reactive-scss-raw/colors/palette-group/index.scss?raw';
+// @ts-expect-error raw import
+import colorsGrayScss from 'reactive-scss-raw/colors/gray.scss?raw';
 
 // Variables
 // @ts-expect-error raw import
@@ -95,22 +81,6 @@ import variablesIndexScss from 'reactive-scss-raw/variables/index.scss?raw';
 import variablesFontScss from 'reactive-scss-raw/variables/font.scss?raw';
 // @ts-expect-error raw import
 import variablesColorIndexScss from 'reactive-scss-raw/variables/color-variables/index.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractiveIndexScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/index.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractiveDefaultScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/default.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractivePrimaryScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/primary.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractiveSecondaryScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/secondary.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractiveInfoScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/info.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractiveSuccessScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/success.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractiveWarnScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/warn.scss?raw';
-// @ts-expect-error raw import
-import variablesInteractiveDangerScss from 'reactive-scss-raw/variables/color-variables/interactive-group-variables/danger.scss?raw';
 
 // Utilities
 // @ts-expect-error raw import
@@ -184,31 +154,16 @@ export const scssSourceMap: Record<string, string> = {
     'configuration/inputs/index.scss': configInputsIndexScss,
     'configuration/inputs/input-container.scss': configFieldContainerScss,
     'configuration/interactive-designs/index.scss': configInteractiveIndexScss,
-    'configuration/interactive-designs/default.scss': configInteractiveDefaultScss,
-    'configuration/interactive-designs/primary.scss': configInteractivePrimaryScss,
-    'configuration/interactive-designs/secondary.scss': configInteractiveSecondaryScss,
-    'configuration/interactive-designs/info.scss': configInteractiveInfoScss,
-    'configuration/interactive-designs/success.scss': configInteractiveSuccessScss,
-    'configuration/interactive-designs/warn.scss': configInteractiveWarnScss,
-    'configuration/interactive-designs/danger.scss': configInteractiveDangerScss,
-    'configuration/interactive-designs/_grayscale.scss': configInteractiveGrayscaleScss,
     'configuration/typography.scss': configTypographyScss,
 
     'colors/index.scss': colorsIndexScss,
     'colors/interactive-designs.scss': colorsInteractiveScss,
     'colors/palette-group/index.scss': colorsPaletteIndexScss,
+    'colors/gray.scss': colorsGrayScss,
 
     'variables/index.scss': variablesIndexScss,
     'variables/font.scss': variablesFontScss,
     'variables/color-variables/index.scss': variablesColorIndexScss,
-    'variables/color-variables/interactive-group-variables/index.scss': variablesInteractiveIndexScss,
-    'variables/color-variables/interactive-group-variables/default.scss': variablesInteractiveDefaultScss,
-    'variables/color-variables/interactive-group-variables/primary.scss': variablesInteractivePrimaryScss,
-    'variables/color-variables/interactive-group-variables/secondary.scss': variablesInteractiveSecondaryScss,
-    'variables/color-variables/interactive-group-variables/info.scss': variablesInteractiveInfoScss,
-    'variables/color-variables/interactive-group-variables/success.scss': variablesInteractiveSuccessScss,
-    'variables/color-variables/interactive-group-variables/warn.scss': variablesInteractiveWarnScss,
-    'variables/color-variables/interactive-group-variables/danger.scss': variablesInteractiveDangerScss,
 
     '_utilities.scss': utilitiesScss,
 

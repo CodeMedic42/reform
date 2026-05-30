@@ -9,8 +9,8 @@ import React, {
 import classnames from 'classnames';
 import { isNil, get, toLower, isString, isFunction, isNumber, reduce, map, findIndex, trim, forEach } from 'lodash-es';
 import useCollectionContext from '../../../../hooks/use-collection-context/index.js';
-import DropDown from '../../../controls/drop-down/index.js';
-import DropDownList from '../../../controls/drop-down/drop-down-list.js';
+import DropDown from '../../../arrangement/drop-down/index.js';
+import DropDownList from '../../../arrangement/drop-down/drop-down-list.js';
 import Spinner from '../../../display/spinner/index.js';
 import buildId from '../../../../common/build-id.js';
 import Field from '../field.js';

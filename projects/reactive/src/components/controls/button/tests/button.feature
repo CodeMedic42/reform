@@ -27,20 +27,20 @@ Scenario: Verify no color classes when color not set
     Given the component is rendered with defaults
     Then the root element has attribute "className" which does not contain "ra-clr-int-primary"
 
-# design Prop
-Scenario: Verify "design" prop applies design class
+# variant Prop
+Scenario: Verify "variant" prop applies interactive variant class
     Given the "color" property is set to "primary"
-    And the "design" property is set to "fill"
+    And the "variant" property is set to "fill"
     Then the root element has attribute "className" which contains "ra-clr-int-fill"
 
-# variant Prop
-Scenario: Verify "variant" prop applies variant class
-    Given the "variant" property is set to "sm"
-    Then the root element has attribute "className" which contains "ra-btn-variant-sm"
+# design Prop
+Scenario: Verify "design" prop applies button design class
+    Given the "design" property is set to "sm"
+    Then the root element has attribute "className" which contains "ra-btn-design-sm"
 
-Scenario: Verify no variant class when variant not set
+Scenario: Verify no design class when design not set
     Given the component is rendered with defaults
-    Then the root element has attribute "className" which does not contain "ra-btn-variant"
+    Then the root element has attribute "className" which does not contain "ra-btn-design"
 
 # Component Prop
 Scenario: Verify default element is button

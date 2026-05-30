@@ -1,4 +1,4 @@
-@use '../configuration/interactive-designs/grayscale' as *;
+@use '../colors/gray' as *;
 
 $input-sm: 32px;
 $input-md: 40px;
@@ -14,7 +14,7 @@ $input-lg: 48px;
 
     .clear {
         display: none;
-        color: $clr-g-90;
+        color: gray(800);
         z-index: 11;
     }
 
@@ -23,11 +23,11 @@ $input-lg: 48px;
         padding-bottom: 0;
         padding-left: 12px;
         padding-right: 4px;
-        color: $clr-g-60;
+        color: gray(600);
         width: 100%;
         box-sizing: border-box;
         outline: 0;
-        background-color: $clr-white;
+        background-color: gray(100);
         text-align: left;
         display: flex;
         justify-content: space-between;
@@ -102,7 +102,7 @@ $input-lg: 48px;
             //     left: 0;
             //     right: 0;
             //     bottom: 0;
-            //     border: solid 1px $clr-g-40;
+            //     border: solid 1px gray(400);
             //     border-radius: 2px;
             //     z-index: 10;
             //     pointer-events: none;
@@ -110,11 +110,11 @@ $input-lg: 48px;
 
             &.has-value {
                 ~ .anchor-content {
-                    color: $clr-g-90;
+                    color: gray(800);
                 }
 
                 // &::before {
-                //     border-color: $clr-g-80;
+                //     border-color: gray(800);
                 // }
             }
 
@@ -142,8 +142,8 @@ $input-lg: 48px;
                 cursor: not-allowed;
 
                 ~ .anchor-content {
-                    color: $clr-g-40;
-                    background-color: $clr-g-10;
+                    color: gray(400);
+                    background-color: gray(200);
                 }
 
                 &::before {
@@ -276,14 +276,14 @@ $input-lg: 48px;
         border: 0;
         line-height: 2.5;
         padding: 0 16px;
-        border-bottom: 1px solid $clr-g-10;
-        color: $clr-g-90;
+        border-bottom: 1px solid gray(200);
+        color: gray(800);
         margin-top: 8px;
     }
 
     .ra-dd-list {
         .ra-dd-list-item.no-options {
-            color: $clr-g-40;
+            color: gray(400);
         }
     }
 

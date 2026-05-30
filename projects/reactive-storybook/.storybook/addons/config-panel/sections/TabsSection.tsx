@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { NumberInput } from '../components/NumberInput';
 import { ColorPicker } from '../components/ColorPicker';
+import { SectionDescription } from '../components/SectionDescription';
 import { SectionHeader } from '../components/SectionHeader';
 import type { ConfigState, TabConfig } from '../types';
 
@@ -53,6 +54,10 @@ export function TabsSection({ config, onChange }: TabsSectionProps) {
 
     return (
         <div>
+            <SectionDescription
+                title="Tabs"
+                description="Styles the Tab component: corner style, borders, padding, fonts, and colors. The Active and Disabled overrides let you change any base value for those states. The bottom area styles the content panel under the tab strip."
+            />
             <SectionHeader title="Base Tab Styling" level={0} defaultOpen>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <NumberInput label="Corner Style" value={config.tabs.cornerStyle} onChange={(v) => updateTab('cornerStyle', v)} />

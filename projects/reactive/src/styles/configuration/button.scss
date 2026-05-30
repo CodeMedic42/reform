@@ -1,4 +1,4 @@
-$ra-config-button-default-variant: (
+$ra-config-button-default-design: (
     "padding-v": 6px,
     "padding-h": 12px,
     "border-radius": 6px,
@@ -8,7 +8,7 @@ $ra-config-button-default-variant: (
     // "resp-changes": ({}, null, {})
 ) !default;
 
-// $ra-config-button-variants: (
+// $ra-config-button-designs: (
 //     "sm": (
 //         "padding-v": 3px,
 //         "padding-h": 10px,
@@ -27,5 +27,5 @@ $ra-config-button-default-variant: (
 //         "min-width": 335px,
 //     ),
 // );
-$ra-config-button-variants: (
+$ra-config-button-designs: (
 ) !default;

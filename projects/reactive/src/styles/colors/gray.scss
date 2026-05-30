@@ -1,0 +1,21 @@
+@use 'sass:map';
+@use '../configuration/palette' as *;
+
+$_gray-fallbacks: (
+    100: #ffffff,
+    200: #e6e6e6,
+    300: #cccccc,
+    400: #999999,
+    500: #808080,
+    600: #666666,
+    700: #4d4d4d,
+    800: #333333,
+    900: #000000,
+);
+
+@function gray($shade) {
+    @if $ra-config-palette-color-gray and map.has-key($ra-config-palette-color-gray, $shade) {
+        @return map.get($ra-config-palette-color-gray, $shade);
+    }
+    @return map.get($_gray-fallbacks, $shade);
+}

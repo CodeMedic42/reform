@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { NumberInput } from '../components/NumberInput';
+import { SectionDescription } from '../components/SectionDescription';
 import { SectionHeader } from '../components/SectionHeader';
 import type {
     ConfigState,
@@ -606,6 +607,10 @@ export function TypographySection({ config, onChange }: TypographySectionProps) 
 
     return (
         <div>
+            <SectionDescription
+                title="Typography"
+                description="Sets font sizes, line heights, weights, and colors for headings, sub-headings, text, paragraphs, captions, and overlines. Each text type can override font size and line height at the mobile and desktop breakpoints. Named font-weight classes (normal, medium, semi-bold, bold) live here too."
+            />
             {/* Base Typography */}
             <SectionHeader title="Base Typography" level={0} defaultOpen>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

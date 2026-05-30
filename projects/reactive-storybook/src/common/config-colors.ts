@@ -1,11 +1,14 @@
 import { DEFAULT_CONFIG } from '@reformjs/reactive/config/defaults';
 
-const STORAGE_KEY = 'ra-config-panel-state';
+const STORAGE_KEY = 'ra-config-panel-state-v4';
 
 function loadConfigState(): any {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) return JSON.parse(stored);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            return parsed?.config ?? parsed;
+        }
     } catch {
         // ignore
     }
@@ -32,13 +35,22 @@ export function getInteractiveColorOptions(): string[] {
     return [...defaultSchemes, ...customSchemes];
 }
 
-export function getButtonVariantOptions(): string[] {
+export function getButtonDesignOptions(): string[] {
     const config = loadConfigState();
-    if (!config?.button) return [];
+    if (!config?.button) return Object.keys(DEFAULT_CONFIG.button.designs);
 
-    return Object.keys(config.button.variants ?? {});
+    return Object.keys(config.button.designs ?? {});
 }
 
-export function getInteractiveDesignOptions(): string[] {
-    return ['fill'];
+export function getInteractiveVariantOptions(): string[] {
+    const config = loadConfigState();
+    const schemes = config?.interactiveDesigns?.schemes ?? DEFAULT_CONFIG.interactiveDesigns.schemes;
+    const custom = config?.interactiveDesigns?.custom ?? {};
+    const variants = new Set<string>();
+    for (const scheme of [...Object.values(schemes), ...Object.values(custom)]) {
+        for (const name of Object.keys((scheme as any)?.variants ?? {})) {
+            variants.add(name);
+        }
+    }
+    return [...variants];
 }

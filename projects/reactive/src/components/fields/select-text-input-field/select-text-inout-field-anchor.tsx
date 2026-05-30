@@ -1,5 +1,5 @@
 import React from 'react';
-import applyAnchorBinding from '../../controls/drop-down/anchor-binding.jsx';
+import applyAnchorBinding from '../../arrangement/drop-down/anchor-binding.jsx';
 import TextInputBase from '../text-field/text-field-container.js';
 
 interface SelectTextAnchorProps {

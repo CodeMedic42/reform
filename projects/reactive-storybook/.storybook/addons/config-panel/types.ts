@@ -1,8 +1,11 @@
 export type {
     PaletteShades,
-    InteractiveVariant,
+    PaletteShade,
+    PaletteRef,
+    VariantStateSlots,
+    VariantStates,
     InteractiveScheme,
-    ButtonVariant,
+    ButtonDesign,
     FieldContainerVariant,
     TabConfig,
     ConfigState,

@@ -1,5 +1,5 @@
 import React from 'react';
-import applyAnchorBinding from '../../controls/drop-down/anchor-binding.js';
+import applyAnchorBinding from '../../arrangement/drop-down/anchor-binding.js';
 import DateFieldValue from '../_support/date-select-field/date-field-value.js';
 import buildId from '../../../common/build-id.js';
 import FieldContainer from '../_support/field-container.js';

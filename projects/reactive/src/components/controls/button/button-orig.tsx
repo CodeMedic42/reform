@@ -122,7 +122,7 @@ class Button extends PureComponent<ButtonOrigProps> {
         const colorClasses = getSchemeColorClasses({
             colorRequired: false,
             color,
-            design: !isNil(variant) ? variant : 'fill',
+            variant: !isNil(variant) ? variant : 'fill',
         });
 
         const content = (

@@ -52,19 +52,19 @@ describeFeature(feature, ({ Scenario, AfterEachScenario, defineSteps }) => {
         });
     });
 
-    Scenario('Verify "design" prop applies design class', ({ Given }) => {
+    Scenario('Verify "variant" prop applies interactive variant class', ({ Given }) => {
         Given('the "color" property is set to "primary"', async () => {
             await harness.renderHarness(Button, { color: 'primary' });
         });
     });
 
-    Scenario('Verify "variant" prop applies variant class', ({ Given }) => {
-        Given('the "variant" property is set to "sm"', async () => {
-            await harness.renderHarness(Button, { variant: 'sm' });
+    Scenario('Verify "design" prop applies button design class', ({ Given }) => {
+        Given('the "design" property is set to "sm"', async () => {
+            await harness.renderHarness(Button, { design: 'sm' });
         });
     });
 
-    Scenario('Verify no variant class when variant not set', ({ Given }) => {
+    Scenario('Verify no design class when design not set', ({ Given }) => {
         Given('the component is rendered with defaults', async () => {
             await harness.renderHarness(Button);
         });

@@ -1,110 +1,109 @@
-import type { ConfigState, InteractiveScheme, InteractiveVariant, TypographyConfig } from './types.js';
+import type {
+    ConfigState,
+    InteractiveScheme,
+    PaletteRef,
+    PaletteShade,
+    TypographyConfig,
+    VariantStates,
+} from './types.js';
+
+const T: PaletteRef = 'transparent';
+const ref = (palette: string, shade: PaletteShade): PaletteRef => ({ palette, shade });
+
+const DISABLED_BASE_CLR: PaletteRef = ref('gray', 400);
+const DISABLED_FILL_CLR: PaletteRef = ref('gray', 100);
+const DISABLED_FILL_BG: PaletteRef = ref('gray', 400);
 
 function baseVariant(
-    clr: string,
-    hoverClr: string,
-    focusClr: string,
-    activeClr: string,
-    disabledClr?: string,
-): InteractiveVariant {
+    clr: PaletteRef,
+    hoverClr: PaletteRef,
+    focusClr: PaletteRef,
+    activeClr: PaletteRef,
+    disabledClr?: PaletteRef,
+): VariantStates {
     return {
-        clr,
-        bg: 'transparent',
-        br: 'transparent',
-        out: 'transparent',
-        'hover-clr': hoverClr,
-        'hover-bg': 'transparent',
-        'hover-br': 'transparent',
-        'hover-out': 'transparent',
-        'focus-clr': focusClr,
-        'focus-bg': 'transparent',
-        'focus-br': 'transparent',
-        'focus-out': 'transparent',
-        'active-clr': activeClr,
-        'active-bg': 'transparent',
-        'active-br': 'transparent',
-        'active-out': 'transparent',
-        ...(disabledClr ? {
-            'disabled-clr': disabledClr,
-            'disabled-bg': 'transparent',
-            'disabled-br': 'transparent',
-            'disabled-out': 'transparent',
-        } : {}),
+        default:  { clr,                                       bg: T, br: T, out: T },
+        hover:    { clr: hoverClr,                             bg: T, br: T, out: T },
+        focus:    { clr: focusClr,                             bg: T, br: T, out: T },
+        active:   { clr: activeClr,                            bg: T, br: T, out: T },
+        disabled: { clr: disabledClr ?? DISABLED_BASE_CLR,     bg: T, br: T, out: T },
     };
 }
 
 function fillVariant(
-    clr: string,
-    baseBg: string,
-    hoverBg: string,
-    hoverBr: string,
-    focusBg: string,
-    focusBr: string,
-    focusOut: string,
-    activeBg: string,
-    activeBr: string,
-    disabledClr?: string,
-    disabledBg?: string,
-): InteractiveVariant {
+    clr: PaletteRef,
+    baseBg: PaletteRef,
+    hoverBg: PaletteRef,
+    hoverBr: PaletteRef,
+    focusBg: PaletteRef,
+    focusBr: PaletteRef,
+    focusOut: PaletteRef,
+    activeBg: PaletteRef,
+    activeBr: PaletteRef,
+    disabledClr?: PaletteRef,
+    disabledBg?: PaletteRef,
+): VariantStates {
     return {
-        clr,
-        bg: baseBg,
-        br: baseBg,
-        out: 'transparent',
-        'hover-clr': clr,
-        'hover-bg': hoverBg,
-        'hover-br': hoverBr,
-        'hover-out': 'transparent',
-        'focus-clr': clr,
-        'focus-bg': focusBg,
-        'focus-br': focusBr,
-        'focus-out': focusOut,
-        'active-clr': clr,
-        'active-bg': activeBg,
-        'active-br': activeBr,
-        'active-out': 'transparent',
-        ...(disabledClr ? {
-            'disabled-clr': disabledClr,
-            'disabled-bg': disabledBg,
-            'disabled-br': disabledBg,
-            'disabled-out': 'transparent',
-        } : {}),
+        default: { clr,         bg: baseBg,   br: baseBg,   out: T },
+        hover:   { clr,         bg: hoverBg,  br: hoverBr,  out: T },
+        focus:   { clr,         bg: focusBg,  br: focusBr,  out: focusOut },
+        active:  { clr,         bg: activeBg, br: activeBr, out: T },
+        disabled: {
+            clr: disabledClr ?? DISABLED_FILL_CLR,
+            bg: disabledBg ?? DISABLED_FILL_BG,
+            br: disabledBg ?? DISABLED_FILL_BG,
+            out: T,
+        },
     };
 }
 
 const defaultScheme: InteractiveScheme = {
-    base: baseVariant('#212529', '#424649', '#424649', '#4d5154', '#999999'),
-    fill: fillVariant('#ffffff', '#212529', '#424649', '#424649', '#424649', '#424649', 'rgba(66, 70, 73, 0.5)', '#4d5154', '#4d5154', '#ffffff', '#999999'),
+    variants: {
+        base: baseVariant(ref('gray', 900), ref('gray', 800), ref('gray', 800), ref('gray', 700), ref('gray', 400)),
+        fill: fillVariant(ref('gray', 100), ref('gray', 900), ref('gray', 800), ref('gray', 800), ref('gray', 800), ref('gray', 800), ref('gray', 500), ref('gray', 700), ref('gray', 700), ref('gray', 100), ref('gray', 400)),
+    },
 };
 
 const primaryScheme: InteractiveScheme = {
-    base: baseVariant('#0d6efd', '#0a58ca', '#0a58ca', '#0a58ca'),
-    fill: fillVariant('#ffffff', '#0d6efd', '#0b5ed7', '#0a58ca', '#0b5ed7', '#0a58ca', 'rgba(49, 132, 253, 0.5)', '#0a58ca', '#0a53be'),
+    variants: {
+        base: baseVariant(ref('blue', 500), ref('blue', 600), ref('blue', 600), ref('blue', 600)),
+        fill: fillVariant(ref('gray', 100), ref('blue', 500), ref('blue', 600), ref('blue', 600), ref('blue', 600), ref('blue', 600), ref('blue', 300), ref('blue', 600), ref('blue', 600)),
+    },
 };
 
 const secondaryScheme: InteractiveScheme = {
-    base: baseVariant('#6c757d', '#5c636a', '#5c636a', '#565e64'),
-    fill: fillVariant('#ffffff', '#6c757d', '#5c636a', '#5c636a', '#5c636a', '#5c636a', 'rgba(130, 138, 145, 0.5)', '#565e64', '#565e64'),
+    variants: {
+        base: baseVariant(ref('gray', 500), ref('gray', 600), ref('gray', 600), ref('gray', 600)),
+        fill: fillVariant(ref('gray', 100), ref('gray', 500), ref('gray', 600), ref('gray', 600), ref('gray', 600), ref('gray', 600), ref('gray', 400), ref('gray', 600), ref('gray', 600)),
+    },
 };
 
 const infoScheme: InteractiveScheme = {
-    base: baseVariant('#0dcaf0', '#31d2f2', '#b02a37', '#b02a37'),
-    fill: fillVariant('#000000', '#0dcaf0', '#31d2f2', '#31d2f2', '#31d2f2', '#31d2f2', 'rgba(11, 172, 204, 0.5)', '#3dd5f3', '#3dd5f3'),
+    variants: {
+        base: baseVariant(ref('cyan', 500), ref('cyan', 400), ref('red', 600), ref('red', 600)),
+        fill: fillVariant(ref('gray', 900), ref('cyan', 500), ref('cyan', 400), ref('cyan', 400), ref('cyan', 400), ref('cyan', 400), ref('cyan', 300), ref('cyan', 400), ref('cyan', 400)),
+    },
 };
 
 const successScheme: InteractiveScheme = {
-    base: baseVariant('#198754', '#157347', '#157347', '#146c43'),
-    fill: fillVariant('#ffffff', '#198754', '#157347', '#157347', '#157347', '#157347', 'rgba(60, 153, 110, 0.5)', '#146c43', '#146c43'),
+    variants: {
+        base: baseVariant(ref('green', 500), ref('green', 600), ref('green', 600), ref('green', 600)),
+        fill: fillVariant(ref('gray', 100), ref('green', 500), ref('green', 600), ref('green', 600), ref('green', 600), ref('green', 600), ref('green', 300), ref('green', 600), ref('green', 600)),
+    },
 };
 
 const warnScheme: InteractiveScheme = {
-    base: baseVariant('#ffc107', '#ffca2c', '#ffca2c', '#ffcd39'),
-    fill: fillVariant('#000000', '#ffc107', '#ffca2c', '#ffca2c', '#ffca2c', '#ffca2c', 'rgba(217, 164, 6, 0.5)', '#ffcd39', '#ffcd39'),
+    variants: {
+        base: baseVariant(ref('yellow', 500), ref('yellow', 400), ref('yellow', 400), ref('yellow', 400)),
+        fill: fillVariant(ref('gray', 900), ref('yellow', 500), ref('yellow', 400), ref('yellow', 400), ref('yellow', 400), ref('yellow', 400), ref('yellow', 300), ref('yellow', 400), ref('yellow', 400)),
+    },
 };
 
 const dangerScheme: InteractiveScheme = {
-    base: baseVariant('#dc3545', '#b02a37', '#b02a37', '#b02a37'),
-    fill: fillVariant('#ffffff', '#dc3545', '#b02a37', '#bb2d3b', '#bb2d3b', '#b02a37', 'rgba(225, 83, 97, 0.5)', '#b02a37', '#a52834'),
+    variants: {
+        base: baseVariant(ref('red', 500), ref('red', 600), ref('red', 600), ref('red', 600)),
+        fill: fillVariant(ref('gray', 100), ref('red', 500), ref('red', 600), ref('red', 600), ref('red', 600), ref('red', 600), ref('red', 300), ref('red', 600), ref('red', 600)),
+    },
 };
 
 const typographyDefaults: TypographyConfig = {
@@ -179,6 +178,8 @@ export const DEFAULT_CONFIG: ConfigState = {
             yellow: { 100: '#fff3cd', 200: '#ffe69c', 300: '#ffda6a', 400: '#ffcd39', 500: '#ffc107', 600: '#cc9a06', 700: '#997404', 800: '#664d03', 900: '#332701' },
             orange: { 100: '#ffe5d0', 200: '#fecba1', 300: '#feb272', 400: '#fd9843', 500: '#fd7e14', 600: '#ca6510', 700: '#984c0c', 800: '#653208', 900: '#331904' },
             red: { 100: '#f8d7da', 200: '#f1aeb5', 300: '#ea868f', 400: '#e35d6a', 500: '#dc3545', 600: '#b02a37', 700: '#842029', 800: '#58151c', 900: '#2c0b0e' },
+            cyan: { 100: '#cff4fc', 200: '#9eeaf9', 300: '#6edff6', 400: '#3dd5f3', 500: '#0dcaf0', 600: '#0aa6c2', 700: '#087990', 800: '#055160', 900: '#032830' },
+            gray: { 100: '#ffffff', 200: '#e6e6e6', 300: '#cccccc', 400: '#999999', 500: '#808080', 600: '#666666', 700: '#4d4d4d', 800: '#333333', 900: '#000000' },
         },
         custom: {},
     },
@@ -208,34 +209,12 @@ export const DEFAULT_CONFIG: ConfigState = {
             custom: {},
         },
     },
-    grayscale: {
-        'g-0': '#ffffff',
-        'g-2': '#fafafa',
-        'g-4': '#f5f5f5',
-        'g-5': '#f2f2f2',
-        'g-10': '#e6e6e6',
-        'g-11': '#e3e3e3',
-        'g-12': '#e0e0e0',
-        'g-13': '#dedede',
-        'g-20': '#cccccc',
-        'g-30': '#b3b3b3',
-        'g-40': '#999999',
-        'g-50': '#808080',
-        'g-60': '#666666',
-        'g-70': '#4d4d4d',
-        'g-80': '#333333',
-        'g-90': '#1a1a1a',
-        'g-100': '#000000',
-        'white': '#ffffff',
-        'black': '#000000',
-        'transparent': 'transparent',
-    },
     base: {
         fontSize: '16px',
         fontWeight: 400,
     },
     button: {
-        defaultVariant: {
+        defaultDesign: {
             'padding-v': '6px',
             'padding-h': '12px',
             'border-radius': '6px',
@@ -243,7 +222,7 @@ export const DEFAULT_CONFIG: ConfigState = {
             'font-weight': 400,
             'line-height': '24px',
         },
-        variants: {},
+        designs: {},
     },
     tabs: {
         cornerStyle: 'rounded-ends',

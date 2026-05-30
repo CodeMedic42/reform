@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use 'sass:string';
 @use '../configuration/interactive-designs/index' as *;
 
@@ -87,7 +88,7 @@
     @include interactiveDesignControl('');
 
     @each $designId in $ra-config-interactive-designs {
-        @if (string.length($designId) <= 0) {
+        @if (type-of($designId) == 'string' and string.length($designId) <= 0) {
             @error "A design must have a non empty id";
         }
 

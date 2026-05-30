@@ -31,7 +31,6 @@
   - `display/icon`
   - `display/icon-box`
   - `display/icon-button`
-  - `controls/drop-down`
   - `controls/menu`
   - `controls/tag`
   - `controls/date-picker`
@@ -44,6 +43,7 @@
   - `fields/date-single-select-field`
   - `fields/date-range-select-field`
   - `arrangement/tray`
+  - `arrangement/drop-down`
   - `arrangement/tab-bar`
   - `arrangement/layout`
   - `arrangement/scaling-container`

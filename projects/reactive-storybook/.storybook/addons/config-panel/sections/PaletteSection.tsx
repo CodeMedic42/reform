@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { ColorPicker } from '../components/ColorPicker';
+import { SectionDescription } from '../components/SectionDescription';
 import { SectionHeader } from '../components/SectionHeader';
 import type { ConfigState, PaletteShades } from '../types';
 
@@ -147,6 +148,10 @@ export function PaletteSection({ config, onChange, removedDefaults, onRemoveDefa
 
     return (
         <div>
+            <SectionDescription
+                title="Palette"
+                description="Defines named color palettes (blue, green, gray, etc.), each with nine shades from 100 (lightest) to 900 (darkest). These palettes feed every other color choice in the library — interactive schemes, badges, spinners, timelines — by referencing a palette name plus a shade number."
+            />
             <h3 style={{ fontSize: '14px', margin: '0 0 8px 0' }}>Palette Colors</h3>
             {Object.entries(config.palette.colors).map(([name, shades]) =>
                 renderColorGroup(name, shades, 'colors'),

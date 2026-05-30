@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import ListItemContent from '../drop-down/list-item-content.js';
+import ListItemContent from '../../arrangement/drop-down/list-item-content.js';
 import IconButton from '../../display/icon-button/index.js';
 import MenuItem from './menu-item.js';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';

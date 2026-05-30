@@ -36,6 +36,10 @@
       "import": "./dist/components/arrangement/card/index.mjs",
       "types": "./dist/components/arrangement/card/index.d.ts"
     },
+    "./arrangement/drop-down": {
+      "import": "./dist/components/arrangement/drop-down/index.mjs",
+      "types": "./dist/components/arrangement/drop-down/index.d.ts"
+    },
     "./arrangement/infinite-list": {
       "import": "./dist/components/arrangement/infinite-list/index.mjs",
       "types": "./dist/components/arrangement/infinite-list/index.d.ts"
@@ -79,10 +83,6 @@
     "./controls/date-picker": {
       "import": "./dist/components/controls/date-picker/index.mjs",
       "types": "./dist/components/controls/date-picker/index.d.ts"
-    },
-    "./controls/drop-down": {
-      "import": "./dist/components/controls/drop-down/index.mjs",
-      "types": "./dist/components/controls/drop-down/index.d.ts"
     },
     "./controls/menu": {
       "import": "./dist/components/controls/menu/index.mjs",

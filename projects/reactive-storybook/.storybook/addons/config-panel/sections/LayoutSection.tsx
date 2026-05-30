@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { NumberInput } from '../components/NumberInput';
+import { SectionDescription } from '../components/SectionDescription';
 import type { ConfigState } from '../types';
 
 interface LayoutSectionProps {
@@ -136,6 +137,10 @@ export function LayoutSection({ config, onChange }: LayoutSectionProps) {
 
     return (
         <div>
+            <SectionDescription
+                title="Layout"
+                description="Defines the responsive breakpoints used across the library (the screen widths where responsive overrides kick in). Mark one breakpoint as the tablet tier and another as the desktop tier to label them in other sections."
+            />
             <h3 style={{ fontSize: '14px', margin: '0 0 12px 0' }}>Responsive Breakpoints</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={headerRowStyle}>

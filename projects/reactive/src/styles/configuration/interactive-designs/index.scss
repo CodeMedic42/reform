@@ -1,44 +1,9 @@
 @use 'sass:list';
-@use 'sass:map';
 
-@forward './grayscale';
-@forward './default';
-@forward './primary';
-@forward './secondary';
-@forward './info';
-@forward './success';
-@forward './warn';
-@forward './danger';
-
-@use './default' as *;
-@use './primary' as *;
-@use './secondary' as *;
-@use './info' as *;
-@use './success' as *;
-@use './warn' as *;
-@use './danger' as *;
-
-$ra-config-interactive-designs: 'fill';
-
-$ra-config-interactive-colors-custom: () !default;
-
-// Filter out empty scheme maps
-$ra-config-interactive-colors-defaults: ();
-@each $name, $scheme in (
-    "primary": $ra-config-interactive-color-primary,
-    "secondary": $ra-config-interactive-color-secondary,
-    "info": $ra-config-interactive-color-info,
-    "success": $ra-config-interactive-color-success,
-    "warn": $ra-config-interactive-color-warn,
-    "danger": $ra-config-interactive-color-danger,
-) {
-    @if list.length($scheme) > 0 {
-        $ra-config-interactive-colors-defaults: map.merge($ra-config-interactive-colors-defaults, ($name: $scheme)) !global;
-    }
-}
-
-$ra-config-interactive-colors: map.merge($ra-config-interactive-colors-defaults, $ra-config-interactive-colors-custom);
+$ra-config-interactive-colors: () !default;
+$ra-config-interactive-color-default: () !default;
+$ra-config-interactive-designs: () !default;
 
 @if list.length($ra-config-interactive-colors) == 0 and list.length($ra-config-interactive-color-default) == 0 {
-    @warn "No interactive color schemes configured. Import defaults.scss before index.scss, or define interactive color variables.";
+    @warn "No interactive color schemes configured. Import defaults.scss before index.scss.";
 }

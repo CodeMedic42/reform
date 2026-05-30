@@ -97,7 +97,7 @@ class IconButton extends React.Component<IconButtonProps> {
         const colorClasses = getSchemeColorClasses({
             colorRequired: false,
             color,
-            design: !isNil(variant) ? variant : 'sch-opaque',
+            variant: !isNil(variant) ? variant : 'sch-opaque',
         });
 
         return (

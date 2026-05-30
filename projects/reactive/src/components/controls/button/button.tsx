@@ -57,7 +57,7 @@ class Button extends PureComponent<ButtonProps> {
         const colorClasses = getSchemeColorClasses({
             colorRequired: false,
             color,
-            design,
+            variant,
         });
 
         const props = {
@@ -69,7 +69,7 @@ class Button extends PureComponent<ButtonProps> {
                 colorClasses,
                 className,
                 {
-                    [`ra-btn-variant-${variant}`]: !isEmpty(variant),
+                    [`ra-btn-design-${design}`]: !isEmpty(design),
                 },
             ),
             ...rest,

@@ -1,23 +1,112 @@
 import React, { useCallback, useState } from 'react';
-import { ColorPicker } from '../components/ColorPicker';
+import { PaletteRefPicker } from '../components/PaletteRefPicker';
+import { SectionDescription } from '../components/SectionDescription';
 import { SectionHeader } from '../components/SectionHeader';
-import type { ConfigState, InteractiveScheme, InteractiveVariant } from '../types';
+import type {
+    ConfigState,
+    InteractiveScheme,
+    PaletteRef,
+    VariantStateSlots,
+    VariantStates,
+} from '../types';
+import { buildPaletteMap } from '../util/resolve-palette-ref';
 
-const VARIANT_PROPS: (keyof InteractiveVariant)[] = [
-    'clr', 'bg', 'br', 'out',
-    'hover-clr', 'hover-bg', 'hover-br', 'hover-out',
-    'focus-clr', 'focus-bg', 'focus-br', 'focus-out',
-    'active-clr', 'active-bg', 'active-br', 'active-out',
-    'disabled-clr', 'disabled-bg', 'disabled-br', 'disabled-out',
-];
+type SchemeSource = 'schemes' | 'custom';
+type StateKey = keyof VariantStates;
+type SlotKey = keyof VariantStateSlots;
 
-const STATE_GROUPS = [
-    { label: 'Default', prefix: '', props: ['clr', 'bg', 'br', 'out'] },
-    { label: 'Hover', prefix: 'hover-', props: ['hover-clr', 'hover-bg', 'hover-br', 'hover-out'] },
-    { label: 'Focus', prefix: 'focus-', props: ['focus-clr', 'focus-bg', 'focus-br', 'focus-out'] },
-    { label: 'Active', prefix: 'active-', props: ['active-clr', 'active-bg', 'active-br', 'active-out'] },
-    { label: 'Disabled', prefix: 'disabled-', props: ['disabled-clr', 'disabled-bg', 'disabled-br', 'disabled-out'] },
-];
+const STATES: StateKey[] = ['default', 'hover', 'focus', 'active', 'disabled'];
+const SLOTS: SlotKey[] = ['clr', 'bg', 'br', 'out'];
+const SLOT_LABELS: Record<SlotKey, string> = {
+    clr: 'Color',
+    bg: 'Background',
+    br: 'Border',
+    out: 'Outline',
+};
+
+const T: PaletteRef = 'transparent';
+
+function emptySlots(): VariantStateSlots {
+    return { clr: T, bg: T, br: T, out: T };
+}
+
+function emptyVariant(): VariantStates {
+    return {
+        default: emptySlots(),
+        hover: emptySlots(),
+        focus: emptySlots(),
+        active: emptySlots(),
+        disabled: emptySlots(),
+    };
+}
+
+function collectVariantNames(prev: ConfigState): string[] {
+    const names = new Set<string>();
+    for (const scheme of [
+        ...Object.values(prev.interactiveDesigns.schemes),
+        ...Object.values(prev.interactiveDesigns.custom),
+    ]) {
+        for (const v of Object.keys(scheme.variants)) names.add(v);
+    }
+    if (names.size === 0) {
+        names.add('base');
+        names.add('fill');
+    }
+    return [...names];
+}
+
+function buildEmptyScheme(variantNames: string[]): InteractiveScheme {
+    const variants: Record<string, VariantStates> = {};
+    for (const name of variantNames) {
+        variants[name] = emptyVariant();
+    }
+    return { variants };
+}
+
+function addVariantToAllSchemes(prev: ConfigState, variantName: string): ConfigState {
+    const apply = (schemes: Record<string, InteractiveScheme>): Record<string, InteractiveScheme> => {
+        const next: Record<string, InteractiveScheme> = {};
+        for (const [name, scheme] of Object.entries(schemes)) {
+            if (scheme.variants[variantName]) {
+                next[name] = scheme;
+            } else {
+                next[name] = { ...scheme, variants: { ...scheme.variants, [variantName]: emptyVariant() } };
+            }
+        }
+        return next;
+    };
+    return {
+        ...prev,
+        interactiveDesigns: {
+            ...prev.interactiveDesigns,
+            schemes: apply(prev.interactiveDesigns.schemes),
+            custom: apply(prev.interactiveDesigns.custom),
+        },
+    };
+}
+
+function removeVariantFromAllSchemes(prev: ConfigState, variantName: string): ConfigState {
+    const apply = (schemes: Record<string, InteractiveScheme>): Record<string, InteractiveScheme> => {
+        const next: Record<string, InteractiveScheme> = {};
+        for (const [name, scheme] of Object.entries(schemes)) {
+            if (!scheme.variants[variantName]) {
+                next[name] = scheme;
+                continue;
+            }
+            const { [variantName]: _removed, ...rest } = scheme.variants;
+            next[name] = { ...scheme, variants: rest };
+        }
+        return next;
+    };
+    return {
+        ...prev,
+        interactiveDesigns: {
+            ...prev.interactiveDesigns,
+            schemes: apply(prev.interactiveDesigns.schemes),
+            custom: apply(prev.interactiveDesigns.custom),
+        },
+    };
+}
 
 const addBarStyle: React.CSSProperties = {
     display: 'flex',
@@ -43,44 +132,6 @@ const addButtonStyle: React.CSSProperties = {
     border: '1px solid #029cfd',
     background: '#029cfd',
     color: '#fff',
-};
-
-const DEFAULT_VARIANT: InteractiveVariant = {
-    clr: '#333333',
-    bg: 'transparent',
-    br: 'transparent',
-    out: 'transparent',
-    'hover-clr': '#222222',
-    'hover-bg': 'transparent',
-    'hover-br': 'transparent',
-    'hover-out': 'transparent',
-    'focus-clr': '#222222',
-    'focus-bg': 'transparent',
-    'focus-br': 'transparent',
-    'focus-out': 'transparent',
-    'active-clr': '#111111',
-    'active-bg': 'transparent',
-    'active-br': 'transparent',
-    'active-out': 'transparent',
-};
-
-const DEFAULT_FILL_VARIANT: InteractiveVariant = {
-    clr: '#ffffff',
-    bg: '#333333',
-    br: '#333333',
-    out: 'transparent',
-    'hover-clr': '#ffffff',
-    'hover-bg': '#222222',
-    'hover-br': '#222222',
-    'hover-out': 'transparent',
-    'focus-clr': '#ffffff',
-    'focus-bg': '#222222',
-    'focus-br': '#222222',
-    'focus-out': 'rgba(51, 51, 51, 0.5)',
-    'active-clr': '#ffffff',
-    'active-bg': '#111111',
-    'active-br': '#111111',
-    'active-out': 'transparent',
 };
 
 const restoreButtonStyle: React.CSSProperties = {
@@ -110,49 +161,54 @@ interface InteractiveDesignsSectionProps {
     onRestoreDefault: (name: string) => void;
 }
 
-export function InteractiveDesignsSection({ config, onChange, removedDefaults, onRemoveDefault, onRestoreDefault }: InteractiveDesignsSectionProps) {
+export function InteractiveDesignsSection({
+    config,
+    onChange,
+    removedDefaults,
+    onRemoveDefault,
+    onRestoreDefault,
+}: InteractiveDesignsSectionProps) {
     const [newSchemeName, setNewSchemeName] = useState('');
+    const [newVariantNames, setNewVariantNames] = useState<Record<string, string>>({});
+    const palettes = buildPaletteMap(config);
 
-    const updateVariantProp = useCallback((
-        source: 'schemes' | 'custom',
+    const updateSlot = useCallback((
+        source: SchemeSource,
         schemeName: string,
-        variantType: 'base' | 'fill',
-        prop: keyof InteractiveVariant,
-        value: string,
+        variantName: string,
+        state: StateKey,
+        slot: SlotKey,
+        value: PaletteRef,
     ) => {
-        onChange((prev) => ({
-            ...prev,
-            interactiveDesigns: {
-                ...prev.interactiveDesigns,
-                [source]: {
-                    ...prev.interactiveDesigns[source],
-                    [schemeName]: {
-                        ...prev.interactiveDesigns[source][schemeName],
-                        [variantType]: {
-                            ...prev.interactiveDesigns[source][schemeName][variantType],
-                            [prop]: value,
+        onChange((prev) => {
+            const scheme = prev.interactiveDesigns[source][schemeName];
+            const variant = scheme.variants[variantName];
+            const updatedSlots: VariantStateSlots = { ...variant[state], [slot]: value };
+            const updatedVariant: VariantStates = { ...variant, [state]: updatedSlots };
+            return {
+                ...prev,
+                interactiveDesigns: {
+                    ...prev.interactiveDesigns,
+                    [source]: {
+                        ...prev.interactiveDesigns[source],
+                        [schemeName]: {
+                            ...scheme,
+                            variants: { ...scheme.variants, [variantName]: updatedVariant },
                         },
                     },
                 },
-            },
-        }));
+            };
+        });
     }, [onChange]);
 
     const addScheme = useCallback(() => {
         const name = newSchemeName.trim().toLowerCase();
         if (!name || config.interactiveDesigns.schemes[name] || config.interactiveDesigns.custom[name]) return;
-
         onChange((prev) => ({
             ...prev,
             interactiveDesigns: {
                 ...prev.interactiveDesigns,
-                custom: {
-                    ...prev.interactiveDesigns.custom,
-                    [name]: {
-                        base: { ...DEFAULT_VARIANT },
-                        fill: { ...DEFAULT_FILL_VARIANT },
-                    },
-                },
+                custom: { ...prev.interactiveDesigns.custom, [name]: buildEmptyScheme(collectVariantNames(prev)) },
             },
         }));
         setNewSchemeName('');
@@ -166,50 +222,96 @@ export function InteractiveDesignsSection({ config, onChange, removedDefaults, o
         });
     }, [onChange]);
 
-    const renderVariant = (
+    const addVariant = useCallback((source: SchemeSource, schemeName: string) => {
+        const key = `${source}:${schemeName}`;
+        const variantName = (newVariantNames[key] ?? '').trim().toLowerCase();
+        if (!variantName) return;
+        onChange((prev) => addVariantToAllSchemes(prev, variantName));
+        setNewVariantNames((prev) => ({ ...prev, [key]: '' }));
+    }, [newVariantNames, onChange]);
+
+    const removeVariant = useCallback((variantName: string) => {
+        if (variantName === 'base') return;
+        onChange((prev) => removeVariantFromAllSchemes(prev, variantName));
+    }, [onChange]);
+
+    const renderState = (
+        source: SchemeSource,
         schemeName: string,
-        variantType: 'base' | 'fill',
-        variant: InteractiveVariant,
-        source: 'schemes' | 'custom',
+        variantName: string,
+        state: StateKey,
+        slots: VariantStateSlots,
     ) => (
-        <SectionHeader title={variantType === 'base' ? 'Base Variant' : 'Fill Variant'} level={1}>
-            {STATE_GROUPS.map((group) => (
-                <SectionHeader key={group.label} title={group.label} level={2}>
-                    {group.props.map((prop) => (
-                        <ColorPicker
-                            key={prop}
-                            label={prop.replace(group.prefix, '')}
-                            value={variant[prop as keyof InteractiveVariant] ?? 'transparent'}
-                            onChange={(v) => updateVariantProp(source, schemeName, variantType, prop as keyof InteractiveVariant, v)}
-                        />
-                    ))}
-                </SectionHeader>
+        <SectionHeader key={state} title={state} level={2}>
+            {SLOTS.map((slot) => (
+                <PaletteRefPicker
+                    key={slot}
+                    label={SLOT_LABELS[slot]}
+                    value={slots[slot]}
+                    palettes={palettes}
+                    onChange={(v) => updateSlot(source, schemeName, variantName, state, slot, v)}
+                />
             ))}
+        </SectionHeader>
+    );
+
+    const renderVariant = (
+        source: SchemeSource,
+        schemeName: string,
+        variantName: string,
+        variant: VariantStates,
+    ) => (
+        <SectionHeader
+            key={variantName}
+            title={variantName}
+            level={1}
+            onRemove={variantName === 'base' ? undefined : () => removeVariant(variantName)}
+        >
+            {STATES.map((state) => renderState(source, schemeName, variantName, state, variant[state]))}
         </SectionHeader>
     );
 
     const renderScheme = (
         name: string,
         scheme: InteractiveScheme,
-        source: 'schemes' | 'custom',
-    ) => (
-        <SectionHeader
-            key={name}
-            title={name}
-            level={0}
-            onRemove={
-                source === 'custom'
-                    ? () => removeScheme(name)
-                    : () => onRemoveDefault(name)
-            }
-        >
-            {renderVariant(name, 'base', scheme.base, source)}
-            {renderVariant(name, 'fill', scheme.fill, source)}
-        </SectionHeader>
-    );
+        source: SchemeSource,
+    ) => {
+        const key = `${source}:${name}`;
+        const variantInput = newVariantNames[key] ?? '';
+        return (
+            <SectionHeader
+                key={name}
+                title={name}
+                level={0}
+                onRemove={source === 'custom' ? () => removeScheme(name) : () => onRemoveDefault(name)}
+            >
+                {Object.entries(scheme.variants).map(([variantName, variant]) =>
+                    renderVariant(source, name, variantName, variant),
+                )}
+                <div style={addBarStyle}>
+                    <input
+                        type="text"
+                        placeholder="Variant name"
+                        value={variantInput}
+                        onChange={(e) => setNewVariantNames((prev) => ({ ...prev, [key]: e.target.value }))}
+                        style={addInputStyle}
+                        onKeyDown={(e) => e.key === 'Enter' && addVariant(source, name)}
+                    />
+                    <button style={addButtonStyle} onClick={() => addVariant(source, name)}>
+                        Add Variant
+                    </button>
+                    <span style={{ fontSize: '11px', color: '#888' }}>Variants are shared across all schemes.</span>
+                </div>
+            </SectionHeader>
+        );
+    };
 
     return (
         <div>
+            <SectionDescription
+                title="Interactive"
+                description="Defines named color schemes (primary, secondary, danger, etc.) used by interactive components like Button via the `color` prop. Each scheme has one or more variants (base, fill, etc.) and five states (default, hover, focus, active, disabled). Every slot picks a palette color and shade, or transparent. Variants are shared across all schemes."
+            />
             <h3 style={{ fontSize: '14px', margin: '0 0 8px 0' }}>Interactive Schemes</h3>
             {Object.entries(config.interactiveDesigns.schemes).map(([name, scheme]) =>
                 renderScheme(name, scheme, 'schemes'),

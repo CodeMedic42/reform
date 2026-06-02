@@ -17,7 +17,7 @@ import chipScss from 'reactive-scss-raw/chip.scss?raw';
 // @ts-expect-error raw import
 import datePickerScss from 'reactive-scss-raw/date-picker.scss?raw';
 // @ts-expect-error raw import
-import dropDownScss from 'reactive-scss-raw/drop-down.scss?raw';
+import dropDownScss from 'reactive-scss-raw/arrangement/drop-down.scss?raw';
 // @ts-expect-error raw import
 import hiddenScss from 'reactive-scss-raw/hidden.scss?raw';
 // @ts-expect-error raw import
@@ -47,6 +47,8 @@ import configIndexScss from 'reactive-scss-raw/configuration/index.scss?raw';
 import configBaseScss from 'reactive-scss-raw/configuration/base.scss?raw';
 // @ts-expect-error raw import
 import configButtonScss from 'reactive-scss-raw/configuration/button.scss?raw';
+// @ts-expect-error raw import
+import configDropDownListItemScss from 'reactive-scss-raw/configuration/drop-down-list-item.scss?raw';
 // @ts-expect-error raw import
 import configLayoutScss from 'reactive-scss-raw/configuration/layout.scss?raw';
 // @ts-expect-error raw import
@@ -118,6 +120,8 @@ import fieldContainerScss from 'reactive-scss-raw/fields/field-container.scss?ra
 // @ts-expect-error raw import
 import fieldScss from 'reactive-scss-raw/fields/field.scss?raw';
 // @ts-expect-error raw import
+import checkInputScss from 'reactive-scss-raw/fields/check-input.scss?raw';
+// @ts-expect-error raw import
 import selectInputScss from 'reactive-scss-raw/fields/select-input.scss?raw';
 // @ts-expect-error raw import
 import dropDownInputScss from 'reactive-scss-raw/fields/drop-down-input.scss?raw';
@@ -132,7 +136,7 @@ export const scssSourceMap: Record<string, string> = {
     'button.scss': buttonScss,
     'chip.scss': chipScss,
     'date-picker.scss': datePickerScss,
-    'drop-down.scss': dropDownScss,
+    'arrangement/drop-down.scss': dropDownScss,
     'hidden.scss': hiddenScss,
     'icon.scss': iconScss,
     'infinite-list.scss': infiniteListScss,
@@ -147,6 +151,7 @@ export const scssSourceMap: Record<string, string> = {
     'configuration/index.scss': configIndexScss,
     'configuration/base.scss': configBaseScss,
     'configuration/button.scss': configButtonScss,
+    'configuration/drop-down-list-item.scss': configDropDownListItemScss,
     'configuration/layout.scss': configLayoutScss,
     'configuration/palette.scss': configPaletteScss,
     'configuration/system.scss': configSystemScss,
@@ -182,6 +187,7 @@ export const scssSourceMap: Record<string, string> = {
     'fields/index.scss': fieldsIndexScss,
     'fields/field-container.scss': fieldContainerScss,
     'fields/field.scss': fieldScss,
+    'fields/check-input.scss': checkInputScss,
     'fields/select-input.scss': selectInputScss,
     'fields/drop-down-input.scss': dropDownInputScss,
     'fields/date-range-input.scss': dateRangeInputScss,

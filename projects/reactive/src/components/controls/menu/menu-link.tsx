@@ -11,13 +11,15 @@ interface MenuLinkProps {
     className?: string | null;
     icon?: IconProp | null;
     children?: string | null;
-    onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
+    onClick?: ((payload: { event: React.MouseEvent; data: unknown }) => void) | null;
     'aria-label'?: string | null;
-    onClickMeta?: unknown | null;
+    eventData?: unknown;
     selected?: boolean;
     targeted?: boolean;
     disabled?: boolean;
     href?: string | null;
+    target?: string | null;
+    rel?: string | null;
     borderBottom?: boolean;
     borderTop?: boolean;
 }
@@ -30,7 +32,7 @@ class MenuLink extends PureComponent<MenuLinkProps> {
     }
 
     handleClick({ event }: { event: React.MouseEvent }): void {
-        const { onClick, onClickMeta } = this.props;
+        const { onClick, eventData } = this.props;
 
         if (event.defaultPrevented) {
             return;
@@ -39,7 +41,7 @@ class MenuLink extends PureComponent<MenuLinkProps> {
         if (!isNil(onClick)) {
             onClick({
                 event,
-                meta: onClickMeta,
+                data: eventData,
             });
         }
     }
@@ -52,6 +54,8 @@ class MenuLink extends PureComponent<MenuLinkProps> {
             targeted = false,
             disabled = false,
             href = null,
+            target = null,
+            rel = null,
             borderBottom = false,
             borderTop = false,
             icon = null,
@@ -72,6 +76,8 @@ class MenuLink extends PureComponent<MenuLinkProps> {
                     disabled={disabled}
                     onClick={this.handleClick}
                     href={href}
+                    target={target}
+                    rel={rel}
                     aria-label={!isNil(ariaLabel) ? ariaLabel : children}
                 >
                     {!isNil(icon) ? (

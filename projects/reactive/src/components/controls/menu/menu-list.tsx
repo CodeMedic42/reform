@@ -6,8 +6,7 @@ interface MenuListProps {
     id?: string | null;
     className?: string | null;
     children?: React.ReactNode;
-    size?: string | null;
-    dark?: boolean;
+    design?: string | null;
 }
 
 class MenuList extends PureComponent<MenuListProps> {

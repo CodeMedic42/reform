@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import {
@@ -6,7 +6,6 @@ import {
 } from '../../../common/color-list.js';
 
 interface DropDownListItemProps {
-    ref?: React.Ref<unknown>;
     id?: string | null;
     color?: string | null;
     className?: string | null;
@@ -23,12 +22,16 @@ interface DropDownListItemProps {
     disabled?: boolean;
 }
 
-export type { DropDownListItemProps };
+interface DropDownListItemHandle {
+    getRootNode: () => HTMLLIElement | null;
+}
+
+export type { DropDownListItemProps, DropDownListItemHandle };
 
 /**
  * This component is used the base definition of an item being rendered inside the DropDownList component.
  */
-function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
+const DropDownListItem = forwardRef<DropDownListItemHandle, DropDownListItemProps>(function DropDownListItem(props, ref) {
     const {
         id = null,
         color = null,
@@ -46,6 +49,10 @@ function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
     } = props;
 
     const itemRef = useRef<HTMLLIElement>(null);
+
+    useImperativeHandle(ref, () => ({
+        getRootNode: () => itemRef.current,
+    }), []);
 
     const handleClick = useCallback((event: React.MouseEvent) => {
         if (preventCloseOnClick) {
@@ -98,6 +105,6 @@ function DropDownListItem(props: DropDownListItemProps): React.ReactNode {
             {children}
         </li>
     );
-}
+});
 
 export default DropDownListItem;

@@ -10,7 +10,7 @@ import { getDefaultSize } from './utils.js';
 
 interface ChipClickEvent {
 	event: React.MouseEvent<HTMLButtonElement>;
-	meta: unknown;
+	data: unknown;
 }
 
 export interface ChipProps {
@@ -25,7 +25,7 @@ export interface ChipProps {
 	variant?: 'rectangle' | 'pill' | null;
 	bordered?: boolean;
 	onClick?: ((event: ChipClickEvent) => void) | null;
-	onClickMeta?: unknown;
+	eventData?: unknown;
 	asButton?: boolean;
 }
 
@@ -43,7 +43,7 @@ const Chip = memo(forwardRef<{ focus: () => void }, ChipProps>((props, ref) => {
 		onClick = null,
 		disabled = false,
 		asButton = false,
-		onClickMeta,
+		eventData,
 	} = props;
 
 	const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -70,8 +70,8 @@ const Chip = memo(forwardRef<{ focus: () => void }, ChipProps>((props, ref) => {
 			return;
 		}
 
-		onClick({ event, meta: onClickMeta });
-	}, [onClick, onClickMeta]);
+		onClick({ event, data: eventData });
+	}, [onClick, eventData]);
 
 	const { colorClasses } = getColorInfo({
 		color,

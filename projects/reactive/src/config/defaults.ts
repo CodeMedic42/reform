@@ -224,6 +224,21 @@ export const DEFAULT_CONFIG: ConfigState = {
         },
         designs: {},
     },
+    dropDownListItem: {
+        designs: {
+            medium: {
+                'padding-v': '8px',
+                'padding-h': '16px',
+                'font-size': '16px',
+                'line-height': '24px',
+                'min-height': '40px',
+                'ol-border-radius': '0',
+                'ol-padding-top': '8px',
+                'ol-padding-bottom': '8px',
+            },
+        },
+        defaultDesignName: 'medium',
+    },
     tabs: {
         cornerStyle: 'rounded-ends',
         innerBorder: 'none',

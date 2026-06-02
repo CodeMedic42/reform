@@ -14,6 +14,7 @@ interface MenuCheckProps {
     children?: string | null;
     borderBottom?: boolean;
     borderTop?: boolean;
+    color?: string | null;
     value?: boolean;
     onChange?: ((value: boolean) => void) | null;
     disabled?: boolean;
@@ -47,6 +48,7 @@ class MenuCheck extends PureComponent<MenuCheckProps> {
             disabled = false,
             variant,
             icon = null,
+            color,
             'aria-label': ariaLabel = null,
         } = this.props;
 
@@ -62,8 +64,7 @@ class MenuCheck extends PureComponent<MenuCheckProps> {
                     <CheckInput
                         id={buildId(id, 'check')}
                         className="menu-checkbox-control"
-                        color="secondary"
-                        size="sm"
+                        color={color}
                         value={value}
                         onChange={onChange}
                         disabled={disabled}

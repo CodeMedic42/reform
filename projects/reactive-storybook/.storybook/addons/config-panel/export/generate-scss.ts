@@ -1,4 +1,4 @@
-import type { ConfigState, PaletteShades, InteractiveScheme, VariantStates, VariantStateSlots, ButtonDesign, FieldContainerVariant, HeadingLevelConfig, TextSizeConfig, ParagraphSizeConfig, TypographyResponsiveTier, ParagraphResponsiveTier } from '../types';
+import type { ConfigState, PaletteShades, InteractiveScheme, VariantStates, VariantStateSlots, ButtonDesign, DropDownListItemDesign, FieldContainerVariant, HeadingLevelConfig, TextSizeConfig, ParagraphSizeConfig, TypographyResponsiveTier, ParagraphResponsiveTier } from '../types';
 import { DEFAULT_CONFIG } from '../defaults';
 import { buildPaletteMap, resolvePaletteRef, type PaletteMap } from '../util/resolve-palette-ref';
 
@@ -46,6 +46,13 @@ function formatButtonDesign(design: ButtonDesign): string {
     const entries = Object.entries(design)
         .filter(([, v]) => v !== undefined)
         .map(([k, v]) => indent(`"${k}": ${typeof v === 'number' ? v : v},`, 2));
+    return `(\n${entries.join('\n')}\n${indent(')', 1)}`;
+}
+
+function formatDropDownListItemDesign(design: DropDownListItemDesign): string {
+    const entries = Object.entries(design)
+        .filter(([, v]) => v !== undefined)
+        .map(([k, v]) => indent(`"${k}": ${v},`, 2));
     return `(\n${entries.join('\n')}\n${indent(')', 1)}`;
 }
 
@@ -372,6 +379,21 @@ export function generateScss(config: ConfigState): string {
         const entries = Object.entries(config.button.designs)
             .map(([name, design]) => `${indent(`"${name}": ${formatButtonDesign(design)},`, 1)}`);
         lines.push(`$ra-config-button-designs: (\n${entries.join('\n')}\n);`);
+    }
+
+    // Drop-down list item settings
+    const ddli = config.dropDownListItem;
+    const ddliDefault = ddli.designs[ddli.defaultDesignName];
+    if (ddliDefault) {
+        lines.push('');
+        lines.push(`$ra-config-drop-down-list-item-default-design: ${formatDropDownListItemDesign(ddliDefault)};`);
+    }
+    const ddliOthers = Object.entries(ddli.designs).filter(([n]) => n !== ddli.defaultDesignName);
+    if (ddliOthers.length > 0) {
+        lines.push('');
+        const entries = ddliOthers
+            .map(([name, design]) => `${indent(`"${name}": ${formatDropDownListItemDesign(design)},`, 1)}`);
+        lines.push(`$ra-config-drop-down-list-item-designs: (\n${entries.join('\n')}\n);`);
     }
 
     lines.push('');

@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 
 export interface HeaderSortableClickEvent {
     event: React.MouseEvent<HTMLButtonElement>;
-    meta: unknown;
+    data: unknown;
 }
 
 interface HeaderSortableCellBaseProps {
@@ -13,7 +13,7 @@ interface HeaderSortableCellBaseProps {
     sortDirection?: 'none' | 'ascending' | 'descending' | null;
     headerText?: string | null;
     onClick?: ((event: HeaderSortableClickEvent) => void) | null;
-    onClickMeta?: unknown;
+    eventData?: unknown;
 }
 
 class HeaderSortableCellBase extends PureComponent<HeaderSortableCellBaseProps> {
@@ -24,7 +24,7 @@ class HeaderSortableCellBase extends PureComponent<HeaderSortableCellBaseProps> 
     }
 
     handleClick(event: React.MouseEvent<HTMLButtonElement>) {
-        const { onClick, onClickMeta } = this.props;
+        const { onClick, eventData } = this.props;
 
         event.preventDefault();
 
@@ -33,7 +33,7 @@ class HeaderSortableCellBase extends PureComponent<HeaderSortableCellBaseProps> 
         }
 
         onClick({
-            meta: onClickMeta,
+            data: eventData,
             event,
         });
     }

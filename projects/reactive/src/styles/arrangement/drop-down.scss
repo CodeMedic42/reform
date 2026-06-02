@@ -1,16 +1,66 @@
-@use './colors/gray' as *;
-@use 'utilities';
+@use 'sass:list';
+@use 'sass:map';
+@use '../colors/gray' as *;
+@use '../configuration/drop-down-list-item' as *;
+@use '../utilities';
 
 /* stylelint-disable no-descending-specificity */
 $-list-background: gray(100);
-$-hover-menu-background: gray(100);
-$-targeted-menu-background: gray(200);
+$-hover-menu-background: gray(200);
+$-targeted-menu-background: gray(300);
 $-hover-targeted-menu-background: #dfdfe0;
 $-selected-menu-background: #eff7fe;
 $-hover-selected-menu-background: #dceffd;
 $-selected-targeted-menu-background: #d3ebfc;
 $-hover-selected-targeted-menu-background: #c5e4fb;
 $-disabled-menu-background: gray(200);
+
+@mixin buildDropDownListItemContentDesignSettings($design) {
+    padding: map.get($design, 'padding-v') map.get($design, 'padding-h');
+    font-size: map.get($design, 'font-size');
+    line-height: map.get($design, 'line-height');
+    min-height: map.get($design, 'min-height');
+}
+
+@mixin buildDropDownListOlDesignSettings($design) {
+    border-radius: map.get($design, 'ol-border-radius');
+    padding-bottom: map.get($design, 'ol-padding-bottom');
+
+    &:first-child {
+        padding-top: map.get($design, 'ol-padding-top');
+    }
+}
+
+@mixin buildDropDownListItemDesignSettings($design) {
+    @include buildDropDownListOlDesignSettings($design);
+
+    .ra-dd-list-item {
+        .ra-dd-list-item-content {
+            @include buildDropDownListItemContentDesignSettings($design);
+        }
+
+        &.ra-dd-menu-list-item {
+            &.menu-removable .menu-remove-btn,
+            &.sub-menu .menu-arrow {
+                padding-left: calc(map.get($design, 'padding-h') / 2);
+            }
+        }
+    }
+}
+
+@mixin buildDropDownListItemDesigns() {
+    @if list.length(map.keys($ra-config-drop-down-list-item-default-design)) == 0 {
+        @warn 'No default drop-down list-item design defined. The drop-down list will have no sizing.';
+    } @else {
+        @include buildDropDownListItemDesignSettings($ra-config-drop-down-list-item-default-design);
+    }
+
+    @each $designId, $design in $ra-config-drop-down-list-item-designs {
+        &.ra-dd-list-design-#{$designId} {
+            @include buildDropDownListItemDesignSettings($design);
+        }
+    }
+}
 
 .ra-drop-down {
     display: inline-block;
@@ -42,7 +92,6 @@ $-disabled-menu-background: gray(200);
         display: flex;
         align-items: center;
         text-align: left;
-        padding: 8px 16px;
         color: inherit;
         box-sizing: border-box;
         font: inherit;
@@ -161,14 +210,28 @@ $-disabled-menu-background: gray(200);
     }
 
     &.ra-dd-menu-list-item {
+        .menu-content {
+            flex: 1;
+        }
+
         .menu-icon {
             margin-right: 4px;
         }
 
-        .menu-remove-btn,
-        .menu-checkbox-control,
-        .menu-arrow {
-            position: absolute;
+        &.menu-checkbox {
+            .ra-checkbox {
+                margin-left: calc(var(--checkbox-length) / -2);
+                margin-top: calc(var(--checkbox-length) / -2);
+                margin-bottom: calc(var(--checkbox-length) / -2);
+            }
+        }
+
+        .menu-remove-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font: inherit;
+            padding: 0px;
         }
     }
 }
@@ -177,7 +240,6 @@ $-disabled-menu-background: gray(200);
     overflow-y: auto;
     margin: 0;
     padding: 0;
-    padding-bottom: 8px;
     box-sizing: border-box;
     outline: none;
     flex-grow: 1;
@@ -187,273 +249,5 @@ $-disabled-menu-background: gray(200);
     width: 100%;
     background-color: $-list-background;
 
-    &.dark {
-        background-color: gray(800);
-
-        .ra-dd-list-item {
-            color: gray(200);
-
-            .ra-dd-list-item-control {
-                &:hover,
-                &.hover {
-                    ~ .ra-dd-list-item-content {
-                        color: gray(100);
-                        background-color: gray(700);
-                    }
-                }
-
-                &:focus,
-                &.focus {
-                    ~ .ra-dd-list-item-content {
-                        color: gray(200);
-                        background-color: gray(800);
-                    }
-                }
-
-                &:active,
-                &.active {
-                    ~ .ra-dd-list-item-content {
-                        color: gray(200);
-                        background-color: gray(900);
-                    }
-                }
-
-                &:disabled,
-                &.disabled {
-                    ~ .ra-dd-list-item-content {
-                        background-color: transparent;
-                    }
-                }
-            }
-
-            &.targeted {
-                .ra-dd-list-item-content {
-                    background-color: $-targeted-menu-background;
-                }
-
-                .ra-dd-list-item-control {
-                    &:hover,
-                    &.hover,
-                    &:active,
-                    &.active,
-                    &:focus,
-                    &.focus {
-                        ~ .ra-dd-list-item-content {
-                            background-color: $-hover-targeted-menu-background;
-                        }
-                    }
-                }
-            }
-
-            &.selected {
-                .ra-dd-list-item-content {
-                    background-color: $-selected-menu-background;
-                }
-
-                .ra-dd-list-item-control {
-                    &:hover,
-                    &.hover,
-                    &:active,
-                    &.active,
-                    &:focus,
-                    &.focus {
-                        ~ .ra-dd-list-item-content {
-                            background-color: $-hover-selected-menu-background;
-                        }
-                    }
-                }
-            }
-
-            &.border-bottom {
-                border-bottom-color: gray(600);
-            }
-
-            &.border-top {
-                border-top-color: gray(600);
-            }
-        }
-    }
-
-    &:first-child {
-        padding-top: 8px;
-    }
-
-    &.size-2xs,
-    &.size-xs {
-        .ra-dd-list-item {
-            .ra-dd-list-item-content {
-                font-size: 15px;
-            }
-        }
-    }
-
-    &.size-sm {
-        .ra-dd-list-item {
-            .ra-dd-list-item-content {
-                font-size: 16px;
-            }
-        }
-    }
-
-    &.size-2xs,
-    &.size-xs,
-    &.size-sm {
-        .ra-dd-list-item {
-            .ra-dd-list-item-content {
-                padding-top: 8px;
-                min-height: 32px;
-                line-height: 16px;
-            }
-
-            &.ra-dd-menu-list-item {
-                &.menu-removable {
-                    .ra-dd-list-item-content {
-                        padding-right: 36px;
-                    }
-
-                    .menu-remove-btn {
-                        position: absolute;
-                        right: 8px;
-                        top: 4px;
-                    }
-                }
-
-                &.menu-checkbox {
-                    .ra-dd-list-item-content {
-                        padding-left: 44px;
-                    }
-
-                    .menu-checkbox-control {
-                        position: absolute;
-                        left: 8px;
-                        top: 0;
-                    }
-                }
-
-                &.sub-menu {
-                    .ra-dd-list-item-content {
-                        padding-right: 28px;
-                    }
-
-                    .menu-arrow {
-                        position: absolute;
-                        right: 16px;
-                        top: 9px;
-                    }
-                }
-            }
-        }
-    }
-
-    &.size-md {
-        .ra-dd-list-item {
-            .ra-dd-list-item-content {
-                font-size: 16px;
-
-                padding-top: 8px;
-                min-height: 40px;
-                line-height: 24px;
-            }
-
-            &.ra-dd-menu-list-item {
-                &.menu-removable {
-                    .ra-dd-list-item-content {
-                        padding-right: 36px;
-                    }
-
-                    .menu-remove-btn {
-                        right: 8px;
-                        top: 8px;
-                    }
-                }
-
-                &.menu-checkbox {
-                    .ra-dd-list-item-content {
-                        padding-left: 44px;
-                    }
-
-                    .menu-checkbox-control {
-                        left: 8px;
-                        top: 4px;
-                    }
-                }
-
-                &.sub-menu {
-                    .ra-dd-list-item-content {
-                        padding-right: 28px;
-                    }
-
-                    .menu-arrow {
-                        right: 16px;
-                        top: 12px;
-                    }
-                }
-            }
-        }
-    }
-
-    &.size-lg {
-        .ra-dd-list-item {
-            .ra-dd-list-item-content {
-                font-size: 16px;
-            }
-        }
-    }
-
-    &.size-xl {
-        .ra-dd-list-item {
-            .ra-dd-list-item-content {
-                font-size: 18px;
-            }
-        }
-    }
-
-    &.size-lg,
-    &.size-xl {
-        .ra-dd-list-item {
-            .ra-dd-list-item-content {
-                padding-top: 14px;
-                min-height: 48px;
-                line-height: 20px;
-            }
-
-            &.ra-dd-menu-list-item {
-                &.menu-removable {
-                    .ra-dd-list-item-content {
-                        padding-right: 36px;
-                    }
-
-                    .menu-remove-btn {
-                        position: absolute;
-                        right: 8px;
-                        top: 12px;
-                    }
-                }
-
-                &.menu-checkbox {
-                    .ra-dd-list-item-content {
-                        padding-left: 44px;
-                    }
-
-                    .menu-checkbox-control {
-                        position: absolute;
-                        left: 8px;
-                        top: 8px;
-                    }
-                }
-
-                &.sub-menu {
-                    .ra-dd-list-item-content {
-                        padding-right: 28px;
-                    }
-
-                    .menu-arrow {
-                        position: absolute;
-                        right: 16px;
-                        top: 16px;
-                    }
-                }
-            }
-        }
-    }
+    @include buildDropDownListItemDesigns();
 }

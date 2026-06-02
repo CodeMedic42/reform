@@ -9,8 +9,7 @@ interface MenuProps {
     className?: string | null;
     Anchor: React.ElementType;
     anchorProps?: Record<string, unknown> | null;
-    size?: 'sm' | 'md' | 'lg';
-    dark?: boolean;
+    design?: string | null;
     children?: React.ReactNode;
     disabled?: boolean;
 }
@@ -20,8 +19,7 @@ class Menu extends PureComponent<MenuProps> {
         const {
             className = null,
             anchorProps = null,
-            size = 'md',
-            dark = false,
+            design = null,
             disabled = false,
             children = null,
             ...rest
@@ -33,7 +31,7 @@ class Menu extends PureComponent<MenuProps> {
                 className={classnames('ra-menu', className)}
                 disabled={disabled}
                 anchorProps={{
-                    size,
+                    design,
                     disabled,
                     ...anchorProps,
                 }}
@@ -42,8 +40,8 @@ class Menu extends PureComponent<MenuProps> {
             >
                 <Consumer>
                     {(({ open }: { open: boolean }) => (
-                        <MenuList size={size} dark={dark}>
-                            <Provider value={{ dark, size, open }}>
+                        <MenuList design={design}>
+                            <Provider value={{ design, open }}>
                                 {children}
                             </Provider>
                         </MenuList>

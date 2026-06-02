@@ -11,6 +11,7 @@ import { InteractiveDesignsSection } from './sections/InteractiveDesignsSection'
 import { SystemSection } from './sections/SystemSection';
 import { TypographySection } from './sections/TypographySection';
 import { ButtonSection } from './sections/ButtonSection';
+import { DropDownListItemSection } from './sections/DropDownListItemSection';
 import { TabsSection } from './sections/TabsSection';
 import { InputsSection } from './sections/InputsSection';
 import { LayoutSection } from './sections/LayoutSection';
@@ -22,6 +23,7 @@ const TABS = [
     { id: 'system', label: 'System' },
     { id: 'typography', label: 'Typography' },
     { id: 'button', label: 'Button' },
+    { id: 'drop-down-list-item', label: 'Drop Down List Items' },
     { id: 'tabs', label: 'Tabs' },
     { id: 'inputs', label: 'Inputs' },
     { id: 'layout', label: 'Layout' },
@@ -225,6 +227,9 @@ export function ConfigPanel({ active }: ConfigPanelProps) {
                 )}
                 {activeTab === 'button' && (
                     <ButtonSection config={config} onChange={updateConfig} />
+                )}
+                {activeTab === 'drop-down-list-item' && (
+                    <DropDownListItemSection config={config} onChange={updateConfig} />
                 )}
                 {activeTab === 'tabs' && (
                     <TabsSection config={config} onChange={updateConfig} />

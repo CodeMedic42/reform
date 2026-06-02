@@ -40,6 +40,7 @@ interface SelectProps {
     'aria-labelledby'?: string | null;
     'aria-describedby'?: string | null;
     size?: string;
+    design?: string | null;
     enableFiltering?: boolean | 'internal' | 'external';
     value?: string | number | Array<string | number> | null;
     onSelect?: ((value: unknown) => void) | null;
@@ -509,6 +510,7 @@ function renderOptions(
     targetIndex: number | null,
     optionSeparator: boolean | undefined,
     size: string | undefined,
+    design: string | null | undefined,
     enableMultiSelect: boolean | undefined,
     handleSelect: (id: string | number | null) => void,
     dropDownListRef: React.RefObject<any>,
@@ -601,7 +603,7 @@ function renderOptions(
             <DropDownList
                 ref={dropDownListRef}
                 id={listBoxId}
-                size={size}
+                design={design}
                 aria-labelledby={labelledBy}
                 aria-multiselectable={enableMultiSelect}
             >
@@ -680,6 +682,7 @@ const SelectField = forwardRef<unknown, SelectProps>((props, ref) => {
         'aria-labelledby': ariaLabelledby,
         'aria-describedby': ariaDescribedby,
         size,
+        design = null,
         enableFiltering = false,
         value = null,
         onSelect = null,
@@ -948,6 +951,7 @@ const SelectField = forwardRef<unknown, SelectProps>((props, ref) => {
                     targetIndex,
                     optionSeparator,
                     size,
+                    design,
                     enableMultiSelect,
                     selectValue,
                     dropDownListRef,

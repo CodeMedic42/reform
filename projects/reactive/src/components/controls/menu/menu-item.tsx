@@ -1,6 +1,7 @@
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
 import DropDownListItem from '../../arrangement/drop-down/drop-down-list-item.js';
+import type { DropDownListItemHandle } from '../../arrangement/drop-down/drop-down-list-item.js';
 
 interface MenuItemProps {
     id?: string | null;
@@ -17,7 +18,7 @@ interface MenuItemProps {
 }
 
 class MenuItem extends PureComponent<MenuItemProps> {
-    private itemRef: React.RefObject<unknown>;
+    private itemRef: React.RefObject<DropDownListItemHandle>;
 
     constructor(props: MenuItemProps) {
         super(props);
@@ -26,7 +27,7 @@ class MenuItem extends PureComponent<MenuItemProps> {
     }
 
     getRootNode(): HTMLElement | null {
-        return (this.itemRef.current as { getRootNode: () => HTMLElement } | null)?.getRootNode() ?? null;
+        return this.itemRef.current?.getRootNode() ?? null;
     }
 
     render(): React.ReactNode {

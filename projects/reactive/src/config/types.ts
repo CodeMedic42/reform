@@ -45,6 +45,17 @@ export interface ButtonDesign {
     'min-width'?: string;
 }
 
+export interface DropDownListItemDesign {
+    'padding-v': string;
+    'padding-h': string;
+    'font-size': string;
+    'line-height': string;
+    'min-height': string;
+    'ol-border-radius': string;
+    'ol-padding-top': string;
+    'ol-padding-bottom': string;
+}
+
 export interface FieldContainerVariant {
     height: string;
     'padding-h': string;
@@ -184,6 +195,10 @@ export interface ConfigState {
     button: {
         defaultDesign: ButtonDesign;
         designs: Record<string, ButtonDesign>;
+    };
+    dropDownListItem: {
+        designs: Record<string, DropDownListItemDesign>;
+        defaultDesignName: string;
     };
     tabs: TabConfig;
     inputs: {

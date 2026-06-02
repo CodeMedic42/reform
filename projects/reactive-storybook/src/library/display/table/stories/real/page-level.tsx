@@ -1,11 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '@reformjs/reactive/display/table';
 import { items, columns } from '../constants';
 import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
 import StaticContainer from '@reformjs/reactive/arrangement/static-container';
 import Card from '@reformjs/reactive/arrangement/card';
 
+type TableItem = Record<string, unknown>;
+
 function Basic() {
+    const [selected, setSelected] = useState<Set<string>>(new Set());
+
+    const isRowSelected = (item: TableItem) =>
+        selected.has(item.id as string);
+
+    const isHeaderSelected = (
+        allItems: TableItem[] | Record<string, TableItem> | null | undefined,
+    ) => {
+        const arr = Array.isArray(allItems)
+            ? allItems
+            : allItems
+                ? Object.values(allItems)
+                : [];
+        return arr.length > 0 && selected.size === arr.length;
+    };
+
+    const onRowSelect = (item: TableItem, checked: boolean) => {
+        const id = item.id as string;
+        const next = new Set(selected);
+        if (checked) {
+            next.add(id);
+        } else {
+            next.delete(id);
+        }
+        setSelected(next);
+    };
+
+    const onHeaderSelect = (allItems: TableItem[], checked: boolean) => {
+        setSelected(
+            new Set(checked ? allItems.map((i) => i.id as string) : []),
+        );
+    };
+
     return (
         <Page>
             <PageContent>
@@ -44,15 +79,21 @@ function Basic() {
                         items={items}
                         columns={columns}
                         pageTable={false}
-                        stickyColumns={2}
+                        stickyColumns={3}
                         minWidth={1400}
                         initialSortPath="dob"
                         initialSortDescending
                         useParentScroll
+                        selectable
+                        headerSelectable
+                        isRowSelected={isRowSelected}
+                        isHeaderSelected={isHeaderSelected}
+                        onRowSelect={onRowSelect}
+                        onHeaderSelect={onHeaderSelect}
                     />
                 </Card>
             </PageContent>
-        </Page> 
+        </Page>
     );
 }
 

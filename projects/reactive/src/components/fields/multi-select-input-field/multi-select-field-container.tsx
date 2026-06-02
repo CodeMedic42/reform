@@ -14,12 +14,12 @@ import FieldContainer from '../_support/field-container.js';
 
 interface ClearEvent {
 	event: React.MouseEvent;
-	meta: unknown;
+	data: unknown;
 }
 
 interface ClearIndexEvent {
 	event: React.MouseEvent;
-	meta: unknown;
+	data: unknown;
 	index: number;
 }
 
@@ -29,9 +29,8 @@ interface MultiSelectAnchorProps {
 	value?: string[] | null;
 	nullable?: boolean;
 	onClear?: ((event: ClearEvent) => void) | null;
-	onClearMeta?: Record<string, unknown> | null;
 	onClearIndex?: ((event: ClearIndexEvent) => void) | null;
-	onClearIndexMeta?: Record<string, unknown> | null;
+	eventData?: unknown;
 	disabled?: boolean;
 	open?: boolean;
 	'aria-labelledby'?: string | null;
@@ -49,9 +48,8 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 		size: null,
 		nullable: false,
 		onClear: null,
-		onClearMeta: null,
 		onClearIndex: null,
-		onClearIndexMeta: null,
+		eventData: null,
 		disabled: false,
 		open: false,
 		title: null,
@@ -77,7 +75,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 
 	}
 
-	handleClear({ event, meta }: { event: React.MouseEvent; meta: unknown }) {
+	handleClear({ event, data }: { event: React.MouseEvent; data: unknown }) {
 		const { onClear } = this.props;
 
 		event.preventDefault();
@@ -88,7 +86,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 
 		onClear({
 			event,
-			meta,
+			data,
 		});
 	}
 
@@ -96,8 +94,8 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 		event.preventDefault();
 	}
 
-	handleClearItem({ event, meta: index }: { event: React.MouseEvent<HTMLButtonElement>; meta: unknown }) {
-		const { onClearIndex, onClearIndexMeta } = this.props;
+	handleClearItem({ event, data: index }: { event: React.MouseEvent<HTMLButtonElement>; data: unknown }) {
+		const { onClearIndex, eventData } = this.props;
 
 		event.preventDefault();
 
@@ -106,7 +104,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 
 			onClearIndex({
 				event,
-				meta: onClearIndexMeta,
+				data: eventData,
 				index: index as number,
 			});
 		}
@@ -120,7 +118,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
             || event.which === 46 // delete
         ) {
             if (onClear) {
-                onClear({ event: event as unknown as React.MouseEvent, meta: null });
+                onClear({ event: event as unknown as React.MouseEvent, data: null });
             }
         };
     };
@@ -143,7 +141,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 			const itemProps: Record<string, unknown> = {
 				color: 'blue',
 				onClear: this.handleClearItem,
-				onClearMeta: index,
+				eventData: index,
 				onMouseDown: this.handleMouseDown,
 				size,
 				key: text,
@@ -168,7 +166,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 			nullable,
 			size,
 			value,
-			onClearMeta,
+			eventData,
 			expandable,
 			listBoxId,
 		} = this.props;
@@ -179,7 +177,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 					className="clear"
 					tabIndex="-1"
 					icon={faXmark}
-					onClick={(event: React.MouseEvent<HTMLButtonElement>) => this.handleClear({ event, meta: onClearMeta })}
+					onClick={(event: React.MouseEvent<HTMLButtonElement>) => this.handleClear({ event, data: eventData })}
 					size={changeSize(size ?? 'md', 1) as '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'}
 					disabled={disabled}
 				/>

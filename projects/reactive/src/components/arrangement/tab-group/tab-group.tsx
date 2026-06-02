@@ -20,8 +20,8 @@ interface TabGroupProps {
     background?: boolean;
     border?: boolean;
     tabs: TabGroupTab[];
-    onMove?: ((tabId: string, meta: { meta: unknown }) => boolean | void) | null;
-    onMoveMeta?: unknown;
+    onMove?: ((tabId: string, payload: { data: unknown }) => boolean | void) | null;
+    eventData?: unknown;
 }
 
 interface TabGroupState {
@@ -40,11 +40,11 @@ class TabGroup extends PureComponent<TabGroupProps, TabGroupState> {
     }
 
     handleSelect(tabId: string): void {
-        const { onMove, onMoveMeta } = this.props;
+        const { onMove, eventData } = this.props;
 
         if (!isNil(onMove)) {
             const ret = onMove(tabId, {
-                meta: onMoveMeta,
+                data: eventData,
             });
 
             if (ret === false) {

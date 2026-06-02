@@ -9,7 +9,7 @@ import Icon from '../../display/icon/index.js';
 
 export interface TagClearEvent {
 	event: React.MouseEvent<HTMLButtonElement>;
-	meta: unknown;
+	data: unknown;
 }
 
 export interface TagProps {
@@ -21,7 +21,7 @@ export interface TagProps {
 	floating?: boolean;
 	children?: React.ReactNode;
 	onClear?: ((event: TagClearEvent) => void) | null;
-	onClearMeta?: unknown;
+	eventData?: unknown;
 	variant?: 'rectangle' | 'pill';
 	clearType?: 'normal' | 'inverse';
 	tabIndex?: string | null;
@@ -40,7 +40,7 @@ function Tag(props: TagProps): React.ReactNode {
 		floating = false,
 		variant = 'rectangle',
 		onClear = null,
-		onClearMeta = null,
+		eventData = null,
 		clearType = 'normal',
 		tabIndex = null,
 		disabled = false,
@@ -53,9 +53,9 @@ function Tag(props: TagProps): React.ReactNode {
 				return;
 			}
 
-			onClear({ event, meta: onClearMeta });
+			onClear({ event, data: eventData });
 		},
-		[onClear, onClearMeta],
+		[onClear, eventData],
 	);
 
 	return (

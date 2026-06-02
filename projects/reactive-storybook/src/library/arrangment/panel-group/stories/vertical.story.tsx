@@ -1,12 +1,12 @@
 import React from 'react';
 import PanelGroup, { Panel } from '@reformjs/reactive/arrangement/panel-group';
-import Page, { PageContainer } from '@reformjs/reactive/arrangement/page';
+import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
 import Card from '@reformjs/reactive/arrangement/card';
 
 export default function VerticalStory() {
     return (
         <Page>
-            <PageContainer>
+            <PageContent>
                 <Card>
                     <div style={{ height: 500 }}>
                         <PanelGroup direction="vertical">
@@ -34,7 +34,7 @@ export default function VerticalStory() {
                         </PanelGroup>
                     </div>
                 </Card>
-            </PageContainer>
+            </PageContent>
         </Page>
     );
 }

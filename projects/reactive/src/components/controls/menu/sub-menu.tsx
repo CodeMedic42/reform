@@ -25,16 +25,15 @@ interface SubMenuProps {
     icon?: IconProp | null;
     content?: React.ReactNode;
     children?: React.ReactNode;
-    onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
+    onClick?: ((payload: { event: React.MouseEvent; data: unknown }) => void) | null;
     'aria-label'?: string | null;
-    onClickMeta?: unknown | null;
+    eventData?: unknown;
     selected?: boolean;
     targeted?: boolean;
     disabled?: boolean;
     dropDownContext?: {
         open: boolean;
-        size: string;
-        dark: boolean;
+        design: string | null;
     };
     borderBottom?: boolean;
     borderTop?: boolean;
@@ -85,7 +84,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
     // This will close the menu if it's parent is closed
     static getDerivedStateFromProps(nextProps: SubMenuProps): Partial<SubMenuState> | null {
         const {
-            dropDownContext = { open: false, size: 'md', dark: false },
+            dropDownContext = { open: false, design: null },
         } = nextProps;
         const { open } = dropDownContext;
 
@@ -107,7 +106,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
     }
 
     handleClick({ event }: { event: React.MouseEvent }): void {
-        const { children, onClick, onClickMeta } = this.props;
+        const { children, onClick, eventData } = this.props;
 
         const { open } = this.state;
 
@@ -124,7 +123,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
         if (!isNil(onClick)) {
             onClick({
                 event,
-                meta: onClickMeta,
+                data: eventData,
             });
         }
     }
@@ -164,7 +163,6 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
                 id={buildId(id, 'check')}
                 className="menu-checkbox-control"
                 color="secondary"
-                size="sm"
                 value={checkbox.value}
                 onChange={checkbox.onChange}
                 disabled={checkbox.disabled}
@@ -185,7 +183,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
             selected = false,
             targeted = false,
             disabled = false,
-            dropDownContext = { open: false, size: 'md' as string, dark: false },
+            dropDownContext = { open: false, design: null as string | null },
             borderBottom = false,
             borderTop = false,
             checkbox = null,
@@ -194,7 +192,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
             'aria-label': ariaLabel = null,
         } = this.props;
 
-        const { size, dark } = dropDownContext;
+        const { design } = dropDownContext;
         const { open } = this.state;
 
         return (
@@ -219,13 +217,13 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
                     }
                 >
                     {this.renderCheckBox()}
-                    {!isNil(icon) ? (
+                    {/* {!isNil(icon) ? (
                         <Icon className="menu-icon" icon={icon} />
-                    ) : null}
-                    {content}
+                    ) : null} */}
+                    <div className="menu-content">{content}</div>
                     <Icon className="menu-arrow" icon={faCaretRight} />
                 </ListItemButton>
-                <Provider value={{ open, size, dark }}>
+                <Provider value={{ open, design }}>
                     <Tray
                         id={!isNil(id) && id.length > 0 ? `${id}-drawer` : undefined}
                         open={open}
@@ -237,7 +235,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
                         }}
                         maxWidth={320}
                     >
-                        <MenuList size={size} dark={dark}>
+                        <MenuList design={design}>
                             {children}
                         </MenuList>
                     </Tray>

@@ -21,25 +21,7 @@ import RowBase from './base/row-base.js';
 import CellBase from './base/cell-base.js';
 import HeaderCellBase from './base/header-cell-base.js';
 import HeaderSortableCellBase from './base/header-sortable-cell-base.js';
-
-// TODO: replace this stub with the real `@reformjs/reactive/fields/check-input-field`
-//   and adapt the `onChange` callbacks to the new (checked, meta) signature when
-//   the simple-table API is reworked. Until then, the `selectable` column
-//   renders empty cells where the checkboxes used to be.
-interface CheckInputStubProps {
-    id?: string;
-    className?: string;
-    value?: boolean;
-    disabled?: boolean;
-    size?: 'sm' | 'md' | 'lg';
-    onChange?: (checked: boolean) => void;
-    'aria-label'?: string;
-    ignoreHalo?: boolean;
-}
-
-function CheckInput(_props: CheckInputStubProps): React.ReactElement | null {
-    return null;
-}
+import CheckInputField from '../../fields/check-input-field/check-input-field.js';
 
 type SortPath = string | string[];
 
@@ -73,19 +55,19 @@ export interface RowClickMeta {
     rowIndex: number;
 }
 
-/** Row click event. `meta` is typed as `unknown` to match RowBase; in practice
+/** Row click event. `data` is typed as `unknown` to match RowBase; in practice
  * this Table always provides `{ item, rowIndex }` (see {@link RowClickMeta}). */
 interface RowClickEvent {
     event: React.MouseEvent<HTMLTableRowElement>;
-    meta: unknown;
+    data: unknown;
 }
 
-/** Sortable-header click event. `meta` is typed as `unknown` to match
- *  HeaderSortableCellBase; this Table always sets `onClickMeta` to the column's
+/** Sortable-header click event. `data` is typed as `unknown` to match
+ *  HeaderSortableCellBase; this Table always sets `eventData` to the column's
  *  sort path, so handleSort narrows it to {@link SortPath}. */
 interface SortClickEvent {
     event: React.MouseEvent<HTMLButtonElement>;
-    meta: unknown;
+    data: unknown;
 }
 
 export interface SimpleTableProps {
@@ -179,8 +161,8 @@ export default function Table({
         return null;
     }
 
-    const handleSort = ({ meta }: SortClickEvent) => {
-        const clicked = meta as SortPath | null;
+    const handleSort = ({ data }: SortClickEvent) => {
+        const clicked = data as SortPath | null;
         let nextSortPath: SortPath | null = clicked;
         let nextSortDescending = false;
 
@@ -205,18 +187,35 @@ export default function Table({
 
     // Add first column with checkboxes if the table rows are selectable
     if (selectable) {
+        let selectedCount = 0;
+        if (isRowSelected) {
+            for (let i = 0; i < baseItems.length; i += 1) {
+                const state = isRowSelected(baseItems[i], i);
+                const rowSelected = isBoolean(state)
+                    ? state
+                    : !isNil(state)
+                        ? state.selected
+                        : false;
+                if (rowSelected) selectedCount += 1;
+            }
+        }
+        const headerVariant: 'check' | 'indeterminate' =
+            selectedCount > 0 && selectedCount < baseItems.length
+                ? 'indeterminate'
+                : 'check';
+
         allColumns = [
             {
                 headerBody: headerSelectable ? (
                     <>
                         <div className="no-display">Select</div>
-                        <CheckInput
+                        <CheckInputField
                             id="header-check-input"
                             className="row-check-box"
                             value={isHeaderSelected ? isHeaderSelected(items) : false}
+                            variant={headerVariant}
                             aria-label="Select all rows"
-                            size="sm"
-                            onChange={handleHeadCheck}
+                            onChange={(checked) => handleHeadCheck(checked)}
                             ignoreHalo
                         />
                     </>
@@ -224,15 +223,14 @@ export default function Table({
                     <div className="no-display">Select Item</div>
                 ),
                 renderCell: (_cellValue, item, rowIndex, selectionStatus) => (
-                    <CheckInput
+                    <CheckInputField
                         id={`check-input-${rowIndex}`}
                         className="row-check-box"
                         value={selectionStatus.selected}
                         disabled={selectionStatus.disabled}
                         aria-label="Select row"
-                        size="sm"
-                        onChange={(newChecked: boolean) =>
-                            onRowSelect(item, newChecked, rowIndex)
+                        onChange={(checked) =>
+                            onRowSelect(item, checked, rowIndex)
                         }
                         ignoreHalo
                     />
@@ -322,7 +320,7 @@ export default function Table({
                     sortDirection={sortDirection}
                     headerText={isString(headerBody) ? headerBody : null}
                     onClick={handleSort}
-                    onClickMeta={newSortPath}
+                    eventData={newSortPath}
                 >
                     {headerBody}
                 </HeaderSortableCellBase>
@@ -388,7 +386,7 @@ export default function Table({
                     })}
                     active={selectionState.selected}
                     onClick={onClickRow}
-                    onClickMeta={{ item, rowIndex }}
+                    eventData={{ item, rowIndex }}
                 >
                     {cells}
                 </RowBase>

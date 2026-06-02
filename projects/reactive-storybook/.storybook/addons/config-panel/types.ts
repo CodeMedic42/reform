@@ -6,6 +6,7 @@ export type {
     VariantStates,
     InteractiveScheme,
     ButtonDesign,
+    DropDownListItemDesign,
     FieldContainerVariant,
     TabConfig,
     ConfigState,

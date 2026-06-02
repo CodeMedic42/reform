@@ -18,11 +18,9 @@ interface CheckInputFieldProps {
     color?: Color;
     variant?: 'check' | 'indeterminate';
     value?: boolean;
-    size?: 'sm' | 'md' | 'lg';
-    onChange?: ((checked: boolean, meta: { event: React.ChangeEvent<HTMLInputElement>; meta: unknown }) => void) | null;
-    onChangeMeta?: unknown;
-    onClick?: ((meta: { event: React.MouseEvent; meta: unknown }) => void) | null;
-    onClickMeta?: unknown;
+    onChange?: ((checked: boolean, payload: { event: React.ChangeEvent<HTMLInputElement>; data: unknown }) => void) | null;
+    onClick?: ((payload: { event: React.MouseEvent; data: unknown }) => void) | null;
+    eventData?: unknown;
     disabled?: boolean;
     hidden?: boolean;
     ignoreHalo?: boolean;
@@ -51,11 +49,9 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
         'aria-describedby': null,
         title: null,
         color: 'primary',
-        size: 'md',
         onChange: null,
-        onChangeMeta: null,
         onClick: null,
-        onClickMeta: null,
+        eventData: null,
         disabled: false,
         hidden: false,
         ignoreHalo: false,
@@ -88,7 +84,7 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
     }
 
     handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const { onChange, onChangeMeta } = this.props;
+        const { onChange, eventData } = this.props;
 
         if (isNil(onChange)) {
             return;
@@ -96,12 +92,12 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
 
         onChange(event.target.checked === true, {
             event,
-            meta: onChangeMeta,
+            data: eventData,
         });
     }
 
     handleClick(event: React.MouseEvent) {
-        const { onClick, onClickMeta } = this.props;
+        const { onClick, eventData } = this.props;
 
         if (isNil(onClick)) {
             return;
@@ -109,7 +105,7 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
 
         onClick({
             event,
-            meta: onClickMeta,
+            data: eventData,
         });
     }
 
@@ -157,7 +153,6 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
             hidden,
             messages,
             color,
-            size,
             variant,
             ignoreHalo,
             constrictField,
@@ -190,13 +185,13 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
             <span
                 className={classnames(
                     'ra-checkbox',
-                    `size-${size}`,
                     variantClass,
-                    `sch-check-${color}`,
+                    'ra-clr-int',
+                    `ra-clr-int-${color}`,
                     className,
                     {
                         hidden,
-                        ignoreHalo,
+                        'ignore-halo': ignoreHalo,
                         'constrict-field': constrictField,
                     },
                 )}

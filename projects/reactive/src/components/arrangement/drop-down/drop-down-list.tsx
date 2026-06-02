@@ -7,7 +7,7 @@ interface DropDownListProps {
     id?: string | null;
     className?: string | null;
     children?: React.ReactNode;
-    size?: string | null;
+    design?: string | null;
     'aria-labelledby'?: string | null;
 }
 
@@ -115,17 +115,17 @@ class DropDownList extends Component<DropDownListProps> {
             id = null,
             className = null,
             children = null,
-            size = null,
+            design = null,
             'aria-labelledby': ariaLabeledBy = null,
         } = this.props;
 
-        const sizeClass = !isNil(size) ? `size-${size}` : 'size-md';
+        const designClass = !isNil(design) ? `ra-dd-list-design-${design}` : null;
 
         return (
             <ol
                 ref={this.listRef}
                 id={id ?? undefined}
-                className={classnames('ra-dd-list', className, sizeClass)}
+                className={classnames('ra-dd-list', className, designClass)}
                 role="listbox"
                 aria-labelledby={ariaLabeledBy ?? undefined}
             >

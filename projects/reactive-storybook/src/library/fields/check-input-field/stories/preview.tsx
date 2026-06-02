@@ -147,11 +147,6 @@ Preview.argTypes = {
 		],
 		defaultValue: 'primary',
 	},
-	size: {
-		control: 'select',
-		options: ['sm', 'md', 'lg'],
-		defaultValue: 'md',
-	},
 	disabled: {
 		control: 'boolean',
 		defaultValue: false,

@@ -11,8 +11,8 @@ interface MenuButtonProps {
     className?: string | null;
     icon?: IconProp | null;
     children?: string | null;
-    onClick?: ((payload: { event: React.MouseEvent; meta: unknown }) => void) | null;
-    onClickMeta?: unknown | null;
+    onClick?: ((payload: { event: React.MouseEvent; data: unknown }) => void) | null;
+    eventData?: unknown;
     selected?: boolean;
     targeted?: boolean;
     disabled?: boolean;
@@ -33,7 +33,7 @@ class MenuButton extends PureComponent<MenuButtonProps> {
     }
 
     handleClick({ event }: { event: React.MouseEvent }): void {
-        const { onClick, onClickMeta } = this.props;
+        const { onClick, eventData } = this.props;
 
         if (event.defaultPrevented) {
             return;
@@ -42,7 +42,7 @@ class MenuButton extends PureComponent<MenuButtonProps> {
         if (!isNil(onClick)) {
             onClick({
                 event,
-                meta: onClickMeta,
+                data: eventData,
             });
         }
     }

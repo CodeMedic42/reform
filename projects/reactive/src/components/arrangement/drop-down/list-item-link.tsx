@@ -9,7 +9,7 @@ interface ListItemLinkProps {
     id?: string | null;
     className?: string | null;
     children?: React.ReactNode;
-    onClick?: ((event: React.MouseEvent) => void) | null;
+    onClick?: ((payload: { event: React.MouseEvent }) => void) | null;
     'aria-label'?: string | null;
     tabIndex?: string | null;
     disabled?: boolean;
@@ -17,6 +17,8 @@ interface ListItemLinkProps {
         open: boolean;
     };
     href?: string | null;
+    target?: string | null;
+    rel?: string | null;
 }
 
 class ListItemLink extends PureComponent<ListItemLinkProps> {
@@ -38,7 +40,7 @@ class ListItemLink extends PureComponent<ListItemLinkProps> {
             return;
         }
 
-        onClick(event);
+        onClick({ event });
     }
 
     handleKeyDown(event: React.KeyboardEvent): void {
@@ -62,9 +64,16 @@ class ListItemLink extends PureComponent<ListItemLinkProps> {
             disabled = false,
             dropDownContext: { open },
             href = null,
+            target = null,
+            rel = null,
         } = this.props;
 
         const textId = buildId(id, 'text');
+
+        // Default rel to noopener noreferrer when opening in a new tab, unless caller provided one
+        const effectiveRel = !isNil(rel)
+            ? rel
+            : target === '_blank' ? 'noopener noreferrer' : null;
 
         return (
             <>
@@ -82,6 +91,8 @@ class ListItemLink extends PureComponent<ListItemLinkProps> {
                     tabIndex={open ? (tabIndex as unknown as number) : -1}
                     aria-disabled={disabled || undefined}
                     href={href ?? undefined}
+                    target={target ?? undefined}
+                    rel={effectiveRel ?? undefined}
                     aria-labelledby={textId ?? undefined}
                 >
                     {ariaLabel}

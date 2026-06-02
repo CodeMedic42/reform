@@ -4,6 +4,7 @@ import { DEFAULT_CONFIG } from '../src/config/defaults.js';
 import { resolvePaletteRef, type PaletteMap } from '../src/config/resolve-palette-ref.js';
 import type {
     ButtonDesign,
+    DropDownListItemDesign,
     FieldContainerVariant,
     HeadingLevelConfig,
     InteractiveScheme,
@@ -60,6 +61,13 @@ function formatButtonDesign(design: ButtonDesign, indentLevel: number): string {
     const entries = Object.entries(design)
         .filter(([, v]) => v !== undefined)
         .map(([k, v]) => indent(`"${k}": ${typeof v === 'number' ? v : v},`, indentLevel));
+    return `(\n${entries.join('\n')}\n${indent(')', indentLevel - 1)}`;
+}
+
+function formatDropDownListItemDesign(design: DropDownListItemDesign, indentLevel: number): string {
+    const entries = Object.entries(design)
+        .filter(([, v]) => v !== undefined)
+        .map(([k, v]) => indent(`"${k}": ${v},`, indentLevel));
     return `(\n${entries.join('\n')}\n${indent(')', indentLevel - 1)}`;
 }
 
@@ -296,6 +304,23 @@ function generate(): string {
     // Button settings
     lines.push(`$ra-config-button-default-design: ${formatButtonDesign(config.button.defaultDesign, 2)};`);
     lines.push('');
+
+    // Drop-down list item settings
+    const ddli = config.dropDownListItem;
+    const ddliDefault = ddli.designs[ddli.defaultDesignName];
+    if (ddliDefault) {
+        lines.push(`$ra-config-drop-down-list-item-default-design: ${formatDropDownListItemDesign(ddliDefault, 2)};`);
+        lines.push('');
+    }
+    const ddliOthers = Object.entries(ddli.designs).filter(([n]) => n !== ddli.defaultDesignName);
+    if (ddliOthers.length > 0) {
+        lines.push(`$ra-config-drop-down-list-item-designs: (`);
+        for (const [name, design] of ddliOthers) {
+            lines.push(indent(`"${name}": ${formatDropDownListItemDesign(design, 2)},`, 1));
+        }
+        lines.push(`);`);
+        lines.push('');
+    }
 
     return lines.join('\n');
 }

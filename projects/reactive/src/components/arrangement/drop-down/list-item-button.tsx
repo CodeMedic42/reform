@@ -28,13 +28,24 @@ class ListItemButton extends PureComponent<ListItemButtonProps> {
 
         this.buttonRef = createRef();
 
+        this.handleClick = this.handleClick.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
+    }
+
+    handleClick(event: React.MouseEvent): void {
+        const { onClick } = this.props;
+
+        if (isNil(onClick)) {
+            return;
+        }
+
+        onClick({ event });
     }
 
     handleKeyDown(event: React.KeyboardEvent): void {
         // Treat enter key presses as clicks
         if (event.which === 13) {
-            (this as unknown as { handleClick: (event: React.KeyboardEvent) => void }).handleClick(event);
+            this.handleClick(event as unknown as React.MouseEvent);
         }
     }
 
@@ -50,7 +61,6 @@ class ListItemButton extends PureComponent<ListItemButtonProps> {
             tabIndex = null,
             children = null,
             disabled = false,
-            onClick = null,
             dropDownContext: { open },
         } = this.props;
 
@@ -69,7 +79,7 @@ class ListItemButton extends PureComponent<ListItemButtonProps> {
                     aria-label={ariaLabel ?? undefined}
                     tabIndex={open ? (tabIndex as unknown as number) : -1}
                     disabled={disabled}
-                    onClick={onClick}
+                    onClick={this.handleClick}
                 >
                     {ariaLabel}
                 </button>

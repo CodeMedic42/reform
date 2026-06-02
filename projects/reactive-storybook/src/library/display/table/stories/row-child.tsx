@@ -18,8 +18,8 @@ function renderText(value: React.ReactNode, weight?: 'bold') {
 function RowChild() {
     const [openedRows, setOpenedRows] = useState<Record<string, true>>({});
 
-    const toggleOpenRow = ({ meta }: { meta: unknown }) => {
-        const id = (meta as { item?: { id?: string } } | undefined)?.item?.id;
+    const toggleOpenRow = ({ data }: { data: unknown }) => {
+        const id = (data as { item?: { id?: string } } | undefined)?.item?.id;
         if (!id) return;
 
         if (openedRows[id]) {

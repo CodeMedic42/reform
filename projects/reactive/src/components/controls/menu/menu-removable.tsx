@@ -8,12 +8,17 @@ import MenuItem from './menu-item.js';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 
+interface MenuRemovableRemoveEvent {
+    event: React.MouseEvent<HTMLButtonElement>;
+    data: unknown;
+}
+
 interface MenuRemovableProps {
     id?: string | null;
     className?: string | null;
     children?: string | null;
-    onRemove?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | null;
-    onRemoveMeta?: unknown;
+    onRemove?: ((event: MenuRemovableRemoveEvent) => void) | null;
+    eventData?: unknown;
     selected?: boolean;
     targeted?: boolean;
     disabled?: boolean;
@@ -23,6 +28,22 @@ interface MenuRemovableProps {
 }
 
 class MenuRemovable extends PureComponent<MenuRemovableProps> {
+    constructor(props: MenuRemovableProps) {
+        super(props);
+
+        this.handleRemove = this.handleRemove.bind(this);
+    }
+
+    handleRemove(event: React.MouseEvent<HTMLButtonElement>): void {
+        const { onRemove, eventData } = this.props;
+
+        if (isNil(onRemove)) {
+            return;
+        }
+
+        onRemove({ event, data: eventData });
+    }
+
     render(): React.ReactNode {
         const {
             id = null,
@@ -32,7 +53,6 @@ class MenuRemovable extends PureComponent<MenuRemovableProps> {
             targeted = false,
             disabled = false,
             onRemove = null,
-            onRemoveMeta = null,
             borderBottom = false,
             borderTop = false,
             icon = null,
@@ -49,17 +69,18 @@ class MenuRemovable extends PureComponent<MenuRemovableProps> {
                 preventCloseOnClick
             >
                 <ListItemContent>
-                    {!isNil(icon) ? (
+                    {/* {!isNil(icon) ? (
                         <Icon className="menu-icon" icon={icon} />
-                    ) : null}
-                    {children}
-                    <IconButton
+                    ) : null} */}
+                    <div className="menu-content">{children}</div>
+                    {/* {children} */}
+                    <button
                         className="menu-remove-btn"
-                        icon={faXmark}
-                        size="2xs"
                         disabled={disabled}
-                        onClick={onRemove ?? undefined}
-                    />
+                        onClick={!isNil(onRemove) ? this.handleRemove : undefined}
+                    >
+                        <Icon icon={faXmark} />   
+                    </button>
                 </ListItemContent>
             </MenuItem>
         );

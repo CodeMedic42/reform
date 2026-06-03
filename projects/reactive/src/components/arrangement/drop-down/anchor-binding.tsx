@@ -107,6 +107,7 @@ export class AnchorWrapper extends Component<AnchorWrapperProps> {
         return (
             <div
                 ref={this.anchorRef}
+                role="button"
                 className={classnames('anchor-binding')}
                 tabIndex={-1}
                 onClick={onClick}
@@ -167,7 +168,7 @@ function applyAnchorBinding(
         boundingSelectorLookup = () => boundingSelector as string | null;
     }
 
-    const AnchorBinding: React.FC<AnchorBindingProps> = (props) => {
+    function AnchorBinding(props: AnchorBindingProps) {
         const { anchorProps, bindingRef, bindingInterface, open } = props;
 
         return (
@@ -181,7 +182,7 @@ function applyAnchorBinding(
                 anchorProps={anchorProps}
             />
         );
-    };
+    }
 
     return AnchorBinding;
 }

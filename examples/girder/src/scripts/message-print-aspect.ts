@@ -20,6 +20,7 @@ class MessagePrintAspect extends Aspect {
                     }
 
                     messages.forEach((message: string) => {
+                        // eslint-disable-next-line no-console
                         console.log(message);
                     });
                 });

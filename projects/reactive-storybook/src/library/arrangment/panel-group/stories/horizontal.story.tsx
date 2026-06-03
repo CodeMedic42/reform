@@ -9,7 +9,9 @@ export default function DefaultStory() {
             <PageContent>
                 <Card>
                     <PanelGroup
+                        // eslint-disable-next-line no-console
                         onResize={(weights) => console.log('onResize', weights)}
+                        // eslint-disable-next-line no-console
                         onResizeEnd={(weights) => console.log('onResizeEnd', weights)}
                     >
                         <Panel>

@@ -26,7 +26,7 @@ function Page(props: PageProps): React.ReactElement {
 
 	useEffect(() => {
 		if (disableAdjustment) {
-			return;
+			return undefined;
 		}
 
 		let currentViewportWidth: number = 0;

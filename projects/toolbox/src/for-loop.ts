@@ -1,4 +1,4 @@
-function forLoop<T>(start: number = 0, end: number = 0, cb: (index: number) => T): T[] {
+function forLoop<T>(start: number, end: number, cb: (index: number) => T): T[] {
     const items: T[] = [];
 
     for (let counter = start; counter < end; counter += 1) {

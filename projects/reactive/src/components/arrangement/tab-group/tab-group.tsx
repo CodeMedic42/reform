@@ -14,11 +14,11 @@ interface TabGroupTab {
 
 interface TabGroupProps {
     defaultTabId?: string | null;
-    size?: 'lg' | 'sm';
-    justify?: boolean;
-    color?: SchemeColor;
-    background?: boolean;
-    border?: boolean;
+    // size?: 'lg' | 'sm';
+    // justify?: boolean;
+    // color?: SchemeColor;
+    // background?: boolean;
+    // border?: boolean;
     tabs: TabGroupTab[];
     onMove?: ((tabId: string, payload: { data: unknown }) => boolean | void) | null;
     eventData?: unknown;
@@ -59,7 +59,13 @@ class TabGroup extends PureComponent<TabGroupProps, TabGroupState> {
 
     render(): React.ReactElement {
         const {
-            defaultTabId = null, size = 'lg', justify = false, color = 'primary', background = false, border = false, tabs,
+            defaultTabId = null,
+            // size = 'lg',
+            // justify = false,
+            // color = 'primary',
+            // background = false,
+            // border = false,
+            tabs,
         } = this.props;
 
         let { selectedTabId } = this.state;

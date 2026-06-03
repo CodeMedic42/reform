@@ -1,3 +1,4 @@
+import React from 'react';
 import { expect } from 'vitest';
 import { render } from 'vitest-browser-react/pure';
 import { loadFeature, describeFeature } from '@amiceli/vitest-cucumber/browser';

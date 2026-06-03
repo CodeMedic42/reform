@@ -1,5 +1,6 @@
-import React, { useMemo, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useCallback, useMemo, useRef, forwardRef, useImperativeHandle } from 'react';
 import classNames from 'classnames';
+import { forEach, range as rangeArray, some } from 'lodash-es';
 import TimelineEvent from './timeline-event.js';
 
 import type { TimelineEventType, IncomingConnectionType, ProcessedEventType } from './timeline-types.js';
@@ -73,8 +74,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         freeLanes.push(oldLane);
     }
 
-    for (let i = 0; i < events.length; i++) {
-        const event = events[i];
+    forEach(events, (event) => {
         const primaryParent = event.parent;
         const ancillaryParents = event.ancillaryParents || [];
 
@@ -89,6 +89,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                 laneMap[primaryParent] = lane;
                 assignedBy[primaryParent] = 'primary';
             } else if (assignedBy[primaryParent] === 'primary' && laneMap[primaryParent] !== lane) {
+                // eslint-disable-next-line no-console
                 console.warn(`Event "${event.id}": primary parent "${primaryParent}" was already claimed as primary by another child. Treating as ancillary.`);
                 demotedPrimary[event.id] = primaryParent;
             } else if (assignedBy[primaryParent] === 'merge') {
@@ -101,53 +102,53 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         }
 
         // Process ancillary parents
-        for (const ancParentId of ancillaryParents) {
+        forEach(ancillaryParents, (ancParentId) => {
             if (laneMap[ancParentId] === undefined) {
                 laneMap[ancParentId] = allocLane();
                 assignedBy[ancParentId] = 'merge';
             }
-        }
-    }
+        });
+    });
 
     // Build event index lookup (used by compaction, collapsing, and
     // collision detection below).
     const eventIndex: Record<string, number> = {};
-    for (let i = 0; i < events.length; i++) {
-        eventIndex[events[i].id] = i;
-    }
+    forEach(events, (event, i) => {
+        eventIndex[event.id] = i;
+    });
 
     // Compact lanes: remove gaps in lane numbering caused by lanes that
     // were freed during reassignment but never permanently occupied.
     const usedLanes = new Set(Object.values(laneMap));
     const sortedUsed = [...usedLanes].sort((a, b) => a - b);
     const compactMap: Record<number, number> = {};
-    for (let i = 0; i < sortedUsed.length; i++) {
-        compactMap[sortedUsed[i]] = i;
-    }
+    forEach(sortedUsed, (lane, i) => {
+        compactMap[lane] = i;
+    });
     if (sortedUsed.some((lane, i) => lane !== i)) {
-        for (const id of Object.keys(laneMap)) {
+        forEach(Object.keys(laneMap), (id) => {
             laneMap[id] = compactMap[laneMap[id]];
-        }
+        });
     }
 
     // Collapse lanes: merge non-overlapping lanes into the same column
     // to minimize graph width (interval graph coloring). Two lanes can
     // share a column if their active row ranges don't overlap.
     const laneRanges: Record<number, [number, number]> = {};
-    for (let i = 0; i < events.length; i++) {
-        const lane = laneMap[events[i].id];
+    forEach(events, (event, i) => {
+        const lane = laneMap[event.id];
         if (laneRanges[lane] === undefined) {
             laneRanges[lane] = [i, i];
         } else {
             laneRanges[lane][0] = Math.min(laneRanges[lane][0], i);
             laneRanges[lane][1] = Math.max(laneRanges[lane][1], i);
         }
-    }
+    });
 
     // Extend ranges for cross-lane connections: branches extend the
     // child's lane to the parent's row, merges extend the parent's
     // lane to the child's row.
-    for (const event of events) {
+    forEach(events, (event) => {
         const childLane = laneMap[event.id];
         const childIdx = eventIndex[event.id];
         const parents = [...(event.ancillaryParents || [])];
@@ -158,17 +159,17 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         }
         if (effectivePrimary) parents.push(effectivePrimary);
 
-        for (const parentId of parents) {
+        forEach(parents, (parentId) => {
             const parentLane = laneMap[parentId];
-            if (parentLane === undefined || parentLane === childLane) continue;
+            if (parentLane === undefined || parentLane === childLane) return;
             const parentIdx = eventIndex[parentId];
             if (parentLane < childLane) {
                 laneRanges[childLane][1] = Math.max(laneRanges[childLane][1], parentIdx);
             } else {
                 laneRanges[parentLane][0] = Math.min(laneRanges[parentLane][0], childIdx);
             }
-        }
-    }
+        });
+    });
 
     // Greedy coloring: assign each lane to the lowest column whose
     // last active range ends before this lane's range starts.
@@ -178,22 +179,21 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
     const columnEnds: number[] = [];
     const laneToColumn: Record<number, number> = {};
 
-    for (const lane of sortedLanes) {
+    forEach(sortedLanes, (lane) => {
         const [start, end] = laneRanges[lane];
-        let assigned = false;
-        for (let col = 0; col < columnEnds.length; col++) {
-            if (columnEnds[col] < start) {
+        const assigned = some(columnEnds, (colEnd, col) => {
+            if (colEnd < start) {
                 laneToColumn[lane] = col;
                 columnEnds[col] = end;
-                assigned = true;
-                break;
+                return true;
             }
-        }
+            return false;
+        });
         if (!assigned) {
             laneToColumn[lane] = columnEnds.length;
             columnEnds.push(end);
         }
-    }
+    });
 
     // Build per-lane active segments from the collapse mapping.
     // Collapsed lanes have multiple segments (one per original lane);
@@ -201,27 +201,33 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
     // discontinuous active ranges so through-lines don't falsely bridge
     // independent sections sharing a column.
     const laneSegments: Record<number, [number, number][]> = {};
-    for (const lane of sortedLanes) {
+    forEach(sortedLanes, (lane) => {
         const col = laneToColumn[lane];
         if (!laneSegments[col]) laneSegments[col] = [];
         laneSegments[col].push([laneRanges[lane][0], laneRanges[lane][1]]);
-    }
-    for (const col of Object.keys(laneSegments)) {
+    });
+    forEach(Object.keys(laneSegments), (col) => {
         laneSegments[Number(col)].sort((a, b) => a[0] - b[0]);
-    }
+    });
 
-    for (const id of Object.keys(laneMap)) {
+    forEach(Object.keys(laneMap), (id) => {
         laneMap[id] = laneToColumn[laneMap[id]];
-    }
+    });
 
     /** Returns the end index of the segment containing `index` on `lane`, or -1 if none. */
     function getSegmentEnd(lane: number, index: number): number {
         const segs = laneSegments[lane];
         if (!segs) return -1;
-        for (const seg of segs) {
-            if (index >= seg[0] && index <= seg[1]) return seg[1];
-        }
-        return -1;
+        let result = -1;
+        some(segs, (seg) => {
+            const [segStart, segEnd] = seg;
+            if (index >= segStart && index <= segEnd) {
+                result = segEnd;
+                return true;
+            }
+            return false;
+        });
+        return result;
     }
 
     /** Extends the segment on `lane` that contains `containingIndex` to reach `newEnd`.
@@ -231,12 +237,14 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             laneSegments[lane] = [[containingIndex, newEnd]];
             return;
         }
-        for (const seg of laneSegments[lane]) {
+        const extended = some(laneSegments[lane], (seg) => {
             if (containingIndex >= seg[0] && containingIndex <= seg[1]) {
                 seg[1] = Math.max(seg[1], newEnd);
-                return;
+                return true;
             }
-        }
+            return false;
+        });
+        if (extended) return;
         laneSegments[lane].push([containingIndex, newEnd]);
         laneSegments[lane].sort((a, b) => a[0] - b[0]);
     }
@@ -270,7 +278,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
     }
 
     const connections: ConnectionInfo[] = [];
-    for (const event of events) {
+    forEach(events, (event) => {
         const effectiveAncillary = [...(event.ancillaryParents || [])];
         let effectivePrimary: string | null | undefined = event.parent;
         if (demotedPrimary[event.id]) {
@@ -278,7 +286,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             effectivePrimary = null;
         }
 
-        for (const parentId of effectiveAncillary) {
+        forEach(effectiveAncillary, (parentId) => {
             if (laneMap[parentId] !== undefined && laneMap[parentId] !== laneMap[event.id]) {
                 connections.push({
                     childId: event.id,
@@ -287,7 +295,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                     parentIndex: eventIndex[parentId],
                 });
             }
-        }
+        });
 
         if (effectivePrimary && laneMap[effectivePrimary] !== undefined
             && laneMap[effectivePrimary] !== laneMap[event.id]) {
@@ -298,33 +306,30 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                 parentIndex: eventIndex[effectivePrimary],
             });
         }
-    }
+    });
 
     /** Returns true if any event between indexA and indexB sits on connectingLane. */
     function hasCollision(connectingLane: number, indexA: number, indexB: number): boolean {
         const minIdx = Math.min(indexA, indexB);
         const maxIdx = Math.max(indexA, indexB);
-        for (let i = minIdx + 1; i < maxIdx; i++) {
-            if (laneMap[events[i].id] === connectingLane) return true;
-        }
-        return false;
+        return some(events.slice(minIdx + 1, maxIdx), (event) => laneMap[event.id] === connectingLane);
     }
 
     /** Shifts all lanes >= fromLane right by 1, opening fromLane as a routing lane. */
     function shiftLanes(fromLane: number) {
-        for (const id of Object.keys(laneMap)) {
+        forEach(Object.keys(laneMap), (id) => {
             if (laneMap[id] >= fromLane) {
                 laneMap[id] += 1;
             }
-        }
+        });
         // Shift segment keys in descending order to avoid key collisions
         const keys = Object.keys(laneSegments).map(Number).sort((a, b) => b - a);
-        for (const lane of keys) {
+        forEach(keys, (lane) => {
             if (lane >= fromLane) {
                 laneSegments[lane + 1] = laneSegments[lane];
                 delete laneSegments[lane];
             }
-        }
+        });
     }
 
     // Collision resolution tracking (keyed by "childId:parentId"):
@@ -346,13 +351,12 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
     // Try parent's lane first; only shift if both lanes are blocked
     let changed = true;
     while (changed) {
-        changed = false;
-        for (const conn of connections) {
+        changed = some(connections, (conn) => {
             const childLane = laneMap[conn.childId];
             const parentLane = laneMap[conn.parentId];
             const key = `${conn.childId}:${conn.parentId}`;
 
-            if (routedConnections[key] !== undefined || reroutedBranches.has(key)) continue;
+            if (routedConnections[key] !== undefined || reroutedBranches.has(key)) return false;
 
             // Branch: parent on lower lane, child on higher lane
             if (parentLane < childLane) {
@@ -367,21 +371,21 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                         shiftLanes(childLane);
                         routedConnections[key] = routingLane;
                         addIncoming(conn.childId, routingLane, false, conn.parentId);
-                        changed = true;
-                        break;
+                        return true;
                     }
                 }
             }
-        }
+            return false;
+        });
     }
 
     // Process merge collisions (relocate curve to parent's row)
-    for (const conn of connections) {
+    forEach(connections, (conn) => {
         const childLane = laneMap[conn.childId];
         const parentLane = laneMap[conn.parentId];
         const key = `${conn.childId}:${conn.parentId}`;
 
-        if (routedConnections[key] !== undefined) continue;
+        if (routedConnections[key] !== undefined) return;
 
         // Merge: parent on higher lane
         if (parentLane > childLane) {
@@ -390,37 +394,37 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                 addIncoming(conn.parentId, childLane, true, conn.childId);
             }
         }
-    }
+    });
 
     // Extend lane segments for connection endpoints. Each extension
     // grows the segment containing the child event to reach the
     // parent's row, ensuring through-lines span the full connection.
 
     // Routing lanes: create a new segment spanning child to parent
-    for (const [key, routingLane] of Object.entries(routedConnections)) {
+    forEach(Object.entries(routedConnections), ([key, routingLane]) => {
         const [childId, parentId] = key.split(':');
         const childIdx = eventIndex[childId];
         const parentIdx = eventIndex[parentId];
         extendSegment(routingLane, childIdx, parentIdx);
-    }
+    });
 
     // Relocated merges: extend the child's lane segment to the parent's row
-    for (const key of relocatedMerges) {
+    forEach([...relocatedMerges], (key) => {
         const [childId, parentId] = key.split(':');
         const childLane = laneMap[childId];
         const childIdx = eventIndex[childId];
         const parentIdx = eventIndex[parentId];
         extendSegment(childLane, childIdx, parentIdx);
-    }
+    });
 
     // Normal branches: extend the child's lane segment to the parent's row.
     // When multiple branches share a lane (e.g., CC→I and CC→K both
     // branch to CC's lane), the segment grows to the furthest parent.
-    for (const conn of connections) {
+    forEach(connections, (conn) => {
         const key = `${conn.childId}:${conn.parentId}`;
-        if (routedConnections[key] !== undefined) continue;
-        if (reroutedBranches.has(key)) continue;
-        if (relocatedMerges.has(key)) continue;
+        if (routedConnections[key] !== undefined) return;
+        if (reroutedBranches.has(key)) return;
+        if (relocatedMerges.has(key)) return;
 
         const childLane = laneMap[conn.childId];
         const parentLane = laneMap[conn.parentId];
@@ -428,16 +432,16 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         if (parentLane < childLane) {
             extendSegment(childLane, conn.childIndex, conn.parentIndex);
         }
-    }
+    });
 
     // Compute terminates for incoming connections using segment data
-    for (const [eventId, conns] of Object.entries(incomingMap)) {
+    forEach(Object.entries(incomingMap), ([eventId, conns]) => {
         const targetIndex = eventIndex[eventId];
-        for (const conn of conns) {
+        forEach(conns, (conn) => {
             const segEnd = getSegmentEnd(conn.lane, targetIndex);
             conn.terminates = segEnd <= targetIndex;
-        }
-    }
+        });
+    });
 
     // =====================================================================
     // PASS 2: Build entries, classify connections, compute branches,
@@ -449,7 +453,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
 
     // Pre-create all entries so branches can be pushed to parent events
     // (parents appear later in the array but need their entry to exist)
-    for (const event of events) {
+    forEach(events, (event) => {
         lookup[event.id] = {
             ...event,
             lane: laneMap[event.id],
@@ -466,12 +470,11 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             laneBottomEvents: {},
             laneContinuationEvents: {},
         };
-    }
+    });
 
-    for (let i = 0; i < events.length; i++) {
-        const event = events[i];
+    forEach(events, (event, i) => {
         const processed = lookup[event.id];
-        const lane = processed.lane;
+        const {lane} = processed;
 
         // Determine effective parents (accounting for demoted primaries)
         let effectivePrimary = event.parent;
@@ -483,7 +486,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
         }
 
         // Classify ancillary connections by direction
-        for (const ancParentId of effectiveAncillary) {
+        forEach(effectiveAncillary, (ancParentId) => {
             const parentLane = laneMap[ancParentId];
             const connKey = `${event.id}:${ancParentId}`;
 
@@ -502,7 +505,7 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
                     lookup[ancParentId].branches.push({ lane, childId: event.id });
                 }
             }
-        }
+        });
 
         // Primary parent on different lane → branch on parent
         if (effectivePrimary && laneMap[effectivePrimary] !== undefined) {
@@ -525,21 +528,21 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
 
         // Activate merge lanes; detect pass-throughs (already active before merge)
         processed.passThroughMerges = [];
-        for (const conn of processed.mergesFromAbove) {
+        forEach(processed.mergesFromAbove, (conn) => {
             if (currentActiveLanes[conn.lane]) {
                 processed.passThroughMerges.push(conn.lane);
             }
             currentActiveLanes[conn.lane] = true;
-        }
+        });
 
         // Activate incoming connection lanes; detect pass-throughs
         processed.passThroughIncoming = [];
-        for (const conn of processed.incomingConnections) {
+        forEach(processed.incomingConnections, (conn) => {
             if (currentActiveLanes[conn.lane]) {
                 processed.passThroughIncoming.push(conn.lane);
             }
             currentActiveLanes[conn.lane] = true;
-        }
+        });
 
         // Snapshot active lanes for this row's rendering
         processed.activeLanes = [...currentActiveLanes];
@@ -563,19 +566,19 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             .filter(branchLane => getSegmentEnd(branchLane, i) > i);
 
         // Deactivate branch lanes whose current segment ends here.
-        for (const { lane: branchLane } of processed.branches) {
+        forEach(processed.branches, ({ lane: branchLane }) => {
             if (getSegmentEnd(branchLane, i) <= i) {
                 currentActiveLanes[branchLane] = false;
             }
-        }
+        });
 
         // Deactivate incoming lanes whose current segment ends here
-        for (const conn of processed.incomingConnections) {
+        forEach(processed.incomingConnections, (conn) => {
             if (conn.fromAbove && getSegmentEnd(conn.lane, i) <= i) {
                 currentActiveLanes[conn.lane] = false;
             }
-        }
-    }
+        });
+    });
 
     // =====================================================================
     // PASS 3: Compute hasLineBelow
@@ -583,11 +586,11 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
     // available during pass 2.
     // =====================================================================
 
-    for (let i = 0; i < events.length - 1; i++) {
-        const processed = lookup[events[i].id];
+    forEach(events.slice(0, -1), (event, i) => {
+        const processed = lookup[event.id];
         const nextActiveLanes = lookup[events[i + 1].id].activeLanes;
         processed.hasLineBelow = !!nextActiveLanes[processed.lane];
-    }
+    });
 
     // =====================================================================
     // PASS 4: Compute laneTopEvents / laneBottomEvents via edge tracing.
@@ -619,12 +622,12 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
 
     // Primary same-lane parent edges (not in the `connections` array, which
     // only tracks cross-lane connections). No curves at either end.
-    for (const event of events) {
+    forEach(events, (event) => {
         const parentId = event.parent;
-        if (!parentId) continue;
+        if (!parentId) return;
         const childLane = laneMap[event.id];
         const parentLane = laneMap[parentId];
-        if (parentLane === undefined || childLane !== parentLane) continue;
+        if (parentLane === undefined || childLane !== parentLane) return;
         edgeTraces.push({
             childId: event.id,
             parentId,
@@ -634,11 +637,11 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             skipLo: false,
             skipHi: false,
         });
-    }
+    });
 
     // Cross-lane edges — derive traversed lane and curve presence from
     // collision-resolution state.
-    for (const conn of connections) {
+    forEach(connections, (conn) => {
         const key = `${conn.childId}:${conn.parentId}`;
         const childLane = laneMap[conn.childId];
         const parentLane = laneMap[conn.parentId];
@@ -687,44 +690,49 @@ function processEvents(events: TimelineEventType[]): ProcessedEventType[] {
             skipLo,
             skipHi,
         });
-    }
+    });
 
     function addEvents(row: number, lane: number, target: 'top' | 'bottom' | 'continuation', ids: string[]) {
         const e = lookup[events[row].id];
-        const bucket = target === 'top' ? e.laneTopEvents
-                     : target === 'bottom' ? e.laneBottomEvents
-                     : e.laneContinuationEvents;
-        if (!bucket[lane]) bucket[lane] = [];
-        for (const id of ids) {
-            if (!bucket[lane].includes(id)) bucket[lane].push(id);
+        let bucket: Record<number, string[]>;
+        if (target === 'top') {
+            bucket = e.laneTopEvents;
+        } else if (target === 'bottom') {
+            bucket = e.laneBottomEvents;
+        } else {
+            bucket = e.laneContinuationEvents;
         }
+        if (!bucket[lane]) bucket[lane] = [];
+        forEach(ids, (id) => {
+            if (!bucket[lane].includes(id)) bucket[lane].push(id);
+        });
     }
 
-    for (const trace of edgeTraces) {
+    forEach(edgeTraces, (trace) => {
         const ids = [trace.childId, trace.parentId];
         const lo = Math.min(trace.fromRow, trace.toRow);
         const hi = Math.max(trace.fromRow, trace.toRow);
-        if (lo === hi) continue;
+        if (lo === hi) return;
 
         if (!trace.skipLo) addEvents(lo, trace.lane, 'bottom', ids);
         if (!trace.skipHi) addEvents(hi, trace.lane, 'top', ids);
-        for (let r = lo + 1; r < hi; r++) {
+        forEach(rangeArray(lo + 1, hi), (r) => {
             addEvents(r, trace.lane, 'top', ids);
             addEvents(r, trace.lane, 'bottom', ids);
-        }
+        });
 
         // Continuation: the edge crosses every row-to-row gap from lo to hi-1.
         // Attribution is unconditional (skipLo/skipHi only suppress static-SVG
         // endpoint halves, not the between-row continuation).
-        for (let r = lo; r < hi; r++) {
+        forEach(rangeArray(lo, hi), (r) => {
             addEvents(r, trace.lane, 'continuation', ids);
-        }
-    }
+        });
+    });
 
     return events.map(m => lookup[m.id]);
 }
 
-const Timeline = forwardRef<TimelineHandle, TimelineProps>(function Timeline(props, ref) {
+const Timeline = forwardRef<TimelineHandle, TimelineProps>((props, ref) => {
     const {
         events = [],
         renderEvent,
@@ -743,9 +751,9 @@ const Timeline = forwardRef<TimelineHandle, TimelineProps>(function Timeline(pro
         collapseAll: () => expandRegistry.current.forEach(set => set(false)),
     }), []);
 
-    function getLaneClass(laneIndex: number) {
-        return `ra-clr-plt-${colors[laneIndex % colors.length]}`;
-    }
+    const getLaneClass = useCallback((laneIndex: number) => (
+        `ra-clr-plt-${colors[laneIndex % colors.length]}`
+    ), [colors]);
 
     const handleClick = (e: React.MouseEvent) => {
         const target = (e.target as Element).closest('[data-event-id]') as HTMLElement | null;
@@ -789,6 +797,7 @@ const Timeline = forwardRef<TimelineHandle, TimelineProps>(function Timeline(pro
     return (
         <div
             ref={containerRef}
+            role="presentation"
             className={classNames(['ra-timeline', { expandable }])}
             onClick={handleClick}
         >

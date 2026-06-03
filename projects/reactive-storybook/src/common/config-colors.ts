@@ -47,10 +47,10 @@ export function getInteractiveVariantOptions(): string[] {
     const schemes = config?.interactiveDesigns?.schemes ?? DEFAULT_CONFIG.interactiveDesigns.schemes;
     const custom = config?.interactiveDesigns?.custom ?? {};
     const variants = new Set<string>();
-    for (const scheme of [...Object.values(schemes), ...Object.values(custom)]) {
-        for (const name of Object.keys((scheme as any)?.variants ?? {})) {
+    [...Object.values(schemes), ...Object.values(custom)].forEach((scheme) => {
+        Object.keys((scheme as any)?.variants ?? {}).forEach((name) => {
             variants.add(name);
-        }
-    }
+        });
+    });
     return [...variants];
 }

@@ -55,6 +55,7 @@ const DatePicker = forwardRef<DatePickerHandle, DatePickerProps>((props, ref) =>
     }
 
     if (!isNil(fromDate) && !isNil(toDate) && toDate < fromDate) {
+        // eslint-disable-next-line no-console
         console.error('ToDate cannot be less than fromDate');
 
         fromDate = null;

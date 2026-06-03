@@ -88,15 +88,13 @@ function Accordion(props: AccordionProps) {
     useEffect(() => { onResizeRef.current = onResize; }, [onResize]);
     useEffect(() => { onResizeEndRef.current = onResizeEnd; }, [onResizeEnd]);
 
-    useEffect(() => {
-        return () => {
+    useEffect(() => () => {
             const ds = dragStateRef.current;
             if (!isNil(ds)) {
                 ds.cleanup();
                 dragStateRef.current = null;
             }
-        };
-    }, []);
+        }, []);
 
     const handleToggle = useCallback((frameIndex: number) => {
         if (draggedRef.current) {
@@ -246,18 +244,17 @@ function Accordion(props: AccordionProps) {
     const content = childArray.map((child, index) => {
         const isExpanded = expanded.has(index);
         const injected: Record<string, unknown> = {
-            _expanded: isExpanded,
-            _orientation: orientation,
-            _onToggle: () => handleToggle(index),
+            expanded: isExpanded,
+            onToggle: () => handleToggle(index),
         };
         if (mode === 'adjustable') {
             if (!isNil(weights) && isExpanded) {
-                injected._flexGrow = weights[index];
+                injected.flexGrow = weights[index];
             }
             if (isExpanded) {
                 const leftIndex = findPrevExpanded(expanded, index);
                 if (leftIndex !== -1) {
-                    injected._onResizeStart = (e: React.PointerEvent<HTMLDivElement>) => handleResizeStart(e, index, leftIndex);
+                    injected.onResizeStart = (e: React.PointerEvent<HTMLDivElement>) => handleResizeStart(e, index, leftIndex);
                 }
             }
         }

@@ -24,17 +24,30 @@ function TimelineEventNodeExtension({ event, getLaneClass, svgWidth }: TimelineE
             }}
         >
                 {activeLanes.map((active, laneIndex) => {
-                    if (!active) return null;
-                    if (branchLanes.includes(laneIndex) && !passThroughBranches.includes(laneIndex)) return null;
+                    if (!active) {
+                        return null;
+                    }
+                    
+                    if (branchLanes.includes(laneIndex) && !passThroughBranches.includes(laneIndex)) {
+                        return null;
+                    }
+
                     const isTerminating = incomingConnections.some(
                         c => c.lane === laneIndex && c.terminates
                     );
-                    if (isTerminating) return null;
-                    if (laneIndex === lane && !hasLineBelow) return null;
+
+                    if (isTerminating) {
+                        return null;
+                    }
+                    
+                    if (laneIndex === lane && !hasLineBelow) {
+                        return null;
+                    }
 
                     const dataEvents = joinEvents(laneContinuationEvents[laneIndex]);
 
                     return (
+                        // eslint-disable-next-line react/no-array-index-key
                         <g key={`var-${laneIndex}`} className={getLaneClass(laneIndex)}>
                             <line
                                 x1={laneIndex * LANE_WIDTH + LANE_CENTER}

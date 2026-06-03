@@ -49,8 +49,7 @@ export default class SimpleValue extends PropertyModelValue<SimpleModel> {
 		return this.setValue(value);
 	}
 	
-	// @typescript-eslint/no-unused-vars
-	removeValue(keydex: any) {
+	removeValue(_keydex: any) {
 		return this.setValue(undefined);
 	}
 

@@ -1,4 +1,4 @@
-import DateSelectField from '../../../../../reactive/dist/components/fields/date-single-select-field';
+import DateSelectField from "@reformjs/reactive/fields/date-single-select-field";
 import defaultStory from './stories/default.story';
 
 export default {

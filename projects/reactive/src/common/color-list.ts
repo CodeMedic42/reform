@@ -124,6 +124,4 @@ export function getPaletteColorClasses({
     return classes;
 }
 
-export const getColorInfo = (options: PaletteColorClassesOptions): { colorClasses: string } => {
-    return { colorClasses: getPaletteColorClasses(options) };
-};
+export const getColorInfo = (options: PaletteColorClassesOptions): { colorClasses: string } => ({ colorClasses: getPaletteColorClasses(options) });

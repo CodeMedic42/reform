@@ -22,7 +22,7 @@ interface CheckboxConfig {
 interface SubMenuProps {
     id?: string | null;
     className?: string | null;
-    icon?: IconProp | null;
+    // icon?: IconProp | null;
     content?: React.ReactNode;
     children?: React.ReactNode;
     onClick?: ((payload: { event: React.MouseEvent; data: unknown }) => void) | null;
@@ -188,7 +188,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
             borderTop = false,
             checkbox = null,
             content = null,
-            icon = null,
+            // icon = null,
             'aria-label': ariaLabel = null,
         } = this.props;
 

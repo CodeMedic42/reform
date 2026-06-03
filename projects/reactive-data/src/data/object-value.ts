@@ -79,11 +79,11 @@ export default class ObjectValue extends PropertyModelValue<ObjectModel> {
 		return changed;
 	}
 	
-	// @typescript-eslint/no-unused-vars
-	insertValue(value: any, keydex: any, rootChange: boolean) {
+	insertValue(value: any, keydex: any, _rootChange: boolean) {
 		// If the property was defined in the model then it should be defined.
 		if (isNil(this.#value[keydex])) {
 			// If not defined then there is nothing we can insert into.
+			// eslint-disable-next-line no-console
 			console.warn(`The key ${keydex} was not defined in the model and therefor cannot be inserted or defined after the fact. No changes have been made.`);
 
 			return false;
@@ -94,8 +94,7 @@ export default class ObjectValue extends PropertyModelValue<ObjectModel> {
 		return changed;
 	}
 
-	// @typescript-eslint/no-unused-vars
-	removeValue(keydex: any, rootChange: boolean) {
+	removeValue(keydex: any, _rootChange: boolean) {
 		// If the property was defined in the model then it should be defined.
 		if (isNil(this.#value[keydex])) {
 			return false;

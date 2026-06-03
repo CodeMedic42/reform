@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
-import { PaletteColor, PaletteShade, getColorInfo } from '../../../common/color-list.js';
+import { PaletteColor, PaletteShade } from '../../../common/color-list.js';
 import applyForwardRef from '../../../common/apply-forward-ref.js';
 import Typography from './typography.js';
 

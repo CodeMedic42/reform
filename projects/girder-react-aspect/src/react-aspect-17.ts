@@ -1,3 +1,4 @@
+/* eslint-disable react/no-deprecated */
 import ReactDom, { unmountComponentAtNode } from 'react-dom';
 import type { ReactNode, ReactElement, ComponentType } from 'react';
 import ReactAspectBase from './react-aspect-base.js';

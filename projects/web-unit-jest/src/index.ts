@@ -30,6 +30,5 @@ afterEach(async () => {
 afterAll(async () => {
     harnessControl = null;
 
-    // no-unused-vars, @typescript-eslint/no-unused-vars
-    const coverage: unknown = await libControl!.stop();
+    await libControl!.stop();
 });

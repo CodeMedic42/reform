@@ -1,8 +1,6 @@
 import React from 'react';
 import Table from '@reformjs/reactive/display/table';
 import { items, columns } from '../constants';
-import Page from '@reformjs/reactive/arrangement/page';
-import StickyContainer from '@reformjs/reactive/arrangement/sticky-container';
 
 function Basic() {
     return (
@@ -28,7 +26,7 @@ function Basic() {
                     left: '0',
                 }}
             >
-                Normally the table handles it's own scrolling. However sometimes to we want to use the page or another parent to scroll. This example show how to do that.
+                Normally the table handles it&apos;s own scrolling. However sometimes to we want to use the page or another parent to scroll. This example show how to do that.
             </p>
             <Table
                 items={items}

@@ -27,9 +27,7 @@ function replaceRouteParams(url: string, params: Record<string, string> = {}): s
             throw new Error(`A param with key "${key}" was not found in the routeParams.`);
         }
 
-        acc = acc.replaceAll(placeholder, value);
-
-        return acc;
+        return acc.replaceAll(placeholder, value);
     }, url);
 }
 

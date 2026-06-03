@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Table from '@reformjs/reactive/display/table';
-import { items, columns } from '../constants';
 import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
 import StaticContainer from '@reformjs/reactive/arrangement/static-container';
 import Card from '@reformjs/reactive/arrangement/card';
+import { items, columns } from '../constants';
 
 type TableItem = Record<string, unknown>;
 
@@ -16,11 +16,15 @@ function Basic() {
     const isHeaderSelected = (
         allItems: TableItem[] | Record<string, TableItem> | null | undefined,
     ) => {
-        const arr = Array.isArray(allItems)
-            ? allItems
-            : allItems
-                ? Object.values(allItems)
-                : [];
+        let arr: TableItem[];
+        
+        if (Array.isArray(allItems)) {
+            arr = allItems;
+        } else if (allItems) {
+            arr = Object.values(allItems);
+        } else {
+            arr = [];
+        }
         return arr.length > 0 && selected.size === arr.length;
     };
 
@@ -61,7 +65,7 @@ function Basic() {
                             left: '0',
                         }}
                     >
-                        Normally the table handles it's own scrolling. However sometimes to we want to use the page or another parent to scroll. This example show how to do that.
+                        Normally the table handles it&apos;s own scrolling. However sometimes to we want to use the page or another parent to scroll. This example show how to do that.
                     </p>
                 </StaticContainer>
                 <Card>
@@ -72,7 +76,7 @@ function Basic() {
                                 left: '0',
                             }}
                         >
-                            Normally the table handles it's own scrolling. However sometimes to we want to use the page or another parent to scroll. This example show how to do that.
+                            Normally the table handles it&apos;s own scrolling. However sometimes to we want to use the page or another parent to scroll. This example show how to do that.
                         </p>
                     </StaticContainer>
                     <Table

@@ -2,10 +2,9 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
-import ListItemContent from '../../arrangement/drop-down/list-item-content.js';
-import IconButton from '../../display/icon-button/index.js';
-import MenuItem from './menu-item.js';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import ListItemContent from '../../arrangement/drop-down/list-item-content.js';
+import MenuItem from './menu-item.js';
 import Icon from '../../display/icon/index.js';
 
 interface MenuRemovableRemoveEvent {
@@ -24,7 +23,7 @@ interface MenuRemovableProps {
     disabled?: boolean;
     borderBottom?: boolean;
     borderTop?: boolean;
-    icon?: IconProp | null;
+    // icon?: IconProp | null;
 }
 
 class MenuRemovable extends PureComponent<MenuRemovableProps> {
@@ -55,7 +54,7 @@ class MenuRemovable extends PureComponent<MenuRemovableProps> {
             onRemove = null,
             borderBottom = false,
             borderTop = false,
-            icon = null,
+            // icon = null,
         } = this.props;
 
         return (
@@ -75,6 +74,7 @@ class MenuRemovable extends PureComponent<MenuRemovableProps> {
                     <div className="menu-content">{children}</div>
                     {/* {children} */}
                     <button
+                        type="button"
                         className="menu-remove-btn"
                         disabled={disabled}
                         onClick={!isNil(onRemove) ? this.handleRemove : undefined}

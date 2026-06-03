@@ -229,6 +229,7 @@ class MultiSelectFieldContainer extends PureComponent<MultiSelectAnchorProps> {
 					/>
 					<div
 						className="anchor-content"
+						role="presentation"
 						onMouseDown={this.handleMouseDown}
 					>
 						<div className="anchor-selected-items">

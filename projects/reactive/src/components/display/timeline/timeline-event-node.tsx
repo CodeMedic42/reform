@@ -125,6 +125,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                     // same attribution — avoids redundant DOM nodes.
                     if (renderTop && renderBottom && topData === bottomData) {
                         return (
+                            // eslint-disable-next-line react/no-array-index-key
                             <g key={`through-${laneIndex}`} className={getLaneClass(laneIndex)}>
                                 <line
                                     x1={x}
@@ -140,6 +141,7 @@ function TimelineEventNode({ event, index, getLaneClass, svgWidth }: TimelineEve
                     }
 
                     return (
+                        // eslint-disable-next-line react/no-array-index-key
                         <g key={`through-${laneIndex}`} className={getLaneClass(laneIndex)}>
                             {renderTop && (
                                 <line

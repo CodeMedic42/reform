@@ -1,5 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from 'vitest';
 import { toNumber, map } from 'lodash-es';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { userEvent } from 'vitest/browser';
 import type { HarnessControl } from './harness.js';
 

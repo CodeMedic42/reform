@@ -260,8 +260,7 @@ describe('Value Changes', () => {
 
 			const removeListenerAtObjectTest = data.onChangedAt('objectTest', handleOnTriggerAtObjectTest);
 			const removeListenerAtValueA = data.onChangedAt('objectTest.valueA', handleOnTriggerAtValueA);
-			// @typescript-eslint/no-unused-vars
-			const removeListenerAtValueB = data.onChangedAt('objectTest.valueB', handleOnTriggerAtValueB);
+			// const removeListenerAtValueB = data.onChangedAt('objectTest.valueB', handleOnTriggerAtValueB);
 			const removeListenerAtValueC = data.onChangedAt('objectTest.valueC', handleOnTriggerAtValueC);
 
 			const objectTestProp = data.getPropertyAt('objectTest');
@@ -308,12 +307,11 @@ describe('Value Changes', () => {
 			const data = await Data.build(configuration, testInstValues);
 
 			const objectTestProp = data.getPropertyAt('objectTest');
-			// @typescript-eslint/no-unused-vars
-			const valueAProp = data.getPropertyAt('objectTest.valueA');
-			// @typescript-eslint/no-unused-vars
-			const valueBProp = data.getPropertyAt('objectTest.valueB');
-			// @typescript-eslint/no-unused-vars
-			const valueCProp = data.getPropertyAt('objectTest.valueC');
+			/* eslint-disable @typescript-eslint/naming-convention */
+			const _valueAProp = data.getPropertyAt('objectTest.valueA');
+			const _valueBProp = data.getPropertyAt('objectTest.valueB');
+			const _valueCProp = data.getPropertyAt('objectTest.valueC');
+			/* eslint-enable @typescript-eslint/naming-convention */
 
 			const handleObjectOnChange = jest.fn();
 			objectTestProp!.onChange(handleObjectOnChange);

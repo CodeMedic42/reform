@@ -63,6 +63,7 @@ class Button extends PureComponent<ButtonOrigProps> {
         const { current } = this.buttonRef;
 
         if (isNil(current)) {
+            // eslint-disable-next-line no-console
             console.warn('Attempting to focus on an unmounted component');
 
             return;
@@ -109,10 +110,10 @@ class Button extends PureComponent<ButtonOrigProps> {
             useDark = false,
             // leftIcon,
             // rightIcon,
-            // @typescript-eslint/no-unused-vars
+            /* eslint-disable @typescript-eslint/naming-convention */
             onClick: _onClick,
-            // @typescript-eslint/no-unused-vars
-            focusOnMount = false,
+            focusOnMount: _focusOnMount = false,
+            /* eslint-enable @typescript-eslint/naming-convention */
             ...rest
         } = this.props;
 
@@ -166,6 +167,7 @@ class Button extends PureComponent<ButtonOrigProps> {
         const typeProp = (!isNil(type) ? type : 'button') as "button" | "reset" | "submit";
 
         return (
+            // eslint-disable-next-line react/button-has-type
             <button {...props} type={typeProp}>
                 {content}
             </button>

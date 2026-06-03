@@ -2,9 +2,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { reduce, isNil, isEmpty } from 'lodash-es';
 import buildId from '../../../common/build-id.js';
+import type { FieldMessageData } from '../../../common/prop-types.js';
 
 export type { FieldMessageData } from '../../../common/prop-types.js';
-import type { FieldMessageData } from '../../../common/prop-types.js';
 
 interface FieldMessagesProps {
     id?: string | null;

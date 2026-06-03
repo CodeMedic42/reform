@@ -20,6 +20,7 @@ function renderMenuButton({ menuItemType, icon, label }) {
     return <MenuButton
         icon={icon}
         eventData='Clicked'
+        // eslint-disable-next-line no-alert
         onClick={({ data }) => { alert(data) }}
     >
         {label}
@@ -54,6 +55,7 @@ function renderMenuRemovable({ menuItemType, icon, label }) {
     return <MenuRemovable
         icon={icon}
         eventData='Removed'
+        // eslint-disable-next-line no-alert
         onRemove={({ data }) => { alert(data) }}
     >
         {label}

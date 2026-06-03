@@ -71,9 +71,15 @@ class ListItemLink extends PureComponent<ListItemLinkProps> {
         const textId = buildId(id, 'text');
 
         // Default rel to noopener noreferrer when opening in a new tab, unless caller provided one
-        const effectiveRel = !isNil(rel)
-            ? rel
-            : target === '_blank' ? 'noopener noreferrer' : null;
+        let effectiveRel: string | null;
+        
+        if (!isNil(rel)) {
+            effectiveRel = rel;
+        } else if (target === '_blank') {
+            effectiveRel = 'noopener noreferrer';
+        } else {
+            effectiveRel = null;
+        }
 
         return (
             <>

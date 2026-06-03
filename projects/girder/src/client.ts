@@ -125,7 +125,9 @@ class Client {
                 }).catch((error: Error) => {
                     this.status = 'stopped';
 
+                    // eslint-disable-next-line no-console
                     console.error('Failed to start client');
+                    // eslint-disable-next-line no-console
                     console.log(error, error.stack);
 
                     throw error;
@@ -156,7 +158,9 @@ class Client {
                     this.status = 'stopped';
                 })
                 .catch((error: Error) => {
+                    // eslint-disable-next-line no-console
                     console.error('Failed to stop client');
+                    // eslint-disable-next-line no-console
                     console.error(error, error.stack);
 
                     throw error;

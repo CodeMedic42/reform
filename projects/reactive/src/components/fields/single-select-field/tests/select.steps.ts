@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { loadFeatures, autoBindSteps } from 'jest-cucumber';
 import '@reformjs/web-unit-jest';
 

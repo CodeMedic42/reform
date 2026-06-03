@@ -48,35 +48,35 @@ class PendoAspect extends Aspect {
 
         Promise.resolve(this.apiKey())
         .then((apiKey: string) => {
-            (function(p: Window, e: Document, n: string, d: string, _o?: PendoInstance) {
-                var v: string[], w: number, x: number, y: HTMLScriptElement, z: HTMLScriptElement;
+            const installPendo = (p: Window, e: Document, n: string, d: string): void => {
+                const globalScope = p as unknown as Record<string, PendoInstance>;
+                const pendoInstance: PendoInstance = globalScope[d] || ({} as PendoInstance);
+                globalScope[d] = pendoInstance;
 
-                _o = (p as unknown as Record<string, PendoInstance>)[d] = (p as unknown as Record<string, PendoInstance>)[d] || {} as PendoInstance;
+                pendoInstance._q = [];
 
-                _o._q = [];
+                const methods = ['initialize', 'identify', 'updateOptions', 'pageLoad'];
 
-                v = ['initialize', 'identify', 'updateOptions', 'pageLoad'];
+                methods.forEach((methodName: string) => {
+                    pendoInstance[methodName] = pendoInstance[methodName] || function pendoMethod(...callArgs: unknown[]) {
+                        (pendoInstance._q[methodName === methods[0] ? 'unshift' : 'push'] as (item: unknown[]) => void)([methodName].concat([].slice.call(callArgs, 0)));
+                    };
+                });
 
-                for (w = 0, x = v.length; w < x; ++w)
-                    (function(m: string) {
-                        _o![m] = _o![m] || function() {
-                            _o!._q[m === v[0] ? 'unshift' : 'push']([m].concat([].slice.call(arguments, 0)));
-                        };
-                    })(v[w]);
+                const script = e.createElement(n) as HTMLScriptElement;
+                script.async = true;
+                script.src = `https://cdn.pendo.io/agent/static/${apiKey}/pendo.js`;
 
-                y = e.createElement(n) as HTMLScriptElement;
+                const firstScript = e.getElementsByTagName(n)[0] as HTMLScriptElement;
+                firstScript.parentNode!.insertBefore(script, firstScript);
+            };
 
-                y.async = true;
-
-                y.src = `https://cdn.pendo.io/agent/static/${apiKey}/pendo.js`;
-
-                z = e.getElementsByTagName(n)[0] as HTMLScriptElement;
-
-                z.parentNode!.insertBefore(y, z);
-            })(window, document, 'script', 'pendo');
+            installPendo(window, document, 'script', 'pendo');
         })
         .catch((error: Error) => {
+            // eslint-disable-next-line no-console
             console.error('Failed to setup Pendo');
+            // eslint-disable-next-line no-console
             console.error(error, error.stack);
         });
     }

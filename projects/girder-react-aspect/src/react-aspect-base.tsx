@@ -125,6 +125,7 @@ class ReactAspectBase extends Aspect {
                 // The only thing they should know is the action finished.
                 .then(noop)
                 .catch((err: unknown) => {
+                    // eslint-disable-next-line no-console
                     console.error(err);
                 });
             };

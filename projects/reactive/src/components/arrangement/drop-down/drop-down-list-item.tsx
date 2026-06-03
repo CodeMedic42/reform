@@ -31,7 +31,7 @@ export type { DropDownListItemProps, DropDownListItemHandle };
 /**
  * This component is used the base definition of an item being rendered inside the DropDownList component.
  */
-const DropDownListItem = forwardRef<DropDownListItemHandle, DropDownListItemProps>(function DropDownListItem(props, ref) {
+const DropDownListItem = forwardRef<DropDownListItemHandle, DropDownListItemProps>((props, ref) => {
     const {
         id = null,
         color = null,
@@ -61,6 +61,18 @@ const DropDownListItem = forwardRef<DropDownListItemHandle, DropDownListItemProp
 
         if (!isNil(onClick)) {
             onClick(event);
+        }
+    }, [preventCloseOnClick, onClick]);
+
+    const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLLIElement>) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            if (preventCloseOnClick) {
+                event.preventDefault();
+            }
+
+            if (!isNil(onClick)) {
+                onClick(event as unknown as React.MouseEvent);
+            }
         }
     }, [preventCloseOnClick, onClick]);
 
@@ -101,6 +113,7 @@ const DropDownListItem = forwardRef<DropDownListItemHandle, DropDownListItemProp
             aria-current={ariaCurrent ? 'true' : undefined}
             aria-label={accessibilityLabel ?? undefined}
             onClick={handleClick}
+            onKeyDown={handleKeyDown}
         >
             {children}
         </li>

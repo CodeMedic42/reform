@@ -56,15 +56,13 @@ function PanelGroup(props: PanelGroupProps) {
     useEffect(() => { onResizeRef.current = onResize; }, [onResize]);
     useEffect(() => { onResizeEndRef.current = onResizeEnd; }, [onResizeEnd]);
 
-    useEffect(() => {
-        return () => {
+    useEffect(() => () => {
             const ds = dragStateRef.current;
             if (!isNil(ds)) {
                 ds.cleanup();
                 dragStateRef.current = null;
             }
-        };
-    }, []);
+        }, []);
 
     const handleResizeStart = useCallback((e: React.PointerEvent<HTMLDivElement>, dividerIndex: number) => {
         if (e.button !== 0) return;
@@ -192,6 +190,7 @@ function PanelGroup(props: PanelGroupProps) {
         if (index < childArray.length - 1) {
             content.push(
                 <PanelDivider
+                    // eslint-disable-next-line react/no-array-index-key
                     key={`divider-${index}`}
                     direction={direction}
                     dividerIndex={index}

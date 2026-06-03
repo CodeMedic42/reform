@@ -31,8 +31,8 @@ function ResolutionHeader(props: PropsWithChildren<Props>) {
 
     return (
         <div className={classnames('resolution-header', { sticky })}>
-            {Array.from({ length: bandCount }, (_, bandIndex) => {
-                const hidden = Array.from({ length: bandCount }, (_, i) => i !== bandIndex);
+            {Array.from({ length: bandCount }, (_unused, bandIndex) => {
+                const hidden = Array.from({ length: bandCount }, (__unused, i) => i !== bandIndex);
                 const label = bandIndex === 0
                     ? `< ${breakpoints[0]}`
                     : `>= ${breakpoints[bandIndex - 1]}`;

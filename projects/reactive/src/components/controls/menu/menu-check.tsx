@@ -1,11 +1,11 @@
 import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import CheckInput from '../../fields/check-input-field/index.js';
 import MenuItem from './menu-item.js';
 import buildId from '../../../common/build-id.js';
 import ListItemContent from '../../arrangement/drop-down/list-item-content.js';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import Icon from '../../display/icon/index.js';
 
 interface MenuCheckProps {

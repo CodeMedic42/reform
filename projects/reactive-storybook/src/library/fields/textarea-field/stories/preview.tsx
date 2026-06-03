@@ -19,8 +19,8 @@ interface ExampleProps {
 	successMessageCount: number;
 	failureMessageCount: number;
 	generalMessageCount: number;
-	useLeftIcon: boolean;
-	useRightIcon: boolean;
+	// useLeftIcon: boolean;
+	// useRightIcon: boolean;
 	[key: string]: unknown;
 }
 
@@ -31,8 +31,8 @@ function example(props: ExampleProps) {
 		successMessageCount,
 		failureMessageCount,
 		generalMessageCount,
-		useLeftIcon,
-		useRightIcon,
+		// useLeftIcon,
+		// useRightIcon,
 		...rest
 	} = props;
 

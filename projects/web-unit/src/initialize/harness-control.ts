@@ -26,7 +26,6 @@ class HarnessControl {
 
     async clearHarness(keepProps?: boolean): Promise<void> {
         await this.page.evaluate((serKeepProps?: boolean) => {
-            console.log(serKeepProps);
             clearHarness(serKeepProps);
         }, keepProps);
     }

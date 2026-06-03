@@ -191,11 +191,15 @@ export default function Table({
         if (isRowSelected) {
             for (let i = 0; i < baseItems.length; i += 1) {
                 const state = isRowSelected(baseItems[i], i);
-                const rowSelected = isBoolean(state)
-                    ? state
-                    : !isNil(state)
-                        ? state.selected
-                        : false;
+                let rowSelected: boolean;
+                
+                if (isBoolean(state)) {
+                    rowSelected = state;
+                } else if (!isNil(state)) {
+                    rowSelected = state.selected;
+                } else {
+                    rowSelected = false;
+                }
                 if (rowSelected) selectedCount += 1;
             }
         }

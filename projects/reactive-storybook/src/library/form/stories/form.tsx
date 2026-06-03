@@ -152,6 +152,7 @@ function LoadedComponent(props: LoadedComponentProps) {
 			validateOnExecute
 			onExecute={() => {
 				if (data.isValid()) {
+					// eslint-disable-next-line no-alert
 					alert('submitted');
 				}
 			}}

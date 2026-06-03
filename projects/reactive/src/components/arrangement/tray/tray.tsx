@@ -951,6 +951,7 @@ function setTailStyles(
             setVerticalTailLocation(tailRenderingParameters),
         );
     } else {
+        // eslint-disable-next-line no-console
         console.warn('drop down arrow not built yet for this');
     }
 
@@ -1240,6 +1241,8 @@ class Tray extends Component<TrayProps> {
 
         const tray = (
             <TrayContext.Provider
+                // TODO: Fix this. We are creating a new object on every render which is not ideal but it is necessary to allow the child trays to register themselves with the parent tray. We can optimize this by memoizing the context value but it is not a priority right now.
+                // eslint-disable-next-line react/jsx-no-constructed-context-values
                 value={{
                     renderIndex: renderIndex + 1,
                     onRegister: this.handleRegister,

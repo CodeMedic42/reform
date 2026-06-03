@@ -19,6 +19,7 @@ class ApplicationAspect extends Aspect {
     }
 
     onStop(): void {
+        // eslint-disable-next-line no-console
         console.log('Application context is stopping');
     }
 }

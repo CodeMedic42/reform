@@ -33,6 +33,7 @@ class Button extends PureComponent<ButtonProps> {
         const { current } = this.buttonRef;
 
         if (isNil(current)) {
+            // eslint-disable-next-line no-console
             console.warn('Attempting to focus on an unmounted component');
 
             return;

@@ -27,7 +27,7 @@ function computeSvgWidth(event: ProcessedEventType): number {
 
 function TimelineEvent({ event, index, getLaneClass, renderEvent, expandable, expandRegistry }: TimelineEventProps) {
     const [expanded, setExpanded] = useState(!expandable);
-    const [isHovered, setIsHovered] = useState(false);
+    // const [isHovered, setIsHovered] = useState(false);
     const hasMountedRef = useRef(false);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ function TimelineEvent({ event, index, getLaneClass, renderEvent, expandable, ex
     // lifting state to the parent.
     useEffect(() => {
         const registry = expandRegistry?.current;
-        if (!registry) return;
+        if (!registry) return undefined;
         registry.set(event.id, setExpanded);
         return () => { registry.delete(event.id); };
     }, [event.id, expandRegistry]);
@@ -62,12 +62,14 @@ function TimelineEvent({ event, index, getLaneClass, renderEvent, expandable, ex
 
     return (
         <div className="ra-timeline-event">
+            { /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */ }
             <div
                 className="ra-timeline-event-header"
                 onClick={expandable ? handleToggle : undefined}
-                onMouseEnter={expandable ? () => setIsHovered(true) : undefined}
-                onMouseLeave={expandable ? () => setIsHovered(false) : undefined}
+                // onMouseEnter={expandable ? () => setIsHovered(true) : undefined}
+                // onMouseLeave={expandable ? () => setIsHovered(false) : undefined}
                 onKeyDown={expandable ? handleKeyDown : undefined}
+                // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                 tabIndex={expandable ? 0 : undefined}
                 role={expandable ? 'button' : undefined}
                 aria-expanded={expandable ? expanded : undefined}

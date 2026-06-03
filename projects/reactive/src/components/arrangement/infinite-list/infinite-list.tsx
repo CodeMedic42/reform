@@ -43,6 +43,7 @@ function getNumberChildrenBefore(
     if (itemsContainer.childNodes.length > 0) {
         const parentRect = parent.getBoundingClientRect();
 
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             const child = itemsContainer.childNodes[count] as HTMLElement;
             const childRect = child.getBoundingClientRect();
@@ -350,7 +351,6 @@ const InfiniteList = forwardRef<InfiniteListHandle, InfiniteListProps>((props, r
         onLoad,
         loadCount,
         bufferCount,
-        items,
         hold = false,
         keepLoaded = false,
         onTopIndexChange,

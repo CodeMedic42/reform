@@ -49,7 +49,7 @@ class TableBase extends PureComponent<TableBaseProps, TableBaseState> {
     handleScroll(e: Event) {
         const { showStickyBorder } = this.state;
 
-        const target = e.target;
+        const {target} = e;
         const containerEl = this.containerRef.current;
 
         if (containerEl === null) {

@@ -4,6 +4,7 @@ import { getPaletteColorOptions } from '../../../../common/config-colors';
 
 function example(props: Record<string, unknown>) {
     const handleOnClear = useCallback(() => {
+        // eslint-disable-next-line no-alert
         alert('Clear called.');
     }, []);
 

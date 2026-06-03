@@ -473,6 +473,7 @@ class DropDown extends Component<DropDownProps, DropDownState> {
         }
 
         if (isNil(this.anchorRef) || isNil((this.anchorRef as React.RefObject<unknown>).current)) {
+            // eslint-disable-next-line no-console
             console.warn('Attempting to focus on an unmounted component');
         }
 
@@ -571,6 +572,7 @@ class DropDown extends Component<DropDownProps, DropDownState> {
             <div
                 ref={this.mainRef}
                 id={id ?? undefined}
+                role="presentation"
                 className={classnames('ra-drop-down', className, {
                     open,
                 })}

@@ -30,15 +30,15 @@ interface DirectoryFromWorkingDirParams {
     directory: string;
 }
 
-const detectBadGlob = (val: string): string => {
+const detectBadGlob = (val: string): string => 
     // const match = val.match(/\.(\([^)]+\))/);
 
     // if (match) {
     //     return fixBadGlob(match);
     // }
 
-    return val;
-};
+     val
+;
 
 const isDirectory = (configDir: string, entry: string): boolean => {
     try {

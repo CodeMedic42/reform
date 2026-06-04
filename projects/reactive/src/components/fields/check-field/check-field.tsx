@@ -6,7 +6,7 @@ import FieldMessages from '../_support/field-messages.js';
 import type { FieldMessageData } from '../_support/field-messages.js';
 import buildLabeledControlProps, { type BuildLabeledControlPropsOutput } from '../../../common/build-labeled-control-props.js';
 
-interface CheckInputFieldProps {
+interface CheckFieldFieldProps {
     id?: string | null;
     className?: string | null;
     label?: string | null;
@@ -27,7 +27,7 @@ interface CheckInputFieldProps {
     constrictField?: boolean;
 }
 
-interface CheckInputFieldState {
+interface CheckFieldFieldState {
     inputId: string;
     labelId: string;
     descriptionId: string | null;
@@ -36,7 +36,7 @@ interface CheckInputFieldState {
     ariaLabel: string | null;
 }
 
-class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFieldState> {
+class CheckFieldField extends PureComponent<CheckFieldFieldProps, CheckFieldFieldState> {
     static defaultProps = {
         id: null,
         className: null,
@@ -60,7 +60,7 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
 
     inputRef: React.RefObject<HTMLInputElement>;
 
-    constructor(props: CheckInputFieldProps) {
+    constructor(props: CheckFieldFieldProps) {
         super(props);
 
         this.inputRef = createRef<HTMLInputElement>();
@@ -68,10 +68,10 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
 
-        this.state = {} as CheckInputFieldState;
+        this.state = {} as CheckFieldFieldState;
     }
 
-    static getDerivedStateFromProps(nextProps: CheckInputFieldProps): BuildLabeledControlPropsOutput | null {
+    static getDerivedStateFromProps(nextProps: CheckFieldFieldProps): BuildLabeledControlPropsOutput | null {
         return buildLabeledControlProps(nextProps);
     }
 
@@ -132,14 +132,14 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
         setTimeout(() => {
             const { value } = this.props;
 
-            const checkInput = this.inputRef.current;
+            const checkField = this.inputRef.current;
 
-            if (isNil(checkInput)) {
+            if (isNil(checkField)) {
                 return;
             }
 
-            if (checkInput.checked !== (value === true)) {
-                checkInput.checked = value === true;
+            if (checkField.checked !== (value === true)) {
+                checkField.checked = value === true;
             }
         }, 1);
     }
@@ -224,4 +224,4 @@ class CheckInputField extends PureComponent<CheckInputFieldProps, CheckInputFiel
     }
 }
 
-export default CheckInputField;
+export default CheckFieldField;

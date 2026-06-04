@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { reduce } from 'lodash-es';
-import CheckInputField from '@reformjs/reactive/fields/check-input-field';
+import CheckInputField from '@reformjs/reactive/fields/check-field';
 
 function generateMessages(count: number = 0): string[] {
 	const messages: string[] = [];

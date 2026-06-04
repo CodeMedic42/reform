@@ -9,7 +9,7 @@ import MenuList from './menu-list.js';
 import Icon from '../../display/icon/index.js';
 import Provider, { ApplyConsumer } from '../../arrangement/drop-down/drop-down-context.js';
 import MenuItem from './menu-item.js';
-import CheckInput from '../../fields/check-input-field/index.js';
+import CheckField from '../../fields/check-field/index.js';
 import buildId from '../../../common/build-id.js';
 
 interface CheckboxConfig {
@@ -158,7 +158,7 @@ class SubMenu extends PureComponent<SubMenuProps, SubMenuState> {
         }
 
         return (
-            <CheckInput
+            <CheckField
                 key="check"
                 id={buildId(id, 'check')}
                 className="menu-checkbox-control"

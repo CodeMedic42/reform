@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { reduce } from 'lodash-es';
-import MultiSelectInputField from '@reformjs/reactive/fields/multi-select-input-field';
+import MultiSelectInputField from '@reformjs/reactive/fields/multi-select-field';
 import { abbreviated } from '../../../../common/options-data';
 
 function generateMessages(count: number = 0): string[] {

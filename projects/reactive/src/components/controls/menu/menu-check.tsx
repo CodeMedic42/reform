@@ -2,7 +2,7 @@ import React, { createRef, PureComponent } from 'react';
 import classnames from 'classnames';
 import { isNil } from 'lodash-es';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import CheckInput from '../../fields/check-input-field/index.js';
+import CheckField from '../../fields/check-field/index.js';
 import MenuItem from './menu-item.js';
 import buildId from '../../../common/build-id.js';
 import ListItemContent from '../../arrangement/drop-down/list-item-content.js';
@@ -61,7 +61,7 @@ class MenuCheck extends PureComponent<MenuCheckProps> {
                 preventCloseOnClick
             >
                 <ListItemContent>
-                    <CheckInput
+                    <CheckField
                         id={buildId(id, 'check')}
                         className="menu-checkbox-control"
                         color={color}

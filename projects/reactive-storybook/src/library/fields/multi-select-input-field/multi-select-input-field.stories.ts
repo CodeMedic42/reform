@@ -1,8 +1,8 @@
-import MultiSelectInputField from '@reformjs/reactive/fields/multi-select-input-field';
+import MultiSelectField from '@reformjs/reactive/fields/multi-select-field';
 
 export default {
-    title: 'Fields/Multi-Select Input Field',
-    component: MultiSelectInputField,
+    title: 'Fields/Multi-Select Field',
+    component: MultiSelectField,
 };
 
 export { default as preview } from './stories/preview';

@@ -21,7 +21,7 @@ import RowBase from './base/row-base.js';
 import CellBase from './base/cell-base.js';
 import HeaderCellBase from './base/header-cell-base.js';
 import HeaderSortableCellBase from './base/header-sortable-cell-base.js';
-import CheckInputField from '../../fields/check-input-field/check-input-field.js';
+import CheckInputField from '../../fields/check-field/check-field.js';
 
 type SortPath = string | string[];
 

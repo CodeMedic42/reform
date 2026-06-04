@@ -116,9 +116,9 @@
       "import": "./dist/components/display/timeline/index.mjs",
       "types": "./dist/components/display/timeline/index.d.ts"
     },
-    "./fields/check-input-field": {
-      "import": "./dist/components/fields/check-input-field/index.mjs",
-      "types": "./dist/components/fields/check-input-field/index.d.ts"
+    "./fields/check-field": {
+      "import": "./dist/components/fields/check-field/index.mjs",
+      "types": "./dist/components/fields/check-field/index.d.ts"
     },
     "./fields/date-range-select-field": {
       "import": "./dist/components/fields/date-range-select-field/index.mjs",
@@ -128,9 +128,9 @@
       "import": "./dist/components/fields/date-single-select-field/index.mjs",
       "types": "./dist/components/fields/date-single-select-field/index.d.ts"
     },
-    "./fields/multi-select-input-field": {
-      "import": "./dist/components/fields/multi-select-input-field/index.mjs",
-      "types": "./dist/components/fields/multi-select-input-field/index.d.ts"
+    "./fields/multi-select-field": {
+      "import": "./dist/components/fields/multi-select-field/index.mjs",
+      "types": "./dist/components/fields/multi-select-field/index.d.ts"
     },
     "./fields/single-select-field": {
       "import": "./dist/components/fields/single-select-field/index.mjs",

@@ -23,5 +23,5 @@ export { default as StickyBasic } from './stories/sticky/basic';
 // export { default as sticky } from './stories/sticky';
 
 // TODO: port `selectable` and `filterable` once the Table's
-//   CheckInput wiring is updated to use fields/check-input-field and the
+//   CheckField wiring is updated to use fields/check-field and the
 //   reactive Data context exists in this project.

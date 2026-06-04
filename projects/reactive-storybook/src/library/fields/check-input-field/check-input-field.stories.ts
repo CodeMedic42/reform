@@ -1,8 +1,8 @@
-import CheckInput from '@reformjs/reactive/fields/check-input-field';
+import CheckField from '@reformjs/reactive/fields/check-field';
 
 export default {
-	title: 'Fields/Check Input Field',
-	component: CheckInput,
+	title: 'Fields/Check Field',
+	component: CheckField,
 };
 
 export { default as Preview } from './stories/preview';

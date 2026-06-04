@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { reduce } from 'lodash-es';
 import TextField from '@reformjs/reactive/fields/text-field';
+import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
 // import { faFaceLaughSquint } from '@audacious/icons/regular/faFaceLaughSquint';
 // import { faFaceLaughBeam } from '@audacious/icons/regular/faFaceLaughBeam';
 
@@ -101,9 +102,13 @@ function example(props: ExampleProps) {
 	};
 
 	return (
-		<TextField
-			{...(extraProps as any)}
-		/>
+		<Page>
+			<PageContent>
+				<TextField
+					{...(extraProps as any)}
+				/>
+			</PageContent>
+		</Page>
 	);
 }
 

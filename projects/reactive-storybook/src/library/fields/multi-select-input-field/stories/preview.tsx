@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { reduce } from 'lodash-es';
 import MultiSelectInputField from '@reformjs/reactive/fields/multi-select-field';
 import { abbreviated } from '../../../../common/options-data';
+import Page, { PageContent } from '@reformjs/reactive/arrangement/page';
+import StaticContainer from '@reformjs/reactive/arrangement/static-container';
 
 function generateMessages(count: number = 0): string[] {
     const messages: string[] = [];
@@ -21,7 +23,7 @@ interface PreviewProps {
 }
 
 function Preview(props: PreviewProps) {
-    const [value, setValue] = useState<string | number | null>(null);
+    const [value, setValue] = useState<Array<string | number> | null>(null);
 
     const {
         successMessageCount,
@@ -85,15 +87,22 @@ function Preview(props: PreviewProps) {
             {},
         ),
         options: abbreviated,
-        value: value || 'appleCrumb',
+        value,
         onChange: setValue,
         messages,
     };
 
     return (
-        <MultiSelectInputField
-            {...(extraProps as any)}
-        />
+        <Page>
+			<PageContent>
+                <StaticContainer>
+                    <MultiSelectInputField
+                        {...(extraProps as any)}
+                    />
+                    <div><span>{`Value: ${JSON.stringify(value)}`}</span></div>
+                </StaticContainer>
+            </PageContent>
+        </Page>
     );
 }
 

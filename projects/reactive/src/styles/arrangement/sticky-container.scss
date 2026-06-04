@@ -72,5 +72,5 @@
     left: var(--sticky-left-offset);
     width: var(--sticky-visible-content-width);
     z-index: 110;
-    // transform-style: preserve-3d;
+    word-break: break-word;
 }

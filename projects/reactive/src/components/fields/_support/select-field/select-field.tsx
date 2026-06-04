@@ -60,8 +60,6 @@ interface SelectProps {
     optionLabelPath?: string | ((option: unknown) => string | number) | null;
     isFiltering?: boolean;
     isFilteringMessage?: string;
-    useFilter?: boolean;
-    isMultiSelect?: boolean;
 }
 
 function getId(option: unknown, optionValuePath: string | ((option: unknown) => string | number) | null | undefined): string | number | null {

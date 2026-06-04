@@ -63,8 +63,8 @@ const MultiSelectField = forwardRef<unknown, MultiSelectFieldProps>((props, ref)
 				onClearIndex: handleClearIndex,
 				nullable,
             }}
-			useFilter
-			isMultiSelect
+			value={value}
+			enableMultiSelect
 			onSelect={onChange as ((value: unknown) => void) | null}
 		/>
 	);

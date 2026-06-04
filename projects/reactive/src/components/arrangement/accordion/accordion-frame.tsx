@@ -39,7 +39,7 @@ function AccordionFrame(props: AccordionFrameProps) {
         <div
             className={classNames(
                 'ra-accordion-frame',
-                { 'ra-accordion-frame--expanded': expanded },
+                { 'expanded': expanded },
                 className,
             )}
             style={style}

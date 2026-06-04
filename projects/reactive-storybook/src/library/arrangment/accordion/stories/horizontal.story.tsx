@@ -1,5 +1,5 @@
 import React from 'react';
-import Accordion, { AccordionFrame } from '@reformjs/reactive/arrangement/accordion';
+import Accordion, { AccordionFrame, AccordionFrameTextHeader } from '@reformjs/reactive/arrangement/accordion';
 import Page, { PageSurface } from '@reformjs/reactive/arrangement/page';
 
 export default function HorizontalStory() {
@@ -11,16 +11,16 @@ export default function HorizontalStory() {
         >
             <PageSurface position='top'>
                 <Accordion orientation="horizontal">
-                    <AccordionFrame heading="Frame 1">
+                    <AccordionFrame heading={<AccordionFrameTextHeader text="Frame 1" />}>
                         Body 1
                     </AccordionFrame>
-                    <AccordionFrame heading="Frame 2">
+                    <AccordionFrame heading={<AccordionFrameTextHeader text="Frame 2" />}>
                         Body 2
                     </AccordionFrame>
-                    <AccordionFrame heading="Frame 3">
+                    <AccordionFrame heading={<AccordionFrameTextHeader text="Frame 3" />}>
                         Body 3
                     </AccordionFrame>
-                    <AccordionFrame heading="Frame 4">
+                    <AccordionFrame heading={<AccordionFrameTextHeader text="Frame 4" />}>
                         Body 4
                     </AccordionFrame>
                 </Accordion>

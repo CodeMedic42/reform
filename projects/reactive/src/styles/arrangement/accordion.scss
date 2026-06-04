@@ -4,9 +4,6 @@
     height: 100%;
     overflow: hidden;
 
-    &.orientation-vertical { flex-direction: column; }
-    &.orientation-horizontal { flex-direction: row; }
-
     .ra-accordion-frame {
         display: flex;
         flex: 0 1 auto;
@@ -17,32 +14,25 @@
         transition: flex-grow 100ms linear;
     }
 
-    &.orientation-vertical .ra-accordion-frame {
-        flex-direction: column;
-        border-top: 1px solid lightgray;
+    .expanded { 
+        flex-grow: 1; 
     }
 
-    &.orientation-horizontal .ra-accordion-frame {
-        flex-direction: row;
-        border-left: 1px solid lightgray;
-    }
-
-    .ra-accordion-frame--expanded { flex-grow: 1; }
-
-    &.dragging .ra-accordion-frame,
-    &.dragging .ra-accordion-frame-content {
-        transition: none;
+    .ra-accordion-frame-text-header {
+        background-color: #f0f0f0;
+        user-select: none;
+        display: block;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .ra-accordion-frame-header {
-        flex: 0 0 auto;
-        padding: 6px 10px;
-        background-color: #f0f0f0;
         cursor: pointer;
-        user-select: none;
     }
 
     .ra-accordion-frame-resizer {
+        display: none;
         flex: 0 0 auto;
         background-color: grey;
 
@@ -51,18 +41,11 @@
         }
     }
 
-    &.orientation-vertical {
-        .ra-accordion-frame-resizer {
-            height: 4px;
-            width: 100%;
-            cursor: row-resize;
-        }
-    }
-
-    &.orientation-horizontal .ra-accordion-frame-resizer {
-        width: 4px;
-        height: 100%;
-        cursor: col-resize;
+    // Only show a resizer on an expanded frame that has another expanded frame somewhere
+    // before it. Collapsed frames in between are skipped naturally because they don't match
+    // either side of the `.expanded ~ .expanded` combinator.
+    .ra-accordion-frame.expanded ~ .ra-accordion-frame.expanded > .ra-accordion-frame-resizer {
+        display: block;
     }
 
     .ra-accordion-frame-content {
@@ -71,15 +54,87 @@
         overflow: hidden;
         transition: grid-template-rows 100ms linear, grid-template-columns 100ms linear;
     }
-
-    &.orientation-vertical .ra-accordion-frame-content { grid-template-rows: 0fr; }
-    &.orientation-vertical .ra-accordion-frame--expanded > .ra-accordion-frame-content { grid-template-rows: 1fr; }
-
-    &.orientation-horizontal .ra-accordion-frame-content { grid-template-columns: 0fr; }
-    &.orientation-horizontal .ra-accordion-frame--expanded > .ra-accordion-frame-content { grid-template-columns: 1fr; }
-
+    
     .ra-accordion-frame-content-inner {
         min-height: 0;
         min-width: 0;
     }
+
+    &.orientation-vertical { 
+        flex-direction: column; 
+
+        .ra-accordion-frame {
+            flex-direction: column;
+            border-top: 1px solid lightgray;
+
+            .ra-accordion-frame-text-header {
+                padding: 10px 6px;
+            }
+        }
+
+        .ra-accordion-frame-resizer {
+            height: 4px;
+            width: 100%;
+            cursor: row-resize;
+        }
+
+        .ra-accordion-frame-content {
+            grid-template-rows: 0fr;
+        }
+
+        .expanded {
+            > .ra-accordion-frame-content {
+                grid-template-rows: 1fr;
+            }
+        }
+    }
+
+    &.orientation-horizontal { 
+        flex-direction: row; 
+
+        .ra-accordion-frame {
+            flex-direction: row;
+            border-left: 1px solid lightgray;
+
+            .ra-accordion-frame-text-header {
+                writing-mode: sideways-lr;
+                text-orientation: mixed;
+                padding: 6px 10px;
+            }
+        }
+
+        .ra-accordion-frame-resizer {
+            width: 4px;
+            height: 100%;
+            cursor: col-resize;
+        }
+
+        .ra-accordion-frame-content {
+            grid-template-columns: 0fr;
+        }
+
+        .expanded {
+            > .ra-accordion-frame-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+    &.dragging {
+        .ra-accordion-frame,
+        .ra-accordion-frame-content {
+            transition: none;
+        }
+    }
+
+    // &.orientation-vertical .ra-accordion-frame-content { grid-template-rows: 0fr; }
+    // &.orientation-vertical .expanded > .ra-accordion-frame-content { grid-template-rows: 1fr; }
+
+    // &.orientation-horizontal .ra-accordion-frame-content { grid-template-columns: 0fr; }
+    // &.orientation-horizontal .expanded > .ra-accordion-frame-content { grid-template-columns: 1fr; }
+
+    // .ra-accordion-frame-content-inner {
+    //     min-height: 0;
+    //     min-width: 0;
+    // }
 }

@@ -1,4 +1,5 @@
 @use './configuration/tabs' as *;
+@use './box-shadow' as *;
 
 @mixin setTabBorderRadius($style) {
     @if $style == 'rounded' {
@@ -15,8 +16,27 @@
     }
 }
 
+.ra-tab-bar {
+    padding-left: 6px;
+    margin-bottom: -1px;
+    z-index: 1;
+    position: sticky;
+    box-sizing: border-box;
+    left: var(--sticky-left-offset);
+    display: inline-block;
+
+    + .ra-card {
+        .ra-sticky-container-left-gutter {
+            &::before {
+                border-top-left-radius: 0px;
+            }
+        }
+    }
+}
+
 .ra-tab {
     @include setTabBorderRadius($ra-config-tab-corner-style);
+    @include boxShadow1dp;
 
     position: relative;
     overflow: hidden;
@@ -30,17 +50,23 @@
     font-size: $ra-config-tab-font-size;
     font-weight: $ra-config-tab-font-weight;
     line-height: $ra-config-tab-line-height;
-    border-left: $ra-config-tab-inner-border;
-    border-right: $ra-config-tab-inner-border;
-    border-top: $ra-config-tab-outer-border;
+    // border-left: $ra-config-tab-inner-border;
+    // border-right: $ra-config-tab-inner-border;
+    // border-top: $ra-config-tab-outer-border;
     vertical-align: middle;
+    border-top: solid 1px lightgrey;
+    clip-path: inset(-20px 0 0 0);
 
     &:first-child {
+        clip-path: inset(-20px 0 0 -20px);
         border-left: $ra-config-tab-outer-border;
+        border-left: solid 1px lightgrey;
     }
 
     &:last-child {
-        border-right: $ra-config-tab-outer-border;
+        clip-path: inset(-20px -20px 0 0);
+        // border-right: $ra-config-tab-outer-border;
+        border-right: solid 1px lightgrey;
     }
 
     > button {

@@ -4,9 +4,11 @@
     --sticky-gutter-width: var(--gutter-width);
     --border-radius: 5px;
     --sticky-gutter-padding: 6px;
-    
+    --card-border-color: lightgrey;
+
     box-sizing: border-box;
     width: 100%;
+    z-index: 0;
 
     .ra-sticky-container-left-gutter,
     .ra-sticky-container-right-gutter {
@@ -21,6 +23,10 @@
             border-top-left-radius: var(--border-radius);
             border-bottom-left-radius: var(--border-radius);
             clip-path: inset(-20px 0 -20px -20px);
+            border-top: solid 1px var(--card-border-color);
+            border-bottom: solid 1px var(--card-border-color);
+            border-left: solid 1px var(--card-border-color);
+            box-sizing: border-box;
         }
 
         &::after {
@@ -34,6 +40,8 @@
             left: calc(var(--sticky-gutter-width) + var(--sticky-gutter-padding));
             clip-path: inset(0 0 -20px 0);
             pointer-events: none;
+            border-top: solid 1px var(--card-border-color);
+            border-bottom: solid 1px var(--card-border-color);
         }
     }
 
@@ -42,6 +50,10 @@
             border-top-right-radius: var(--border-radius);
             border-bottom-right-radius: var(--border-radius);
             clip-path: inset(-20px -20px -20px 0);
+            border-top: solid 1px var(--card-border-color);
+            border-bottom: solid 1px var(--card-border-color);
+            border-right: solid 1px var(--card-border-color);
+            box-sizing: border-box;
         }
     }
 

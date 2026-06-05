@@ -68,9 +68,9 @@
       "import": "./dist/components/arrangement/sticky-container/index.mjs",
       "types": "./dist/components/arrangement/sticky-container/index.d.ts"
     },
-    "./arrangement/tab-bar": {
-      "import": "./dist/components/arrangement/tab-bar/index.mjs",
-      "types": "./dist/components/arrangement/tab-bar/index.d.ts"
+    "./arrangement/tab-group": {
+      "import": "./dist/components/arrangement/tab-group/index.mjs",
+      "types": "./dist/components/arrangement/tab-group/index.d.ts"
     },
     "./arrangement/tray": {
       "import": "./dist/components/arrangement/tray/index.mjs",

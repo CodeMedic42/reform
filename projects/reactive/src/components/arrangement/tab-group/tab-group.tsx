@@ -1,107 +1,109 @@
-import React, { PureComponent } from 'react';
+import React, { Children, isValidElement, useCallback, useState } from 'react';
 import classnames from 'classnames';
-import { get, isNil, map } from 'lodash-es';
-import TabBar from '../tab-bar/index.js';
-import { SchemeColor } from '../../../common/color-list.js';
+import Tab, { TabGroupContext, TabGroupContextValue, TabProps } from './tab.js';
+import Card from '../card/card.js';
+import isNil from 'lodash-es/isNil.js';
 
-interface TabGroupTab {
-    id: string;
-    heading?: React.ReactNode;
-    body?: React.ReactNode;
+export interface TabGroupProps {
+    id?: string | null;
+    className?: string | null;
     disabled?: boolean;
-    alwaysRenderBody?: boolean;
+    onChange?: ((tabId: string) => void) | null;
+    children?: React.ReactNode;
 }
 
-interface TabGroupProps {
-    defaultTabId?: string | null;
-    // size?: 'lg' | 'sm';
-    // justify?: boolean;
-    // color?: SchemeColor;
-    // background?: boolean;
-    // border?: boolean;
-    tabs: TabGroupTab[];
-    onMove?: ((tabId: string, payload: { data: unknown }) => boolean | void) | null;
-    eventData?: unknown;
-}
+function TabGroup(props: TabGroupProps): React.ReactElement | null {
+    const {
+        id: groupId,
+        className,
+        disabled: groupDisabled = false,
+        onChange,
+        children,
+    } = props;
 
-interface TabGroupState {
-    selectedTabId: string | null;
-}
+    const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
-class TabGroup extends PureComponent<TabGroupProps, TabGroupState> {
-    constructor(props: TabGroupProps) {
-        super(props);
+    const handleClick = useCallback((tabId: string) => {
+        setSelectedTab(tabId);
 
-        this.handleSelect = this.handleSelect.bind(this);
+        if (onChange) {
+            onChange(tabId);
+        }
+    }, [onChange]);
 
-        this.state = {
-            selectedTabId: null,
-        };
-    }
+    const tabs: React.ReactElement<TabProps>[] = [];
+    let effectiveSelectedTab: string | null = selectedTab;
+    const seenIds = new Set<string>();
+    let duplicateWarned = false;
 
-    handleSelect(tabId: string): void {
-        const { onMove, eventData } = this.props;
-
-        if (!isNil(onMove)) {
-            const ret = onMove(tabId, {
-                data: eventData,
-            });
-
-            if (ret === false) {
-                return;
-            }
+    Children.forEach(children, (child) => {
+        if (!isValidElement(child) || child.type !== Tab) {
+            return;
         }
 
-        this.setState({
-            selectedTabId: tabId,
-        });
+        const tabChild = child as React.ReactElement<TabProps>;
+        const tabId = tabChild.props.id;
+
+        if (seenIds.has(tabId) && !duplicateWarned) {
+            console.error('Multiple tabs with the same id found. This is not supported.');
+            duplicateWarned = true;
+        }
+        seenIds.add(tabId);
+
+        tabs.push(tabChild);
+
+        if (isNil(effectiveSelectedTab)) {
+            effectiveSelectedTab = tabId;
+        }
+    });
+
+    if (tabs.length === 0) {
+        return null;
     }
 
-    render(): React.ReactElement {
-        const {
-            defaultTabId = null,
-            // size = 'lg',
-            // justify = false,
-            // color = 'primary',
-            // background = false,
-            // border = false,
-            tabs,
-        } = this.props;
+    const content: React.ReactElement[] = [];
 
-        let { selectedTabId } = this.state;
+    tabs.forEach((tab) => {
+        const { id: tabId, children: panel } = tab.props;
 
-        if (isNil(selectedTabId)) {
-            if (!isNil(defaultTabId)) {
-                selectedTabId = defaultTabId;
-            } else {
-                selectedTabId = get(tabs, ['0', 'id']);
-            }
+        if (isNil(panel)) {
+            return;
         }
 
-        return (
-            <>
-                <TabBar
-                    value={selectedTabId}
-                    onChange={this.handleSelect}
-                    tabs={tabs}
-                />
-                {map(tabs, (tab) => {
-                    const hidden = selectedTabId !== tab.id;
+        const hidden = effectiveSelectedTab !== tabId;
 
-                    return (
-                        <div
-                            key={tab.id}
-                            className={classnames('ra-tab-panel', {
-                                hidden,
-                            })}
-                        >
-                            {!hidden || tab.alwaysRenderBody ? tab.body : null}
-                        </div>
-                    );
-                })}
-            </>
+        content.push(
+            <Card
+                key={tabId}
+                className={classnames('ra-tab-panel', { hidden })}
+            >
+                {panel}
+            </Card>,
         );
-    }
+    });
+
+    const contextValue: TabGroupContextValue = {
+        groupId,
+        selectedTabId: effectiveSelectedTab,
+        groupDisabled,
+        onSelect: handleClick,
+    };
+
+    return (
+        <TabGroupContext.Provider value={contextValue}>
+            <div
+                id={groupId ?? undefined}
+                className={classnames('ra-tab-bar', className)}
+            >
+                <div className="ra-tabs">
+                    {Children.map(children, (child) => (
+                        isValidElement(child) && child.type === Tab ? child : null
+                    ))}
+                </div>
+            </div>
+            {content.length > 0 ? content : null}
+        </TabGroupContext.Provider>
+    );
 }
 
 export default TabGroup;

@@ -1,5 +1,5 @@
-@use './configuration/tabs' as *;
-@use './box-shadow' as *;
+@use '../configuration/tabs' as *;
+@use '../box-shadow' as *;
 
 @mixin setTabBorderRadius($style) {
     @if $style == 'rounded' {
@@ -59,7 +59,7 @@
 
     &:first-child {
         clip-path: inset(-20px 0 0 -20px);
-        border-left: $ra-config-tab-outer-border;
+        // border-left: $ra-config-tab-outer-border;
         border-left: solid 1px lightgrey;
     }
 
@@ -108,23 +108,7 @@
     }
 }
 
-@mixin setTabBottomBorderRadius($style) {
-    @if $style == 'rounded' or $style == 'rounded-ends' {
-        border-top-right-radius: $ra-config-tab-border-radius;
-        border-bottom-left-radius: $ra-config-tab-border-radius;
-        border-bottom-right-radius: $ra-config-tab-border-radius;
-    }
+.ra-tab-panel.hidden {
+    display: none;
 }
 
-.ra-tab-bottom {
-    @include setTabBottomBorderRadius($ra-config-tab-corner-style);
-
-    background-color: $ra-config-tab-bottom-bg-color;
-    padding-top: $ra-config-tab-bottom-padding-top;
-    padding-bottom: $ra-config-tab-bottom-padding-bottom;
-    padding-left: $ra-config-tab-bottom-padding-left;
-    padding-right: $ra-config-tab-bottom-padding-right;
-    border-left: $ra-config-tab-outer-border;
-    border-right: $ra-config-tab-outer-border;
-    border-bottom: $ra-config-tab-outer-border;
-}
